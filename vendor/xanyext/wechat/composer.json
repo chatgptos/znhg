@@ -1,0 +1,20 @@
+{
+  "name": "xanyext/wechat",
+  "description": "Wechat",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "luwei"
+    }
+  ],
+  "require": {
+    "php": ">=5.4",
+    "doctrine/cache": "v1.5.4",
+    "curl/curl": "1.6.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "xanyext\\wechat\\": "src/"
+    }
+  }
+}
