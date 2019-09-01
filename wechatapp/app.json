@@ -42,7 +42,6 @@
     "pages/shop-detail/shop-detail",
     "pages/card/card",
     "pages/card-clerk/card-clerk",
-
     "pages/pt/index/index",
     "pages/pt/list/list",
     "pages/pt/details/details",
@@ -54,7 +53,6 @@
     "pages/pt/order-comment/order-comment",
     "pages/pt/comment/comment",
     "pages/pt/clerk/clerk",
-    
     "pages/book/index/index",
     "pages/book/details/details",
     "pages/book/submit/submit",
@@ -72,5 +70,6 @@
     "navigationBarTextStyle": "black",
     "backgroundColor": "#EFEFF4"
   },
-  "debug": false
+  "debug": false,
+  "sitemapLocation": "sitemap.json"
 }
