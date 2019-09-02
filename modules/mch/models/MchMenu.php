@@ -152,6 +152,71 @@ class MchMenu
                     ],
                 ],
             ],
+
+            [
+                'name' => '众筹管理',
+                'route' => 'mch/goods/goods1',
+                'icon' => 'icon-service',
+                'list' => [
+                    [
+                        'name' => '商品管理',
+                        'route' => 'mch/goods/goods',
+                        'sub' => [
+                            'mch/goods/goods-edit',
+                        ],
+                    ],
+                    [
+                        'name' => '分类',
+                        'route' => 'mch/store/cat',
+                        'sub' => [
+                            'mch/store/cat-edit',
+                        ],
+                    ],
+                ],
+            ],
+
+            [
+                'name' => '预售管理',
+                'route' => 'mch/goods/goods2',
+                'icon' => 'icon-service',
+                'list' => [
+                    [
+                        'name' => '商品管理',
+                        'route' => 'mch/goods/goods',
+                        'sub' => [
+                            'mch/goods/goods-edit',
+                        ],
+                    ],
+                    [
+                        'name' => '分类',
+                        'route' => 'mch/store/cat',
+                        'sub' => [
+                            'mch/store/cat-edit',
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'name' => '市集管理',
+                'route' => 'mch/goods/goods1',
+                'icon' => 'icon-service',
+                'list' => [
+                    [
+                        'name' => '商品管理',
+                        'route' => 'mch/goods/goods',
+                        'sub' => [
+                            'mch/goods/goods-edit',
+                        ],
+                    ],
+                    [
+                        'name' => '分类',
+                        'route' => 'mch/store/cat',
+                        'sub' => [
+                            'mch/store/cat-edit',
+                        ],
+                    ],
+                ],
+            ],
             [
                 'name' => '订单管理',
                 'route' => 'mch/order/index',
@@ -208,24 +273,24 @@ class MchMenu
             ],
             [
                 'id' => 'share',
-                'name' => '分销中心',
+                'name' => '券商中心',
                 'route' => 'mch/share/index',
                 'icon' => 'icon-jiegou',
                 'list' => [
                     [
-                        'name' => '分销商',
+                        'name' => '优惠券商',
                         'route' => 'mch/share/index',
                     ],
                     [
-                        'name' => '分销订单',
+                        'name' => '优惠券订单',
                         'route' => 'mch/share/order',
                     ],
                     [
-                        'name' => '分销提现',
+                        'name' => '优惠券提现',
                         'route' => 'mch/share/cash',
                     ],
                     [
-                        'name' => '分销设置',
+                        'name' => '优惠券商设置',
                         'route' => 'mch/share/basic',
                         'list' => [
                             [
@@ -317,132 +382,137 @@ class MchMenu
                 ],
             ],
             [
-                'name' => '应用专区',
-                'route' => 'mch/seckill/index',
-                'icon' => 'icon-pintu-m',
-                'list' => [
-                    [
-                        'id' => 'seckill',
-                        'name' => '整点秒杀',
-                        'route' => 'mch/seckill/index',
-                        'list' => [
-                            [
-                                'name' => '开放时间',
-                                'route' => 'mch/seckill/index',
-                            ],
-                            [
-                                'name' => '商品设置',
-                                'route' => 'mch/seckill/goods',
-                                'sub' => [
-                                    'mch/seckill/goods-edit',
-                                    'mch/seckill/goods-detail',
-                                    'mch/seckill/calendar',
-                                ],
-                            ],
-                        ],
-                    ],
-                    [
-                        'id' => 'pintuan',
-                        'name' => '拼团管理',
-                        'route' => 'mch/group/goods/index',
-                        'list' => [
-                            [
-                                'name' => '商品管理',
-                                'route' => 'mch/group/goods/index',
-                                'sub' => [
-                                    'mch/group/goods/goods-edit',
-                                    'mch/group/goods/goods-attr'
-                                ]
-                            ],
-                            [
-                                'name' => '商品分类',
-                                'route' => 'mch/group/goods/cat',
-                                'sub' => [
-                                    'mch/group/goods/cat-edit'
-                                ]
-                            ],
-                            [
-                                'name' => '订单管理',
-                                'route' => 'mch/group/order/index',
-                            ],
-                            [
-                                'name' => '拼团管理',
-                                'route' => 'mch/group/order/group',
-                                'sub' => [
-                                    'mch/group/order/group-list'
-                                ]
-                            ],
-                            [
-                                'name' => '轮播图',
-                                'route' => 'mch/group/pt/banner',
-                                'sub' => [
-                                    'mch/group/pt/slide-edit'
-                                ]
-                            ],
-                            [
-                                'name' => '模板消息',
-                                'route' => 'mch/group/notice/setting',
-                            ],
-                            [
-                                'name' => '拼团规则',
-                                'route' => 'mch/group/article/edit',
-                            ],
-                            [
-                                'name' => '评论管理',
-                                'route' => 'mch/group/comment/index',
-                            ],
-                            [
-                                'name' => '广告设置',
-                                'route' => 'mch/group/ad/setting',
-                            ],
-                            [
-                                'name' => '数据统计',
-                                'route' => 'mch/group/data/goods',
-                                'sub' => [
-                                    'mch/group/data/user'
-                                ]
-                            ],
-                        ],
-                    ],
-                    [
-                        'id' => 'book',
-                        'name' => '预约管理',
-                        'route' => 'mch/book/goods/index',
-                        'list' => [
-                            [
-                                'name' => '商品管理',
-                                'route' => 'mch/book/goods/index',
-                                'sub' => [
-                                    'mch/book/goods/goods-edit'
-                                ]
-                            ],
-                            [
-                                'name' => '商品分类',
-                                'route' => 'mch/book/goods/cat',
-                                'sub' => [
-                                    'mch/book/goods/cat-edit'
-                                ]
-                            ],
-                            [
-                                'name' => '订单管理',
-                                'route' => 'mch/book/order/index',
-                            ],
-                            [
-                                'name' => '基础设置',
-                                'route' => 'mch/book/index/setting',
-                            ],
-                            [
-                                'name' => '模板消息',
-                                'route' => 'mch/book/notice/setting',
-                            ],
-                            [
-                                'name' => '评论管理',
-                                'route' => 'mch/book/comment/index',
-                            ],
-                        ],
-                    ],
-                ],
+                'name' => '财务管理',
+                'route' => '/mch/store/index',
+                'icon' => 'icon-coupons',
             ],
+//            [
+//                'name' => '应用专区',
+//                'route' => 'mch/seckill/index',
+//                'icon' => 'icon-pintu-m',
+//                'list' => [
+//                    [
+//                        'id' => 'seckill',
+//                        'name' => '整点秒杀',
+//                        'route' => 'mch/seckill/index',
+//                        'list' => [
+//                            [
+//                                'name' => '开放时间',
+//                                'route' => 'mch/seckill/index',
+//                            ],
+//                            [
+//                                'name' => '商品设置',
+//                                'route' => 'mch/seckill/goods',
+//                                'sub' => [
+//                                    'mch/seckill/goods-edit',
+//                                    'mch/seckill/goods-detail',
+//                                    'mch/seckill/calendar',
+//                                ],
+//                            ],
+//                        ],
+//                    ],
+//                    [
+//                        'id' => 'pintuan',
+//                        'name' => '拼团管理',
+//                        'route' => 'mch/group/goods/index',
+//                        'list' => [
+//                            [
+//                                'name' => '商品管理',
+//                                'route' => 'mch/group/goods/index',
+//                                'sub' => [
+//                                    'mch/group/goods/goods-edit',
+//                                    'mch/group/goods/goods-attr'
+//                                ]
+//                            ],
+//                            [
+//                                'name' => '商品分类',
+//                                'route' => 'mch/group/goods/cat',
+//                                'sub' => [
+//                                    'mch/group/goods/cat-edit'
+//                                ]
+//                            ],
+//                            [
+//                                'name' => '订单管理',
+//                                'route' => 'mch/group/order/index',
+//                            ],
+//                            [
+//                                'name' => '拼团管理',
+//                                'route' => 'mch/group/order/group',
+//                                'sub' => [
+//                                    'mch/group/order/group-list'
+//                                ]
+//                            ],
+//                            [
+//                                'name' => '轮播图',
+//                                'route' => 'mch/group/pt/banner',
+//                                'sub' => [
+//                                    'mch/group/pt/slide-edit'
+//                                ]
+//                            ],
+//                            [
+//                                'name' => '模板消息',
+//                                'route' => 'mch/group/notice/setting',
+//                            ],
+//                            [
+//                                'name' => '拼团规则',
+//                                'route' => 'mch/group/article/edit',
+//                            ],
+//                            [
+//                                'name' => '评论管理',
+//                                'route' => 'mch/group/comment/index',
+//                            ],
+//                            [
+//                                'name' => '广告设置',
+//                                'route' => 'mch/group/ad/setting',
+//                            ],
+//                            [
+//                                'name' => '数据统计',
+//                                'route' => 'mch/group/data/goods',
+//                                'sub' => [
+//                                    'mch/group/data/user'
+//                                ]
+//                            ],
+//                        ],
+//                    ],
+////                    [
+////                        'id' => 'book',
+////                        'name' => '预约管理',
+////                        'route' => 'mch/book/goods/index',
+////                        'list' => [
+////                            [
+////                                'name' => '商品管理',
+////                                'route' => 'mch/book/goods/index',
+////                                'sub' => [
+////                                    'mch/book/goods/goods-edit'
+////                                ]
+////                            ],
+////                            [
+////                                'name' => '商品分类',
+////                                'route' => 'mch/book/goods/cat',
+////                                'sub' => [
+////                                    'mch/book/goods/cat-edit'
+////                                ]
+////                            ],
+////                            [
+////                                'name' => '订单管理',
+////                                'route' => 'mch/book/order/index',
+////                            ],
+////                            [
+////                                'name' => '基础设置',
+////                                'route' => 'mch/book/index/setting',
+////                            ],
+////                            [
+////                                'name' => '模板消息',
+////                                'route' => 'mch/book/notice/setting',
+////                            ],
+////                            [
+////                                'name' => '评论管理',
+////                                'route' => 'mch/book/comment/index',
+////                            ],
+////                        ],
+////                    ],
+//                ],
+//            ],
 
         ];
 
