@@ -69,6 +69,7 @@ App({
                                 },
                                 success: function (res) {
                                     wx.hideLoading();
+                                    //
                                     // console.log(code)
                                     if (res.code == 0) {
                                         wx.setStorageSync("access_token", res.data.access_token);
