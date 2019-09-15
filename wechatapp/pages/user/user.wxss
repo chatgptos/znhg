@@ -1,3 +1,163 @@
+/**index.wxss**/
+.userinfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.heigth-box{
+  height:132px;
+  /* position: fixed; */
+}
+.rigth{
+  width: 8px;
+  height: 10px;
+}
+.userinfo-avatar {
+  width: 128rpx;
+  height: 128rpx;
+  margin: 20rpx;
+  border-radius: 50%;
+}
+
+.userinfo-nickname {
+  color: #aaa;
+}
+
+.usermotto {
+  margin-top: 200px;
+}
+
+.title{
+  width:70px;
+  height: 22px;
+  line-height: 22px;
+  background: #eee;
+  text-align: center;
+  border-radius: 10px;
+  font-size: 12px;
+}
+.uesrName{
+  width:70px;
+  height: 22px;
+  line-height: 22px;
+  text-align: center;
+}
+.money-icon{
+  width: 14px;
+  height: 12px;
+}
+.my-box{
+   position: relative;
+  left: 0;
+  top:0; 
+}
+.user-icon{
+  background: #EEEEEE;
+  border-radius: 30px;
+  height: 66px;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  align-items: center;
+  margin:0 10px;
+  position: relative;
+  bottom: 30px;
+  left: 0px;
+}
+.my-info{
+  width: 50px;
+  text-align: center;
+}
+.order{
+border-bottom: 1px solid #EEEEEE;
+line-height: 40px;
+height: 40px;
+}
+.title1{
+  color:#303133;
+  font-size: 15px;
+  font-weight: bold;
+}
+.title2{
+  color: #909399;
+}
+.my-icon{
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  align-items: center;
+  margin:0 10px;
+  padding: 20px 0;
+}
+.my-list{
+  background: #fff;
+  height: 50px;
+  padding: 0 20px;
+  border-radius: 5px;
+}
+
+.my{
+  margin:0 5px 10px 5px;
+  background: #fff;
+  border-radius: 5px;
+}
+
+
+
+
+
+
+
+/**app.wxss**/
+.container {
+  font-size: 12px;
+  background: #F8F8F8;
+  padding: 5px 0;
+}
+.color-blue{
+  color: #68C3B2;
+}
+.noWarp{
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+.noWarp-space-between{
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+}
+.color-70{
+  color:#707070;
+}
+.bgfff{
+  background: #fff;
+}
+.margin-l5{
+  margin-left:5px;
+}
+.margin-l10{
+  margin-left:10px;
+}
+.padding-5{
+  padding: 5px 5px;
+}
+
+
+
+
+
+/*old css*/
+
+.order-block .my-order {
+  display: block;
+  border-bottom: 1rpx solid #e3e3e3;
+  padding: 24rpx;
+}
+
+
+
 /* user.wxss */
 
 .user-info {
@@ -74,13 +234,13 @@
 }
 
 .order-block .nav-item image {
-  width: 60rpx;
-  height: 57rpx;
+  width: 39rpx;
+  height: 37rpx;
   margin-bottom: 5rpx;
 }
 
 .option-list {
-  margin-bottom: 20rpx;
+  margin-bottom: 80rpx;
 }
 
 .option-item {
@@ -136,41 +296,57 @@ button.option-item {
 }
 
 .integral-bg,.integral{
-    height:100rpx;
-    width:100%;
-    position:absolute;
-    bottom:0;
-    left:0;
+  height:100rpx;
+  width:100%;
+  position:absolute;
+  bottom:0;
+  left:0;
 }
 .integral-bg{
-    background-color:#888888;
-    opacity:0.1;
+  background-color:#888888;
+  opacity:0.1;
 }
 .integral{
-    padding: 0 27rpx;
-    color:#353535;
-    font-size:12pt;
+  padding: 0 27rpx;
+  color:#353535;
+  font-size:12pt;
 }
 .integral text{
-    margin-left:20rpx; 
+  margin-left:20rpx;
 }
 .integral image{
-    width:52rpx;
-    height:54rpx;
-    margin-right: 20rpx;
+  width:52rpx;
+  height:54rpx;
+  margin-right: 20rpx;
 }
 .userinfo-name,.userinfo-addr{
-    height: 248rpx;
+  height: 248rpx;
 }
 .integral-num{
-    margin-left: 20rpx;
+  margin-left: 20rpx;
 }
 .user-integral-arrow image{
-    width: 16rpx;
-    height: 26rpx;
+  width: 16rpx;
+  height: 26rpx;
 }
 .user-integral-go{
-    font-size: 11pt;
-    color: #666666;
-    margin-right: 20rpx;
+  font-size: 11pt;
+  color: #666666;
+  margin-right: 20rpx;
+}
+
+
+/*调整后的css*/
+.my-icon .flex-grow-1 .num-icon {
+  position: absolute;
+  top: 8rpx;
+  left: 50%;
+  margin-left: 12rpx;
+  display: inline-block;
+  background: #f00;
+  color: #fff;
+  border-radius: 999rpx;
+  padding: 0 8rpx;
+  min-width: 40rpx;
+  font-size: 7pt;
 }

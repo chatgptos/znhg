@@ -33,7 +33,7 @@ use xanyext\wechat\DataTransform;
 use xanyext\wechat\Wechat;
 use app\extensions\PinterOrder;
 
-class PayNotifyController extends Controller
+class PaynotifyController extends Controller
 {
     public $enableCsrfValidation = false;
 

@@ -375,8 +375,8 @@ button[plain]{
 }
 
 .navbar .navbar-icon{
-    width: 64rpx;
-    height: 64rpx;
+    width: 39rpx;
+    height: 39rpx;
     display: block;
     margin: 0 auto;
 }

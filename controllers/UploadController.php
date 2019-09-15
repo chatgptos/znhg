@@ -51,7 +51,6 @@ class UploadController extends Controller
         $form->store = $this->store;
         return $this->renderJson($form->saveImage($name));
     }
-
     //ue专用
     public function actionUe($action)
     {
