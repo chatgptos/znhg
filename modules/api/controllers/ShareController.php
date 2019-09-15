@@ -150,7 +150,7 @@ class ShareController extends Controller
         $res['data']['price'] = $form->getPrice();
         $setting = Setting::findOne(['store_id' => $this->store->id]);
         $res['data']['pay_type'] = $setting->pay_type;
-        $res['data']['bank'] = $setting->bank;
+//        $res['data']['bank'] = $setting->bank;
 
         $cash_last = Cash::find()->where(['store_id' => $this->store->id, 'user_id' => \Yii::$app->user->identity->id, 'is_delete' => 0])
             ->orderBy(['id' => SORT_DESC])->select(['name', 'mobile', 'type'])->asArray()->one();
