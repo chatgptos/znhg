@@ -50,13 +50,17 @@ App({
         //   title: "正在登录",
         //   mask: true,
         // });
+
+
         wx.login({
             success: function (res) {
                 if (res.code) {
                     var code = res.code;
+
+                    // console.log('getUserInfo')
                     wx.getUserInfo({
                         success: function (res) {
-                            //console.log(res);
+                            console.log(res);
                             _this.request({
                                 url: api.passport.login,
                                 method: "post",
@@ -69,6 +73,7 @@ App({
                                 },
                                 success: function (res) {
                                     wx.hideLoading();
+                                    //授权升级了
                                     // console.log(code)
                                     if (res.code == 0) {
                                         wx.setStorageSync("access_token", res.data.access_token);
@@ -87,16 +92,20 @@ App({
                             });
                         },
                         fail: function (res) {
+                            console.log('getUserInfo')
+                            wx.navigateTo({
+                                url: '/pages/authorize/authorize',
+                            })
                             wx.hideLoading();
-                            getApp().getauth({
-                                content: '需要获取您的用户信息授权，请到小程序设置中打开授权',
-                                cancel: true,
-                                success: function (e) {
-                                    if (e) {
-                                        getApp().login();
-                                    }
-                                },
-                            });
+                            // getApp().getauth({
+                            //     content: '需要获取您的用户信息授权，请到小程序设置中打开授权',
+                            //     cancel: true,
+                            //     success: function (e) {
+                            //         if (e) {
+                            //             getApp().login();
+                            //         }
+                            //     },
+                            // });
                         }
                     });
                 } else {
@@ -114,6 +123,8 @@ App({
             object.data.access_token = access_token;
         }
         object.data.store_id = this.siteInfo.store_id;
+
+
         wx.request({
             url: object.url,
             header: object.header || {

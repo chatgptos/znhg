@@ -1,6 +1,55 @@
-// user.js
+//index.js
+//获取应用实例
+
 var api = require('../../api.js');
-var app = getApp();
+const app = getApp();
+
+// Page({
+//   data: {
+//     motto: 'Hello World',
+//     userInfo: {},
+//     hasUserInfo: false,
+//     canIUse: wx.canIUse('button.open-type.getUserInfo'),
+//     list:[
+//       { text: "成为商家" }, { text: "我的好友" }, { text: "我的二维码" }, { text: "意见反馈" }, { text: "系统设置" },
+//     ]
+//   },
+//   //事件处理函数
+//   bindViewTap: function() {
+//     wx.navigateTo({
+//       // url: '../logs/logs'
+//     })
+//   },
+//   onLoad: function () {
+//       var page = this;
+//       page.setData({
+//           store: wx.getStorageSync('store'),
+//       });
+//       var pages_user_user = wx.getStorageSync('pages_user_user');
+//       if (pages_user_user) {
+//           page.setData(pages_user_user);
+//       }
+//       app.request({
+//           url: api.user.index,
+//           success: function (res) {
+//               if (res.code == 0) {
+//                   page.setData(res.data);
+//                   wx.setStorageSync('pages_user_user', res.data);
+//                   wx.setStorageSync("share_setting", res.data.share_setting);
+//                   wx.setStorageSync("user_info", res.data.user_info);
+//               }
+//           }
+//       });
+//   getUserInfo: function(e) {
+//     console.log(e)
+//     app.globalData.userInfo = e.detail.userInfo
+//     this.setData({
+//       userInfo: e.detail.userInfo,
+//       hasUserInfo: true
+//     })
+//   }
+// })
+
 Page({
 
     /**
@@ -10,6 +59,14 @@ Page({
         contact_tel: "",
         show_customer_service: 0,
         user_center_bg: "/images/img-user-bg.png",
+
+        // motto: 'Hello World',
+        // userInfo: {},
+        // hasUserInfo: false,
+        // canIUse: wx.canIUse('button.open-type.getUserInfo'),
+        // list:[
+        //     { text: "成为商家" }, { text: "我的好友" }, { text: "我的二维码" }, { text: "意见反馈" }, { text: "系统设置" },
+        // ]
     },
 
     /**
@@ -133,6 +190,11 @@ Page({
     member: function () {
         wx.navigateTo({
             url: '/pages/member/member',
+        })
+    },
+    card: function () {
+        wx.navigateTo({
+            url: '/pages/card/card',
         })
     }
 });

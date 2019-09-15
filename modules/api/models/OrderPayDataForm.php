@@ -177,7 +177,7 @@ class OrderPayDataForm extends Model
             'body' => $goods_names,
             'out_trade_no' => $this->order->order_no,
             'total_fee' => $this->order->pay_price * 100,
-            'notify_url' => \Yii::$app->request->hostInfo . \Yii::$app->request->baseUrl . '/pay-notify.php',
+            'notify_url' => \Yii::$app->request->hostInfo . \Yii::$app->request->baseUrl . '/paynotify/index',
             'trade_type' => 'JSAPI',
             'openid' => $this->user->wechat_open_id,
         ]);

@@ -1,10 +1,16 @@
 <include src="/commons/navbar/navbar" />
 <view class="after-navber">
     <!--商城公告 开始-->
+
     <view class='notice flex-row' wx:if='{{notice}}' bindtap='showNotice'>
         <view class='flex-grow-0 flex-y-center notice-a'>
             <image src='/images/icon-notice.png' style='width:36rpx;height:36rpx;margin-right:24rpx;'></image>
             <view>公告：</view>
+
+            <button wx:if="{{canIUse}}"   open-type="getUserInfo"  bindgetuserinfo="bindGetUserInfo"    hidden="{{userinfo}}">授权登录</button>
+
+
+            
         </view>
         <view class='flex-grow-1 notice-box'>
             <view class='notice-content'>

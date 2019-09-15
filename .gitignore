@@ -1,5 +1,6 @@
 # phpstorm project files
 .idea
+/wechatapp
 
 # netbeans project files
 nbproject
