@@ -39,8 +39,8 @@ Page({
         var user_info = wx.getStorageSync("user_info");
         if (user_info.is_distributor != 1) {
             wx.showModal({
-                title: "您还不是分销商！",
-                content: '请先前往“个人中心->成为分销商”处进行申请成为分销商',
+                title: "您还没有加入集市！",
+                content: '请先前往“个人中心->成为集市”处进行申请成为分销商',
                 showCancel: false,
                 success: function (res) {
                     if (res.confirm) {
