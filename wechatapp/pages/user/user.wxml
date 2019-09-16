@@ -180,7 +180,7 @@
             <block wx:if="{{item.is_show==1}}">
 
                 <block wx:if="{{item.open_type=='navigator'}}">
-                    <block wx:if="{{item.name=='分销中心'}}">
+                    <block wx:if="{{item.name=='成为商家'}}">
                         <block wx:if='{{share_setting.level>0}}'>
                             <view wx:if="{{user_info.is_distributor != 1}}">
                                 <view class="option-item" bindtap="apply">
@@ -190,7 +190,7 @@
                                                 <image class="option-icon" src="/images/icon-user-fx.png"/>
                                             </view>
                                             <view class="flex-grow-1 flex-y-center">
-                                                成为分销商
+                                                成为商家
                                             </view>
                                         </view>
                                         <view class="flex-grow-0 flex-y-center">
@@ -207,7 +207,7 @@
                                                 <image class="option-icon" src="/images/icon-user-fx.png"/>
                                             </view>
                                             <view class="flex-grow-1 flex-y-center">
-                                                分销中心
+                                                积分中心
                                             </view>
                                         </view>
                                         <view class="flex-grow-0 flex-y-center">

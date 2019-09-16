@@ -74,7 +74,7 @@ class Setting extends \yii\db\ActiveRecord
             'pic_url_1' => 'Pic Url 1',
             'pic_url_2' => 'Pic Url 2',
             'price_type' => '分销金额 0--百分比金额  1--固定金额',
-//            'bank' => 'Bank',
+            'bank' => 'Bank',
         ];
     }
 }

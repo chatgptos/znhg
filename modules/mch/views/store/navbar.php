@@ -375,6 +375,14 @@ $this->params['active_nav_group'] = 11;
                     name: '预约',
                     url: '/pages/book/index/index',
                 },
+                {
+                    name: '市集',
+                    url: '/pages/market/market',
+                },
+                {
+                    name: '积分',
+                    url: '/pages/fair/fair',
+                },
             ],
         },
     });

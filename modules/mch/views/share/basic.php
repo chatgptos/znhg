@@ -171,7 +171,7 @@ $this->params['active_nav_group'] = 5;
 
                             <label class="checkbox-label">
                                 <input type="checkbox" name="model[pay_type][bank]" value="2"
-                                    <? // $list->bank == 1) ? "checked" : "" ?>>
+                                <?=  ($list->bank == 1) ? "checked" : "" ?>>
                                 <span class="label-icon"></span>
                                 <span class="label-text">银行卡支付</span>
                             </label>

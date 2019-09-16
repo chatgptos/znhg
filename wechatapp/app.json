@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/user/user",
+    "pages/fair/fair",
     "pages/index/index",
     "pages/authorize/authorize",
     "pages/cart/cart",
@@ -68,7 +69,7 @@
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "Mall",
+    "navigationBarTitleText": "集市",
     "navigationBarTextStyle": "black",
     "backgroundColor": "#EFEFF4"
   },

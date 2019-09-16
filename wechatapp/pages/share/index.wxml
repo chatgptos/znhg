@@ -11,11 +11,11 @@
   <view class="info-content flex-row">
     <view class="info-left">
       <view class="info-label">
-        <view class="info-first">可提现佣金</view>
+        <view class="info-first">可提现积分</view>
         <view class="info-second info-blod info-big flex-row">{{price}}元</view>
       </view>
       <view class="info-label">
-        <view class="info-first">成功提现佣金</view>
+        <view class="info-first">成功提现积分</view>
         <view class="info-second info-blod info-big flex-row">{{cash_price}}元</view>
       </view>
     </view>
@@ -31,7 +31,7 @@
     <view class="list-img flex-x-center">
       <image class="img" src="/images/img-share-price.png"></image>
     </view>
-    <view class="flex-x-center list-content">分销佣金</view>
+    <view class="flex-x-center list-content">积分</view>
     <view class="flex-x-center list-content">
       <view class="list-red">{{total_price}}</view>元</view>
   </navigator>
@@ -39,7 +39,7 @@
     <view class="list-img flex-x-center">
       <image class="img" src="/images/img-share-order.png"></image>
     </view>
-    <view class="flex-x-center list-content">分销订单</view>
+    <view class="flex-x-center list-content">市集订单</view>
     <view class="flex-x-center list-content">
       <view class="list-red">{{order_money}}</view>元</view>
   </navigator>
