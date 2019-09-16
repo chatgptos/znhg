@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/market/market",
     "pages/user/user",
     "pages/index/index",
     "pages/authorize/authorize",
