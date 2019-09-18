@@ -383,6 +383,10 @@ $this->params['active_nav_group'] = 11;
                     name: '积分',
                     url: '/pages/fair/fair',
                 },
+                {
+                    name: '商场',
+                    url: '/pages/mall/mall',
+                },
             ],
         },
     });

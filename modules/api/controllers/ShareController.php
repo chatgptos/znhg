@@ -191,6 +191,21 @@ class ShareController extends Controller
     }
 
     /**
+     * @return mixed|string
+     * 申请充值
+     */
+    public function actionRecharge()
+    {
+        $form = new CashForm();
+        $form->user_id = \Yii::$app->user->identity->id;
+        $form->store_id = $this->store_id;
+        $form->attributes = \Yii::$app->request->post();
+
+
+        return json_encode($form->save(), JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
      * 提现明细列表
      */
     public function actionCashDetail()

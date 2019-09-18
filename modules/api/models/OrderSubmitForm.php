@@ -258,7 +258,6 @@ class OrderSubmitForm extends Model
                     'store_id' => $this->store_id,
                     'status' => 1,
                 ]);
-
                 // 积分
                 $integral = json_decode($goods->integral);
                 if ($integral) {

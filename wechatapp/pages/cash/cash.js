@@ -1,4 +1,4 @@
-// pages/cash/cash.js
+// pages/cash/index.js
 var api = require('../../api.js');
 var app = getApp();
 
@@ -16,6 +16,8 @@ Page({
     data: {
         price: 0.00,
         cash_max_day: -1,
+        integral: 0,
+        total_integral: 0,
         selected: -1
     },
 
@@ -66,6 +68,8 @@ Page({
                         name: name,
                         mobile: mobile,
                         bank:res.data.bank,
+                        integral: res.data.price.integral,
+                        total_integral: res.data.price.total_integral
                     });
                 }
             }
@@ -83,7 +87,7 @@ Page({
     formSubmit: function (e) {
         var page = this;
         var cash = parseFloat(parseFloat(e.detail.value.cash).toFixed(2));
-        var cash_max = page.data.price;
+        var cash_max = page.data.integral;
         if (page.data.cash_max_day != -1) {
             cash_max = min(cash_max, page.data.cash_max_day)
         }

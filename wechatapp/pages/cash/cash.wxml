@@ -1,6 +1,6 @@
 <form report-submit='true' bindsubmit="formSubmit">
   <view class="block">
-    <view class="user-money">账户剩余金额：{{price}}元</view>
+    <view class="user-money">账户剩余金额：{{integral}}元</view>
     <view wx:if="{{cash_max_day!=-1}}" class="flex-row cash-max-day">
       <view class="flex-y-center">今日剩余提现金额{{cash_max_day}}元</view>
       <view class="cash-max-detail" bindtap="showCashMaxDetail">详情</view>

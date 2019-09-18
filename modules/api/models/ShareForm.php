@@ -105,6 +105,7 @@ class ShareForm extends Model
             ->where(['u.is_delete'=>0,'u.store_id'=>$this->store_id,'u.id'=>$this->user_id])
             ->leftJoin('{{%cash}} c','c.user_id=u.id and c.is_delete=0')
             ->select([
+                'u.integral','u.total_integral',
                 'u.total_price','u.price',
                 'sum(case when c.status = 2 then c.price else 0 end) cash_price',
                 'sum(case when c.status = 1 then c.price else 0 end) un_pay',

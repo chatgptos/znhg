@@ -1,12 +1,16 @@
 {
   "pages": [
     "pages/user/user",
+    "pages/list/list",
+    "pages/goods/goods",
+    "pages/recharge-integral/index",
+    "pages/coupon-merchant/index",
     "pages/fair/fair",
+    "pages/mall/mall",
+    "pages/cheapmarket/cheapmarket",
     "pages/index/index",
     "pages/authorize/authorize",
     "pages/cart/cart",
-    "pages/goods/goods",
-    "pages/list/list",
     "pages/user-new/user",
     "pages/search/search",
     "pages/order-submit/order-submit",

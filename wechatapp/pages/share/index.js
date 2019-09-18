@@ -12,6 +12,8 @@ Page({
         cash_price: 0,
         total_cash: 0,
         team_count: 0,
+        integral: 0,
+        total_integral: 0,
         order_money: 0
     },
 
@@ -68,7 +70,9 @@ Page({
                             cash_price: res.data.price.cash_price,
                             total_cash: res.data.price.total_cash,
                             team_count: res.data.team_count,
-                            order_money: res.data.order_money
+                            order_money: res.data.order_money,
+                            integral: res.data.price.integral,
+                            total_integral: res.data.price.total_integral
                         });
                     }
                 },

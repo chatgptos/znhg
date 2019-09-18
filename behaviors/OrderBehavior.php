@@ -102,6 +102,30 @@ class OrderBehavior extends Behavior
             }
         }
 
+
+        //在待收货订单里面如果是积分商品的话
+        $auto_checkout_integral_order_list = Order::find()->alias('o')
+            ->where([
+                'and',
+                [
+                    'o.name' => '平台积分',
+                    'o.is_pay' => 1,
+                    'o.is_delete' => 0,
+                    'o.store_id' => $this->store_id,
+                    'o.is_sale' => 0,
+                    'is_send' => 0,
+                    'is_confirm' => 0
+                ],
+            ])
+            ->select(['o.*'])->groupBy('o.id')
+            ->offset(0)->limit(20)->asArray()->all();
+        //修改代发货状态 待收货状态 确认收货状态
+        foreach ($auto_checkout_integral_order_list as $index => $value) {
+            Order::updateAll(
+                ['pay_type' => 1,'is_send' => 1,'is_confirm' => 1,'confirm_time' => 1508793230],
+                ['id' => $value['id']]
+            );
+        }
         //超过设置的售后时间且没有在售后的订单
         $order_list = Order::find()->alias('o')
             ->where([
@@ -118,13 +142,13 @@ class OrderBehavior extends Behavior
                 ['in', 'r.status', [2, 3]]
             ])
             ->offset(0)->limit(20)->asArray()->all();
+
         foreach ($order_list as $index => $value) {
             \Yii::warning('==>' . $value['id']);
             Order::updateAll(['is_sale' => 1], ['id' => $value['id']]);
             $this->share_money($value['id']);
             $this->give_integral($value['id']);
         }
-        //会员等级
         $user_id_arr = Order::find()->select('user_id')->where(['is_delete' => 0, 'store_id' => $this->store_id, 'is_confirm' => 1, 'is_send' => 1])
             ->andWhere(['<=', 'confirm_time', $sale_time])->groupBy('user_id')->asArray()->all();
 
