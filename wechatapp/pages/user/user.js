@@ -195,6 +195,11 @@ Page({
             url: '/pages/member/member',
         })
     },
+    integral: function () {
+        wx.navigateTo({
+            url: '/pages/recharge-integral/index',
+        })
+    },
     card: function () {
         wx.navigateTo({
             url: '/pages/card/card',

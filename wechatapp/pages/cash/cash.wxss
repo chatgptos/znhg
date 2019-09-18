@@ -1,4 +1,4 @@
-/* pages/cash/cash.wxss */
+/* pages/cash/index.wxss */
 form{
     border-top: 1rpx solid #eee;
     display: block;

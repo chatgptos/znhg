@@ -21,7 +21,7 @@
                     <text class="color-blue margin-l5">升级</text>
 
                 </view>
-                <view class='noWarp'>
+                <view class='noWarp'  bindtap="integral">
                     <text class="color-70 uesrName">{{user_info.nickname}}</text>
                     <view class='margin-l10'>
                         <image class="money-icon" src="../../Img/jifen.png" mode="cover"></image>
@@ -187,10 +187,10 @@
                                     <view class="flex-row option-content">
                                         <view class="flex-grow-1 flex-row">
                                             <view class="flex-grow-0 flex-y-center">
-                                                <image class="option-icon" src="/images/icon-user-fx.png"/>
+                                                <!--<image class="option-icon" src="/images/icon-user-fx.png"/>-->
                                             </view>
                                             <view class="flex-grow-1 flex-y-center">
-                                                成为商家
+                                                申请集市
                                             </view>
                                         </view>
                                         <view class="flex-grow-0 flex-y-center">
@@ -204,7 +204,7 @@
                                     <view class="flex-row option-content">
                                         <view class="flex-grow-1 flex-row">
                                             <view class="flex-grow-0 flex-y-center">
-                                                <image class="option-icon" src="/images/icon-user-fx.png"/>
+                                                <!--<image class="option-icon" src="/images/icon-user-fx.png"/>-->
                                             </view>
                                             <view class="flex-grow-1 flex-y-center">
                                                 积分中心
@@ -223,7 +223,7 @@
                             <view class="flex-row option-content">
                                 <view class="flex-grow-1 flex-row">
                                     <view class="flex-grow-0 flex-y-center">
-                                        <image class="option-icon" src="{{item.icon}}"/>
+                                        <!--<image class="option-icon" src="{{item.icon}}"/>-->
                                     </view>
                                     <view class="flex-grow-1 flex-y-center">{{item.name}}</view>
                                 </view>
@@ -239,7 +239,7 @@
                         <view class="flex-row option-content">
                             <view class="flex-grow-1 flex-row">
                                 <view class="flex-grow-0 flex-y-center">
-                                    <image class="option-icon" src="{{item.icon}}"/>
+                                    <!--<image class="option-icon" src="{{item.icon}}"/>-->
                                 </view>
                                 <view class="flex-grow-1 flex-y-center">{{item.name}}</view>
                             </view>
@@ -254,7 +254,7 @@
                         <view class="flex-row option-content">
                             <view class="flex-grow-1 flex-row">
                                 <view class="flex-grow-0 flex-y-center">
-                                    <image class="option-icon" src="{{item.icon}}"/>
+                                    <!--<image class="option-icon" src="{{item.icon}}"/>-->
                                 </view>
                                 <view class="flex-grow-1 flex-y-center">{{item.name}}</view>
                             </view>

@@ -12,7 +12,7 @@
     <view class="info-left">
       <view class="info-label">
         <view class="info-first">可提现积分</view>
-        <view class="info-second info-blod info-big flex-row">{{price}}元</view>
+        <view class="info-second info-blod info-big flex-row">{{integral}}元</view>
       </view>
       <view class="info-label">
         <view class="info-first">成功提现积分</view>
@@ -33,7 +33,7 @@
     </view>
     <view class="flex-x-center list-content">积分</view>
     <view class="flex-x-center list-content">
-      <view class="list-red">{{total_price}}</view>元</view>
+      <view class="list-red">{{integral}}</view>元</view>
   </navigator>
   <navigator class="item border-bottom border-between" url="/pages/share-order/share-order">
     <view class="list-img flex-x-center">
