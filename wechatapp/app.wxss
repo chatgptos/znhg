@@ -70,6 +70,7 @@ button{
 }
 
 .flex-grow-0{
+    display: none;
     min-width: 0;
     -webkit-box-flex: 0;
     -webkit-flex-grow: 0;

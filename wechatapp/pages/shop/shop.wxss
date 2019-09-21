@@ -42,3 +42,53 @@
 .shop-one:last-child {
     border: 0;
 }
+
+
+/*
+新增
+*/
+
+.ditu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90vw;
+    margin: 0 auto;
+}
+
+.ditu img {
+    display: block;
+    width: 100%;
+}
+
+.title_scan {
+    height: 21rpx;
+    font-family: Helvetica;
+    font-size: 17rpx;
+    font-weight: bold;
+    line-height: 17rpx;
+    color: rgba(48, 49, 51, 1);
+    opacity: 1;
+    margin: 38rpx 0 10rpx 10vw;
+}
+
+.button_scan {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 217rpx;
+    height: 90rpx;
+    background: linear-gradient(90deg, rgba(255, 94, 98, 1) 0%, rgba(255, 153, 102, 1) 100%);
+    box-shadow: 1rpx 1rpx 6rpx rgba(0, 0, 0, 0.16);
+    opacity: 1;
+    border-radius: 50rpx;
+    text-align: center;
+    font-size: 18rpx;
+    font-family: Helvetica;
+    font-weight: bold;
+    line-height: 13rpx;
+    color: rgba(255, 255, 255, 1);
+    opacity: 1;
+    text-decoration: none;
+    margin: 141rpx auto 0;
+}

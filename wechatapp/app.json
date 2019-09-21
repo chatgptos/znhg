@@ -1,9 +1,10 @@
 {
   "pages": [
+    "pages/shop/shop",
     "pages/user/user",
+    "pages/recharge-integral/index",
     "pages/list/list",
     "pages/goods/goods",
-    "pages/recharge-integral/index",
     "pages/coupon-merchant/index",
     "pages/fair/fair",
     "pages/mall/mall",
@@ -45,7 +46,6 @@
     "pages/seckill/seckill",
     "pages/member/member",
     "pages/web/web",
-    "pages/shop/shop",
     "pages/shop-detail/shop-detail",
     "pages/card/card",
     "pages/card-clerk/card-clerk",

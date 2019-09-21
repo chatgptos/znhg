@@ -31,7 +31,7 @@ class Controller extends \app\controllers\Controller
     protected $store_id;
 
     /* @var Wechat $wechat */
-    protected $wechat;
+    public $wechat;
     protected $wechat_app;
 
     protected $version;
