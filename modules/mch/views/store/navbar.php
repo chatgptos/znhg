@@ -377,7 +377,7 @@ $this->params['active_nav_group'] = 11;
                 },
                 {
                     name: '市集',
-                    url: '/pages/market/market',
+                    url: '/pages/coupon-merchant/index',
                 },
                 {
                     name: '积分',
@@ -386,6 +386,10 @@ $this->params['active_nav_group'] = 11;
                 {
                     name: '商场',
                     url: '/pages/mall/mall',
+                },
+                {
+                    name: '暂时不显示',
+                    url: '/pages/mall/deplopment',
                 },
             ],
         },

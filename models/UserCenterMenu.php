@@ -104,6 +104,14 @@ class UserCenterMenu extends Model
                 'url' => '/pages/book/order/order',
                 'tel' => '',
             ],
+            [
+                'is_show' => 1,
+                'name' => '个人消息',
+                'icon' => '/images/icon-about-us.png',
+                'open_type' => 'navigator',
+                'url' => '/pages/message-list/message-list',
+                'tel' => '',
+            ],
         ];
         return $default_menu_list;
     }

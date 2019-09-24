@@ -1,4 +1,4 @@
-<!--pages/topic-list/topic-list.wxml-->
+<!--pages/topic-list/message-list.wxml-->
 <include src="/commons/navbar/navbar"/>
 <view class="after-navber">
     <view class="list">

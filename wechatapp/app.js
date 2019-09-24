@@ -93,9 +93,9 @@ App({
                         },
                         fail: function (res) {
                             console.log('getUserInfo')
-                            wx.navigateTo({
-                                url: '/pages/authorize/authorize',
-                            })
+                            // wx.navigateTo({
+                            //     url: '/pages/authorize/authorize',
+                            // })
                             wx.hideLoading();
                             // getApp().getauth({
                             //     content: '需要获取您的用户信息授权，请到小程序设置中打开授权',
@@ -319,8 +319,8 @@ App({
     },
 
     setPageNavbar: function (page) {
-        // console.log('----setPageNavbar----');
-        // console.log(page);
+        console.log('----setPageNavbar----');
+        console.log(page);
         var navbar = wx.getStorageSync('_navbar');
 
         if (navbar) {
@@ -339,6 +339,8 @@ App({
         function setNavbar(navbar) {
             var in_navs = false;
             var route = page.route || (page.__route__ || null);
+            console.log(route);
+            //判断当前也页面是否有bar
             for (var i in navbar.navs) {
                 if (navbar.navs[i].url === "/" + route) {
                     navbar.navs[i].active = true;
@@ -347,6 +349,7 @@ App({
                     navbar.navs[i].active = false;
                 }
             }
+            in_navs = true;//所有的页面都显示只要加载了头部的文件
             if (!in_navs)
                 return;
             page.setData({ _navbar: navbar });

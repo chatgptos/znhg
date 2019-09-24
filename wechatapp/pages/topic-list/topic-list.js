@@ -1,4 +1,4 @@
-// pages/topic-list/topic-list.js
+// pages/topic-list/message-list.js
 var api = require('../../api.js');
 var app = getApp();
 Page({
