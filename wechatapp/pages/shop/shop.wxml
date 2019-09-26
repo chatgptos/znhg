@@ -10,6 +10,18 @@
             </view>
         </view>
     </view>
+
+
+
+    <view class="app">
+        <view class="title_scan">附近货柜</view>
+        <view class="ditu">
+            <image src="/Img/znhgdt.png"></image>
+        </view>
+    </view>
+
+
+
     <view class='shop-list w-100'>
         <block wx:for='{{list}}' wx:for-index='index' wx:for-item='item'>
             <view class='shop-one flex-row' bindtap='go' data-index='{{index}}'>
@@ -39,5 +51,11 @@
                 </view>
             </view>
         </block>
+    </view>
+
+
+
+    <view>
+        <a href="" class="button_scan">扫码开锁</a>
     </view>
 </view>

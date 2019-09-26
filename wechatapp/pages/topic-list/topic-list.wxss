@@ -1,4 +1,4 @@
-/* pages/topic-list/topic-list.wxss */
+/* pages/topic-list/message-list.wxss */
 .list{
     border-top: 1rpx solid #e3e3e3;
 }

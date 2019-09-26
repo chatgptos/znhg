@@ -24,6 +24,11 @@
           <view class="info-btn">提现</view>
       </navigator>
     </view>
+    <view class="info-right">
+      <navigator open-type="navigate" class="" url="/pages/recharge-integral/index">
+        <view class="info-btn">充值</view>
+      </navigator>
+    </view>
   </view>
 </view>
 <view class="list flex-row">

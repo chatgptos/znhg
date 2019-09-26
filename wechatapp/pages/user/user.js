@@ -59,6 +59,7 @@ Page({
         contact_tel: "",
         show_customer_service: 0,
         user_center_bg: "/images/img-user-bg.png",
+        user_info:{},
 
         // motto: 'Hello World',
         // userInfo: {},
@@ -124,9 +125,6 @@ Page({
         var page = this;
         var share_setting = wx.getStorageSync("share_setting");
         var user_info = wx.getStorageSync("user_info");
-
-       console.log(22222)
-
         if (share_setting.share_condition == 1) {
             wx.navigateTo({
                 url: '/pages/add-share/index',
@@ -204,5 +202,14 @@ Page({
         wx.navigateTo({
             url: '/pages/card/card',
         })
+    },
+    //事件处理函数
+    bindViewTap: function () {
+        var user_info = wx.getStorageSync("user_info");
+        if (user_info == ""){
+            wx.navigateTo({
+                url: '/pages/authorize/authorize',
+            })
+        }
     }
 });
