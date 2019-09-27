@@ -267,7 +267,7 @@ class ShareController extends Controller
         $api = "https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token={$access_token}";
         $data = json_encode([
             'scene' => "{$user_id}",
-//            'page'=>"pages/index/index",
+            'page'=>"pages/user/user",
             'width' => (int)($qrcode_size['w'] * $percent)
         ], JSON_UNESCAPED_UNICODE);
         $this->wechat->curl->post($api, $data);

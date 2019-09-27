@@ -1,10 +1,10 @@
 {
   "pages": [
+    "pages/user/user",
     "pages/index/index",
     "pages/recharge-integral/index",
     "pages/cat/cat",
     "pages/cheapmarket/cheapmarket",
-    "pages/user/user",
     "pages/message-list/message-list",
     "pages/shop/shop",
     "pages/list/list",
