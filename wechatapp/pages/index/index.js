@@ -28,7 +28,11 @@ Page({
         else if (scene != undefined) {
             parent_id = scene;
         }
+
+        console.log(options)
+        console.log('console.log(parent_id)------------------'+parent_id+'user_id'+user_id)
         app.loginBindParent({ parent_id: parent_id });
+        console.log('console.log(loginBindParent)------------------')
     },
 
     /**

@@ -43,6 +43,17 @@ App({
             }
         });
     },
+    /**
+     * 绑定获取parent_id
+     */
+    getParent_id: function () {
+        //绑定
+        var parent_id = wx.getStorageSync('parent_id');
+        if (parent_id != 0) {
+            page.loginBindParent({parent_id: parent_id});
+        }
+
+    },
 
     login: function () {
         var _this = this;
@@ -185,12 +196,13 @@ App({
         if (access_token == '') {
             return true;
         }
+        console.log(object);
         getApp().bindParent(object);
     },
     bindParent: function (object) {
         if (object.parent_id == "undefined" || object.parent_id == 0)
             return;
-        // console.log("Try To Bind Parent With User Id:" + object.parent_id);
+        console.log("Try To Bind Parent With User Id:" + object.parent_id);
         var user_info = wx.getStorageSync("user_info");
         var share_setting = wx.getStorageSync("share_setting");
         if (share_setting.level > 0) {
@@ -383,7 +395,7 @@ App({
     //登录成功后不刷新的页面
     loginNoRefreshPage: [
         'pages/index/index',
-        'pages/user/user',
+        // 'pages/user/user',
     ],
 
 });
