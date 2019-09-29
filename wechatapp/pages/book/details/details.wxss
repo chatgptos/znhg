@@ -285,7 +285,7 @@ button::after {
     overflow: hidden;
     display: inline-block;
 }
-/* 门店 */
+/* 货柜 */
 .shop{
     background-color: #ffffff;
     margin-bottom: 20rpx;

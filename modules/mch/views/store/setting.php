@@ -328,7 +328,7 @@ $this->params['active_nav_group'] = 1;
                         <span class="label-icon"></span>
                         <span class="label-text">仅自提</span>
                     </label>
-                    <div class="text-muted fs-sm">自提需要设置门店，如果您还未设置门店请保存本页后设置门店，<a target="_blank"
+                    <div class="text-muted fs-sm">自提需要设置货柜，如果您还未设置货柜请保存本页后设置货柜，<a target="_blank"
                                                                                   href="<?= $urlManager->createUrl(['mch/store/shop']) ?>">点击前往设置</a>
                     </div>
                 </div>

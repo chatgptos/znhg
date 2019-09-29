@@ -204,7 +204,7 @@ Page({
                 data.shop_id = page.data.shop.id;
             }else{
                 wx.showToast({
-                    title: "请选择核销门店",
+                    title: "请选择核销货柜",
                     image: "/images/icon-warning.png",
                 });
                 return;

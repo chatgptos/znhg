@@ -5,7 +5,7 @@
  * Time: 9:09
  */
 $urlManager = Yii::$app->urlManager;
-$this->title = '编辑门店';
+$this->title = '编辑货柜';
 $this->params['active_nav_group'] = 1;
 ?>
 
@@ -18,7 +18,7 @@ $this->params['active_nav_group'] = 1;
             <div class="form-body">
                 <div class="form-group row">
                     <div class="col-3 text-right">
-                        <label class=" col-form-label required">门店名称：</label>
+                        <label class=" col-form-label required">货柜名称：</label>
                     </div>
                     <div class="col-9">
                         <input class="form-control" type="text" name="name" value="<?= $shop->name ?>">
@@ -42,25 +42,25 @@ $this->params['active_nav_group'] = 1;
                 </div>
                 <div class="form-group row">
                     <div class="col-3 text-right">
-                        <label class=" col-form-label required">门店经度：</label>
+                        <label class=" col-form-label required">货柜经度：</label>
                     </div>
                     <div class="col-9">
                         <input class="form-control" type="text" name="longitude" value="<?= $shop->longitude ?>">
-                        <div class="fs-sm">门店经纬度可以在地图上选择，也可以自己添加</div>
+                        <div class="fs-sm">货柜经纬度可以在地图上选择，也可以自己添加</div>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-3 text-right">
-                        <label class="col-form-label required">门店纬度：</label>
+                        <label class="col-form-label required">货柜纬度：</label>
                     </div>
                     <div class="col-9">
                         <input class="form-control" type="text" name="latitude" value="<?= $shop->latitude ?>">
-                        <div class="fs-sm">门店经纬度可以在地图上选择，也可以自己添加</div>
+                        <div class="fs-sm">货柜经纬度可以在地图上选择，也可以自己添加</div>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-3 text-right">
-                        <label class="col-form-label required">门店大图：</label>
+                        <label class="col-form-label required">货柜大图：</label>
                     </div>
                     <div class="col-9">
                         <?php if ($shop->shopPic): ?>
@@ -113,7 +113,7 @@ $this->params['active_nav_group'] = 1;
                 </div>
                 <div class="form-group row">
                     <div class="col-3 text-right">
-                        <label class="col-form-label required">门店小图：</label>
+                        <label class="col-form-label required">货柜小图：</label>
                     </div>
                     <div class="col-9">
 
@@ -149,7 +149,7 @@ $this->params['active_nav_group'] = 1;
                 </div>
                 <div class="form-group row">
                     <div class="col-3 text-right">
-                        <label class=" col-form-label">门店评分：</label>
+                        <label class=" col-form-label">货柜评分：</label>
                     </div>
                     <div class="col-9">
                         <input class="form-control" type="number" name="score" min="1" max="5"
@@ -168,7 +168,7 @@ $this->params['active_nav_group'] = 1;
 
                 <div class="form-group row">
                     <div class="col-3 text-right">
-                        <label class=" col-form-label">门店介绍：</label>
+                        <label class=" col-form-label">货柜介绍：</label>
                     </div>
                     <div class="col-9">
                             <textarea class="short-row" id="editor"

@@ -70,12 +70,12 @@
         <view class="flex-row address-picker" bindtap='{{shop_list.length>1?"showShop":""}}'>
             <view class="flex-grow-1">
                 <view class="flex-row" style="margin-bottom: 20rpx">
-                    <view class="flex-grow-1">门店名称：{{shop.name}}</view>
+                    <view class="flex-grow-1">货柜名称：{{shop.name}}</view>
                 </view>
                 <view class="flex-row" style="margin-bottom: 20rpx">
-                    <view class="flex-grow-1">门店电话：{{shop.mobile}}</view>
+                    <view class="flex-grow-1">货柜电话：{{shop.mobile}}</view>
                 </view>
-                <view>自提门店：{{shop.address}}</view>
+                <view>自提货柜：{{shop.address}}</view>
             </view>
             <view class="flex-grow-0 flex-y-center" wx:if='{{shop_list.length>1}}'>
                 <image src="/images/icon-jiantou-r.png" style="width: 12rpx;height: 22rpx;margin-left: 12rpx"></image>
@@ -274,7 +274,7 @@
                 <text style='color:#2495ff'>手动定位</text>
             </view>
         </view>
-        <view class='shop-block flex-y-center'>门店列表（仅展示里您最近的30家门店）</view>
+        <view class='shop-block flex-y-center'>货柜列表（仅展示里您最近的30家货柜）</view>
         <view class="flex-row address-picker" style='margin:0;' bindtap='pickShop' wx:for='{{shop_list}}' data-index="{{index}}">
             <view class="flex-grow-0 flex-y-center">
                 <image src="{{item.id==shop.id?'/images/icon-shop-checked.png':'/images/icon-shop-un.png'}}" style="width: 40rpx;height: 40rpx;margin-right: 20rpx"></image>

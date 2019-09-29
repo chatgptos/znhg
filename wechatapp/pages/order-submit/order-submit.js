@@ -121,7 +121,7 @@ Page({
             } else {
                 wx.showModal({
                     title: '警告',
-                    content: '请选择门店',
+                    content: '请选择货柜',
                     showCancel: false
                 });
                 return;

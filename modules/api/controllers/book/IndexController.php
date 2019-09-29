@@ -90,7 +90,7 @@ class IndexController extends Controller
     }
 
     /**
-     * 门店列表
+     * 货柜列表
      */
     public function actionShopList()
     {
