@@ -27,7 +27,7 @@ class OrderPriceForm extends Model
         return [
             [['order_id','price','type'],'number'],
             [['type'],'in','range'=>[1,2]],
-            [['price'],'required']
+//            [['price'],'required']
         ];
     }
     public function attributeLabels()

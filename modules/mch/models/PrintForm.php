@@ -112,11 +112,14 @@ class PrintForm extends Model
 //$jsonParam = JSON($eorder);//兼容php5.2（含）以下
 
 //        echo "电子面单接口提交内容：<br/>".$jsonParam;
-        $jsonResult = KdOrder::submitEOrder($jsonParam,$this->store_id);
+//        $jsonResult = KdOrder::submitEOrder($jsonParam,$this->store_id);
 //        echo "<br/><br/>电子面单提交结果:<br/>".$jsonResult;
+        $jsonResult='{"ResultCode":101,"Reason":"请设置合格证模版"}';
 
 //解析电子面单返回结果
         $result = json_decode($jsonResult, true);
+
+//        var_dump($result);die;
 //        echo "<br/><br/>返回码:".$result["ResultCode"];
         if($result["ResultCode"] == "100") {
 //            echo "<br/>是否成功:".$result["Success"];

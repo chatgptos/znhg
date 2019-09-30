@@ -1,5 +1,4 @@
 <?php
-
 // 只显示致命错误（生产模式下使用）
 error_reporting(E_ERROR);
 

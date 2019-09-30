@@ -30,7 +30,7 @@ class PublicController extends Controller
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post())) {
             if ($model->login()) {
-                $data = ['code' => 1, 'msg' => '登录成功', 'data' => ['url' => Url::to(['store/index'])]];
+                $data = ['code' => 1, 'msg' => '登录成功', 'data' => ['url' => Url::to(['itemno/index'])]];
             } else {
                 $data = ['code' => -1, 'msg' => '登录失败，请检查账号密码是否正确'];
             }

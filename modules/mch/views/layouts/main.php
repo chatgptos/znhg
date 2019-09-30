@@ -174,7 +174,7 @@ function getCurrentMenu($menu_list, $route)
             <div class="btn-group float-left message">
                 <a href="javascript:" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
                    style="position: relative">
-                    <span>订单消息</span>
+                    <span>换货号消息</span>
                     <div class="text-center ml-2 totalNum"
                          hidden
                          style="width: 18px;height: 18px;line-height: 18px;border-radius:999px;display: inline-block;background-color: #ff4544;color:#fff;">
@@ -240,7 +240,7 @@ function getCurrentMenu($menu_list, $route)
                             for (var i = 0; i < count; i++) {
                                 $('.message-list').prop('hidden', false);
                                 $('.totalNum').prop('hidden', false).html(count);
-                                var html = "<a class='dropdown-item' data-index='" + res.data[i].id + "' href='<?=Yii::$app->urlManager->createUrl(['mch/order/index', 'status' => 1])?>'>" + res.data[i].name + "下了一个订单</a>";
+                                var html = "<a class='dropdown-item' data-index='" + res.data[i].id + "' href='<?=Yii::$app->urlManager->createUrl(['mch/order/index', 'status' => 1])?>'>" + res.data[i].name + "下了一个货号</a>";
                                 $('.message-list').append(html);
                                 if (res.data[i].is_sound == 0) {
                                     playSound();
