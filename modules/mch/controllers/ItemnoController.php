@@ -34,7 +34,6 @@ class ItemnoController extends Controller
         $form->store_id = $this->store->id;
         $form->limit = 10;
         $data = $form->search();
-
         $store_data_form = new StoreDataForm();
         $store_data_form->store_id = $this->store->id;
         $store_data_form->is_offline = \Yii::$app->request->get('is_offline');
