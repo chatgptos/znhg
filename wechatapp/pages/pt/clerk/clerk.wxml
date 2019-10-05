@@ -38,9 +38,9 @@
 <block wx:if="{{order_info.offline == 2}}">
     <view class="order-address block flex-row">
     <view class='flex-grow-1'>
-        <view class="flex-grow-1 block-row">门店名称：{{order_info.shop.name}}</view>
+        <view class="flex-grow-1 block-row">货柜名称：{{order_info.shop.name}}</view>
         <view class="flex-grow-1 block-row">联系电话：{{order_info.shop.mobile}}</view>
-        <view class="flex-grow-1">门店地址：{{order_info.shop.address}}</view>
+        <view class="flex-grow-1">货柜地址：{{order_info.shop.address}}</view>
     </view>
     <view class='flex-grow-0 flex-y-center' wx:if='{{order_info.shop.longitude}}'>
         <text class='order-no-num-right flex-grow-0 flex-y-center flex-x-center' bindtap='location'>导航</text>

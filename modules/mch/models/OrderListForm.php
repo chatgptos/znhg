@@ -101,7 +101,7 @@ class OrderListForm extends Model
                     'o.clerk_id' => $this->clerk_id,
                 ]);
             }
-            if ($this->shop_id) {//查找指定门店的订单
+            if ($this->shop_id) {//查找指定货柜的订单
                 $query->andWhere([
                     'o.shop_id' => $this->shop_id,
                 ]);

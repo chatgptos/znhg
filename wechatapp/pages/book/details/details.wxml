@@ -68,7 +68,7 @@
     </view>
     <view class='shop' wx:if="{{goods.shopListNum > 0}}">
         <view class='shop-title flex-y-center'>
-                门店信息
+                货柜信息
         </view>
         <view class='shop-info'>
                 <view class='shop-name'>

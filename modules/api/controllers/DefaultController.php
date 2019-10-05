@@ -308,7 +308,7 @@ class DefaultController extends Controller
         ]);
     }
 
-    //门店列表
+    //货柜列表
     public function actionShopList()
     {
         $form = new ShopListForm();
@@ -318,7 +318,7 @@ class DefaultController extends Controller
         $this->renderJson($form->search());
     }
 
-    //门店详情
+    //货柜详情
     public function actionShopDetail()
     {
         $form = new ShopForm();

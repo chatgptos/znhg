@@ -276,7 +276,7 @@
                         ],
                     },
                     {
-                        name: "门店列表",
+                        name: "货柜列表",
                         link: "/pages/shop/shop",
                         open_type: "navigate",
                         params: []

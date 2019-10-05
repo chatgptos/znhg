@@ -41,7 +41,7 @@ $this->params['active_nav_group'] = 4;
                 <th>ID</th>
                 <th>头像</th>
                 <th>昵称</th>
-                <th>所属门店</th>
+                <th>所属货柜</th>
                 <th>加入时间</th>
                 <th>身份</th>
                 <th>核销订单数</th>
@@ -76,7 +76,7 @@ $this->params['active_nav_group'] = 4;
                                data-content="是否解除核销员">解除核销员</a>
                         <?php endif; ?>
                         <a class="btn btn-primary btn-sm user-shop-edit" data-id="<?= $u['id'] ?>"
-                           href="javascript:">修改门店</a>
+                           href="javascript:">修改货柜</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -100,7 +100,7 @@ $this->params['active_nav_group'] = 4;
                         <div class="modal-body">
                             <div class="form-group row">
                                 <div class="col-3 text-right">
-                                    <label class="col-form-label required">门店选择</label>
+                                    <label class="col-form-label required">货柜选择</label>
                                 </div>
                                 <div class="col-9">
                                     <template v-if="shop_list.length>0">
@@ -120,7 +120,7 @@ $this->params['active_nav_group'] = 4;
                                         <div class="shop-error text-danger" hidden></div>
                                     </template>
                                     <template v-else>
-                                        <label class="col-form-label">暂未设置门店，<a
+                                        <label class="col-form-label">暂未设置货柜，<a
                                                 href="<?= $urlManager->createUrl(['mch/store/shop']) ?>">请前往设置</a></label>
                                     </template>
                                 </div>
@@ -158,7 +158,7 @@ $this->params['active_nav_group'] = 4;
                     </div>
                 </div>
             </div>
-            <!--修改门店-->
+            <!--修改货柜-->
             <div class="modal fade" id="shop-edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
                  aria-hidden="true" data-backdrop="static">
                 <div class="modal-dialog" role="document">
@@ -172,7 +172,7 @@ $this->params['active_nav_group'] = 4;
                         <div class="modal-body">
                             <div class="form-group row">
                                 <div class="col-3 text-right">
-                                    <label class="col-form-label required">门店选择</label>
+                                    <label class="col-form-label required">货柜选择</label>
                                 </div>
                                 <div class="col-9">
                                     <template v-if="shop_list.length>0">
@@ -192,7 +192,7 @@ $this->params['active_nav_group'] = 4;
                                         <div class="shop-error text-danger" hidden></div>
                                     </template>
                                     <template v-else>
-                                        <label class="col-form-label">暂未设置门店，<a
+                                        <label class="col-form-label">暂未设置货柜，<a
                                                 href="<?= $urlManager->createUrl(['mch/store/shop']) ?>">请前往设置</a></label>
                                     </template>
                                 </div>
@@ -280,7 +280,7 @@ $this->params['active_nav_group'] = 4;
         var index = $(this).data('index');
         $('.shop-error').prop('hidden', true);
         if (app.select_shop == "") {
-            $('.shop-error').prop('hidden', false).html('请先选择门店');
+            $('.shop-error').prop('hidden', false).html('请先选择货柜');
             return;
         }
         $.ajax({

@@ -364,7 +364,7 @@ $this->params['active_nav_group'] = 11;
                     url: '/pages/seckill/seckill',
                 },
                 {
-                    name: '附近门店',
+                    name: '附近货柜',
                     url: '/pages/shop/shop',
                 },
                 {

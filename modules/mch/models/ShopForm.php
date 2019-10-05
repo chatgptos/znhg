@@ -50,13 +50,13 @@ class ShopForm extends Model
     public function attributeLabels()
     {
         return [
-            'name'=>'门店名称',
+            'name'=>'货柜名称',
             'mobile'=>'联系方式',
-            'address'=>'门店地址',
+            'address'=>'货柜地址',
             'latitude'=>'经纬度',
             'longitude'=>'经纬度',
             'score'=>'评分',
-            'cover_url'=>'门店大图',
+            'cover_url'=>'货柜大图',
             'pic_url'=>'门店小图',
             'content'=>'门店介绍',
             'shop_time'=>'营业时间',
