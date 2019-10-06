@@ -9,6 +9,7 @@ namespace app\modules\mch\controllers\crowd;
 
 
 use app\models\YySetting;
+use app\models\ZcSetting;
 
 class IndexController extends Controller
 {
@@ -24,9 +25,9 @@ class IndexController extends Controller
      */
     public function actionSetting()
     {
-        $setting = YySetting::findOne(['store_id'=>$this->store->id]);
+        $setting = ZcSetting::findOne(['store_id'=>$this->store->id]);
         if (!$setting){
-            $setting = new YySetting();
+            $setting = new ZcSetting();
         }
         if (\Yii::$app->request->isPost){
             $model = \Yii::$app->request->post('model');

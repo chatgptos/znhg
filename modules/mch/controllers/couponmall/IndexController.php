@@ -8,6 +8,7 @@
 namespace app\modules\mch\controllers\couponmall;
 
 
+use app\models\QsCmSetting;
 use app\models\YySetting;
 
 class IndexController extends Controller
@@ -24,9 +25,9 @@ class IndexController extends Controller
      */
     public function actionSetting()
     {
-        $setting = YySetting::findOne(['store_id'=>$this->store->id]);
+        $setting = QsCmSetting::findOne(['store_id'=>$this->store->id]);
         if (!$setting){
-            $setting = new YySetting();
+            $setting = new QsCmSetting();
         }
         if (\Yii::$app->request->isPost){
             $model = \Yii::$app->request->post('model');

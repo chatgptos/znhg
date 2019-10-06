@@ -9,6 +9,7 @@ namespace app\behaviors;
 
 
 use app\extensions\PinterOrder;
+use app\models\IntegralLog;
 use app\models\Level;
 use app\models\Order;
 use app\models\OrderDetail;
@@ -325,5 +326,19 @@ class OrderBehavior extends Behavior
         $giveUser->save();
         $give->give_integral = 1;
         $give->save();
+
+
+        //积分日志增加
+        $integralLog = new IntegralLog();
+        $integralLog->user_id = $giveUser->id;
+        $integralLog->content = "管理员 后台操作账号：" . $giveUser->nickname . " 积分充值：" . $integral . " 积分";
+        $integralLog->integral = $integral;
+        $integralLog->addtime = time();
+        $integralLog->username = $giveUser->nickname;
+        $integralLog->operator = 'admin';
+        $integralLog->store_id = $this->store->id;
+        $integralLog->operator_id = 0;
+        $integralLog->save();
+
     }
 }

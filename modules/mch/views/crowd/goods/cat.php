@@ -58,7 +58,7 @@ $this->params['is_book'] = 1;
         ?>
         <div class="mb-3 clearfix">
             <div class="float-left">
-                <a href="<?= $urlManager->createUrl(['mch/book/goods/cat-edit']) ?>" class="btn btn-primary"><i
+                <a href="<?= $urlManager->createUrl(['mch/crowd/goods/cat-edit']) ?>" class="btn btn-primary"><i
                         class="iconfont icon-playlistadd"></i>添加分类</a>
             </div>
         </div>
@@ -88,9 +88,9 @@ $this->params['is_book'] = 1;
                     <td class="nowrap text-danger"><?= $cat->sort ?></td>
                     <td class="nowrap">
                         <a class="btn btn-sm btn-primary"
-                           href="<?= $urlManager->createUrl(['mch/book/goods/cat-edit', 'id' => $cat->id]) ?>">修改</a>
+                           href="<?= $urlManager->createUrl(['mch/crowd/goods/cat-edit', 'id' => $cat->id]) ?>">修改</a>
                         <a class="btn btn-sm btn-danger del"
-                           href="<?= $urlManager->createUrl(['mch/book/goods/cat-del', 'id' => $cat->id]) ?>">删除</a>
+                           href="<?= $urlManager->createUrl(['mch/crowd/goods/cat-del', 'id' => $cat->id]) ?>">删除</a>
                     </td>
                 </tr>
             <?php endforeach; ?>

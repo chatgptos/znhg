@@ -149,13 +149,13 @@ $this->params['is_book'] = 1;
                     <td class="nowrap">
                         <?php if ($item['is_hide'] == 0): ?>
                             <a class="btn btn-sm btn-primary hide-status-btn"
-                               href="<?= $urlManager->createUrl(['mch/book/comment/hide-status', 'id' => $item['id'], 'status' => 1]) ?>">隐藏</a>
+                               href="<?= $urlManager->createUrl(['mch/couponmall/comment/hide-status', 'id' => $item['id'], 'status' => 1]) ?>">隐藏</a>
                         <?php else: ?>
                             <a class="btn btn-sm btn-primary hide-status-btn"
-                               href="<?= $urlManager->createUrl(['mch/book/comment/hide-status', 'id' => $item['id'], 'status' => 0]) ?>">显示</a>
+                               href="<?= $urlManager->createUrl(['mch/couponmall/comment/hide-status', 'id' => $item['id'], 'status' => 0]) ?>">显示</a>
                         <?php endif; ?>
                         <a class="btn btn-sm btn-danger delete-status-btn"
-                           href="<?= $urlManager->createUrl(['mch/book/comment/delete-status', 'id' => $item['id'], 'status' => 1]) ?>">删除</a>
+                           href="<?= $urlManager->createUrl(['mch/couponmall/comment/delete-status', 'id' => $item['id'], 'status' => 1]) ?>">删除</a>
                     </td>
                 </tr>
             <?php endforeach; ?>

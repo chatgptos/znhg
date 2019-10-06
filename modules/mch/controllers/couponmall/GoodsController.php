@@ -9,11 +9,13 @@ namespace app\modules\mch\controllers\couponmall;
 
 
 use app\models\PostageRules;
-use app\models\YyCat;
-use app\models\YyForm;
-use app\models\YyGoods;
-use app\modules\mch\models\book\YyCatForm;
-use app\modules\mch\models\book\YyGoodsForm;
+use app\models\QsCmCat;
+use app\models\QsCmForm;
+use app\models\QsCmGoods;
+use app\modules\mch\models\couponmall\QsCmCatForm;
+use app\modules\mch\models\couponmall\QsCmGoodsForm;
+
+
 
 class GoodsController extends Controller
 {
@@ -23,7 +25,7 @@ class GoodsController extends Controller
      */
     public function actionCat()
     {
-        $form = new YyCatForm();
+        $form = new QsCmCatForm();
         $arr = $form->getList($this->store->id);
         return $this->render('cat',[
             'list'      => $arr[0],
@@ -37,14 +39,14 @@ class GoodsController extends Controller
      */
     public function actionCatEdit($id = 0)
     {
-        $cat = YyCat::findOne(['id'=>$id,'is_delete'=>0,'store_id'=>$this->store->id]);
+        $cat = QsCmCat::findOne(['id'=>$id,'is_delete'=>0,'store_id'=>$this->store->id]);
         if (!$cat){
-            $cat = new YyCat();
+            $cat = new QsCmCat();
         }
         if (\Yii::$app->request->isPost){
             $model = \Yii::$app->request->post('model');
             $model['store_id'] = $this->store->id;
-            $form = new YyCatForm();
+            $form = new QsCmCatForm();
             $form->attributes = $model;
             $form->cat = $cat;
             return json_encode($form->save(),JSON_UNESCAPED_UNICODE);
@@ -61,7 +63,7 @@ class GoodsController extends Controller
      */
     public function actionCatDel($id = 0)
     {
-        $cat = YyCat::findOne(['id'=>$id,'is_delete'=>0,'store_id'=>$this->store->id]);
+        $cat = QsCmCat::findOne(['id'=>$id,'is_delete'=>0,'store_id'=>$this->store->id]);
         if (!$cat){
             return json_encode([
                 'code'  => 1,
@@ -89,9 +91,9 @@ class GoodsController extends Controller
      */
     public function actionIndex()
     {
-        $form = new YyGoodsForm();
+        $form = new QsCmGoodsForm();
         $arr = $form->getList($this->store->id);
-        $cat_list = YyCat::find()->select('id,name')->andWhere(['store_id'=>$this->store->id,'is_delete'=>0])->orderBy('sort ASC')->asArray()->all();
+        $cat_list = QsCmCat::find()->select('id,name')->andWhere(['store_id'=>$this->store->id,'is_delete'=>0])->orderBy('sort ASC')->asArray()->all();
         return $this->render('index',[
             'list'      => $arr[0],
             'pagination'=> $arr[1],
@@ -106,24 +108,24 @@ class GoodsController extends Controller
      */
     public function actionGoodsEdit($id = 0)
     {
-        $goods = YyGoods::findOne(['id'=>$id,'is_delete'=>0,'store_id'=>$this->store->id]);
-        $form_list = YyForm::find()->where(['store_id'=>$this->store->id,'goods_id'=>$id,'is_delete'=>0])->orderBy(['sort'=>SORT_ASC])->asArray()->all();
+        $goods = QsCmGoods::findOne(['id'=>$id,'is_delete'=>0,'store_id'=>$this->store->id]);
+        $form_list = QsCmForm::find()->where(['store_id'=>$this->store->id,'goods_id'=>$id,'is_delete'=>0])->orderBy(['sort'=>SORT_ASC])->asArray()->all();
 
         if (!$goods){
-            $goods = new YyGoods();
+            $goods = new QsCmGoods();
         }
         if (\Yii::$app->request->isPost){
             $model = \Yii::$app->request->post('model');
 //            var_dump($model);die();
             $model['store_id'] = $this->store->id;
-            $form = new YyGoodsForm();
+            $form = new QsCmGoodsForm();
             $form->attributes = $model;
             $form->goods = $goods;
 //            var_dump($model['form_list']);
 //            $form->$form_list = $model['form_list'];
             return json_encode($form->save(),JSON_UNESCAPED_UNICODE);
         }
-        $ptCat = YyCat::find()
+        $ptCat = QsCmCat::find()
             ->andWhere(['is_delete'=>0,'store_id'=>$this->store->id])
             ->asArray()
             ->orderBy('sort ASC')
@@ -143,7 +145,7 @@ class GoodsController extends Controller
     public function actionGoodsUpDown($id = 0, $type = 'down')
     {
         if ($type == 'down') {
-            $goods = YyGoods::findOne(['id' => $id, 'is_delete' => 0, 'status' => 1, 'store_id' => $this->store->id]);
+            $goods = QsCmGoods::findOne(['id' => $id, 'is_delete' => 0, 'status' => 1, 'store_id' => $this->store->id]);
             if (!$goods) {
                 $this->renderJson([
                     'code' => 1,
@@ -152,7 +154,7 @@ class GoodsController extends Controller
             }
             $goods->status = 2;
         } elseif ($type == 'up') {
-            $goods = YyGoods::findOne(['id' => $id, 'is_delete' => 0, 'status' => 2, 'store_id' => $this->store->id]);
+            $goods = QsCmGoods::findOne(['id' => $id, 'is_delete' => 0, 'status' => 2, 'store_id' => $this->store->id]);
 
             if (!$goods) {
                 $this->renderJson([
@@ -197,11 +199,11 @@ class GoodsController extends Controller
 
         $condition = ['and', ['in', 'id', $goods_id_group], ['store_id' => $this->store->id]];
         if ($get['type'] == 0) { //批量上架
-            $res = YyGoods::updateAll(['status' => 1], $condition);
+            $res = QsCmGoods::updateAll(['status' => 1], $condition);
         } elseif ($get['type'] == 1) {//批量下架
-            $res = YyGoods::updateAll(['status' => 0], $condition);
+            $res = QsCmGoods::updateAll(['status' => 0], $condition);
         } elseif ($get['type'] == 2) {//批量删除
-            $res = YyGoods::updateAll(['is_delete' => 1], $condition);
+            $res = QsCmGoods::updateAll(['is_delete' => 1], $condition);
         }
         if ($res > 0) {
             $this->renderJson([
@@ -222,7 +224,7 @@ class GoodsController extends Controller
      */
     public function actionGoodsDel($id = 0)
     {
-        $goods = YyGoods::findOne(['id' => $id, 'is_delete' => 0, 'store_id' => $this->store->id]);
+        $goods = QsCmGoods::findOne(['id' => $id, 'is_delete' => 0, 'store_id' => $this->store->id]);
         if (!$goods) {
             $this->renderJson([
                 'code' => 1,

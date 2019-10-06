@@ -150,6 +150,32 @@ class MchMenu
                             'mch/store/cat-edit',
                         ],
                     ],
+                    [
+                        'name' => '订单管理',
+                        'route' => 'mch/order/index',
+                        'icon' => 'icon-activity',
+                        'list' => [
+                            [
+                                'name' => '订单列表',
+                                'route' => 'mch/order/index',
+                                'sub' => [
+                                    'mch/order/detail'
+                                ]
+                            ],
+                            [
+                                'name' => '自提订单',
+                                'route' => 'mch/order/offline',
+                            ],
+                            [
+                                'name' => '售后订单',
+                                'route' => 'mch/order/refund',
+                            ],
+                            [
+                                'name' => '评价管理',
+                                'route' => 'mch/comment/index',
+                            ],
+                        ],
+                    ],
                 ],
             ],
 
@@ -365,32 +391,67 @@ class MchMenu
                     ],
                 ],
             ],
+//            [
+//                'name' => '订单管理',
+//                'route' => 'mch/order/index',
+//                'icon' => 'icon-activity',
+//                'list' => [
+//                    [
+//                        'name' => '订单列表',
+//                        'route' => 'mch/order/index',
+//                        'sub' => [
+//                            'mch/order/detail'
+//                        ]
+//                    ],
+//                    [
+//                        'name' => '自提订单',
+//                        'route' => 'mch/order/offline',
+//                    ],
+//                    [
+//                        'name' => '售后订单',
+//                        'route' => 'mch/order/refund',
+//                    ],
+//                    [
+//                        'name' => '评价管理',
+//                        'route' => 'mch/comment/index',
+//                    ],
+//                ],
+//            ],
+
             [
-                'name' => '订单管理',
-                'route' => 'mch/order/index',
-                'icon' => 'icon-activity',
+                'name' => '财务管理',
+                'route' => 'mch/financial/index',
+                'icon' => 'icon-people',
                 'list' => [
                     [
-                        'name' => '订单列表',
-                        'route' => 'mch/order/index',
+                        'name' => '财务管理',
+                        'route' => 'mch/financial/index',
                         'sub' => [
-                            'mch/order/detail'
-                        ]
+                            'mch/financial/card',
+                            'mch/financial/coupon',
+                            'mch/financial/rechange-log',
+                            'mch/financial/edit',
+                        ],
                     ],
                     [
-                        'name' => '自提订单',
-                        'route' => 'mch/order/offline',
+                        'name' => '积分提现',
+                        'route' => 'mch/share/cash',
                     ],
                     [
-                        'name' => '售后订单',
-                        'route' => 'mch/order/refund',
+                        'name' => '积分收入',
+                        'route' => 'mch/share/cash',
                     ],
                     [
-                        'name' => '评价管理',
-                        'route' => 'mch/comment/index',
+                        'name' => '提现设置',
+                        'route' => 'mch/financial/clerk',
+                    ],
+                    [
+                        'name' => '收银台',
+                        'route' => 'mch/financial/index',
                     ],
                 ],
             ],
+
             [
                 'name' => '用户管理',
                 'route' => 'mch/user/index',
@@ -432,10 +493,6 @@ class MchMenu
                     [
                         'name' => '优惠券订单',
                         'route' => 'mch/share/order',
-                    ],
-                    [
-                        'name' => '优惠券提现',
-                        'route' => 'mch/share/cash',
                     ],
                     [
                         'name' => '优惠券商设置',
@@ -528,11 +585,6 @@ class MchMenu
                         ],
                     ],
                 ],
-            ],
-            [
-                'name' => '财务管理',
-                'route' => '/mch/store/index',
-                'icon' => 'icon-coupons',
             ],
             [
                 'name' => '应用专区',

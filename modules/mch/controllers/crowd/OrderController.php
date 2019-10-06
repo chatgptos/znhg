@@ -10,7 +10,9 @@ namespace app\modules\mch\controllers\crowd;
 
 use app\models\YyOrder;
 use app\models\YyWechatTplMsgSender;
-use app\modules\mch\models\book\OrderForm;
+use app\models\ZcOrder;
+use app\models\ZcWechatTplMsgSender;
+use app\modules\mch\models\crowd\OrderForm;
 
 class OrderController extends Controller
 {
@@ -36,7 +38,7 @@ class OrderController extends Controller
     public function actionRefund()
     {
         $order_id = \Yii::$app->request->get('order_id');
-        $order = YyOrder::find()
+        $order = ZcOrder::find()
             ->andWhere([
                 'id'            => $order_id,
                 'is_delete'     => 0,
@@ -91,7 +93,7 @@ class OrderController extends Controller
         }
         $order->is_refund = 1;
         if ($order->save()) {
-            $msg_sender = new YyWechatTplMsgSender($this->store_id, $order->id, $wechat);
+            $msg_sender = new ZcWechatTplMsgSender($this->store_id, $order->id, $wechat);
             if ($order->is_pay) {
                 $remark = '订单已退款，退款金额：' . $order->pay_price;
                 $refund_reason = '用户取消';

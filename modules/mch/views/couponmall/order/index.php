@@ -186,27 +186,27 @@ $condition = [
             <ul class="nav nav-tabs status">
                 <li class="nav-item">
                     <a class="status-item nav-link <?= $status == -1 ? 'active' : null ?>"
-                       href="<?= $urlManager->createUrl(array_merge(['mch/book/order/index'])) ?>">全部</a>
+                       href="<?= $urlManager->createUrl(array_merge(['mch/couponmall/order/index'])) ?>">全部</a>
                 </li>
                 <li class="nav-item">
                     <a class="status-item nav-link <?= $status == 0 ? 'active' : null ?>"
-                       href="<?= $urlManager->createUrl(array_merge(['mch/book/order/index'], $condition, ['status' => 0])) ?>">待付款</a>
+                       href="<?= $urlManager->createUrl(array_merge(['mch/couponmall/order/index'], $condition, ['status' => 0])) ?>">待付款</a>
                 </li>
                 <li class="nav-item">
                     <a class="status-item nav-link <?= $status == 1 ? 'active' : null ?>"
-                       href="<?= $urlManager->createUrl(array_merge(['mch/book/order/index'], $condition, ['status' => 1])) ?>">待使用</a>
+                       href="<?= $urlManager->createUrl(array_merge(['mch/couponmall/order/index'], $condition, ['status' => 1])) ?>">待使用</a>
                 </li>
                 <li class="nav-item">
                     <a class="status-item nav-link <?= $status == 2 ? 'active' : null ?>"
-                       href="<?= $urlManager->createUrl(array_merge(['mch/book/order/index'], $condition, ['status' => 2])) ?>">已使用</a>
+                       href="<?= $urlManager->createUrl(array_merge(['mch/couponmall/order/index'], $condition, ['status' => 2])) ?>">已使用</a>
                 </li>
                 <li class="nav-item">
                     <a class="status-item nav-link <?= $status == 3 ? 'active' : null ?>"
-                       href="<?= $urlManager->createUrl(array_merge(['mch/book/order/index'], $condition, ['status' => 3])) ?>">退款</a>
+                       href="<?= $urlManager->createUrl(array_merge(['mch/couponmall/order/index'], $condition, ['status' => 3])) ?>">退款</a>
                 </li>
                 <li class="nav-item">
                     <a class="status-item nav-link <?= $status == 5 ? 'active' : null ?>"
-                       href="<?= $urlManager->createUrl(array_merge(['mch/book/order/index'], $condition, ['status' => 5])) ?>">已取消</a>
+                       href="<?= $urlManager->createUrl(array_merge(['mch/couponmall/order/index'], $condition, ['status' => 5])) ?>">已取消</a>
                 </li>
             </ul>
         </div>
@@ -348,7 +348,7 @@ $condition = [
         error.hide();
         console.log(error);
         $.ajax({
-            url: "<?=$urlManager->createUrl(['mch/book/order/refund'])?>",
+            url: "<?=$urlManager->createUrl(['mch/couponmall/order/refund'])?>",
             type: "get",
             data: {order_id: order_id},
             dataType: "json",
