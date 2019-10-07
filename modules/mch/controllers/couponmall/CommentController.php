@@ -9,6 +9,8 @@ namespace app\modules\mch\controllers\couponmall;
 
 
 use app\models\PtGoods;
+use app\models\QsCmGoods;
+use app\models\QsCmOrderComment;
 use app\models\User;
 use app\models\YyGoods;
 use app\models\YyOrderComment;
@@ -18,12 +20,12 @@ class CommentController extends Controller
 {
     public function actionIndex()
     {
-        $query = YyOrderComment::find()->alias('oc')->where(['oc.store_id' => $this->store->id, 'oc.is_delete' => 0]);
+        $query = QsCmOrderComment::find()->alias('oc')->where(['oc.store_id' => $this->store->id, 'oc.is_delete' => 0]);
         $count = $query->count();
         $pagination = new Pagination(['totalCount' => $count, 'pageSize' => 20]);
         $list = $query
             ->leftJoin(['u' => User::tableName()], 'oc.user_id=u.id')
-            ->leftJoin(['g' => YyGoods::tableName()], 'oc.goods_id=g.id')
+            ->leftJoin(['g' => QsCmGoods::tableName()], 'oc.goods_id=g.id')
             ->select('oc.id,u.nickname,u.avatar_url,oc.score,oc.content,oc.pic_list,g.name goods_name,oc.is_hide')
             ->orderBy('oc.addtime DESC')->limit($pagination->limit)->offset($pagination->offset)->asArray()->all();
         return $this->render('index', [
@@ -34,7 +36,7 @@ class CommentController extends Controller
 
     public function actionHideStatus($id, $status)
     {
-        $order_comment = YyOrderComment::findOne([
+        $order_comment = QsCmOrderComment::findOne([
             'store_id' => $this->store->id,
             'id' => $id,
         ]);
@@ -50,7 +52,7 @@ class CommentController extends Controller
 
     public function actionDeleteStatus($id, $status)
     {
-        $order_comment = YyOrderComment::findOne([
+        $order_comment = QsCmOrderComment::findOne([
             'store_id' => $this->store->id,
             'id' => $id,
         ]);

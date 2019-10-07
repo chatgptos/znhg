@@ -14,7 +14,7 @@ $this->params['is_book'] = 1;
     <div class="panel-header"><?= $this->title ?></div>
     <div class="panel-body">
         <form class="form auto-form" method="post" autocomplete="off"
-              return="<?= $urlManager->createUrl(['mch/book/goods/cat']) ?>">
+              return="<?= $urlManager->createUrl(['mch/couponmall/goods/cat']) ?>">
             <div class="form-body">
                 <div class="form-group row">
                     <div class="form-group-label col-3 text-right">

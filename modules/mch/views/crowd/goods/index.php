@@ -58,16 +58,16 @@ $this->params['is_book'] = 1;
         ?>
         <div class="mb-3 clearfix">
             <div class="float-left">
-                <a href="<?= $urlManager->createUrl(['mch/book/goods/goods-edit']) ?>" class="btn btn-primary"><i
+                <a href="<?= $urlManager->createUrl(['mch/crowd/goods/goods-edit']) ?>" class="btn btn-primary"><i
                         class="iconfont icon-playlistadd"></i>添加商品</a>
                 <a href="javascript:void(0)" class="btn btn-secondary batch"
-                   data-url="<?= $urlManager->createUrl(['mch/book/goods/batch']) ?>" data-content="是否批量上架"
+                   data-url="<?= $urlManager->createUrl(['mch/crowd/goods/batch']) ?>" data-content="是否批量上架"
                    data-type="0">批量上架</a>
                 <a href="javascript:void(0)" class="btn btn-warning batch"
-                   data-url="<?= $urlManager->createUrl(['mch/book/goods/batch']) ?>" data-content="是否批量下架"
+                   data-url="<?= $urlManager->createUrl(['mch/crowd/goods/batch']) ?>" data-content="是否批量下架"
                    data-type="1">批量下架</a>
                 <a href="javascript:void(0)" class="btn btn-danger batch"
-                   data-url="<?= $urlManager->createUrl(['mch/book/goods/batch']) ?>" data-content="是否批量删除"
+                   data-url="<?= $urlManager->createUrl(['mch/crowd/goods/batch']) ?>" data-content="是否批量删除"
                    data-type="2">批量删除</a>
                 <div class="dropdown float-right ml-2">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
@@ -83,10 +83,10 @@ $this->params['is_book'] = 1;
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"
                          style="max-height: 200px;overflow-y: auto">
-                        <a class="dropdown-item" href="<?= $urlManager->createUrl(['mch/book/goods/index']) ?>">全部类型</a>
+                        <a class="dropdown-item" href="<?= $urlManager->createUrl(['mch/crowd/goods/index']) ?>">全部类型</a>
                         <?php foreach ($cat_list as $index => $value): ?>
                             <a class="dropdown-item"
-                               href="<?= $urlManager->createUrl(array_merge(['mch/book/goods/index'], $_GET, ['cat' => $value['id']])) ?>"><?= $value['name'] ?></a>
+                               href="<?= $urlManager->createUrl(array_merge(['mch/crowd/goods/index'], $_GET, ['cat' => $value['id']])) ?>"><?= $value['name'] ?></a>
                         <?php endforeach; ?>
                     </div>
                 </div>
@@ -171,9 +171,9 @@ $this->params['is_book'] = 1;
                     </td>
                     <td class="nowrap">
                         <a class="btn btn-sm btn-primary"
-                           href="<?= $urlManager->createUrl(['mch/book/goods/goods-edit', 'id' => $goods['id']]) ?>">修改</a>
+                           href="<?= $urlManager->createUrl(['mch/crowd/goods/goods-edit', 'id' => $goods['id']]) ?>">修改</a>
                         <a class="btn btn-sm btn-danger del"
-                           href="<?= $urlManager->createUrl(['mch/book/goods/goods-del', 'id' => $goods['id']]) ?>">删除</a>
+                           href="<?= $urlManager->createUrl(['mch/crowd/goods/goods-del', 'id' => $goods['id']]) ?>">删除</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -235,7 +235,7 @@ $this->params['is_book'] = 1;
             text = '下架';
         }
 
-        var url = "<?= $urlManager->createUrl(['mch/book/goods/goods-up-down']) ?>";
+        var url = "<?= $urlManager->createUrl(['mch/crowd/goods/goods-up-down']) ?>";
         layer.confirm("是否" + text + "？", {
             btn: [text, '取消'] //按钮
         }, function () {
