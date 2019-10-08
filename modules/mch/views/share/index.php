@@ -71,6 +71,7 @@ if ($status === '' || $status === null || $status == -1)
                     <div>累计佣金</div>
                     <div>打款佣金</div>
                 </td>
+                <td>上级分销商</td>
                 <td>下级分销商</td>
                 <td>状态</td>
                 <td>申请时间</td>
@@ -94,6 +95,10 @@ if ($status === '' || $status === null || $status == -1)
                         <div><?= $value['total_price'] ?></div>
                         <div><?= $value['price'] ?></div>
                     </td>
+                    <td>
+                        <div><?= $value['parent_id_nickname'] ?></div>
+                    </td>
+
                     <td>
                         <?php if ($value['status'] == 1): ?>
                             <?php if ($setting->level == 0): ?>
@@ -139,6 +144,8 @@ if ($status === '' || $status === null || $status == -1)
                                        data-url="<?= $urlManager->createUrl(['mch/share/status', 'status' => 2, 'id' => $value['id']]) ?>"
                                        data-content="是否审核不通过？">不通过</a>
                                 <?php elseif ($value['status'] == 1): ?>
+                                    <a class="dropdown-item"
+                                       href="<?= $urlManager->createUrl(['mch/user/edit', 'id' => $value['user_id']]) ?>">修改会员层级</a>
                                     <a class="dropdown-item"
                                        href="<?= $urlManager->createUrl(['mch/order/index', 'keyword' => $value['nickname']]) ?>">会员订单</a>
                                     <a class="dropdown-item"

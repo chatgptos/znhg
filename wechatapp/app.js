@@ -12,7 +12,9 @@ App({
         this.getStoreData();
         this.getCatList();
     },
-
+    globalData:{
+      parent_id:0,
+    },
     getStoreData: function () {
         var page = this;
         this.request({
@@ -85,7 +87,6 @@ App({
                                 success: function (res) {
                                     wx.hideLoading();
                                     //授权升级了
-                                    // console.log(code)
                                     if (res.code == 0) {
                                         wx.setStorageSync("access_token", res.data.access_token);
                                         wx.setStorageSync("user_info", {
@@ -196,7 +197,7 @@ App({
         if (access_token == '') {
             return true;
         }
-        console.log(object);
+        // console.log(object);
         getApp().bindParent(object);
     },
     bindParent: function (object) {
@@ -205,8 +206,10 @@ App({
         console.log("Try To Bind Parent With User Id:" + object.parent_id);
         var user_info = wx.getStorageSync("user_info");
         var share_setting = wx.getStorageSync("share_setting");
+        console.log(share_setting);
         if (share_setting.level > 0) {
             var parent_id = object.parent_id;
+            console.log(parent_id);
             if (parent_id != 0) {
                 getApp().request({
                     url: api.share.bind_parent,
@@ -395,7 +398,7 @@ App({
     //登录成功后不刷新的页面
     loginNoRefreshPage: [
         'pages/index/index',
-        // 'pages/user/user',
+        'pages/user/user',
     ],
 
 });

@@ -195,6 +195,84 @@ $this->params['active_nav_group'] = 5;
                     </div>
                 </div>
 
+                <div class="form-group row">
+                    <div class="col-3 text-right">
+                        <label class=" col-form-label required">代理商要求推广团队数量</label>
+                    </div>
+                    <div class="col-9">
+                        <div class="input-group short-row">
+                            <input class="form-control" name="model[agency_team_count_require]"
+                                   value="<?= $list->agency_team_count_require ? $list->agency_team_count_require : 0 ?>">
+                            <span class="input-group-addon">人</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-3 text-right">
+                        <label class=" col-form-label required">代理商优惠券申请需要数量</label>
+                    </div>
+                    <div class="col-9">
+                        <div class="input-group short-row">
+                            <input class="form-control" name="model[agency_card_count_require]"
+                                   value="<?= $list->agency_card_count_require ? $list->agency_card_count_require : 0 ?>">
+                            <span class="input-group-addon">张</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-3 text-right">
+                        <label class=" col-form-label required">渠道商要求推广团队数量</label>
+                    </div>
+                    <div class="col-9">
+                        <div class="input-group short-row">
+                            <input class="form-control" name="model[distributors_team_count_require]"
+                                   value="<?= $list->distributors_team_count_require ? $list->distributors_team_count_require : 0 ?>">
+                            <span class="input-group-addon">人</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group row">
+                    <div class="col-3 text-right">
+                        <label class=" col-form-label required">渠道商优惠券申请需要数量</label>
+                    </div>
+                    <div class="col-9">
+                        <div class="input-group short-row">
+                            <input class="form-control" name="model[distributors_card_count_require]"
+                                   value="<?= $list->distributors_card_count_require ? $list->distributors_card_count_require : 0 ?>">
+                            <span class="input-group-addon">张</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-3 text-right">
+                        <label class=" col-form-label required">分红权要求推广团队数量</label>
+                    </div>
+                    <div class="col-9">
+                        <div class="input-group short-row">
+                            <input class="form-control" name="model[dividend_sharing_right_team_count_require]"
+                                   value="<?= $list->dividend_sharing_right_team_count_require ? $list->dividend_sharing_right_team_count_require : 0 ?>">
+                            <span class="input-group-addon">人</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-3 text-right">
+                        <label class=" col-form-label required">分红权优惠券申请需要数量</label>
+                    </div>
+                    <div class="col-9">
+                        <div class="input-group short-row">
+                            <input class="form-control" name="model[dividend_sharing_right_card_count_require]"
+                                   value="<?= $list->dividend_sharing_right_card_count_require ? $list->dividend_sharing_right_card_count_require : 0 ?>">
+                            <span class="input-group-addon">张</span>
+                        </div>
+                    </div>
+                </div>
+
+
 
                 <div class="form-group row">
                     <div class="col-3 text-right">

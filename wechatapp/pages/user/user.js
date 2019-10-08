@@ -31,8 +31,37 @@ Page({
     onLoad: function (options) {
         app.pageOnLoad(this);
         this.loadData(options);
-        this.setParent_id(options);
-        // this.getParent_idAndBind();
+        // this.setParent_id(options);
+        var parent_id = 0;
+        var user_id = options.user_id;
+        var scene = decodeURIComponent(options.scene);
+        if (user_id != undefined) {
+            parent_id = user_id;
+        }
+        else if (scene != undefined) {
+            parent_id = scene;
+        }
+        console.log(options)
+        console.log('console.log(parent_id)------------------' + parent_id + 'user_id' + user_id)
+        wx.setStorageSync('parent_id', parent_id);
+        console.log(parent_id)
+        //第一次种下 判断如果没有登入
+        if (parent_id == undefined || parent_id == "undefined" || parent_id == 0) {
+            parent_id=app.globalData.parent_id;
+        }
+        if (parent_id != undefined && parent_id != "undefined" && parent_id != 0) {
+            app.globalData.parent_id=parent_id;
+            var access_token = wx.getStorageSync("access_token");
+            if (access_token == '') {
+                //没有登入就种下
+
+            }else {
+                app.loginBindParent({parent_id: parent_id});
+            }
+        }
+        console.log('查看parent_id');
+        console.log(parent_id);
+        console.log(app.globalData.parent_id);
     },
     /**
      * 绑定获取parent_id
@@ -51,9 +80,24 @@ Page({
      */
     setParent_id: function (options) {
         var parent_id = 0;
-        var share_user_id = options.user_id;
-        var scene = decodeURIComponent(options.scene);
+        var share_user_id = options.user_id;//转发过来的推荐人id
+        var scene = decodeURIComponent(options.scene);//二维码推荐人id
 
+
+        app.pageOnLoad(this);
+        this.loadData(options);
+        var page = this;
+        var parent_id = 0;
+        var user_id = options.user_id;
+        var scene = decodeURIComponent(options.scene);
+        if (user_id != undefined) {
+            parent_id = user_id;
+        }
+        else if (scene != undefined) {
+            parent_id = scene;
+        }
+
+        //得到推荐者的id
         if (share_user_id != undefined && share_user_id != 'undefined' && share_user_id != 0) {
             parent_id = share_user_id;
             console.log('share_user_id != undefined------------------' + parent_id)
@@ -229,21 +273,21 @@ Page({
     /**
      * 用户点击右上角分享
      */
-    onShareAppMessage: function (options) {
-        var page = this;
-        var user_info = wx.getStorageSync("user_info");
-        //申请完集市可以转发
-        var share_setting = wx.getStorageSync("share_setting");
-        if (share_setting.share_condition == 0 || share_setting.share_condition == 2) {
-            return {
-                path: "/pages/user/user?user_id=" + user_info.id,
-                success: function (e) {
-                    share_count++;
-                    if (share_count == 1)
-                        app.shareSendCoupon(page);
-                }
-            };
-        }
-    }
+    // onShareAppMessage: function (options) {
+    //     var page = this;
+    //     var user_info = wx.getStorageSync("user_info");
+    //     //申请完集市可以转发
+    //     var share_setting = wx.getStorageSync("share_setting");
+    //     if (share_setting.share_condition == 0 || share_setting.share_condition == 2) {
+    //         return {
+    //             path: "/pages/user/user?user_id=" + user_info.id,
+    //             success: function (e) {
+    //                 share_count++;
+    //                 if (share_count == 1)
+    //                     app.shareSendCoupon(page);
+    //             }
+    //         };
+    //     }
+    // }
 
 });

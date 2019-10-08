@@ -54,6 +54,19 @@ $this->params['active_nav_group'] = 4;
                         </div>
                     </div>
                     <div class="form-group row">
+                        <div class="form-group-label col-sm-2 text-right">
+                            <label class="col-form-label">上级经销商</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <select class="form-control " name="parent_id">
+                                <option value="0">无</option>
+                                <?php foreach ($parent_list as $value): ?>
+                                    <option value="<?= $value->id ?>" <?= $value->id == $value['id'] ? 'selected' : '' ?>><?= $value->nickname ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <div class="form-group-label col-2 text-right">
                         </div>
                         <div class="col-5">

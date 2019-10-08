@@ -318,8 +318,20 @@ class UserController extends Controller
             $this->renderJson($form->save());
         }
         $level = Level::findAll(['store_id' => $this->store->id, 'status' => 1, 'is_delete' => 0]);
+
+        $user_list = User::findAll(['store_id' => $this->store->id,'is_distributor' => 1]);
+
+
+//        $user_list = User::find(['store_id' => $this->store->id,'is_distributor' => 1])->asArray()->all();;
+//        foreach($user_list as $index=>$value){
+//            $user = User::findOne(['id' =>  $value['parent_id']]);
+//            if($user && isset($user->nickname)){
+//                $user_list[$index]['parent_id_nickname'] = $user->nickname;
+//            }
+//        }
         return $this->render('edit', [
             'user' => $user,
+            'parent_list' => $user_list,
             'level' => $level
         ]);
     }
