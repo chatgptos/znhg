@@ -64,9 +64,13 @@ class ShareListForm extends Model
             $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $this->limit, 'page' => $this->page - 1]);
             $list = $query->limit($pagination->limit)->offset($pagination->offset)->orderBy('s.status ASC,s.addtime DESC')
                 ->select([
-                    's.*','u.nickname','u.avatar_url','u.time','u.price','u.total_price','u.id user_id'
+                    's.*','u.nickname','u.avatar_url','u.time','u.price','u.total_price','u.id user_id','u.parent_id'
                 ])->asArray()->all();
             foreach($list as $index=>$value){
+                $user = User::findOne(['id' =>  $value['parent_id']]);
+                if($user && isset($user->nickname)){
+                    $list[$index]['parent_id_nickname'] = $user->nickname;
+                }
                 $list[$index]['first'] = 0;
                 $list[$index]['second'] = 0;
                 $list[$index]['third'] = 0;
@@ -141,7 +145,7 @@ class ShareListForm extends Model
             ->joinWith('firstChildren')->groupBy('s.id');
 //        $count = $query->count();
 //        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $this->limit, 'page' => $this->page - 1]);
-        $list = $query->select(['s.*','u.nickname'])->asArray()->all();
+        $list = $query->select(['s.*','u.nickname','u.parent_id'])->asArray()->all();
         $new_list = $list;
         //获取二级下线
         foreach($list as $index=>$value){

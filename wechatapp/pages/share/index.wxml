@@ -40,13 +40,20 @@
     <view class="flex-x-center list-content">
       <view class="list-red">{{integral}}</view>元</view>
   </navigator>
-  <navigator class="item border-bottom border-between" url="/pages/share-order/share-order">
+  <!--<navigator class="item border-bottom border-between" url="/pages/share-order/share-order">-->
+    <!--<view class="list-img flex-x-center">-->
+      <!--<image class="img" src="/images/img-share-order.png"></image>-->
+    <!--</view>-->
+    <!--<view class="flex-x-center list-content">市集订单</view>-->
+    <!--<view class="flex-x-center list-content">-->
+      <!--<view class="list-red">{{order_money}}</view>元</view>-->
+  <!--</navigator>-->
+
+  <navigator class="item border-bottom border-between" url="/pages/share-qrcode/share-qrcode">
     <view class="list-img flex-x-center">
-      <image class="img" src="/images/img-share-order.png"></image>
+      <image class="img" src="/images/img-share-qrcode.png"></image>
     </view>
-    <view class="flex-x-center list-content">市集订单</view>
-    <view class="flex-x-center list-content">
-      <view class="list-red">{{order_money}}</view>元</view>
+    <view class="flex-x-center list-content">推广二维码</view>
   </navigator>
   <navigator class="item border-bottom" url="/pages/cash-detail/cash-detail">
     <view class="list-img flex-x-center">
@@ -63,16 +70,16 @@
     <view class="list-img flex-x-center">
       <image class="img" src="/images/img-share-team.png"></image>
     </view>
-    <view class="flex-x-center list-content">我的团队</view>
+    <view class="flex-x-center list-content">我的用户</view>
     <view class="flex-x-center list-content">
       <view class="list-red">{{team_count}}</view>人</view>
   </navigator>
-  <navigator class="item border-bottom border-between" url="/pages/share-qrcode/share-qrcode">
+  <!--<navigator class="item border-bottom border-between" url="/pages/share-qrcode/share-qrcode">
     <view class="list-img flex-x-center">
       <image class="img" src="/images/img-share-qrcode.png"></image>
     </view>
     <view class="flex-x-center list-content">推广二维码</view>
-  </navigator>
+  </navigator>-->
   <view class="item border-bottom">
   </view>
 </view>

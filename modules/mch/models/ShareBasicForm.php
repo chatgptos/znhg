@@ -33,6 +33,8 @@ class ShareBasicForm extends Model
     public $cash_fail_tpl;
 
     public $cash_max_day, $auto_share_val;
+    public $agency_team_count_require ,$agency_card_count_require;
+    public $distributors_card_count_require, $distributors_team_count_require ,$dividend_sharing_right_card_count_require ,$dividend_sharing_right_team_count_require;
 
     public function rules()
     {
@@ -47,6 +49,7 @@ class ShareBasicForm extends Model
             [['cash_max_day'], 'number', 'min' => 0],
             [['auto_share_val'], 'default', 'value' => 0],
             [['auto_share_val'], 'number', 'min' => 0],
+            [['agency_team_count_require', 'agency_card_count_require', 'distributors_card_count_require', 'distributors_team_count_require', 'dividend_sharing_right_team_count_require', 'dividend_sharing_right_card_count_require'], 'integer'],
         ];
     }
 
@@ -84,6 +87,13 @@ class ShareBasicForm extends Model
             $list->min_money = $this->min_money;
             $list->pic_url_1 = $this->pic_url_1;
             $list->pic_url_2 = $this->pic_url_2;
+            $list->agency_team_count_require = $this->agency_team_count_require;
+            $list->agency_card_count_require = $this->agency_card_count_require;
+            $list->distributors_card_count_require = $this->distributors_card_count_require;
+            $list->distributors_team_count_require = $this->distributors_team_count_require;
+            $list->dividend_sharing_right_team_count_require = $this->dividend_sharing_right_team_count_require;
+            $list->dividend_sharing_right_card_count_require = $this->dividend_sharing_right_card_count_require;
+
             $pay_type = $this->pay_type;
 //            isset($pay_type['bank'])? $list->bank = 1:$list->bank = 0;
 

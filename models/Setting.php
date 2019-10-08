@@ -44,7 +44,9 @@ class Setting extends \yii\db\ActiveRecord
     {
         return [
             [['first', 'second', 'third', 'min_money'], 'number'],
-            [['store_id', 'level', 'condition', 'share_condition', 'pay_type', 'price_type'], 'integer'],
+            [['store_id', 'level', 'condition', 'share_condition', 'pay_type', 'price_type','agency_team_count_require','agency_card_count_require',
+                    'distributors_card_count_require', 'distributors_team_count_require',
+                    'dividend_sharing_right_team_count_require', 'dividend_sharing_right_card_count_require'], 'integer'],
             [['content', 'agree', 'pic_url_1', 'pic_url_2'], 'string'],
             [['first_name', 'second_name', 'third_name'], 'string', 'max' => 255],
         ]; 
@@ -75,6 +77,12 @@ class Setting extends \yii\db\ActiveRecord
             'pic_url_2' => 'Pic Url 2',
             'price_type' => '分销金额 0--百分比金额  1--固定金额',
             'bank' => 'Bank',
+            'agency_team_count_require' => '代理商要求推广团队数量',
+            'agency_card_count_require' => '代理商优惠券申请需要数量',
+            'distributors_card_count_require' => '渠道商优惠券申请需要数量',
+            'distributors_team_count_require' => '渠道商要求推广团队数量',
+            'dividend_sharing_right_team_count_require' => '分红权要求推广团队数量',
+            'dividend_sharing_right_card_count_require' => '分红权优惠券申请需要数量',
         ];
     }
 }
