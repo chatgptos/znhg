@@ -70,11 +70,11 @@ class BindForm extends Model
             file_put_contents($save_root . 'store_qrcodepost.log', "绑定关系\r\n" . $user->nickname . '经销商' . $user->is_distributor . '上级' . $user->parent_id . $parent->nickname . '经销商' . $parent->is_distributor . '绑定结果' . json_encode(
                     [
                         'code' => 1,
-                        'msg' => ''
+                        'msg' => '父级id是否在三级分销链中'
                     ], JSON_UNESCAPED_UNICODE), FILE_APPEND);
             return [
                 'code' => 1,
-                'msg' => ''
+                'msg' => '父级id是否在三级分销链中'
             ];
         }
         //用户是否是分销商
