@@ -398,7 +398,7 @@ App({
     //登录成功后不刷新的页面
     loginNoRefreshPage: [
         'pages/index/index',
-        'pages/user/user',
+        // 'pages/user/user',
     ],
 
 });

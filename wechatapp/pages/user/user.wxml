@@ -4,8 +4,10 @@
     <view class="noWarp-space-between bgfff heigth-box">
         <view class='noWarp'>
             <view>
-                <image bindtap="bindViewTap" class="userinfo-avatar" src="{{user_info.avatar_url}}"
-                       mode="cover"></image>
+                <image bindtap="bindViewTap" class="userinfo-avatar" src='{{(user_info&&user_info.avatar_url!="")?user_info.avatar_url:"/images/sqdr.png"}}'
+                mode="cover"></image>
+              <!--  <image bindtap="bindViewTap" class="userinfo-avatar" src="{{user_info.avatar_url (user_info.avatar_url!=''))?"user_info.avatar_url":""}}"
+                mode="cover"></image>-->
             </view>
             <view>
                 <view class='noWarp'>

@@ -173,7 +173,8 @@ class CreateQrcode
         //缩放尺寸
         $newwidth = $width * $percent;
         $newheight = $height * $percent;
-        $src_im = imagecreatefromjpeg($file);
+//        $src_im = imagecreatefromjpeg($file);
+        $src_im = imagecreatefromstring(file_get_contents($file));
         $dst_im = imagecreatetruecolor($newwidth, $newheight);
         imagecopyresized($dst_im, $src_im, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
         imagejpeg($dst_im, $imgname); //输出压缩后的图片

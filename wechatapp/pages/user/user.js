@@ -15,9 +15,9 @@ Page({
         show_customer_service: 0,
         user_center_bg: "/images/img-user-bg.png",
         parent_id: 0,
+        userInfo: {},
 
         // motto: 'Hello World',
-        // userInfo: {},
         // hasUserInfo: false,
         // canIUse: wx.canIUse('button.open-type.getUserInfo'),
         // list:[
@@ -29,6 +29,7 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad: function (options) {
+        getApp().login();
         app.pageOnLoad(this);
         this.loadData(options);
         // this.setParent_id(options);
@@ -82,8 +83,6 @@ Page({
         var parent_id = 0;
         var share_user_id = options.user_id;//转发过来的推荐人id
         var scene = decodeURIComponent(options.scene);//二维码推荐人id
-
-
         app.pageOnLoad(this);
         this.loadData(options);
         var page = this;
@@ -179,6 +178,8 @@ Page({
         });
     },
     apply: function (e) {
+        getApp().login();
+        app.loginBindParent({parent_id: app.globalData.parent_id});
         var page = this;
         var share_setting = wx.getStorageSync("share_setting");
         var user_info = wx.getStorageSync("user_info");

@@ -104,6 +104,8 @@ class LoginForm extends Model
                     'id' => $user->id,
                     'is_clerk' => $user->is_clerk,
                     'integral' => $user->integral,
+                    'hld' => $user->hld,
+                    'coupon' => $user->coupon,
                 ],
             ];
         } else {
