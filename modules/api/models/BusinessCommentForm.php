@@ -65,6 +65,7 @@ class BusinessCommentForm extends Model
 
 
 
+        //发布的时候券出去了
         $user->coupon = $coupon - $num;
         $user->coupon_total = $coupon_total - $num;
 
@@ -224,9 +225,9 @@ class BusinessCommentForm extends Model
         $user->hld = $user->hld + $order->huanledou - $order->huanledou_charge;//欢乐豆卖家 + 总的-手续费
         $user->total_hld -= $user->total_hld + $order->huanledou - $order->huanledou_charge;//欢乐豆卖家 + 总的-手续费
         //xtjl
-        //失去券
-        $user->coupon = $user->coupon - $order->num;
-        $user->coupon_total = $user->coupon_total - $order->num;
+        //失去券 发布的时候券就失去了
+//        $user->coupon = $user->coupon - $order->num;
+//        $user->coupon_total = $user->coupon_total - $order->num;
 
         //买家
         $user_buyer->hld = $user_buyer->hld - $order->huanledou - $order->huanledou_charge;//欢乐豆卖家 + 总的-手续费
