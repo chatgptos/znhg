@@ -48,7 +48,7 @@ class BusinessListForm extends Model
         $query = Business::find()->alias('g')->where([
             'g.status' => 1,
             'g.is_delete' => 0,
-        ]);
+        ])->orderBy('g.addtime DESC');
         if ($this->store_id)
             $query->andWhere(['g.store_id' => $this->store_id]);
         if ($this->keyword)
