@@ -239,6 +239,15 @@ class BusinessCommentForm extends Model
         $user_buyer->coupon = $user_buyer->coupon + $order->num + $order->xtjl;
         $user_buyer->coupon_total = $user_buyer->coupon_total + $order->num + $order->xtjl;
 
+
+        if($user->hld + $order->huanledou - $order->huanledou_charge <0){
+            return [
+                'code' => 1,
+                'msg' => '欢乐豆不够',
+            ];
+        }
+
+
         if ($order->save() &&$user->save() && $user_buyer->save()) {
             $t->commit();
             return [
