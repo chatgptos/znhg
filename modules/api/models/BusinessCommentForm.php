@@ -43,7 +43,7 @@ class BusinessCommentForm extends Model
         $coupon = $user->coupon;
         $coupon_total = $user->coupon_total;
 
-        
+
         if ($num < 1 || !is_int($num)) {
             return json_encode([
                 'code' => 1,
@@ -221,22 +221,22 @@ class BusinessCommentForm extends Model
 
         //扣除双方手续费
         //卖家
-        $user->hld -= $user->hld + $order->huanledou - $order->huanledou_charge;//欢乐豆卖家 + 总的-手续费
+        $user->hld = $user->hld + $order->huanledou - $order->huanledou_charge;//欢乐豆卖家 + 总的-手续费
         $user->total_hld -= $user->total_hld + $order->huanledou - $order->huanledou_charge;//欢乐豆卖家 + 总的-手续费
         //xtjl
         //失去券
-        $user->coupon -= $order->num;
-        $user->coupon_total -= $order->num;
+        $user->coupon = $user->coupon - $order->num;
+        $user->coupon_total = $user->coupon_total - $order->num;
 
         //买家
-        $user_buyer->hld -= $user_buyer->hld - $order->huanledou - $order->huanledou_charge;//欢乐豆卖家 + 总的-手续费
-        $user_buyer->total_hld -= $user_buyer->total_hld - $order->huanledou - $order->huanledou_charge;//欢乐豆卖家 + 总的-手续费
+        $user_buyer->hld = $user_buyer->hld - $order->huanledou - $order->huanledou_charge;//欢乐豆卖家 + 总的-手续费
+        $user_buyer->total_hld = $user_buyer->total_hld - $order->huanledou - $order->huanledou_charge;//欢乐豆卖家 + 总的-手续费
         //xtjl
 
 
         //得到券
-        $user_buyer->coupon += $order->num + $order->xtjl;
-        $user_buyer->coupon_total += $order->num + $order->xtjl;
+        $user_buyer->coupon = $user_buyer->coupon + $order->num + $order->xtjl;
+        $user_buyer->coupon_total = $user_buyer->coupon_total + $order->num + $order->xtjl;
 
         if ($order->save() &&$user->save() && $user_buyer->save()) {
             $t->commit();
