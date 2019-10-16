@@ -44,6 +44,11 @@ class BusinessCommentForm extends Model
                 'code' => 1,
                 'msg' => '数量不正确'
             ], JSON_UNESCAPED_UNICODE);
+        }elseif ($num > $user->coupon) {
+            return json_encode([
+                'code' => 1,
+                'msg' => '优惠券不足'
+            ], JSON_UNESCAPED_UNICODE);
         }
 
 
@@ -54,6 +59,8 @@ class BusinessCommentForm extends Model
         $user = User::findOne(['id' => $this->user_id]);
         $coupon = $user->coupon;
         $coupon_total = $user->coupon_total;
+
+
 
 
         $user->coupon = $coupon - $num;
