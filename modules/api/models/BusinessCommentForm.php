@@ -39,6 +39,11 @@ class BusinessCommentForm extends Model
     {
         $num = (int)\Yii::$app->request->post('num');
 
+        $user = User::findOne(['id' => $this->user_id]);
+        $coupon = $user->coupon;
+        $coupon_total = $user->coupon_total;
+
+        
         if ($num < 1 || !is_int($num)) {
             return json_encode([
                 'code' => 1,
@@ -56,9 +61,6 @@ class BusinessCommentForm extends Model
             return $this->getModelError();
 
 
-        $user = User::findOne(['id' => $this->user_id]);
-        $coupon = $user->coupon;
-        $coupon_total = $user->coupon_total;
 
 
 
