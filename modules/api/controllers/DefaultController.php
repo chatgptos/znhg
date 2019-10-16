@@ -20,6 +20,9 @@ use app\models\Store;
 use app\models\UploadConfig;
 use app\models\UploadForm;
 use app\modules\api\behaviors\LoginBehavior;
+use app\modules\api\models\BusinessCommentListForm;
+use app\modules\api\models\BusinessForm;
+use app\modules\api\models\BusinessListForm;
 use app\modules\api\models\CatListForm;
 use app\modules\api\models\CommentListForm;
 use app\modules\api\models\CouponListForm;
@@ -78,6 +81,39 @@ class DefaultController extends Controller
         $this->renderJson($form->search());
     }
 
+    /**
+     * 交易列表
+     */
+    public function actionBusinessList()
+    {
+        $form = new BusinessListForm();
+        $form->attributes = \Yii::$app->request->get();
+        $form->store_id = $this->store->id;
+        $this->renderJson($form->search());
+    }
+
+    /**
+     * 交易详情
+     */
+    public function actionBusiness()
+    {
+        $form = new BusinessForm();
+        $form->attributes = \Yii::$app->request->get();
+        if (!\Yii::$app->user->isGuest) {
+            $form->user_id = \Yii::$app->user->id;
+        }
+        $form->store_id = $this->store->id;
+        $this->renderJson($form->search());
+    }
+
+
+    //商品评价列表
+    public function actionBusinessCommentList()
+    {
+        $form = new BusinessCommentListForm();
+        $form->attributes = \Yii::$app->request->get();
+        $this->renderJson($form->search());
+    }
     /**
      * 商品详情
      */

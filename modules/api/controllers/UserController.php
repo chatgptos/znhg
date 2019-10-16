@@ -55,6 +55,8 @@ class UserController extends Controller
 
         $user = User::findOne(['id' => \Yii::$app->user->identity->id]);
         $level = $user->level;
+        $hld= $user->hld;
+        $coupon = $user->coupon;
 
 
         $now_level = Level::findOne(['store_id' => $this->store->id, 'level' => $level, 'is_delete' => 0]);
@@ -67,6 +69,8 @@ class UserController extends Controller
             'id' => \Yii::$app->user->identity->id,
             'is_clerk' => \Yii::$app->user->identity->is_clerk,
             'level' => $level,
+            'hld' => $hld,
+            'coupon' => $coupon,
             'level_name' => $now_level ? $now_level->name : "普通用户",
             'integral' => \Yii::$app->user->identity->integral,
         ];

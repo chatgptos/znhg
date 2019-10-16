@@ -235,6 +235,15 @@ class ShareController extends Controller
         $pic_url = \Yii::$app->request->hostInfo . \Yii::$app->request->baseUrl . '/temp/' . $save_name;
 
         $save_root = \Yii::$app->basePath . '/web/temp/';
+
+
+        file_put_contents($save_root .'store_qrcodepost.log',json_encode([
+                'scene' => "{$user_id}",
+                'page'=>"pages/user/user",
+            ], JSON_UNESCAPED_UNICODE).$name.'上级'.$user->parent_id.'经销商'.$user->is_distributor."内容\r\n",FILE_APPEND);
+
+
+
         if (file_exists($save_root . $save_name)) {
             return json_encode([
                 'code' => 0,

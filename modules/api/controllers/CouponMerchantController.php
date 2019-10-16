@@ -38,6 +38,7 @@ class CouponMerchantController extends Controller
             ],
         ]);
     }
+
     /**
      * @return mixed|string
      * 券商分类
@@ -45,21 +46,105 @@ class CouponMerchantController extends Controller
     public function actionGetQsInfo()
     {
 
-       $id=   \Yii::$app->request->get('id');
-
-       echo $id;
-
+        $id = \Yii::$app->request->get('qsId');
         $store_id = $this->store->id;
         $list = Setting::findOne(['store_id' => $store_id]);
-        $team_count_require=$list->agency_team_count_require;
-        $card_count_require=$list->agency_card_count_require;
+        $user = User::findOne(['id' => \Yii::$app->user->identity->id, 'store_id' => $this->store->id]);
+
+        //推荐人数
+        $tuijianNum = User::find()->where(['parent_id' => $user->id, 'store_id' => $this->store->id])->count();
+        $card_count = $user->coupon;
+
+        $buttonClicked=false;
+        $buttonName='立即申请';
+        $roleName='普通用户';
+        $team_count_require=0;
+        $card_count_require=0;
+
+        if($user->is_agency){
+            $roleName='经销商';
+        }
+
+        if($user->is_distributors){
+            $roleName='渠道商';
+        }
+
+        if ($id == 0) {
+            //经销商
+            $team_count_require = $list->agency_team_count_require;
+            $card_count_require = $list->agency_card_count_require;
+            if($user->is_agency){
+                $buttonClicked=true;
+                $buttonName='已经拥有';
+            }
+        } elseif ($id == 1) {
+            //渠道商
+            $team_count_require = $list->distributors_card_count_require;
+            $card_count_require = $list->distributors_team_count_require;
+            if($user->is_distributors){
+                $buttonClicked=true;
+            }
+        } elseif ($id == 2) {
+            //服务权
+            $team_count_require = 0;
+            $card_count_require = 0;
+            $buttonName='暂未开放';
+            $buttonClicked=true;
+        } elseif ($id == 3) {
+            //分红权
+            $team_count_require = $list->dividend_sharing_right_team_count_require;
+            $card_count_require = $list->dividend_sharing_right_card_count_require;
+            if($user-> dividend_sharing_right){
+                $buttonClicked=true;
+                $buttonName='已经拥有';
+            }
+        } elseif ($id == 4) {
+            //福利
+            $team_count_require = $list->agency_team_count_require;
+            $card_count_require = $list->agency_card_count_require;
+            $buttonName='暂未开放';
+            $buttonClicked=true;
+        } elseif ($id == 5) {
+            //抽奖
+            $team_count_require = 0;
+            $card_count_require = 0;
+            $buttonName='暂未开放';
+            $buttonClicked=true;
+        } elseif ($id == 6) {
+            //赠送
+            $team_count_require = 0;
+            $card_count_require = 0;
+            $buttonName='暂未开放';
+            $buttonClicked=true;
+        }else {
+            //初始化
+            //经销商
+            $team_count_require = $list->agency_team_count_require;
+            $card_count_require = $list->agency_card_count_require;
+            if($user->is_agency){
+                $buttonClicked=true;
+                $buttonName='已经拥有';
+            }
+
+
+        }
+
+
+        $userlist=array(
+            'roleName'=>$roleName,
+            'coupon'=>$card_count,
+            'people'=>$tuijianNum,
+        );
 
         return json_encode([
             'code' => 0,
             'msg' => 'success',
             'data' => array(
-                'team_count_require'=>$team_count_require,
-                'card_count_require'=>$card_count_require
+                'team_count_require' => $team_count_require,
+                'card_count_require' => $card_count_require,
+                'buttonClicked'=>$buttonClicked,
+                'buttonName'=>$buttonName,
+                'userlist'=>$userlist,
             )
         ], JSON_UNESCAPED_UNICODE);
 
@@ -71,7 +156,7 @@ class CouponMerchantController extends Controller
      */
     public function actionJoin()
     {
-        $user = User::findOne(['id' =>  \Yii::$app->user->identity->id, 'store_id' => $this->store->id]);
+        $user = User::findOne(['id' => \Yii::$app->user->identity->id, 'store_id' => $this->store->id]);
         if (!$user) {
             return json_encode([
                 'code' => 1,
@@ -90,9 +175,9 @@ class CouponMerchantController extends Controller
         $get_team = $team->getList();
         $team_count = $get_team['data']['first'] + $get_team['data']['second'] + $get_team['data']['third'];
 
-        $team_count_require=$list->agency_team_count_require;;
+        $team_count_require = $list->agency_team_count_require;;
         //检查人数
-        if($team_count<$team_count_require){
+        if ($team_count < $team_count_require) {
             return json_encode([
                 'code' => 1,
                 'msg' => '推荐人数不够'
@@ -100,11 +185,11 @@ class CouponMerchantController extends Controller
 
         }
 
-        $card_count=User::getCardCount($user->id);
-        $card_count_require=$list->agency_card_count_require;
+        $card_count = User::getCardCount($user->id);
+        $card_count_require = $list->agency_card_count_require;
 
         //检查优惠券数量
-        if($card_count<$card_count_require){
+        if ($card_count < $card_count_require) {
             return json_encode([
                 'code' => 1,
                 'msg' => '优惠券数量不够'
@@ -123,13 +208,12 @@ class CouponMerchantController extends Controller
                 'code' => 1,
                 'msg' => '申请失败！请重试'
             ], JSON_UNESCAPED_UNICODE);
-        }else{
+        } else {
             return json_encode([
                 'code' => 0,
                 'msg' => '申请成功'
             ], JSON_UNESCAPED_UNICODE);
         }
-
 
 
     }
@@ -339,7 +423,7 @@ class CouponMerchantController extends Controller
         $api = "https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token={$access_token}";
         $data = json_encode([
             'scene' => "{$user_id}",
-            'page'=>"pages/user/user",
+            'page' => "pages/user/user",
             'width' => (int)($qrcode_size['w'] * $percent)
         ], JSON_UNESCAPED_UNICODE);
         $this->wechat->curl->post($api, $data);

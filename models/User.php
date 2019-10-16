@@ -31,6 +31,13 @@ use yii\web\IdentityInterface;
  * @property integer $level
  * @property integer $integral
  * @property integer $total_integral
+ * @property integer $total_hld
+ * @property integer $hld
+ * @property integer $coupon
+ * @property integer $coupon_total
+ *
+ *
+ *
  */
 class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
@@ -51,7 +58,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['type', 'addtime', 'is_delete', 'store_id', 'is_distributor', 'parent_id', 'time', 'is_clerk', 'shop_id', 'level'], 'integer'],
             [['username', 'password', 'auth_key', 'access_token', 'avatar_url'], 'required'],
             [['avatar_url'], 'string'],
-            [['total_price', 'price', 'integral', 'total_integral'], 'number'],
+            [['total_price', 'price', 'integral', 'total_integral','total_hld','hld'], 'number'],
             [['username', 'password', 'auth_key', 'access_token', 'wechat_open_id', 'wechat_union_id', 'nickname'], 'string', 'max' => 255],
         ];
     }
@@ -85,6 +92,10 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             'level' => '会员等级',
             'integral' => '用户当前积分',
             'total_integral' => '用户总积分',
+            'hld' => '用户当前欢乐豆',
+            'total_hld' => '用户总欢乐豆',
+            'coupon' => '用户优惠券',
+            'coupon_total' => '用户总优惠券',
         ];
     }
 
