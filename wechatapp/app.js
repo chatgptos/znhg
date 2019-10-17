@@ -104,10 +104,10 @@ App({
                             });
                         },
                         fail: function (res) {
+                            wx.showToast({ title: '请登入',
+                                image: "/images/icon-warning.png",
+                            });
                             console.log('getUserInfo')
-                            // wx.navigateTo({
-                            //     url: '/pages/authorize/authorize',
-                            // })
                             wx.hideLoading();
                             // getApp().getauth({
                             //     content: '需要获取您的用户信息授权，请到小程序设置中打开授权',
@@ -118,6 +118,9 @@ App({
                             //         }
                             //     },
                             // });
+                            // wx.navigateTo({
+                            //     url: '/pages/authorize/authorize',
+                            // })
                         }
                     });
                 } else {

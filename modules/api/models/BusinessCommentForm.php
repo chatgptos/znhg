@@ -135,9 +135,9 @@ class BusinessCommentForm extends Model
     public function getCharge($num)
     {
         if ($num < 7 && $num > 0) {
-            $this->charge = 6;
+            $this->charge = 7;
         } elseif ($num < 18 && $num > 6) {
-            $this->charge = 2;
+            $this->charge = 3;
         } elseif ($num > 17) {
             $this->charge = 1;
         }
