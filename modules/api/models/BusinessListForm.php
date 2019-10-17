@@ -47,6 +47,7 @@ class BusinessListForm extends Model
             return $this->getModelError();
         $query = Business::find()->alias('g')->where([
             'g.status' => 1,
+            'g.is_exchange' => 0,
             'g.is_delete' => 0,
         ])->orderBy('g.addtime DESC');
         if ($this->store_id)

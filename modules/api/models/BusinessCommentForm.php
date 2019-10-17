@@ -23,9 +23,11 @@ class BusinessCommentForm extends Model
     public $user_id;
     public $order_id;
     public $goods_list;
-    public $sethuanledou = 50;//50欢乐豆一张
+    public $sethuanledou = 7;//50欢乐豆一张
     public $xtjl = 1;//系统赠送张数
     public $charge = 3;//百分比手续费
+    public $JFTOHLD = 10;//积分对欢乐豆
+    public $do_JFTOHLD = false;//积分对欢乐豆是否打开
 
 
     public function rules()
@@ -49,7 +51,7 @@ class BusinessCommentForm extends Model
                 'code' => 1,
                 'msg' => '数量不正确'
             ], JSON_UNESCAPED_UNICODE);
-        }elseif ($num > $user->coupon) {
+        } elseif ($num > $user->coupon) {
             return json_encode([
                 'code' => 1,
                 'msg' => '优惠券不足'
@@ -60,11 +62,6 @@ class BusinessCommentForm extends Model
         if (!$this->validate())
             return $this->getModelError();
 
-
-
-
-
-
         //发布的时候券出去了
         $user->coupon = $coupon - $num;
         $user->coupon_total = $coupon_total - $num;
@@ -74,7 +71,19 @@ class BusinessCommentForm extends Model
         $Business->store_id = $this->store_id;
         $Business->status = 1;//售卖中 上架
         $Business->user_id = $this->user_id;//卖方用户id
-        $Business->title = $num . '优惠券，' . $this->sethuanledou * $num . '欢乐豆出，机不可失 买到就是赚到！！';//卖的张数
+
+        $guanggao = array(
+           '1'=> "欢乐豆出，机不可失 买到就是赚到！！"
+        ,'2'=> "欢乐豆出，平台优惠券，立刻出手！！"
+        , '3'=>"欢乐豆出，可以兑抽奖的优惠券出手！！"
+        , '4'=>"欢乐豆出，平台保证！立刻出兑换"
+        , '5'=>'欢乐豆出，良心优惠券出手'
+        , '6'=>'欢乐豆出，优惠券可参加福利分红'
+        , '7'=>'欢乐豆出，劲爆优惠券 欢乐豆就出手'
+        , '8'=>'欢乐豆出，系统奖励系统奖励 兑换就送'
+        , '9'=>'欢乐豆出，机不可失 买到就是赚到！！'
+        );
+        $Business->title = $num . '优惠券，' . $this->sethuanledou * $num .$guanggao[array_rand($guanggao)];//卖的张数
 //        $Business->order_num = $this->user_id; //成交交易数量
 //        $Business->integral = $this->user_id; //需要积分
 
@@ -90,13 +99,13 @@ class BusinessCommentForm extends Model
         $Business->huanledou = $this->sethuanledou * $num;//卖的张数*平台固定的每张欢乐豆价值
 
 //      手续费欢乐豆价值
-        $Business->huanledou_charge = ($this->charge) / 100 * ($this->sethuanledou * $num);//卖的张数*平台固定的欢乐豆
+        $Business->huanledou_charge = ($this->getCharge($num)) / 100 * ($this->sethuanledou * $num);//卖的张数*平台固定的欢乐豆
 
 //      系统奖励
         $Business->xtjl = $this->xtjl;//系统奖励
 
 //      合计收益
-        $huanledou_total = ($this->sethuanledou * $num) * (100 - $this->charge) / 100;// 需要的欢乐豆 + 总的*手续费
+        $huanledou_total = ($this->sethuanledou * $num) * (100 - $this->getCharge($num)) / 100;// 需要的欢乐豆 + 总的*手续费
 
         $Business->addtime = time();
 
@@ -121,6 +130,18 @@ class BusinessCommentForm extends Model
             return $this->getModelError($Business);
         }
 
+    }
+
+    public function getCharge($num)
+    {
+        if ($num < 7 && $num > 0) {
+            $this->charge = 6;
+        } elseif ($num < 18 && $num > 6) {
+            $this->charge = 2;
+        } elseif ($num > 17) {
+            $this->charge = 1;
+        }
+        return $this->charge;
     }
 
     public function save()
@@ -240,7 +261,7 @@ class BusinessCommentForm extends Model
         $user_buyer->coupon_total = $user_buyer->coupon_total + $order->num + $order->xtjl;
 
 
-        if(($user_buyer->hld) <0){
+        if (($user_buyer->hld) < 0) {
             return [
                 'code' => 1,
                 'msg' => '欢乐豆不够',
@@ -248,7 +269,7 @@ class BusinessCommentForm extends Model
         }
 
 
-        if ($order->save() &&$user->save() && $user_buyer->save()) {
+        if ($order->save() && $user->save() && $user_buyer->save()) {
             $t->commit();
             return [
                 'code' => 0,
@@ -302,7 +323,7 @@ class BusinessCommentForm extends Model
 
             $user->integral -= $integral;
             //增加欢乐豆
-            $hldJf = $integral * 7;
+            $hldJf = $integral * 10;
             $user->hld += $hldJf;
             $user->total_hld += $hldJf;
 
@@ -310,7 +331,14 @@ class BusinessCommentForm extends Model
         } elseif ($rechangeType == '1') {
             //充值积分 扣除欢乐豆
 
-            $hldJf = $hld / 7;
+            if (!$this->do_JFTOHLD) {
+                return json_encode([
+                    'code' => 1,
+                    'msg' => '暂不支持'
+                ], JSON_UNESCAPED_UNICODE);
+            }
+
+            $hldJf = $hld / $this->JFTOHLD;
 
             if ($hld > $user->hld) {
                 return json_encode([
@@ -320,12 +348,12 @@ class BusinessCommentForm extends Model
             } elseif (!is_int($hldJf)) {
                 return json_encode([
                     'code' => 1,
-                    'msg' => '请输入7的倍数'
+                    'msg' => '请输入' . $this->JFTOHLD . '的倍数'
                 ], JSON_UNESCAPED_UNICODE);
             } elseif ($hldJf < 1) {
                 return json_encode([
                     'code' => 1,
-                    'msg' => '不能小于7'
+                    'msg' => '不能小于10'
                 ], JSON_UNESCAPED_UNICODE);
             }
 
@@ -343,9 +371,9 @@ class BusinessCommentForm extends Model
         $integralLog = new IntegralLog();
         $integralLog->user_id = $user->id;
         if ($rechangeType == '2') {
-            $integralLog->content = "管理员（积分兑换欢乐豆） 后台操作账号：" . $user->nickname . " 积分扣除：" . $integral . " 积分" . " 欢乐豆充值：" . $integral * 7 . " 个";
+            $integralLog->content = "管理员（积分兑换欢乐豆） 后台操作账号：" . $user->nickname . " 积分扣除：" . $integral . " 积分" . " 欢乐豆充值：" . $integral * $this->JFTOHLD . " 个";
         } elseif ($rechangeType == '1') {
-            $integralLog->content = "管理员（欢乐豆兑换积分） 后台操作账号：" . $user->nickname . " 积分充值：" . $integral . " 积分" . " 欢乐豆扣除：" . $integral * 7 . " 个";
+            $integralLog->content = "管理员（欢乐豆兑换积分） 后台操作账号：" . $user->nickname . " 积分充值：" . $integral . " 积分" . " 欢乐豆扣除：" . $integral * $this->JFTOHLD . " 个";
         }
 
         $integralLog->integral = $integral;
@@ -400,13 +428,13 @@ class BusinessCommentForm extends Model
         $huanledou = $this->sethuanledou * $num;//卖的张数*平台固定的每张欢乐豆价值
 
 //      手续费欢乐豆价值
-        $huanledou_charge = ($this->charge) * 0.01 * ($this->sethuanledou * $num);//卖的张数*平台固定的欢乐豆
+        $huanledou_charge = ($this->getCharge($num)) * 0.01 * ($this->sethuanledou * $num);//卖的张数*平台固定的欢乐豆
 
 //      系统奖励
         $xtjl = $this->xtjl;//系统奖励
 
 //      合计收益
-        $huanledou_total = ($this->sethuanledou * $num) * (100 - $this->charge) / 100;// 需要的欢乐豆 + 总的*手续费
+        $huanledou_total = ($this->sethuanledou * $num) * (100 - $this->getCharge($num)) / 100;// 需要的欢乐豆 + 总的*手续费
 
         return [
             'code' => 0,
