@@ -96,6 +96,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             'total_hld' => '用户总欢乐豆',
             'coupon' => '用户优惠券',
             'coupon_total' => '用户总优惠券',
+            'fuliquan' => '福利权份数',
         ];
     }
 

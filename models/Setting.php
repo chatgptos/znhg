@@ -83,6 +83,7 @@ class Setting extends \yii\db\ActiveRecord
             'distributors_team_count_require' => '渠道商要求推广团队数量',
             'dividend_sharing_right_team_count_require' => '分红权要求推广团队数量',
             'dividend_sharing_right_card_count_require' => '分红权优惠券申请需要数量',
+            'fuliquan_card_count_require' => '福利权优惠券申请需要数量',
         ];
     }
 }

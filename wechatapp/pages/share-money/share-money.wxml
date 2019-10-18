@@ -3,7 +3,7 @@
     <view class="info-block">
       <view class="info-up white">累计积分</view>
       <view class="info-bottom white">
-        <view class="big bold">{{total_price}}</view>
+        <view class="big bold">{{user_info.integral}}</view>
         <view class="bottom">元</view>
       </view>
     </view>
@@ -16,7 +16,7 @@
   <view class="info-content black">
     <view class="info-label flex-y-center big-13">
       <view class="info-left">可提现积分</view>
-      <view class="info-right">{{price}}元</view>
+      <view class="info-right">{{user_info.integral}}元</view>
     </view>
     <view class=" info-margin">
       <view class="info-label big-13">
