@@ -23,7 +23,7 @@ class BusinessCommentForm extends Model
     public $user_id;
     public $order_id;
     public $goods_list;
-    public $sethuanledou = 7;//50欢乐豆一张
+    public $sethuanledou = 7;//7欢乐豆一张
     public $xtjl = 1;//系统赠送张数
     public $charge = 3;//百分比手续费
     public $JFTOHLD = 10;//积分对欢乐豆
@@ -372,7 +372,7 @@ class BusinessCommentForm extends Model
 
             $user->integral -= $integral;
             //增加欢乐豆
-            $hldJf = $integral * 10;
+            $hldJf = $integral * $this->JFTOHLD;
             $user->hld += $hldJf;
             $user->total_hld += $hldJf;
 
