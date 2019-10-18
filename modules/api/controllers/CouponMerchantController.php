@@ -100,6 +100,8 @@ class CouponMerchantController extends Controller
                 $buttonClicked=true;
                 $buttonName='已经拥有';
             }
+            $buttonName='暂未开放';
+            $buttonClicked=true;
         } elseif ($id == 4) {
             //福利
             $team_count_require = $list->agency_team_count_require;
@@ -172,7 +174,6 @@ class CouponMerchantController extends Controller
      */
     public function actionChoujiang()
     {
-
         $num = \Yii::$app->request->get('num');
         $store_id = $this->store->id;
         $list = Setting::findOne(['store_id' => $store_id]);
@@ -188,19 +189,15 @@ class CouponMerchantController extends Controller
         $buttonName='开始抽奖';
         $buttonClicked=false;
         $awardsList=['1张券',  '2张券', '3元张券', '5张券','10张券', '谢谢惠顾'];
-        $awardsListQuan=[1, 2, 3, 4, 5,10, 0];
+        $awardsListQuan=[1, 2, 3, 5,10, 0];
         //加工人工随机概率
         //获得抽奖结果 序列号
-        $awardIndex=array_rand($awardsList,1);
-
+//        $awardIndex=array_rand($awardsList,1);
+        $awardIndex=$this->GailvChoujiang()['yes']['list'];
         //抽奖奖品
         $awardName=$awardsList[$awardIndex];
         //券个数
         $awardsListQuanNum=$awardsListQuan[$awardIndex];
-
-
-
-
         $award=array(
             'awardsList'=>$awardsList,
             'awardIndex'=>$awardIndex,
@@ -245,6 +242,76 @@ class CouponMerchantController extends Controller
         ], JSON_UNESCAPED_UNICODE);
 
     }
+
+
+
+
+    private function get_rand($proArr) {
+        $result = '';
+        //概率数组的总概率精度
+        $proSum = array_sum($proArr);
+        //概率数组循环
+        foreach ($proArr as $key => $proCur) {
+            $randNum = mt_rand(1, $proSum);
+            if ($randNum <= $proCur) {
+                $result = $key;
+                break;
+            } else {
+                $proSum -= $proCur;
+            }
+        }
+        unset ($proArr);
+        return $result;
+    }
+    /*
+     * 经典的概率算法，
+     * $proArr是一个预先设置的数组，
+     * 假设数组为：array(100,200,300，400)，
+     * 开始是从1,1000 这个概率范围内筛选第一个数是否在他的出现概率范围之内，
+     * 如果不在，则将概率空间，也就是k的值减去刚刚的那个数字的概率空间，
+     * 在本例当中就是减去100，也就是说第二个数是在1，900这个范围内筛选的。
+     * 这样 筛选到最终，总会有一个数满足要求。
+     * 就相当于去一个箱子里摸东西，
+     * 第一个不是，第二个不是，第三个还不是，那最后一个一定是。
+     * 这个算法简单，而且效率非常高，
+     * 这个算法在大数据量的项目中效率非常棒。
+     */
+    public function GailvChoujiang()
+    {
+        $prize_arr = array(
+            '0' => array('id'=>1,'prize'=>'1张券','awardsListQuan'=>1,'v'=>10),
+            '1' => array('id'=>2,'prize'=>'2张券','awardsListQuan'=>2,'v'=>1),
+            '2' => array('id'=>3,'prize'=>'3元张券','awardsListQuan'=>3,'v'=>1),
+            '3' => array('id'=>4,'prize'=>'5张券','awardsListQuan'=>5,'v'=>1),
+            '4' => array('id'=>5,'prize'=>'10张券','awardsListQuan'=>10,'v'=>1),
+            '5' => array('id'=>6,'prize'=>'下次没准就能中哦','awardsListQuan'=>0,'v'=>9000),
+        );
+
+        /*
+         * 每次前端页面的请求，PHP循环奖项设置数组，
+         * 通过概率计算函数get_rand获取抽中的奖项id。
+         * 将中奖奖品保存在数组$res['yes']中，
+         * 而剩下的未中奖的信息保存在$res['no']中，
+         * 最后输出json个数数据给前端页面。
+         */
+        foreach ($prize_arr as $key => $val) {
+            $arr[$val['id']] = $val['v'];
+        }
+        $rid = $this->get_rand($arr); //根据概率获取奖项id
+
+        $res['yes']['prize'] = $prize_arr[$rid-1]['prize']; //中奖项
+        $res['yes']['list'] = $rid-1; //中奖项
+        unset($prize_arr[$rid-1]); //将中奖项从数组中剔除，剩下未中奖项
+        shuffle($prize_arr); //打乱数组顺序
+        for($i=0;$i<count($prize_arr);$i++){
+            $pr[] = $prize_arr[$i]['prize'];
+        }
+        $res['no'] = $pr;
+        return $res;
+    }
+
+
+
 
     /**
      * @return mixed|string
