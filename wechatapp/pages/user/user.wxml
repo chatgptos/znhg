@@ -31,7 +31,7 @@
                     </view>
                     <view class='margin-l10'     bindtap="card"    >
                         <image class="money-icon" src="../../Img/money.png" mode="cover"></image>
-                        <text class="user-motto margin-l5">200</text>
+                        <text class="user-motto margin-l5">{{user_info.coupon}} </text>
                     </view>
                 </view>
             </view>

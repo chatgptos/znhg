@@ -258,7 +258,7 @@ Page({
     },
     card: function () {
         wx.navigateTo({
-            url: '/pages/card/card',
+            url: '/pages/coupon-merchant-mall-list/index',
         })
     },
     //事件处理函数

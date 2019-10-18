@@ -1,11 +1,11 @@
 {
   "pages": [
+    "pages/coupon-merchant/index",
     "pages/fair/fair",
     "pages/coupon-merchant-mall-list/index",
     "pages/recharge-integral/index",
     "pages/user/user",
     "pages/coupon-merchant-mall/index",
-    "pages/coupon-merchant/index",
     "pages/cat/cat",
     "pages/pt/index/index",
     "pages/catmall/mall",
