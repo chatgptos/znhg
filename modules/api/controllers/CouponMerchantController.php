@@ -54,12 +54,14 @@ class CouponMerchantController extends Controller
         //推荐人数
         $tuijianNum = User::find()->where(['parent_id' => $user->id, 'store_id' => $this->store->id])->count();
         $card_count = $user->coupon;
+        $hld = $user->hld;
 
         $buttonClicked=false;
         $buttonName='立即申请';
         $roleName='普通用户';
         $team_count_require=0;
         $card_count_require=0;
+        $award=[];
 
         if($user->is_agency){
             $roleName='经销商';
@@ -108,8 +110,18 @@ class CouponMerchantController extends Controller
             //抽奖
             $team_count_require = 0;
             $card_count_require = 0;
-            $buttonName='暂未开放';
-            $buttonClicked=true;
+
+            if($card_count<1){
+                $buttonName='优惠券不够';
+                $buttonClicked=true;
+            }else{
+                $buttonName='1张/次';
+            }
+            //奖品列表
+            $awardsList=['1张券',  '2张券', '3元张券', '5张券','10张券', '谢谢惠顾'];
+            $award=array(
+                'awardsList'=>$awardsList,
+            );
         } elseif ($id == 6) {
             //赠送
             $team_count_require = 0;
@@ -134,6 +146,7 @@ class CouponMerchantController extends Controller
             'roleName'=>$roleName,
             'coupon'=>$card_count,
             'people'=>$tuijianNum,
+            'hld'=>$hld,
         );
 
         return json_encode([
@@ -145,6 +158,89 @@ class CouponMerchantController extends Controller
                 'buttonClicked'=>$buttonClicked,
                 'buttonName'=>$buttonName,
                 'userlist'=>$userlist,
+                'award'=>$award,
+            )
+        ], JSON_UNESCAPED_UNICODE);
+
+    }
+
+
+
+    /**
+     * @return mixed|string
+     * 券商分类
+     */
+    public function actionChoujiang()
+    {
+
+        $num = \Yii::$app->request->get('num');
+        $store_id = $this->store->id;
+        $list = Setting::findOne(['store_id' => $store_id]);
+        $user = User::findOne(['id' => \Yii::$app->user->identity->id, 'store_id' => $this->store->id]);
+
+        //推荐人数
+        $tuijianNum = User::find()->where(['parent_id' => $user->id, 'store_id' => $this->store->id])->count();
+        $card_count = $user->coupon;
+        $hld = $user->hld;
+
+        $buttonClicked=false;
+
+        $buttonName='开始抽奖';
+        $buttonClicked=false;
+        $awardsList=['1张券',  '2张券', '3元张券', '5张券','10张券', '谢谢惠顾'];
+        $awardsListQuan=[1, 2, 3, 4, 5,10, 0];
+        //加工人工随机概率
+        //获得抽奖结果 序列号
+        $awardIndex=array_rand($awardsList,1);
+
+        //抽奖奖品
+        $awardName=$awardsList[$awardIndex];
+        //券个数
+        $awardsListQuanNum=$awardsListQuan[$awardIndex];
+
+
+
+
+        $award=array(
+            'awardsList'=>$awardsList,
+            'awardIndex'=>$awardIndex,
+            'awardName'=>$awardName,
+            'duration'=>4000,
+            'runNum'=>5,
+        );
+
+        $buttonClicked=true;
+
+        $user->coupon= $user->coupon-$num;//失去N张券 抽奖花费
+
+        if($awardsListQuanNum){
+            //增加券
+            $user->coupon = $user->coupon + $awardsListQuanNum;
+
+        }
+        $res = $user->save();
+
+        if ($res['code'] != 0) {
+            return json_encode([
+                'code' => 0,
+                'msg' => '抽奖失败',
+                'data' =>  array(
+                    'buttonClicked'=>$buttonClicked,
+                    'buttonName'=>$buttonName,
+                    'award'=>$award,
+                    'coupon'=>$user->coupon,
+                ),
+            ], JSON_UNESCAPED_UNICODE);
+        }
+
+        return json_encode([
+            'code' => 0,
+            'msg' => 'success',
+            'data' => array(
+                'buttonClicked'=>$buttonClicked,
+                'buttonName'=>$buttonName,
+                'award'=>$award,
+                'coupon'=>$user->coupon,
             )
         ], JSON_UNESCAPED_UNICODE);
 
