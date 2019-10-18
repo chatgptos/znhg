@@ -82,6 +82,11 @@ class BusinessCommentForm extends Model
         , '7' => '欢乐豆出，劲爆优惠券 欢乐豆就出手'
         , '8' => '欢乐豆出，系统奖励系统奖励 兑换就送'
         , '9' => '欢乐豆出，机不可失 买到就是赚到！！'
+        , '10' => '欢乐豆出，千万不要错过 ！！'
+        , '10' => '欢乐豆出，错过就后悔 ！！'
+        , '10' => '欢乐豆出，手续费劲爆最低 ！！'
+        , '10' => '欢乐豆出，货柜分红想要就  收集优惠券 ！！'
+        , '10' => '欢乐豆出，今天不抢 明天就后悔 ！！'
         );
         $Business->title = $num . '优惠券，' . $this->sethuanledou * $num . $guanggao[array_rand($guanggao)];//卖的张数
 //        $Business->order_num = $this->user_id; //成交交易数量
