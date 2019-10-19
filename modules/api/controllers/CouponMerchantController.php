@@ -47,6 +47,7 @@ class CouponMerchantController extends Controller
     {
 
         $id = \Yii::$app->request->get('qsId');
+        $num = \Yii::$app->request->get('num');
         $store_id = $this->store->id;
         $list = Setting::findOne(['store_id' => $store_id]);
         $user = User::findOne(['id' => \Yii::$app->user->identity->id, 'store_id' => $this->store->id]);
@@ -189,11 +190,11 @@ class CouponMerchantController extends Controller
             $team_count_require = 0;
             $card_count_require = 0;
 
-            if ($card_count < 1) {
+            if ($card_count < $num) {
                 $buttonName = '优惠券不够';
                 $buttonClicked = true;
             } else {
-                $buttonName = '1张/次';
+                $buttonName = $num.'张/次';
             }
             //奖品列表
             $awardsList = ['1张券', '2张券', '3元张券', '5张券', '10张券', '谢谢惠顾'];
@@ -285,6 +286,21 @@ class CouponMerchantController extends Controller
 
         $user->coupon = $user->coupon - $num;//失去N张券 抽奖花费
 
+        if($user->coupon < 0){
+            $buttonName = '优惠券不够'; 
+            return json_encode([
+                'code' => 1,
+                'msg' => '优惠券不够',
+                'data' => array(
+                    'buttonClicked' => $buttonClicked,
+                    'buttonName' => $buttonName,
+                    'award' => $award,
+                    'coupon' => $user->coupon,
+                ),
+            ], JSON_UNESCAPED_UNICODE);
+        }
+
+
         if ($awardsListQuanNum) {
             //增加券
             $user->coupon = $user->coupon + $awardsListQuanNum;
@@ -294,7 +310,7 @@ class CouponMerchantController extends Controller
 
         if ($res['code'] != 0) {
             return json_encode([
-                'code' => 0,
+                'code' => 1,
                 'msg' => '抽奖失败',
                 'data' => array(
                     'buttonClicked' => $buttonClicked,
