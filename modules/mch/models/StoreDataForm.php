@@ -216,10 +216,86 @@ class StoreDataForm extends Model
             'store_id' => $this->store_id,
             'is_delete' => 0,
         ])->count();
+
+        $coupon_count = User::find()->where([
+            'store_id' => $this->store_id,
+            'is_delete' => 0,
+        ])->sum('coupon');
+
+
+        $integral_count = User::find()->where([
+            'store_id' => $this->store_id,
+            'is_delete' => 0,
+        ])->sum('integral');
+
+
+
+        $integral_count = User::find()->where([
+            'store_id' => $this->store_id,
+            'is_delete' => 0,
+        ])->sum('integral');
+
+        $hld_count = User::find()->where([
+            'store_id' => $this->store_id,
+            'is_delete' => 0,
+        ])->sum('hld');
+
+
+        $jruser_count = User::find()->where([
+            'store_id' => $this->store_id,
+            'is_delete' => 0,
+        ])->andWhere(['>=', 'addtime', strtotime(date("Y-m-d"),time())])->count();
+
+
+        $jrintegral_count = User::find()->where([
+            'store_id' => $this->store_id,
+            'is_delete' => 0,
+        ])->andWhere(['>=', 'integral', strtotime(date("Y-m-d"),time())])->count();
+
+
+        $jrhld_count = User::find()->where([
+            'store_id' => $this->store_id,
+            'is_delete' => 0,
+        ])->andWhere(['>=', 'hld', strtotime(date("Y-m-d"),time())])->count();
+
+
+
+        $oldtoday=date('Y-m-d H:i:s',strtotime(strtotime(date("Y-m-d"),time()))-86400);//昨日零点
+
+        $htuser_count = User::find()->where([
+            'store_id' => $this->store_id,
+            'is_delete' => 0,
+        ])->andWhere(['>=', 'addtime', $oldtoday])->count();
+
+
+        $htintegral_count = User::find()->where([
+            'store_id' => $this->store_id,
+            'is_delete' => 0,
+        ])->andWhere(['>=', 'integral', $oldtoday])->count();
+
+
+        $hthld_count = User::find()->where([
+            'store_id' => $this->store_id,
+            'is_delete' => 0,
+        ])->andWhere(['>=', 'hld', $oldtoday])->count();
+
+
+
+
+
         return [
             'user_count' => $user_count ? intval($user_count) : 0,
             'goods_count' => $goods_count ? intval($goods_count) : 0,
             'order_count' => $order_count ? intval($order_count) : 0,
+            'coupon_count' => $coupon_count ? intval($coupon_count) : 0,
+            'integral_count' => $integral_count ? intval($integral_count) : 0,
+            'hld_count' => $hld_count ? intval($hld_count) : 0,
+            'jruser_count' => $jruser_count ? intval($jruser_count) : 0,
+            'jrintegral_count' => $jrintegral_count ? intval($jrintegral_count) : 0,
+            'jrhld_count' => $jrhld_count ? intval($jrhld_count) : 0,
+            'htuser_count' => $htuser_count-$jruser_count ? intval($htuser_count-$jruser_count) : 0,
+            'htintegral_count' => $htintegral_count-$jrintegral_count ? intval($htintegral_count-$jrintegral_count) : 0,
+            'hthld_count' => $hthld_count-$jrhld_count ? intval($hthld_count-$jrhld_count) : 0,
         ];
     }
 

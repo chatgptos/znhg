@@ -16,6 +16,10 @@ use Yii;
  * @property string $operator
  * @property string $store_id
  * @property string $operator_id
+ * @property string $coupon
+ * @property string $hld
+ *
+ *
  */
 class IntegralLog extends \yii\db\ActiveRecord
 {
@@ -51,6 +55,7 @@ class IntegralLog extends \yii\db\ActiveRecord
             'content' => '描述',
             'integral' => '积分',
             'hld' => '欢乐豆',
+            'coupon' => '优惠券',
             'addtime' => '添加时间',
             'username' => '用户名',
             'operator' => '操作者',

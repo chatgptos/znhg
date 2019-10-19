@@ -149,6 +149,29 @@ $this->params['active_nav_group'] = 0;
 <div class="row home-row" id="app" style="display: none">
     <div class="home-col col-md-4">
         <div class="panel panel-1" v-if="panel_1">
+            <div class="panel-header">今日数据</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-4 text-center">
+                        <div style="font-size: 1.75rem">{{panel_1.jruser_count}}</div>
+                        <div>今日新增用户总数</div>
+                    </div>
+
+                    <div class="col-4 text-center">
+                        <div style="font-size: 1.75rem">{{panel_1.jrintegral_count}}</div>
+                        <div>今日积分总数</div>
+                    </div>
+                <div class="col-4 text-center">
+                    <div style="font-size: 1.75rem">{{panel_1.jrhld_count}}</div>
+                    <div>今日欢乐豆总数</div>
+                </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="home-col col-md-4">
+        <div class="panel panel-1" v-if="panel_1">
             <div class="panel-header">商城信息</div>
             <div class="panel-body">
                 <div class="row">
@@ -164,10 +187,58 @@ $this->params['active_nav_group'] = 0;
                         <div style="font-size: 1.75rem">{{panel_1.order_count}}</div>
                         <div>订单数</div>
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
+    <div class="home-col col-md-4">
+        <div class="panel panel-1" v-if="panel_1">
+            <div class="panel-header">平台营销数据</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-4 text-center">
+                        <div style="font-size: 1.75rem">{{panel_1.coupon_count}}</div>
+                        <div>优惠券总数</div>
+                    </div>
+
+                    <div class="col-4 text-center">
+                        <div style="font-size: 1.75rem">{{panel_1.integral_count}}</div>
+                        <div>积分总数</div>
+                    </div>
+                    <div class="col-4 text-center">
+                        <div style="font-size: 1.75rem">{{panel_1.hld_count}}</div>
+                        <div>欢乐豆总数</div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="home-col col-md-4">
+        <div class="panel panel-1" v-if="panel_1">
+            <div class="panel-header">昨日数据</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-4 text-center">
+                        <div style="font-size: 1.75rem">{{panel_1.htuser_count}}</div>
+                        <div>昨日新增用户总数</div>
+                    </div>
+
+                    <div class="col-4 text-center">
+                        <div style="font-size: 1.75rem">{{panel_1.htintegral_count}}</div>
+                        <div>昨日积分总数</div>
+                    </div>
+                    <div class="col-4 text-center">
+                        <div style="font-size: 1.75rem">{{panel_1.hthld_count}}</div>
+                        <div>昨日欢乐豆总数</div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="home-col col-md-8">
         <div class="panel panel-2" v-if="panel_2">
             <div class="panel-body">

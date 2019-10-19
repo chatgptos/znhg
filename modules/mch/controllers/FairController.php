@@ -69,6 +69,15 @@ class FairController extends Controller
             $model->is_jftohld=$list['is_jftohld'];//积分对欢乐豆是否打开
             $model->is_hldtojf=$list['is_hldtojf']; //欢乐豆对积分是否打开
             $model->is_yhqtohld=$list['is_yhqtohld']; //欢乐豆对积分是否打开
+
+
+            $model->charge5 = $list['charge5'];
+            $model->charge3 = $list['charge3'];
+            $model->chargeNum = $list['chargeNum'];
+            $model->chargeNum1 = $list['chargeNum1'];
+            $model->chargeNum2 = $list['chargeNum2'];
+            $model->chargeNum3 = $list['chargeNum3'];
+
             $model->save();
             $this->renderJson([
                 'code' => 0,
@@ -106,7 +115,7 @@ class FairController extends Controller
             'pagination' => $data['pagination'],
             'list' => $data['list'],
             'level_list' => $level_list
-        ]); 
+        ]);
     }
 
 
