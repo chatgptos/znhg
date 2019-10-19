@@ -230,14 +230,12 @@ class BusinessCommentForm extends Model
             ];
 
 
-        $t = \Yii::$app->db->beginTransaction();
-
 
         if ($this->user_id == $order->user_id) {
-            return [
-                'code' => 1,
-                'msg' => '自己不能购买',
-            ];
+//            return [
+//                'code' => 1,
+//                'msg' => '自己不能购买',
+//            ];
         }
 
 
@@ -273,7 +271,6 @@ class BusinessCommentForm extends Model
         $user_buyer->coupon = $buycoupon;
         $user_buyer->coupon_total = $buycoupon_total;
 
-
         if (($user_buyer->hld) < 0) {
             return [
                 'code' => 1,
@@ -299,6 +296,8 @@ class BusinessCommentForm extends Model
                 'code' => 0,
                 'msg' => '交易成功',
                 'data' => array(
+                    'coupon' => $user_buyer->coupon,
+                    'nickname' => $user_buyer->nickname,
                     'is_exchange' => 1,
                 )
             ];
