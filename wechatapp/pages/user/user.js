@@ -253,7 +253,7 @@ Page({
     },
     integral: function () {
         wx.navigateTo({
-            url: '/pages/recharge-integral/index',
+            url: '/pages/fair/fair',
         })
     },
     card: function () {

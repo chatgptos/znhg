@@ -201,6 +201,23 @@ class CouponMerchantController extends Controller
             $award = array(
                 'awardsList' => $awardsList,
             );
+
+
+            $buttonClicked = true;
+            $buttonName = '暂未开放';
+
+            return json_encode([
+                'code' => 1,
+                'msg' => '暂未开放',
+                'data' => array(
+                    'buttonClicked' => $buttonClicked,
+                    'buttonName' => $buttonName,
+                    'award' => $award,
+                    'coupon' => $user->coupon,
+                ),
+            ], JSON_UNESCAPED_UNICODE);
+
+
         } elseif ($id == 6) {
             //赠送
             $team_count_require = 0;
@@ -287,7 +304,7 @@ class CouponMerchantController extends Controller
         $user->coupon = $user->coupon - $num;//失去N张券 抽奖花费
 
         if($user->coupon < 0){
-            $buttonName = '优惠券不够'; 
+            $buttonName = '优惠券不够';
             return json_encode([
                 'code' => 1,
                 'msg' => '优惠券不够',

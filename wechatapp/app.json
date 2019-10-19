@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/fair/fair",
+    "pages/user/user",
     "pages/mall/mall",
     "pages/catmall/mall",
     "pages/cheapmarket/cheapmarket",
@@ -8,7 +9,6 @@
     "pages/coupon-merchant-mall-list/index",
     "pages/coupon-merchant-mall/index",
     "pages/recharge-integral/index",
-    "pages/user/user",
     "pages/cat/cat",
     "pages/pt/index/index",
     "pages/index/index",
