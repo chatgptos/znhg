@@ -16,6 +16,7 @@ use app\models\Shop;
 use app\models\Store;
 use app\models\User;
 use app\models\UserCoupon;
+use app\modules\mch\models\BusinessListForm;
 use app\modules\mch\models\LevelForm;
 use app\modules\mch\models\LevelListForm;
 use app\modules\mch\models\UserCardListForm;
@@ -67,7 +68,7 @@ class FairController extends Controller
             $model->is_hldtoyhq=$list['is_hldtoyhq'];//积分对欢乐豆是否打开
             $model->is_jftohld=$list['is_jftohld'];//积分对欢乐豆是否打开
             $model->is_hldtojf=$list['is_hldtojf']; //欢乐豆对积分是否打开
-            $model->is_yhqtohld=$list['is_yhqtohld']; //欢乐豆对积分是否打开 
+            $model->is_yhqtohld=$list['is_yhqtohld']; //欢乐豆对积分是否打开
             $model->save();
             $this->renderJson([
                 'code' => 0,
@@ -90,18 +91,22 @@ class FairController extends Controller
 
     public function actionDealindex()
     {
-        $form = new UserListForm();
+
+
+        $form = new BusinessListForm();
         $form->attributes = \Yii::$app->request->get();
         $form->store_id = $this->store->id;
-        $data = $form->search();
+
         $level_list = Level::find()->where(['store_id' => $this->store->id, 'is_delete' => 0, 'status' => 1])
             ->orderBy(['level' => SORT_ASC])->asArray()->all();
-        return $this->render('index', [
+
+        $data = $form->search();
+        return $this->render('deal', [
             'row_count' => $data['row_count'],
             'pagination' => $data['pagination'],
             'list' => $data['list'],
             'level_list' => $level_list
-        ]);
+        ]); 
     }
 
 

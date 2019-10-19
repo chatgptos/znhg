@@ -300,6 +300,11 @@ class MchMenu
                 'route' => 'mch/fair/index',
                 'icon' => 'icon-people',
                 'list' => [
+
+                    [
+                        'name' => '开放时间',
+                        'route' => 'mch/fair/opentime',
+                    ],
                     [
                         'name' => '集市交易列表',
                         'route' => 'mch/fair/dealindex',
@@ -309,10 +314,6 @@ class MchMenu
                             'mch/fair/rechange-log',
                             'mch/fair/edit',
                         ],
-                    ],
-                    [
-                        'name' => '开放时间',
-                        'route' => 'mch/fair/opentime',
                     ],
                     [
                         'name' => '集市用户列表',
