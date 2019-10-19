@@ -303,7 +303,7 @@ class CouponMerchantController extends Controller
 
         $awardsListget = $this->get_AwardList();
         $awardsList = $awardsListget['name'];
-        $awardsListQuan = $awardsList['num'];
+        $awardsListQuan = $awardsListget['num'];
         $duration = $awardsListget['quan'];
         $money = $awardsListget['money'];
         //单独的数组
@@ -317,6 +317,7 @@ class CouponMerchantController extends Controller
         $awardName = $awardsList[$awardIndex];
         //券个数
         $awardsListQuanNum = $awardsListQuan[$awardIndex];
+ 
         $award = array(
             'awardsList' => $awardsList,
             'awardIndex' => $awardIndex,

@@ -610,7 +610,7 @@ class MchMenu
                                 'name' => '奖品等级',
                                 'route' => 'mch/choujiang/level-edit',
                                 'sub' => [
-                                    'mch/choujiang/level-edit', 
+                                    'mch/choujiang/level-edit',
                                 ],
                             ],
                         ],
