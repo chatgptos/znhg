@@ -105,7 +105,6 @@ class FairController extends Controller
         $form = new BusinessListForm();
         $form->attributes = \Yii::$app->request->get();
         $form->store_id = $this->store->id;
-
         $level_list = Level::find()->where(['store_id' => $this->store->id, 'is_delete' => 0, 'status' => 1])
             ->orderBy(['level' => SORT_ASC])->asArray()->all();
 

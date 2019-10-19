@@ -37,26 +37,6 @@ class BusinessListForm extends Model
         ];
     }
 
-    public function search1()
-    {
-        if(!$this->validate()){
-            return $this->getModelError();
-        }
-
-        $query = Card::find()->where(['is_delete'=>0,'store_id'=>$this->store_id]);
-
-        $count = $query->count();
-
-        $p = new Pagination(['totalCount'=>$count,'pageSize'=>$this->limit]);
-        $list = $query->offset($p->offset)->limit($p->limit)->orderBy(['addtime'=>SORT_DESC])->asArray()->all();
-
-        return [
-            'list'=>$list,
-            'row_count'=>$count,
-            'pagintion'=>$p
-        ];
-
-    }
 
     public function search()
     {
@@ -64,13 +44,15 @@ class BusinessListForm extends Model
             return $this->getModelError();
         $query = Business::find()->alias('g')->where([
             'g.status' => 1,
-            'g.is_exchange' => 0,
+//            'g.is_exchange' => 0,
             'g.is_delete' => 0,
         ])->orderBy('g.addtime DESC');
         if ($this->store_id)
             $query->andWhere(['g.store_id' => $this->store_id]);
+        $this->keyword =\Yii::$app->request->get()['keyword'];
         if ($this->keyword)
-            $query->andWhere(['LIKE', 'g.name', $this->keyword]);
+            $query->andWhere(['g.is_exchange'=> $this->keyword]);
+//            $query->andWhere(['LIKE', 'g.name', $this->keyword]);
         $count = $query->count();
         $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $this->limit, 'page' => $this->page - 1]);
         $list = $query

@@ -8,6 +8,7 @@
 namespace app\modules\api\controllers;
 
 use app\extensions\CreateQrcode;
+use app\models\Award;
 use app\models\Cash;
 use app\models\Color;
 use app\models\Option;
@@ -25,6 +26,7 @@ use app\modules\api\models\CashListForm;
 use app\modules\api\models\QrcodeForm;
 use app\modules\api\models\ShareForm;
 use app\modules\api\models\TeamForm;
+use app\modules\mch\models\AwardListForm;
 use yii\helpers\VarDumper;
 
 class CouponMerchantController extends Controller
@@ -190,32 +192,36 @@ class CouponMerchantController extends Controller
             $team_count_require = 0;
             $card_count_require = 0;
 
-            if ($card_count < $num) {
+            //奖品列表
+            $awardsList = $this->get_AwardList();
+            $award = array(
+                'awardsList' => $awardsList['name'],
+            );
+                $money= $awardsList['money'];
+
+            if ($card_count < $money) {
                 $buttonName = '优惠券不够';
                 $buttonClicked = true;
             } else {
-                $buttonName = $num.'张/次';
+                $buttonName = $money.'张/次';
             }
-            //奖品列表
-            $awardsList = ['1张券', '2张券', '3元张券', '5张券', '10张券', '谢谢惠顾'];
-            $award = array(
-                'awardsList' => $awardsList,
-            );
 
+            if(!$awardsList){
+                $buttonClicked = true;
+                $buttonName = '暂未开放';
 
-            $buttonClicked = true;
-            $buttonName = '暂未开放';
+                return json_encode([
+                    'code' => 1,
+                    'msg' => '暂未开放',
+                    'data' => array(
+                        'buttonClicked' => $buttonClicked,
+                        'buttonName' => $buttonName,
+                        'award' => $award,
+                        'coupon' => $user->coupon,
+                    ),
+                ], JSON_UNESCAPED_UNICODE);
+            }
 
-            return json_encode([
-                'code' => 1,
-                'msg' => '暂未开放',
-                'data' => array(
-                    'buttonClicked' => $buttonClicked,
-                    'buttonName' => $buttonName,
-                    'award' => $award,
-                    'coupon' => $user->coupon,
-                ),
-            ], JSON_UNESCAPED_UNICODE);
 
 
         } elseif ($id == 6) {
@@ -261,6 +267,17 @@ class CouponMerchantController extends Controller
     }
 
 
+
+    private function get_AwardList()
+    {
+        //奖品列表
+        $formAward = new AwardListForm();
+        $formAward->store_id = $this->store->id;
+        $list = $formAward->searchName();
+        return $list;
+    }
+
+
     /**
      * @return mixed|string
      * 券商分类
@@ -281,8 +298,17 @@ class CouponMerchantController extends Controller
 
         $buttonName = '开始抽奖';
         $buttonClicked = false;
-        $awardsList = ['1张券', '2张券', '3元张券', '5张券', '10张券', '谢谢惠顾'];
-        $awardsListQuan = [1, 2, 3, 5, 10, 0];
+//        $awardsList = ['1张券', '2张券', '3元张券', '5张券', '10张券', '谢谢惠顾'];
+//        $awardsListQuan = [1, 2, 3, 5, 10, 0];
+
+        $awardsListget = $this->get_AwardList();
+        $awardsList = $awardsListget['name'];
+        $awardsListQuan = $awardsList['num'];
+        $duration = $awardsListget['quan'];
+        $money = $awardsListget['money'];
+        //单独的数组
+
+
         //加工人工随机概率
         //获得抽奖结果 序列号
 //        $awardIndex=array_rand($awardsList,1);
@@ -295,13 +321,13 @@ class CouponMerchantController extends Controller
             'awardsList' => $awardsList,
             'awardIndex' => $awardIndex,
             'awardName' => $awardName,
-            'duration' => 4000,
-            'runNum' => 5,
+            'duration' => 3000,
+            'runNum' => $duration[$awardIndex],
         );
 
         $buttonClicked = true;
 
-        $user->coupon = $user->coupon - $num;//失去N张券 抽奖花费
+        $user->coupon = $user->coupon - $money;//失去N张券 抽奖花费
 
         if($user->coupon < 0){
             $buttonName = '优惠券不够';
@@ -386,15 +412,16 @@ class CouponMerchantController extends Controller
      */
     public function GailvChoujiang()
     {
-        $prize_arr = array(
-            '0' => array('id' => 1, 'prize' => '1张券', 'awardsListQuan' => 1, 'v' => 10),
-            '1' => array('id' => 2, 'prize' => '2张券', 'awardsListQuan' => 2, 'v' => 1),
-            '2' => array('id' => 3, 'prize' => '3元张券', 'awardsListQuan' => 3, 'v' => 1),
-            '3' => array('id' => 4, 'prize' => '5张券', 'awardsListQuan' => 5, 'v' => 1),
-            '4' => array('id' => 5, 'prize' => '10张券', 'awardsListQuan' => 10, 'v' => 1),
-            '5' => array('id' => 6, 'prize' => '下次没准就能中哦', 'awardsListQuan' => 0, 'v' => 9000),
-        );
-
+//        $prize_arr = array(
+//            '0' => array('id' => 1, 'prize' => '1张券', 'awardsListQuan' => 1, 'v' => 10),
+//            '1' => array('id' => 2, 'prize' => '2张券', 'awardsListQuan' => 2, 'v' => 1),
+//            '2' => array('id' => 3, 'prize' => '3元张券', 'awardsListQuan' => 3, 'v' => 1),
+//            '3' => array('id' => 4, 'prize' => '5张券', 'awardsListQuan' => 5, 'v' => 1),
+//            '4' => array('id' => 5, 'prize' => '10张券', 'awardsListQuan' => 10, 'v' => 1),
+//            '5' => array('id' => 6, 'prize' => '下次没准就能中哦', 'awardsListQuan' => 0, 'v' => 9000),
+//        );
+        $awardsListget = $this->get_AwardList();
+        $prize_arr=$awardsListget['mkawardlist'];
         /*
          * 每次前端页面的请求，PHP循环奖项设置数组，
          * 通过概率计算函数get_rand获取抽中的奖项id。

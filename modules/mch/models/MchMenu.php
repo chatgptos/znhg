@@ -598,6 +598,24 @@ class MchMenu
                 'icon' => 'icon-pintu-m',
                 'list' => [
                     [
+                        'id' => 'jingpin',
+                        'name' => '抽奖管理',
+                        'route' => 'mch/choujiang/level',
+                        'list' => [
+                            [
+                                'name' => '奖品列表',
+                                'route' => 'mch/choujiang/level',
+                            ],
+                            [
+                                'name' => '奖品等级',
+                                'route' => 'mch/choujiang/level-edit',
+                                'sub' => [
+                                    'mch/choujiang/level-edit', 
+                                ],
+                            ],
+                        ],
+                    ],
+                    [
                         'id' => 'seckill',
                         'name' => '整点秒杀',
                         'route' => 'mch/seckill/index',
