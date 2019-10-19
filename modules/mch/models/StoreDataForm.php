@@ -223,12 +223,6 @@ class StoreDataForm extends Model
         ])->sum('coupon');
 
 
-        $integral_count = User::find()->where([
-            'store_id' => $this->store_id,
-            'is_delete' => 0,
-        ])->sum('integral');
-
-
 
         $integral_count = User::find()->where([
             'store_id' => $this->store_id,
@@ -250,13 +244,19 @@ class StoreDataForm extends Model
         $jrintegral_count = User::find()->where([
             'store_id' => $this->store_id,
             'is_delete' => 0,
-        ])->andWhere(['>=', 'integral', strtotime(date("Y-m-d"),time())])->count();
+        ])->andWhere(['>=', 'addtime', strtotime(date("Y-m-d"),time())])->sum('integral');;
 
 
         $jrhld_count = User::find()->where([
             'store_id' => $this->store_id,
             'is_delete' => 0,
-        ])->andWhere(['>=', 'hld', strtotime(date("Y-m-d"),time())])->count();
+        ])->andWhere(['>=', 'addtime', strtotime(date("Y-m-d"),time())])->sum('hld');
+
+
+        $jrcoupon_count = User::find()->where([
+            'store_id' => $this->store_id,
+            'is_delete' => 0,
+        ])->andWhere(['>=', 'addtime', strtotime(date("Y-m-d"),time())])->sum('coupon');
 
 
 
@@ -271,13 +271,19 @@ class StoreDataForm extends Model
         $htintegral_count = User::find()->where([
             'store_id' => $this->store_id,
             'is_delete' => 0,
-        ])->andWhere(['>=', 'integral', $oldtoday])->count();
+        ])->andWhere(['>=', 'addtime', $oldtoday])->sum('integral');;
 
 
         $hthld_count = User::find()->where([
             'store_id' => $this->store_id,
             'is_delete' => 0,
-        ])->andWhere(['>=', 'hld', $oldtoday])->count();
+        ])->andWhere(['>=', 'addtime', $oldtoday])->sum('hld');
+
+
+        $htcoupon_count = User::find()->where([
+            'store_id' => $this->store_id,
+            'is_delete' => 0,
+        ])->andWhere(['>=', 'addtime', $oldtoday])->sum('coupon');;
 
 
 
@@ -293,9 +299,11 @@ class StoreDataForm extends Model
             'jruser_count' => $jruser_count ? intval($jruser_count) : 0,
             'jrintegral_count' => $jrintegral_count ? intval($jrintegral_count) : 0,
             'jrhld_count' => $jrhld_count ? intval($jrhld_count) : 0,
+            'jrcoupon_count' => $jrcoupon_count ? intval($jrcoupon_count) : 0,
             'htuser_count' => $htuser_count-$jruser_count ? intval($htuser_count-$jruser_count) : 0,
             'htintegral_count' => $htintegral_count-$jrintegral_count ? intval($htintegral_count-$jrintegral_count) : 0,
             'hthld_count' => $hthld_count-$jrhld_count ? intval($hthld_count-$jrhld_count) : 0,
+            'htcoupon_count' => $htcoupon_count-$jrcoupon_count ? intval($htcoupon_count-$jrcoupon_count) : 0,
         ];
     }
 

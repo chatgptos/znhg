@@ -154,7 +154,7 @@ $this->params['active_nav_group'] = 0;
                 <div class="row">
                     <div class="col-4 text-center">
                         <div style="font-size: 1.75rem">{{panel_1.jruser_count}}</div>
-                        <div>今日新增用户总数</div>
+                        <div>今日新增用户</div>
                     </div>
 
                     <div class="col-4 text-center">
@@ -222,9 +222,8 @@ $this->params['active_nav_group'] = 0;
                 <div class="row">
                     <div class="col-4 text-center">
                         <div style="font-size: 1.75rem">{{panel_1.htuser_count}}</div>
-                        <div>昨日新增用户总数</div>
+                        <div>昨日新增用户</div>
                     </div>
-
                     <div class="col-4 text-center">
                         <div style="font-size: 1.75rem">{{panel_1.htintegral_count}}</div>
                         <div>昨日积分总数</div>
