@@ -259,31 +259,29 @@ class StoreDataForm extends Model
         ])->andWhere(['>=', 'addtime', strtotime(date("Y-m-d"),time())])->sum('coupon');
 
 
-
-        $oldtoday=date('Y-m-d H:i:s',strtotime(strtotime(date("Y-m-d"),time()))-86400);//昨日零点
-
+ 
         $htuser_count = User::find()->where([
             'store_id' => $this->store_id,
             'is_delete' => 0,
-        ])->andWhere(['>=', 'addtime', $oldtoday])->count();
+        ])->andWhere(['>=', 'addtime', strtotime('yesterday')])->count();
 
 
         $htintegral_count = User::find()->where([
             'store_id' => $this->store_id,
             'is_delete' => 0,
-        ])->andWhere(['>=', 'addtime', $oldtoday])->sum('integral');;
+        ])->andWhere(['>=', 'addtime', strtotime('yesterday')])->sum('integral');;
 
 
         $hthld_count = User::find()->where([
             'store_id' => $this->store_id,
             'is_delete' => 0,
-        ])->andWhere(['>=', 'addtime', $oldtoday])->sum('hld');
+        ])->andWhere(['>=', 'addtime', strtotime('yesterday')])->sum('hld');
 
 
         $htcoupon_count = User::find()->where([
             'store_id' => $this->store_id,
             'is_delete' => 0,
-        ])->andWhere(['>=', 'addtime', $oldtoday])->sum('coupon');;
+        ])->andWhere(['>=', 'addtime', strtotime('yesterday')])->sum('coupon');;
 
 
 
