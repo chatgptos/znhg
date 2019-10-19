@@ -50,6 +50,7 @@ class IntegralLog extends \yii\db\ActiveRecord
             'user_id' => '用户id',
             'content' => '描述',
             'integral' => '积分',
+            'hld' => '欢乐豆',
             'addtime' => '添加时间',
             'username' => '用户名',
             'operator' => '操作者',
