@@ -282,9 +282,9 @@ class BusinessCommentForm extends Model
 
 
         //卖家 卖
-        $this->insertintegralLog(1, $user->id, $order->num, $sellhld, $order->xtjl, $order->huanledou_charge);
+        $this->insertintegralLog(1, $user->id, $order->num, $order->huanledou, $order->xtjl, $order->huanledou_charge);
         //买家 买
-        $this->insertintegralLog(2, $user_buyer->id, $buycoupon, $buyhld, $order->xtjl, $order->huanledou_charge);
+        $this->insertintegralLog(2, $user_buyer->id, $order->num, $order->huanledou, $order->xtjl, $order->huanledou_charge);
 
 
 
