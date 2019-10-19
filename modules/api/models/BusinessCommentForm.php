@@ -318,10 +318,10 @@ class BusinessCommentForm extends Model
         $integralLog->user_id = $user->id;
         if ($rechangeType == '2') {
             //买优惠券
-            $integralLog->content = "管理员（欢乐豆兑换优惠券） 后台操作账号：" . $user->nickname . " 欢乐豆扣除：" . $hld . " 豆" . " 优惠券充值（包含奖励）：" . $num . " 张" . "系统奖励" . $xtjl;
+            $integralLog->content = "管理员（欢乐豆兑换优惠券） 后台操作账号：" . $user->nickname . " 欢乐豆".$user->hld."已经扣除：" . $hld . " 豆" . " 优惠券".$user->coupon."已经充值（包含奖励）：" . $num . " 张" . "系统奖励" . $xtjl;
         } elseif ($rechangeType == '1') {
             //卖优惠券
-            $integralLog->content = "管理员（优惠券换欢乐豆） 后台操作账号：" . $user->nickname . " 欢乐豆充值：" . $hld . " 豆" . " 优惠券扣除：" . $num . " 张,（发布时候已经扣除优惠券）（交易时扣除去手续费" . $sxf . '个欢乐豆）';
+            $integralLog->content = "管理员（优惠券换欢乐豆） 后台操作账号：" . $user->nickname . " 欢乐豆".$user->hld."已经充值：" . $hld . " 豆" . " 优惠券".$user->coupon."已经扣除：" . $num . " 张,（发布时候已经扣除优惠券）（交易时扣除去手续费" . $sxf . '个欢乐豆）';
         }
 
         $integralLog->hld = $hld;
