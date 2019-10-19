@@ -311,6 +311,10 @@ class MchMenu
                         ],
                     ],
                     [
+                        'name' => '开放时间',
+                        'route' => 'mch/fair/opentime',
+                    ],
+                    [
                         'name' => '集市用户列表',
                         'route' => 'mch/fair/index',
                         'sub' => [
@@ -320,6 +324,7 @@ class MchMenu
 //                            'mch/fair/edit',
                         ],
                     ],
+
 //                    [
 //                        'name' => '核销员',
 //                        'route' => 'mch/fair/clerk',

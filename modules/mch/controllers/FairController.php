@@ -8,8 +8,10 @@
 namespace app\modules\mch\controllers;
 
 
+use app\models\BusinessSetting;
 use app\models\IntegralLog;
 use app\models\Level;
+use app\models\Seckill;
 use app\models\Shop;
 use app\models\Store;
 use app\models\User;
@@ -38,6 +40,44 @@ class FairController extends Controller
             'list' => $data['list'],
             'level_list' => $level_list
         ]);
+    }
+
+
+
+    public function actionOpentime()
+    {
+        $model = BusinessSetting::findOne([
+            'store_id' => $this->store->id,
+        ]);
+        if (!$model) {
+            $model = new BusinessSetting();
+            $model->store_id = $this->store->id;
+        }
+        if (\Yii::$app->request->isPost) {
+            $model->open_time = json_encode((array)\Yii::$app->request->post('open_time', []), JSON_UNESCAPED_UNICODE);
+            $list = \Yii::$app->request->post('model');
+            $model->hldtoyhq=$list['hldtoyhq'];//7欢乐豆一张
+            $model->xtjl=$list['xtjl'];//系统赠送张数
+            $model->xtjlsell=$list['xtjlsell'];//系统赠送张数卖方
+            $model->jftohld=$list['jftohld'];//积分对欢乐豆
+            $model->hldtojf=$list['hldtojf'];//欢乐豆对积分
+            $model->charge=$list['charge'];//百分比手续费
+            $model->charge1=$list['charge1'];//百分比手续费2级
+            $model->charge2=$list['charge2'];//百分比手续费3级
+            $model->is_hldtoyhq=$list['is_hldtoyhq'];//积分对欢乐豆是否打开
+            $model->is_jftohld=$list['is_jftohld'];//积分对欢乐豆是否打开
+            $model->is_hldtojf=$list['is_hldtojf']; //欢乐豆对积分是否打开
+            $model->is_yhqtohld=$list['is_yhqtohld']; //欢乐豆对积分是否打开 
+            $model->save();
+            $this->renderJson([
+                'code' => 0,
+                'msg' => '保存成功',
+            ]);
+        } else {
+            return $this->render('opentime', [
+                'model' => $model,
+            ]);
+        }
     }
 
     /**
