@@ -206,7 +206,8 @@ class CouponMerchantController extends Controller
                 $buttonName = $money.'张/次';
             }
 
-            if(!$awardsList){
+            //判断是否有奖品
+            if(!$awardsList['name']){
                 $buttonClicked = true;
                 $buttonName = '暂未开放';
 
@@ -317,7 +318,7 @@ class CouponMerchantController extends Controller
         $awardName = $awardsList[$awardIndex];
         //券个数
         $awardsListQuanNum = $awardsListQuan[$awardIndex];
- 
+
         $award = array(
             'awardsList' => $awardsList,
             'awardIndex' => $awardIndex,
