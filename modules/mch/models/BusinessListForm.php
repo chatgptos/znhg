@@ -49,9 +49,14 @@ class BusinessListForm extends Model
         ])->orderBy('g.addtime DESC');
         if ($this->store_id)
             $query->andWhere(['g.store_id' => $this->store_id]);
-        $this->keyword =\Yii::$app->request->get()['keyword'];
-        if ($this->keyword)
-            $query->andWhere(['g.is_exchange'=> $this->keyword]);
+        $this->keyword =\Yii::$app->request->get()['keyword']; 
+        if ($this->keyword ==0){
+            $query->andWhere(['g.is_exchange'=>0]);
+        }elseif($this->keyword == 1) {
+            $query->andWhere(['g.is_exchange'=>1]);
+        }elseif($this->keyword == 2) {
+
+        }
 //            $query->andWhere(['LIKE', 'g.name', $this->keyword]);
         $count = $query->count();
         $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $this->limit, 'page' => $this->page - 1]);
