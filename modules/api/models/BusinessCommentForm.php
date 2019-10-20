@@ -146,7 +146,7 @@ class BusinessCommentForm extends Model
         $Business->xtjl = (int)intval($this->xtjl);//系统奖励
 
 //      合计收益
-        $huanledou_total = (int)intval(($this->hldtoyhq * $num) * (1 - $this->getCharge($num) * 0.01));// 需要的欢乐豆 + 总的*手续费
+        $huanledou_total = (int)intval($Business->huanledou - $Business->huanledou_charge);// 需要的欢乐豆 + 总的*手续费
 
         $Business->addtime = time();
 
@@ -519,7 +519,7 @@ class BusinessCommentForm extends Model
         $xtjl = $this->xtjl;//系统奖励
 
 //      合计收益
-        $huanledou_total = ($this->hldtoyhq * $num) * (100 - $this->getCharge($num)) / 100;// 需要的欢乐豆 + 总的*手续费
+        $huanledou_total = $huanledou -$huanledou_charge ;// 需要的欢乐豆 + 总的*手续费
 
         return [
             'code' => 0,
