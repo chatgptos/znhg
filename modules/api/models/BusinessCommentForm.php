@@ -510,16 +510,16 @@ class BusinessCommentForm extends Model
 //      卖的张数
 
 //      欢乐豆实际总价值
-        $huanledou = $this->hldtoyhq * $num;//卖的张数*平台固定的每张欢乐豆价值
+        $huanledou =  (int)intval($this->hldtoyhq * $num);//卖的张数*平台固定的每张欢乐豆价值
 
 //      手续费欢乐豆价值
-        $huanledou_charge = ($this->getCharge($num)) * 0.01 * ($this->hldtoyhq * $num);//卖的张数*平台固定的欢乐豆
+        $huanledou_charge = (int)intval( ($this->getCharge($num)) * 0.01 * ($this->hldtoyhq * $num));//卖的张数*平台固定的欢乐豆
 
 //      系统奖励
         $xtjl = $this->xtjl;//系统奖励
 
 //      合计收益
-        $huanledou_total = $huanledou -$huanledou_charge ;// 需要的欢乐豆 + 总的*手续费
+        $huanledou_total =  (int)intval($huanledou -$huanledou_charge) ;// 需要的欢乐豆 + 总的*手续费
 
         return [
             'code' => 0,
