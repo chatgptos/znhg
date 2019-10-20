@@ -113,6 +113,7 @@ class FairController extends Controller
             'row_count' => $data['row_count'],
             'pagination' => $data['pagination'],
             'list' => $data['list'],
+            'people' => $data['people'],
             'level_list' => $level_list
         ]);
     }

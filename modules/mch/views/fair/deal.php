@@ -10,7 +10,16 @@ $urlManager = Yii::$app->urlManager;
 $this->title = '集市管理';
 $this->params['active_nav_group'] = 4;
 ?>
-
+<div class="alert alert-info rounded-0">
+    <div>所有交易欢乐豆总数量： <?php echo  $people['peoplesellcount_huanledou'] ?></div>
+    <div>所有系统收取手续费（欢乐豆个数）： <?php echo  $people['peoplesellcount_huanledou_charge'] ?></div>
+    <div>所有系统奖励优惠券数量： <?php echo  $people['peoplesellcount_xtjl'] ?></div>
+    <div>所有正在售卖优惠券数量： <?php echo  $people['peoplesellcount_num'] ?></div>
+    <div>所有活跃买家数量： <?php echo  $people['peoplesellcount'] ?></div>
+    <div>所有活跃买家数量： <?php echo  $people['peoplebuyercount'] ?></div>
+    <div>注：可以搜索 0/1/2 （未交易/已经交易/全部） </div>
+    </div>
+</div>
 <div class="panel mb-3">
     <div class="panel-header"><?= $this->title ?></div>
     <div class="panel-body">
@@ -61,6 +70,7 @@ $this->params['active_nav_group'] = 4;
             <tr>
                 <th>ID</th>
                 <th>头像</th>
+                <th>买家头像</th>
                 <th>优惠券本次交易数量</th>
                 <th>发布时候欢乐豆显示卖价格</th>
                 <th>手续费价值欢乐豆</th>
@@ -82,6 +92,10 @@ $this->params['active_nav_group'] = 4;
                     <td><?= $u['id'] ?></td>
                     <td>
                         <img src="<?= $u['avatar_url'] ?>" style="width: 34px;height: 34px;"><br><?= $u['nickname']; ?><br><?=$u['wechat_open_id']?>
+                    </td>
+                    <td>
+                     <img src="<?= $u['avatar_url_buyer'] ?>" style="width: 34px;height: 34px;"><br><?= $u['nickname_buyer']; ?><br>
+                       ( 欢乐豆:<?=$u['hld_buyer']?>优惠券:<?=$u['coupon_buyer']?>积分:<a class="btn btn-sm btn-link"href="<?= $urlManager->createUrl(['mch/fair/rechange-log', 'user_id' => $u['user_id_buyer']]) ?>"><?= $u['integral'] ?></a>)
                     </td>
                     <td><?= $u['num']; ?> </td>
                     <td><?= $u['huanledou']; ?> </td>

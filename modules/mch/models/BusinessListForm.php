@@ -49,7 +49,7 @@ class BusinessListForm extends Model
         ])->orderBy('g.addtime DESC');
         if ($this->store_id)
             $query->andWhere(['g.store_id' => $this->store_id]);
-        $this->keyword =\Yii::$app->request->get()['keyword']; 
+        $this->keyword =\Yii::$app->request->get()['keyword'];
         if ($this->keyword ==0){
             $query->andWhere(['g.is_exchange'=>0]);
         }elseif($this->keyword == 1) {
@@ -58,6 +58,7 @@ class BusinessListForm extends Model
 
         }
 //            $query->andWhere(['LIKE', 'g.name', $this->keyword]);
+        $newquery=$query;
         $count = $query->count();
         $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $this->limit, 'page' => $this->page - 1]);
         $list = $query
@@ -75,11 +76,37 @@ class BusinessListForm extends Model
                 $list[$i]['integral'] =  User::findOne(['id' => $item['user_id'], 'store_id' => $this->store_id])->integral;
                 $list[$i]['user_id'] =  User::findOne(['id' => $item['user_id'], 'store_id' => $this->store_id])->id;
 
+                if($item['user_id_buyer']){
+                    $list[$i]['avatar_url_buyer'] =  User::findOne(['id' => $item['user_id_buyer'], 'store_id' => $this->store_id])->avatar_url;
+                    $list[$i]['nickname_buyer'] =  User::findOne(['id' => $item['user_id_buyer'], 'store_id' => $this->store_id])->nickname;
+                    $list[$i]['wechat_open_id_buyer'] =  User::findOne(['id' => $item['user_id_buyer'], 'store_id' => $this->store_id])->wechat_open_id;
+                    $list[$i]['hld_buyer'] =  User::findOne(['id' => $item['user_id_buyer'], 'store_id' => $this->store_id])->hld;
+                    $list[$i]['coupon_buyer'] =  User::findOne(['id' => $item['user_id_buyer'], 'store_id' => $this->store_id])->coupon;
+                    $list[$i]['integral_buyer'] =  User::findOne(['id' => $item['user_id_buyer'], 'store_id' => $this->store_id])->integral;
+                    $list[$i]['user_id_buyer'] =  User::findOne(['id' => $item['user_id_buyer'], 'store_id' => $this->store_id])->id;
+                }
             }
         }
 
+        $peoplesellcount_huanledou= $newquery->sum('huanledou');
+        $peoplesellcount_huanledou_charge= $newquery->sum('huanledou_charge');
+        $peoplesellcount_xtjl= $newquery->sum('xtjl');
+        $peoplesellcount_num= $newquery->sum('num');
+        $peoplesellcount= $newquery->groupBy('user_id_buyer')->count();
+        $peoplebuyercount= $newquery->groupBy('user_id')->count();
+
+
+        $people=array(
+            'peoplesellcount_huanledou'=>$peoplesellcount_huanledou,
+            'peoplesellcount_huanledou_charge'=>$peoplesellcount_huanledou_charge,
+            'peoplesellcount_xtjl'=>$peoplesellcount_xtjl,
+            'peoplesellcount_num'=>$peoplesellcount_num,
+            'peoplesellcount'=>$peoplesellcount,
+            'peoplebuyercount'=>$peoplebuyercount,
+        );
 
         return [
+            'people'=>$people,
             'list'=>$list,
             'row_count'=>$count,
             'pagination'=>$pagination
