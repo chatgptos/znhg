@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/user/user",
+    "pages/counter/index",
     "pages/fair/fair",
     "pages/mall/mall",
     "pages/catmall/mall",
