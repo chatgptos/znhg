@@ -527,7 +527,7 @@ class BusinessCommentForm extends Model
                 'num' => (int)$num,//合计收益
                 'huanledou' => (int)$huanledou,//合计收益
                 'huanledou_charge' => (int)$huanledou_charge,//合计收益
-                'xtjl' => (int)$xtjl,//合计收益
+                'xtjl' => 0,//合计收益
                 'huanledou_total' => (int)$huanledou_total,//合计收益
             ),
             'msg' => '计算中...',
