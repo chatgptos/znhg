@@ -29,6 +29,10 @@
                         <image class="money-icon" src="../../Img/jifen.png" mode="cover"></image>
                         <text class="user-motto margin-l5">{{user_info.integral}}</text>
                     </view>
+                    <view class='margin-l10'>
+                        <image class="money-icon" src="../../Img/doudou.png" mode="cover"></image>
+                        <text class="user-motto margin-l5">{{user_info.hld}}</text>
+                    </view>
                     <view class='margin-l10'     bindtap="card"    >
                         <image class="money-icon" src="../../Img/money.png" mode="cover"></image>
                         <text class="user-motto margin-l5">{{user_info.coupon}} </text>

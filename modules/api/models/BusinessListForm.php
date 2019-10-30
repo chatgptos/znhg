@@ -56,7 +56,6 @@ class BusinessListForm extends Model
             $query->andWhere(['LIKE', 'g.name', $this->keyword]);
         $count = $query->count();
         $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $this->limit, 'page' => $this->page - 1]);
-
         $list = $query
             ->limit($pagination->limit)
             ->offset($pagination->offset)
@@ -74,7 +73,8 @@ class BusinessListForm extends Model
             'msg' => 'success',
             'data' => [
                 'row_count' => $count,
-                'page_count' => 1,
+                'page_count' => $pagination->pageCount,
+                'pagination' => $pagination,
                 'list' => $list,
             ],
         ];

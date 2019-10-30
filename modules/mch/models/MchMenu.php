@@ -300,6 +300,11 @@ class MchMenu
                 'route' => 'mch/fair/index',
                 'icon' => 'icon-people',
                 'list' => [
+
+                    [
+                        'name' => '开放时间',
+                        'route' => 'mch/fair/opentime',
+                    ],
                     [
                         'name' => '集市交易列表',
                         'route' => 'mch/fair/dealindex',
@@ -309,10 +314,6 @@ class MchMenu
                             'mch/fair/rechange-log',
                             'mch/fair/edit',
                         ],
-                    ],
-                    [
-                        'name' => '开放时间',
-                        'route' => 'mch/fair/opentime',
                     ],
                     [
                         'name' => '集市用户列表',
@@ -596,6 +597,24 @@ class MchMenu
                 'route' => 'mch/seckill/index',
                 'icon' => 'icon-pintu-m',
                 'list' => [
+                    [
+                        'id' => 'jingpin',
+                        'name' => '抽奖管理',
+                        'route' => 'mch/choujiang/level',
+                        'list' => [
+                            [
+                                'name' => '奖品列表',
+                                'route' => 'mch/choujiang/level',
+                            ],
+                            [
+                                'name' => '奖品等级',
+                                'route' => 'mch/choujiang/level-edit',
+                                'sub' => [
+                                    'mch/choujiang/level-edit',
+                                ],
+                            ],
+                        ],
+                    ],
                     [
                         'id' => 'seckill',
                         'name' => '整点秒杀',

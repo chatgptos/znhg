@@ -43,6 +43,12 @@ class BusinessCommentForm extends Model
     public $is_jftohld;//积分对欢乐豆是否打开
     public $is_hldtojf;//欢乐豆对积分是否打开
     public $is_yhqtohld;//优惠券对欢乐豆是否打开 卖优惠券
+    public $charge3;//优惠券对欢乐豆是否打开 卖优惠券
+    public $chargeNum;//优惠券对欢乐豆是否打开 卖优惠券
+    public $chargeNum1;//优惠券对欢乐豆是否打开 卖优惠券
+    public $chargeNum2;//优惠券对欢乐豆是否打开 卖优惠券
+    public $chargeNum3;//优惠券对欢乐豆是否打开 卖优惠券
+    public $charge5;//优惠券对欢乐豆是否打开 卖优惠券
 
 
     public function rules()
@@ -55,8 +61,8 @@ class BusinessCommentForm extends Model
     //卖
     public function add()
     {
-        $check=$this->getBusinessSetting();
-        if($check){
+        $check = $this->getBusinessSetting();
+        if ($check) {
             return json_encode([
                 'code' => 1,
                 'msg' => $check
@@ -131,20 +137,25 @@ class BusinessCommentForm extends Model
 
 
 //      欢乐豆实际总价值
-        $Business->huanledou = (int)$this->hldtoyhq * $num;//卖的张数*平台固定的每张欢乐豆价值
+        $Business->huanledou = (int) intval($this->hldtoyhq * $num);//卖的张数*平台固定的每张欢乐豆价值
 
 //      手续费欢乐豆价值
-        $Business->huanledou_charge = ($this->getCharge($num)) * 0.01 * ($this->hldtoyhq * $num);//卖的张数*平台固定的欢乐豆
+        $Business->huanledou_charge = (int) intval(($this->getCharge($num)) * 0.01 * ($this->hldtoyhq * $num));//卖的张数*平台固定的欢乐豆
 
 //      系统奖励
-        $Business->xtjl = (int)$this->xtjl;//系统奖励
+        $Business->xtjl = (int)intval($this->xtjl);//系统奖励
 
 //      合计收益
-        $huanledou_total = (int)($this->hldtoyhq * $num) * (1 - $this->getCharge($num) * 0.01);// 需要的欢乐豆 + 总的*手续费
+        $huanledou_total = (int)intval($Business->huanledou - $Business->huanledou_charge);// 需要的欢乐豆 + 总的*手续费
 
         $Business->addtime = time();
 
+
+
         $t = \Yii::$app->db->beginTransaction();
+
+        //卖家 卖
+        $this->insertintegralLog(1, $user->id, $Business->num,$Business->huanledou, $Business->xtjl, $Business->huanledou_charge);
 
 
         if ($Business->save() && $user->save()) {
@@ -167,14 +178,15 @@ class BusinessCommentForm extends Model
         }
 
     }
-/*
- * 买
- * */
+
+    /*
+     * 买
+     * */
     public function exchange()
     {
 
-        $check=$this->getBusinessSetting();
-        if($check){
+        $check = $this->getBusinessSetting();
+        if ($check) {
             return json_encode([
                 'code' => 1,
                 'msg' => $check
@@ -218,8 +230,6 @@ class BusinessCommentForm extends Model
             ];
 
 
-        $t = \Yii::$app->db->beginTransaction();
-
 
         if ($this->user_id == $order->user_id) {
             return [
@@ -234,23 +244,32 @@ class BusinessCommentForm extends Model
 
         //扣除双方手续费
         //卖家
-        $user->hld = (int)$user->hld + $order->huanledou - $order->huanledou_charge;//欢乐豆卖家 + 总的-手续费
-        $user->total_hld = (int)$user->total_hld + $order->huanledou - $order->huanledou_charge;//欢乐豆卖家 + 总的-手续费
+        $sellhld = (int)intval($user->hld + $order->huanledou - $order->huanledou_charge);//欢乐豆卖家 + 总的-手续费
+        $selltotal_hld = (int)intval($user->total_hld + $order->huanledou - $order->huanledou_charge);//欢乐豆卖家 + 总的-手续费
+
+
+        $user->hld = intval($sellhld);
+        $user->total_hld = intval($selltotal_hld);
         //xtjl
         //失去券 发布的时候券就失去了
 //        $user->coupon = $user->coupon - $order->num;
 //        $user->coupon_total = $user->coupon_total - $order->num;
 
         //买家
-        $user_buyer->hld = (int)$user_buyer->hld - $order->huanledou - $order->huanledou_charge;//欢乐豆卖家 + 总的-手续费
-        $user_buyer->total_hld = (int)$user_buyer->total_hld - $order->huanledou - $order->huanledou_charge;//欢乐豆卖家 + 总的-手续费
+        $buyhld = (int)intval($user_buyer->hld - $order->huanledou - $order->huanledou_charge);//欢乐豆卖家 + 总的-手续费
+        $buytotal_hld = (int)intval($user_buyer->total_hld - $order->huanledou - $order->huanledou_charge);//欢乐豆卖家 + 总的-手续费
+
+        $user_buyer->hld =intval( $buyhld);
+        $user_buyer->total_hld = intval($buytotal_hld);
         //xtjl
 
 
         //得到券
-        $user_buyer->coupon = (int)$user_buyer->coupon + $order->num + $order->xtjl;
-        $user_buyer->coupon_total = (int)$user_buyer->coupon_total + $order->num + $order->xtjl;
+        $buycoupon = (int)intval($user_buyer->coupon + $order->num + $order->xtjl);
+        $buycoupon_total = (int)intval($user_buyer->coupon_total + $order->num + $order->xtjl);
 
+        $user_buyer->coupon = $buycoupon;
+        $user_buyer->coupon_total = $buycoupon_total;
 
         if (($user_buyer->hld) < 0) {
             return [
@@ -259,6 +278,17 @@ class BusinessCommentForm extends Model
             ];
         }
 
+        $t = \Yii::$app->db->beginTransaction();
+
+
+        //卖家 卖
+        $this->insertintegralLog(1, $user->id, $order->num, $order->huanledou, $order->xtjl, $order->huanledou_charge);
+        //买家 买
+        $this->insertintegralLog(2, $user_buyer->id, $order->num, $order->huanledou, $order->xtjl, $order->huanledou_charge);
+
+
+
+
 
         if ($order->save() && $user->save() && $user_buyer->save()) {
             $t->commit();
@@ -266,6 +296,8 @@ class BusinessCommentForm extends Model
                 'code' => 0,
                 'msg' => '交易成功',
                 'data' => array(
+                    'coupon' => $user_buyer->coupon,
+                    'nickname' => $user_buyer->nickname,
                     'is_exchange' => 1,
                 )
             ];
@@ -274,6 +306,32 @@ class BusinessCommentForm extends Model
             return $this->getModelError($order);
         }
 
+    }
+
+
+    public function insertintegralLog($rechangeType, $user_id, $num, $hld = 0, $xtjl = 0, $sxf)
+    {
+
+
+        $user = User::findOne(['id' => $user_id]);
+        $integralLog = new IntegralLog();
+        $integralLog->user_id = $user->id;
+        if ($rechangeType == '2') {
+            //买优惠券
+            $integralLog->content = "管理员（欢乐豆兑换优惠券） 后台操作账号：" . $user->nickname . " 欢乐豆".$user->hld."已经扣除：" . $hld . " 豆" . " 优惠券".$user->coupon."已经充值（包含奖励）：" . $num . " 张" . "系统奖励" . $xtjl;
+        } elseif ($rechangeType == '1') {
+            //卖优惠券
+            $integralLog->content = "管理员（优惠券换欢乐豆） 后台操作账号：" . $user->nickname . " 欢乐豆".$user->hld."已经充值：" . $hld . " 豆" . " 优惠券".$user->coupon."已经扣除：" . $num . " 张,（发布时候已经扣除优惠券）（交易时扣除去手续费" . $sxf . '个欢乐豆）';
+        }
+
+        $integralLog->hld = $hld;
+        $integralLog->coupon = $num + $xtjl;
+        $integralLog->addtime = time();
+        $integralLog->username = $user->nickname;
+        $integralLog->operator = 'admin';
+        $integralLog->store_id = $this->store_id;
+        $integralLog->operator_id = 0;
+        $integralLog->save();
     }
 
 
@@ -289,10 +347,21 @@ class BusinessCommentForm extends Model
         $this->charge = $this->BusinessSetting['charge'];
         $this->charge1 = $this->BusinessSetting['charge1'];
         $this->charge2 = $this->BusinessSetting['charge2'];
+
+
         $this->is_hldtoyhq = $this->BusinessSetting['is_hldtoyhq'];
         $this->is_jftohld = $this->BusinessSetting['is_jftohld'];
         $this->is_hldtojf = $this->BusinessSetting['is_hldtojf'];
         $this->is_yhqtohld = $this->BusinessSetting['is_yhqtohld'];
+
+        $this->charge3 = $this->BusinessSetting['charge3'];
+        $this->charge5 = $this->BusinessSetting['charge5'];
+        $this->chargeNum = $this->BusinessSetting['chargeNum'];
+        $this->chargeNum1 = $this->BusinessSetting['chargeNum1'];
+        $this->chargeNum2 = $this->BusinessSetting['chargeNum2'];
+        $this->chargeNum3 = $this->BusinessSetting['chargeNum3'];
+
+
         $open_time = json_decode($this->open_time, true);
         $this->time = intval(date('H'));
 
@@ -302,8 +371,6 @@ class BusinessCommentForm extends Model
 
         return false;
     }
-
-
 
 
     public function getBusinessSettingAll()
@@ -326,77 +393,79 @@ class BusinessCommentForm extends Model
         $this->time = intval(date('H'));
 
 
+        $this->charge3 = $this->BusinessSetting['charge3'];
+        $this->charge5 = $this->BusinessSetting['charge5'];
+        $this->chargeNum = $this->BusinessSetting['chargeNum'];
+        $this->chargeNum1 = $this->BusinessSetting['chargeNum1'];
+        $this->chargeNum2 = $this->BusinessSetting['chargeNum2'];
+        $this->chargeNum3 = $this->BusinessSetting['chargeNum3'];
+
         $rechangeType = (int)\Yii::$app->request->post('rechangeType');
 
-        if($rechangeType == 0){//is_yhqtohld     卖 sell
+        if ($rechangeType == 0) {//is_yhqtohld     卖 sell
 
             if (!in_array($this->time, $open_time)) {
                 return json_encode([
                     'code' => 1,
-                    'msg' =>'集市未到开放时间',
+                    'msg' => '集市未到开放时间',
                 ], JSON_UNESCAPED_UNICODE);
-            }elseif (!$this->is_yhqtohld){
+            } elseif (!$this->is_yhqtohld) {
                 return json_encode([
                     'code' => 1,
-                    'msg' =>'暂未开放',
+                    'msg' => '暂未开放',
                 ], JSON_UNESCAPED_UNICODE);
             }
 
-        }elseif($rechangeType == 2){//is_jftohld
+        } elseif ($rechangeType == 2) {//is_jftohld
 
 
-        }elseif($rechangeType == 2){//is_jftohld
+        } elseif ($rechangeType == 2) {//is_jftohld
 
 
-        }elseif($rechangeType == 3){//   is_hldtoyhq   getcard 买
+        } elseif ($rechangeType == 3) {//   is_hldtoyhq   getcard 买
 
 
             if (!in_array($this->time, $open_time)) {
                 return json_encode([
                     'code' => 1,
-                    'msg' =>'集市未到开放时间',
+                    'msg' => '集市未到开放时间',
                 ], JSON_UNESCAPED_UNICODE);
-            }elseif (!$this->is_hldtoyhq){
+            } elseif (!$this->is_hldtoyhq) {
                 return json_encode([
                     'code' => 1,
-                    'msg' =>'暂未开放',
+                    'msg' => '暂未开放',
                 ], JSON_UNESCAPED_UNICODE);
             }
 
 
-
-        }elseif($rechangeType == 4){//is_hldtojf
-
-
-        }elseif($rechangeType == 5){//is_yhqtohld
+        } elseif ($rechangeType == 4) {//is_hldtojf
 
 
-        }else{
+        } elseif ($rechangeType == 5) {//is_yhqtohld
+
+
+        } else {
 
 
         }
 
 
-
-
-
-
         return json_encode([
             'code' => 0,
             'data' => array(
-                'open_time'=>$this->open_time,
-                'hldtoyhq'=>$this->open_time,
-                'xtjl'=>$this->open_time,
-                'xtjlsell'=>$this->open_time,
-                'jftohld'=>$this->open_time,
-                'hldtojf'=>$this->open_time,
-                'charge'=>$this->open_time,
-                'charge1'=>$this->open_time,
-                'is_hldtoyhq'=>$this->open_time,
-                'is_jftohld'=>$this->open_time,
-                'is_hldtojf'=>$this->open_time,
-                'is_yhqtohld'=>$this->open_time,
-                'is_opentime'=>in_array($this->time, $open_time),
+                'open_time' => $this->open_time,
+                'hldtoyhq' => $this->open_time,
+                'xtjl' => $this->open_time,
+                'xtjlsell' => $this->open_time,
+                'jftohld' => $this->open_time,
+                'hldtojf' => $this->open_time,
+                'charge' => $this->open_time,
+                'charge1' => $this->open_time,
+                'is_hldtoyhq' => $this->open_time,
+                'is_jftohld' => $this->open_time,
+                'is_hldtojf' => $this->open_time,
+                'is_yhqtohld' => $this->open_time,
+                'is_opentime' => in_array($this->time, $open_time),
             )
         ], JSON_UNESCAPED_UNICODE);
     }
@@ -409,8 +478,8 @@ class BusinessCommentForm extends Model
      * */
     public function PreJfToHld()
     {
-        $check=$this->getBusinessSetting();
-        if($check){
+        $check = $this->getBusinessSetting();
+        if ($check) {
             return json_encode([
                 'code' => 1,
                 'msg' => $check
@@ -441,16 +510,16 @@ class BusinessCommentForm extends Model
 //      卖的张数
 
 //      欢乐豆实际总价值
-        $huanledou = $this->hldtoyhq * $num;//卖的张数*平台固定的每张欢乐豆价值
+        $huanledou =  (int)intval($this->hldtoyhq * $num);//卖的张数*平台固定的每张欢乐豆价值
 
 //      手续费欢乐豆价值
-        $huanledou_charge = ($this->getCharge($num)) * 0.01 * ($this->hldtoyhq * $num);//卖的张数*平台固定的欢乐豆
+        $huanledou_charge = (int)intval( ($this->getCharge($num)) * 0.01 * ($this->hldtoyhq * $num));//卖的张数*平台固定的欢乐豆
 
 //      系统奖励
         $xtjl = $this->xtjl;//系统奖励
 
 //      合计收益
-        $huanledou_total = ($this->hldtoyhq * $num) * (100 - $this->getCharge($num)) / 100;// 需要的欢乐豆 + 总的*手续费
+        $huanledou_total =  (int)intval($huanledou -$huanledou_charge) ;// 需要的欢乐豆 + 总的*手续费
 
         return [
             'code' => 0,
@@ -458,7 +527,7 @@ class BusinessCommentForm extends Model
                 'num' => (int)$num,//合计收益
                 'huanledou' => (int)$huanledou,//合计收益
                 'huanledou_charge' => (int)$huanledou_charge,//合计收益
-                'xtjl' => (int)$xtjl,//合计收益
+                'xtjl' => 0,//合计收益
                 'huanledou_total' => (int)$huanledou_total,//合计收益
             ),
             'msg' => '计算中...',
@@ -468,23 +537,24 @@ class BusinessCommentForm extends Model
 
     public function getCharge($num)
     {
-        $charge =0;
+        $charge = 0;
 
-        if ($num < 2 && $num > 0) {
+        if ($num <= $this->chargeNum && $num > 0) {
 //            $this->charge = 100 / 7;
-            $charge= $this->charge;  //1张
-        } elseif ($num < 7 && $num > 0) {
+            $charge = $this->charge;  //1张
+        } elseif ($num <= $this->chargeNum1 && $num > $this->chargeNum) {
 //            $this->charge = 100 / 7;
-            $charge= $this->charge1; //1-6
-        } elseif ($num < 18 && $num > 6) {
-            $charge= $this->charge2;//7-18
+            $charge = $this->charge1; //1-6
+        } elseif ($num <= $this->chargeNum2 && $num > $this->chargeNum1) {
+            $charge = $this->charge2;//7-18
 //            $this->charge = 3;
-        } elseif ($num > 17) {
+        } elseif ($num <= $this->chargeNum3 && $num > $this->chargeNum2) {
 //            $this->charge = 1;
-            $charge= $this->charge2; //18以上
-        }else{
-            $charge= $this->charge;  //1张
+            $charge = $this->charge3; //18以上
+        } else {
+            $charge = $this->charge5;  //1张
         }
+
         return $charge;
     }
 
@@ -538,7 +608,6 @@ class BusinessCommentForm extends Model
         }
 
     }
-
 
 
     public function JfToHld()

@@ -7,10 +7,19 @@
 use \app\models\User;
 
 $urlManager = Yii::$app->urlManager;
-$this->title = '用户管理';
+$this->title = '集市管理';
 $this->params['active_nav_group'] = 4;
 ?>
-
+<div class="alert alert-info rounded-0">
+    <div>所有交易欢乐豆总数量： <?php echo  $people['peoplesellcount_huanledou'] ?></div>
+    <div>所有系统收取手续费（欢乐豆个数）： <?php echo  $people['peoplesellcount_huanledou_charge'] ?></div>
+    <div>所有系统奖励优惠券数量： <?php echo  $people['peoplesellcount_xtjl'] ?></div>
+    <div>所有正在售卖优惠券数量： <?php echo  $people['peoplesellcount_num'] ?></div>
+    <div>所有活跃买家数量： <?php echo  $people['peoplesellcount'] ?></div>
+    <div>所有活跃买家数量： <?php echo  $people['peoplebuyercount'] ?></div>
+    <div>注：可以搜索 0/1/2 （未交易/已经交易/全部） </div>
+    </div>
+</div>
 <div class="panel mb-3">
     <div class="panel-header"><?= $this->title ?></div>
     <div class="panel-body">
@@ -29,10 +38,10 @@ $this->params['active_nav_group'] = 4;
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"
                  style="max-height: 200px;overflow-y: auto">
-                <a class="dropdown-item" href="<?= $urlManager->createUrl(['mch/user/index']) ?>">全部会员</a>
+                <a class="dropdown-item" href="<?= $urlManager->createUrl(['mch/fair/index']) ?>">全部会员</a>
                 <?php foreach ($level_list as $index => $value): ?>
                     <a class="dropdown-item"
-                       href="<?= $urlManager->createUrl(array_merge(['mch/user/index'], $_GET, ['level' => $value['level'], 'page' => 1])) ?>"><?= $value['name'] ?></a>
+                       href="<?= $urlManager->createUrl(array_merge(['mch/fair/index'], $_GET, ['level' => $value['level'], 'page' => 1])) ?>"><?= $value['name'] ?></a>
                 <?php endforeach; ?>
             </div>
         </div>
@@ -46,7 +55,7 @@ $this->params['active_nav_group'] = 4;
 
                 <div class="input-group">
                     <input class="form-control"
-                           placeholder="微信昵称"
+                           placeholder="微信昵称/1交易成功/0交易中的"
                            name="keyword"
                            autocomplete="off"
                            value="<?= isset($_GET['keyword']) ? trim($_GET['keyword']) : null ?>">
@@ -61,13 +70,19 @@ $this->params['active_nav_group'] = 4;
             <tr>
                 <th>ID</th>
                 <th>头像</th>
-                <th>昵称</th>
-                <th>加入时间</th>
-                <th>身份</th>
+                <th>买家头像</th>
+                <th>优惠券本次交易数量</th>
+                <th>发布时候欢乐豆显示卖价格</th>
+                <th>手续费价值欢乐豆</th>
+                <th>系统奖励</th>
+                <th>已交易</th>
                 <th>订单数</th>
-                <th>优惠券数量</th>
+                <th>发布时间</th>
+                <th>身份</th>
+                <th>卡券</th>
+                <th>当前欢乐豆</th>
+                <th>当前优惠券</th>
                 <th>卡券数量</th>
-                <th>欢乐豆</th>
                 <th>当前积分</th>
                 <th>操作</th>
             </tr>
@@ -76,9 +91,20 @@ $this->params['active_nav_group'] = 4;
                 <tr>
                     <td><?= $u['id'] ?></td>
                     <td>
-                        <img src="<?= $u['avatar_url'] ?>" style="width: 34px;height: 34px;">
+                        <img src="<?= $u['avatar_url'] ?>" style="width: 34px;height: 34px;"><br><?= $u['nickname']; ?><br><?=$u['wechat_open_id']?>
                     </td>
-                    <td><?= $u['nickname']; ?><br><?=$u['wechat_open_id']?></td>
+                    <td>
+                     <img src="<?= $u['avatar_url_buyer'] ?>" style="width: 34px;height: 34px;"><br><?= $u['nickname_buyer']; ?><br>
+                       ( 欢乐豆:<?=$u['hld_buyer']?>优惠券:<?=$u['coupon_buyer']?>积分:<a class="btn btn-sm btn-link"href="<?= $urlManager->createUrl(['mch/fair/rechange-log', 'user_id' => $u['user_id_buyer']]) ?>"><?= $u['integral'] ?></a>)
+                    </td>
+                    <td><?= $u['num']; ?> </td>
+                    <td><?= $u['huanledou']; ?> </td>
+                    <td><?= $u['huanledou_charge']; ?> </td>
+                    <td><?= $u['xtjl']; ?>  </td>
+                    <td><?= $u['is_exchange']; ?> </td>
+
+                    <td><a class="btn btn-sm btn-link"
+                           href="<?= $urlManager->createUrl(['mch/fair/card', 'user_id' => $u['user_id']]) ?>"><?= User::getCardCount($u['id']) ?></a></td>
                     <td><?= date('Y-m-d H:i:s', $u['addtime']) ?></td>
                     <td>
                         <?= $u['l_name'] ? $u['l_name'] : '普通用户' ?>
@@ -86,37 +112,37 @@ $this->params['active_nav_group'] = 4;
                     </td>
                     <td>
                         <a class="btn btn-sm btn-link"
-                           href="<?= $urlManager->createUrl(['mch/order/index', 'user_id' => $u['id']]) ?>"><?= User::getCount($u['id']) ?></a>
+                           href="<?= $urlManager->createUrl(['mch/order/index', 'user_id' => $u['user_id']]) ?>"><?= User::getCount($u['id']) ?></a>
                     </td>
                     <td>
                         <a class="btn btn-sm btn-link"
-                           href="<?= $urlManager->createUrl(['mch/user/coupon', 'user_id' => $u['id']]) ?>"><?= User::getCouponcount($u['id']) ?></a>
+                           href="<?= $urlManager->createUrl(['mch/fair/hld', 'user_id' => $u['user_id']]) ?>"><?= $u['hld'] ?></a>
                     </td>
                     <td>
                         <a class="btn btn-sm btn-link"
-                           href="<?= $urlManager->createUrl(['mch/user/card', 'user_id' => $u['id']]) ?>"><?= User::getCardCount($u['id']) ?></a>
+                           href="<?= $urlManager->createUrl(['mch/fair/hld', 'user_id' => $u['user_id']]) ?>"><?= $u['coupon'] ?></a>
                     </td>
                     <td>
                         <a class="btn btn-sm btn-link"
-                           href="<?= $urlManager->createUrl(['mch/user/rechange-log', 'user_id' => $u['id']]) ?>"><?= $u['hld'] ?></a>
+                           href="<?= $urlManager->createUrl(['mch/fair/coupon', 'user_id' => $u['user_id']]) ?>"><?= User::getCouponcount($u['id']) ?></a>
                     </td>
                     <td>
                         <a class="btn btn-sm btn-link"
-                           href="<?= $urlManager->createUrl(['mch/user/rechange-log', 'user_id' => $u['id']]) ?>"><?= $u['integral'] ?></a>
+                           href="<?= $urlManager->createUrl(['mch/fair/rechange-log', 'user_id' => $u['user_id']]) ?>"><?= $u['integral'] ?></a>
                     </td>
                     <td>
                         <a class="btn btn-sm btn-primary"
-                           href="<?= $urlManager->createUrl(['mch/user/edit', 'id' => $u['id']]) ?>">编辑</a>
+                           href="<?= $urlManager->createUrl(['mch/fair/edit', 'id' => $u['user_id']]) ?>">编辑</a>
                         <a class="btn btn-sm btn-success rechangeBtn"
                            data-toggle="modal" data-target="#attrAddModal"
                            href="javascript:;"
                            data-integral="<?= $u['integral'] ?>"
-                           data-id="<?= $u['id'] ?>">充值积分</a>
+                           data-id="<?= $u['user_id'] ?>">充值积分</a>
                     </td>
                     <!--
                 <td>
                     <a class="btn btn-sm btn-danger del" href="javascript:"
-                       data-url="<?= $urlManager->createUrl(['mch/user/del', 'id' => $u['id']]) ?>"
+                       data-url="<?= $urlManager->createUrl(['mch/fair/del', 'id' => $u['user_id']]) ?>"
                        data-content="是否删除？">删除</a>
                 </td>
                 -->
@@ -218,7 +244,7 @@ $this->params['active_nav_group'] = 4;
             return;
         }
         $.ajax({
-            url: "<?= Yii::$app->urlManager->createUrl(['mch/user/rechange']) ?>",
+            url: "<?= Yii::$app->urlManager->createUrl(['mch/fair/rechange']) ?>",
             type: 'post',
             dataType: 'json',
             data: {user_id: user_id, integral: integral, _csrf: _csrf, rechangeType: rechangeType},

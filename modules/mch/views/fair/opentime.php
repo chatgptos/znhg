@@ -229,6 +229,20 @@ $this->params['active_nav_group'] = 10;
                     </div>
                 </div>
             </div>
+
+            <div class="form-group row">
+                <div class="col-3 text-right">
+                    <label class=" col-form-label required">第一级数量</label>
+                </div>
+                <div class="col-3">
+                    <div class="input-group short-row">
+                        <input class="form-control" name="model[chargeNum]"
+                               value="<?= $model->chargeNum ? $model->chargeNum : 0 ?>">
+                        <span class="input-group-addon">张</span>
+                    </div>
+                </div>
+            </div>
+
             <div class="form-group row">
                 <div class="col-3 text-right">
                     <label class=" col-form-label required">百分比手续费2级</label>
@@ -241,6 +255,20 @@ $this->params['active_nav_group'] = 10;
                     </div>
                 </div>
             </div>
+
+            <div class="form-group row">
+                <div class="col-3 text-right">
+                    <label class=" col-form-label required">第2级数量</label>
+                </div>
+                <div class="col-3">
+                    <div class="input-group short-row">
+                        <input class="form-control" name="model[chargeNum1]"
+                               value="<?= $model->chargeNum1 ? $model->chargeNum1 : 0 ?>">
+                        <span class="input-group-addon">张</span>
+                    </div>
+                </div>
+            </div>
+
             <div class="form-group row">
                 <div class="col-3 text-right">
                     <label class=" col-form-label required">百分比手续费3级</label>
@@ -253,9 +281,58 @@ $this->params['active_nav_group'] = 10;
                     </div>
                 </div>
             </div>
+            <div class="form-group row">
+                <div class="col-3 text-right">
+                    <label class=" col-form-label required">第3级数量</label>
+                </div>
+                <div class="col-3">
+                    <div class="input-group short-row">
+                        <input class="form-control" name="model[chargeNum2]"
+                               value="<?= $model->chargeNum2 ? $model->chargeNum2 : 0 ?>">
+                        <span class="input-group-addon">张</span>
+                    </div>
+                </div>
+            </div>
 
 
+            <div class="form-group row">
+                <div class="col-3 text-right">
+                    <label class=" col-form-label required">百分比手续费four级</label>
+                </div>
+                <div class="col-3">
+                    <div class="input-group short-row">
+                        <input class="form-control" name="model[charge3]"
+                               value="<?= $model->charge3 ? $model->charge3 : 0 ?>">
+                        <span class="input-group-addon">%个欢乐豆</span>
+                    </div>
+                </div>
+            </div>
 
+
+            <div class="form-group row">
+                <div class="col-3 text-right">
+                    <label class=" col-form-label required">第four级数量</label>
+                </div>
+                <div class="col-3">
+                    <div class="input-group short-row">
+                        <input class="form-control" name="model[chargeNum3]"
+                               value="<?= $model->chargeNum3 ? $model->chargeNum3 : 0 ?>">
+                        <span class="input-group-addon">张</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-3 text-right">
+                    <label class=" col-form-label required">其他手续费</label>
+                </div>
+                <div class="col-3">
+                    <div class="input-group short-row">
+                        <input class="form-control" name="model[charge5]"
+                               value="<?= $model->charge5 ? $model->charge5 : 0 ?>">
+                        <span class="input-group-addon">%个欢乐豆</span>
+                    </div>
+                </div>
+            </div>
 
 
 

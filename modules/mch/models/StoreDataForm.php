@@ -216,10 +216,92 @@ class StoreDataForm extends Model
             'store_id' => $this->store_id,
             'is_delete' => 0,
         ])->count();
+
+        $coupon_count = User::find()->where([
+            'store_id' => $this->store_id,
+            'is_delete' => 0,
+        ])->sum('coupon');
+
+
+
+        $integral_count = User::find()->where([
+            'store_id' => $this->store_id,
+            'is_delete' => 0,
+        ])->sum('integral');
+
+        $hld_count = User::find()->where([
+            'store_id' => $this->store_id,
+            'is_delete' => 0,
+        ])->sum('hld');
+
+
+        $jruser_count = User::find()->where([
+            'store_id' => $this->store_id,
+            'is_delete' => 0,
+        ])->andWhere(['>=', 'addtime', strtotime(date("Y-m-d"),time())])->count();
+
+
+        $jrintegral_count = User::find()->where([
+            'store_id' => $this->store_id,
+            'is_delete' => 0,
+        ])->andWhere(['>=', 'addtime', strtotime(date("Y-m-d"),time())])->sum('integral');;
+
+
+        $jrhld_count = User::find()->where([
+            'store_id' => $this->store_id,
+            'is_delete' => 0,
+        ])->andWhere(['>=', 'addtime', strtotime(date("Y-m-d"),time())])->sum('hld');
+
+
+        $jrcoupon_count = User::find()->where([
+            'store_id' => $this->store_id,
+            'is_delete' => 0,
+        ])->andWhere(['>=', 'addtime', strtotime(date("Y-m-d"),time())])->sum('coupon');
+
+
+ 
+        $htuser_count = User::find()->where([
+            'store_id' => $this->store_id,
+            'is_delete' => 0,
+        ])->andWhere(['>=', 'addtime', strtotime('yesterday')])->count();
+
+
+        $htintegral_count = User::find()->where([
+            'store_id' => $this->store_id,
+            'is_delete' => 0,
+        ])->andWhere(['>=', 'addtime', strtotime('yesterday')])->sum('integral');;
+
+
+        $hthld_count = User::find()->where([
+            'store_id' => $this->store_id,
+            'is_delete' => 0,
+        ])->andWhere(['>=', 'addtime', strtotime('yesterday')])->sum('hld');
+
+
+        $htcoupon_count = User::find()->where([
+            'store_id' => $this->store_id,
+            'is_delete' => 0,
+        ])->andWhere(['>=', 'addtime', strtotime('yesterday')])->sum('coupon');;
+
+
+
+
+
         return [
             'user_count' => $user_count ? intval($user_count) : 0,
             'goods_count' => $goods_count ? intval($goods_count) : 0,
             'order_count' => $order_count ? intval($order_count) : 0,
+            'coupon_count' => $coupon_count ? intval($coupon_count) : 0,
+            'integral_count' => $integral_count ? intval($integral_count) : 0,
+            'hld_count' => $hld_count ? intval($hld_count) : 0,
+            'jruser_count' => $jruser_count ? intval($jruser_count) : 0,
+            'jrintegral_count' => $jrintegral_count ? intval($jrintegral_count) : 0,
+            'jrhld_count' => $jrhld_count ? intval($jrhld_count) : 0,
+            'jrcoupon_count' => $jrcoupon_count ? intval($jrcoupon_count) : 0,
+            'htuser_count' => $htuser_count-$jruser_count ? intval($htuser_count-$jruser_count) : 0,
+            'htintegral_count' => $htintegral_count-$jrintegral_count ? intval($htintegral_count-$jrintegral_count) : 0,
+            'hthld_count' => $hthld_count-$jrhld_count ? intval($hthld_count-$jrhld_count) : 0,
+            'htcoupon_count' => $htcoupon_count-$jrcoupon_count ? intval($htcoupon_count-$jrcoupon_count) : 0,
         ];
     }
 
