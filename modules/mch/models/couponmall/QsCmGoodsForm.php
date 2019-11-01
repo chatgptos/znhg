@@ -112,7 +112,7 @@ class QsCmGoodsForm extends Model
             ->alias('g')
             ->andWhere(['g.is_delete' => 0, 'g.store_id' => $store_id])
             ->select(['g.*', 'c.name AS cname'])
-            ->leftJoin('{{%yy_cat}} c', 'g.cat_id=c.id');
+            ->leftJoin('{{%qs_cat}} c', 'g.cat_id=c.id');
         $cat = \Yii::$app->request->get('cat');
         if ($cat){
             $query->andWhere(['cat_id'=>$cat]);
