@@ -11,14 +11,16 @@ use app\models\Banner;
 use app\models\Option;
 use app\models\PtCat;
 use app\models\PtGoods;
+use app\models\QsCmCat;
+use app\models\QsCmSetting;
 use app\models\YyCat;
 use app\models\YySetting;
-use app\modules\api\models\book\CommentListForm;
-use app\modules\api\models\book\GoodsQrcodeForm;
-use app\modules\api\models\book\ShopListForm;
-use app\modules\api\models\book\YyGoodsForm;
+use app\modules\api\models\couponmall\CommentListForm;
+use app\modules\api\models\couponmall\GoodsQrcodeForm;
+use app\modules\api\models\couponmall\ShopListForm;
 use app\modules\api\models\group\PtGoodsAttrInfoForm;
 use app\modules\api\models\group\PtGoodsForm;
+use app\modules\api\models\couponmall\QsCmGoodsForm;
 
 /**
  * Class IndexController
@@ -34,19 +36,18 @@ class IndexController extends Controller
     public function actionIndex()
     {
         // 获取导航分类
-        $cat = YyCat::find()
+        $cat = QsCmCat::find()
             ->select('id,name')
             ->andWhere(['is_delete'=>0,'store_id'=>$this->store_id])
             ->orderBy('sort ASC')
             ->asArray()
             ->all();
 //        $ad = Option::get('pt_ad', $this->store_id);
-
-        $yyGoods = new YyGoodsForm();
+        $yyGoods = new QsCmGoodsForm();
         $yyGoods->store_id = $this->store_id;
         $yyGoods->user_id = \Yii::$app->user->id;
         $goods = $yyGoods->getList();
-        $catShow = YySetting::findOne(['store_id'=>$this->store_id]);
+        $catShow = QsCmSetting::findOne(['store_id'=>$this->store_id]);
         return json_encode([
             'code'  => 0,
             'msg'   => 'success',
@@ -64,7 +65,7 @@ class IndexController extends Controller
      */
     public function actionGoodList()
     {
-        $yyGoods = new YyGoodsForm();
+        $yyGoods = new QsCmGoodsForm();
         $yyGoods->store_id = $this->store_id;
         $yyGoods->user_id = \Yii::$app->user->id;
         $goods = $yyGoods->getList();
@@ -82,7 +83,7 @@ class IndexController extends Controller
      */
     public function actionGoodDetails($gid = 0)
     {
-        $ptGoods = new YyGoodsForm();
+        $ptGoods = new QsCmGoodsForm();
         $ptGoods->store_id = $this->store_id;
         $ptGoods->gid = $gid;
         $ptGoods->user_id = \Yii::$app->user->id;

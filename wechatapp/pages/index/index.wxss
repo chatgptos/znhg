@@ -575,3 +575,143 @@
 .pintuan-goods-list > navigator {
     margin-right: 20rpx;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.top{
+    width: 96%;
+    height: 362rpx;
+    border-radius: 20rpx;
+    margin: 0 auto;
+    overflow: hidden;
+}
+.title{
+    display: flex;
+    align-items: center;
+    color: #000000;
+    padding-left: 40rpx;
+    margin-top: 40rpx;
+    margin-bottom: 16rpx;
+}
+.title .name{
+    font-size: 36rpx;
+    margin: 0 20rpx;
+
+}
+.title .line{
+    width: 16rpx;
+    height: 8rpx;
+    background: #FF5E62;
+    border-radius: 8rpx;
+}
+.title .green{
+    background: #68C3B2;
+}
+.con-list{
+    width: 96%;
+    height: 310rpx;
+    margin: 0 auto;
+    background: #F8F8F8;
+}
+.con-list .body .swiper-item{
+    background: #F8F8F8;
+    height: 100%;
+    display: flex;
+    padding: 0 20rpx;
+    border-radius: 10rpx;
+}
+.con-list .body .swiper-item .li{
+    width: 150rpx;
+    margin: 0 12rpx;
+    padding-top: 34rpx;
+}
+.con-list .body .swiper-item .li .img{
+    height: 150rpx;
+    background: yellow;
+    width: 100%;
+}
+.con-list .body .swiper-item .li .x-title{
+    font-size: 20rpx;
+    color: #303331;
+    line-height: 24rpx;
+    margin-top: 16rpx;
+}
+.con-list .body .swiper-item .li .price{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.con-list .body .swiper-item .li .price .new-p{
+    font-size: 28rpx;
+    color: #A92112;
+}
+.con-list .body .swiper-item .li .price .new-p text{
+    font-size: 16rpx;
+}
+.con-list .body .swiper-item .li .price .old-p{
+    text-decoration: line-through;
+    color: #707070;
+    font-size: 22rpx;
+    margin-left: 12rpx;
+}
+.con-list .body .swiper-item .li .price .icon{
+    width: 36rpx;
+    height: 24rpx;
+    background: green;
+}
+.con-list .body .swiper-item .li .price .number{
+    color: #A92112;
+    font-size: 32rpx;
+    margin-left: 15rpx;
+}
+.con-list .body .swiper-item .li .textLeft{
+    justify-content: flex-start;
+    padding-left: 10rpx;
+}
+.posi-fixed{
+    height: 106rpx;
+    background: linear-gradient(#FF5E62,#FF9966);
+    position: fixed;
+    right: 0;
+    bottom: 200rpx;
+    border-top-left-radius: 10rpx;
+    border-bottom-left-radius: 10rpx;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition-duration:0.8s;
+}
+.posi-fixed.close{
+    right: -510rpx;
+}
+.posi-fixed .dialog-close{
+    width: 58rpx;
+    text-align: center;
+}
+.posi-fixed .li{
+    width: 140rpx;
+    height: 56rpx;
+    color: #303133;
+    background: #ffffff;
+    border-radius: 28rpx;
+    margin-right: 30rpx;
+    font-size: 24rpx;
+    line-height: 56rpx;
+    text-align: center;
+}

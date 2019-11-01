@@ -65,8 +65,9 @@ $this->params['active_nav_group'] = 4;
                 <th>加入时间</th>
                 <th>身份</th>
                 <th>订单数</th>
-                <th>优惠券数量</th>
+                <th>营销券</th>
                 <th>卡券数量</th>
+                <th>优惠券数量</th>
                 <th>欢乐豆</th>
                 <th>当前积分</th>
                 <th>操作</th>
@@ -95,6 +96,10 @@ $this->params['active_nav_group'] = 4;
                     <td>
                         <a class="btn btn-sm btn-link"
                            href="<?= $urlManager->createUrl(['mch/user/card', 'user_id' => $u['id']]) ?>"><?= User::getCardCount($u['id']) ?></a>
+                    </td>
+                    <td>
+                        <a class="btn btn-sm btn-link"
+                           href="<?= $urlManager->createUrl(['mch/user/rechange-log', 'user_id' => $u['id']]) ?>"><?= $u['coupon'] ?></a>
                     </td>
                     <td>
                         <a class="btn btn-sm btn-link"

@@ -64,7 +64,7 @@ class IndexController extends Controller
      */
     public function actionGoodList()
     {
-        $yyGoods = new YyGoodsForm();
+        $yyGoods = new QsCmGoodsForm();
         $yyGoods->store_id = $this->store_id;
         $yyGoods->user_id = \Yii::$app->user->id;
         $goods = $yyGoods->getList();
@@ -82,7 +82,7 @@ class IndexController extends Controller
      */
     public function actionGoodDetails($gid = 0)
     {
-        $ptGoods = new YyGoodsForm();
+        $ptGoods = new QsCmGoodsForm();
         $ptGoods->store_id = $this->store_id;
         $ptGoods->gid = $gid;
         $ptGoods->user_id = \Yii::$app->user->id;

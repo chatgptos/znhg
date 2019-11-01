@@ -295,6 +295,12 @@ $condition = [
                                 </a>
                             <?php endif; ?>
                         </td>
+                        <td class="order-tab-5">
+                            <?php if ($order_item['is_pay'] == 1 && $order_item['is_confirm'] != 1&& $order_item['is_use'] != 1): ?>
+                                <a class="btn btn-sm btn-primary update" href="javascript:" data-toggle="modal"
+                                   data-target="#price" data-id="<?= $order_item['id'] ?>">核销</a>
+                            <?php endif; ?>
+                        </td>
                     </tr>
                 </table>
             </div>
@@ -368,3 +374,270 @@ $condition = [
 
 
 </script>
+
+
+
+
+
+<!--新加入的-->
+<!-- 修改价格 -->
+<div class="modal fade" data-backdrop="static" id="price">
+    <div class="modal-dialog modal-sm" role="document" style="max-width: 400px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <b class="modal-title">确认核销</b>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input class="order-id" type="hidden">
+<!--                <input class=" form-control money" type="number" placeholder="请填写增加或减少的价格">-->
+                <div class="text-danger form-error mb-3" style="display: none">错误信息</div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:" class="btn btn-primary add-price" data-type="1">确认</a>
+<!--                <a href="javascript:" class="btn btn-primary add-price" data-type="2">优惠</a>-->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- 发货 -->
+<div class="modal fade send-modal" data-backdrop="static">
+    <div class="modal-dialog modal-sm" role="document" style="max-width: 400px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <b class="modal-title">物流信息</b>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="send-form" method="post">
+                    <div class="form-group row">
+                        <div class="col-3 text-right">
+                            <label class=" col-form-label">物流选择</label>
+                        </div>
+                        <div class="col-9">
+                            <div class="pt-1">
+                                <label class="custom-control custom-radio">
+                                    <input id="radio1" value="1" checked
+                                           name="is_express" type="radio"
+                                           class="custom-control-input is-express">
+                                    <span class="custom-control-indicator"></span>
+                                    <span class="custom-control-description">快递</span>
+                                </label>
+                                <label class="custom-control custom-radio">
+                                    <input id="radio2" value="0" name="is_express" type="radio"
+                                           class="custom-control-input is-express">
+                                    <span class="custom-control-indicator"></span>
+                                    <span class="custom-control-description">无需物流</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="is-true-express">
+                        <input class="form-control" type="hidden" autocomplete="off" name="order_id">
+                        <label>快递公司</label>
+                        <div class="input-group mb-3">
+                            <input class="form-control" placeholder="请输入快递公司" type="text" autocomplete="off"
+                                   name="express">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-secondary dropdown-toggle"
+                                        data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right"
+                                     style="max-height: 250px;overflow: auto">
+                                    <?php if (count($express_list['private'])): ?>
+                                        <?php foreach ($express_list['private'] as $item): ?>
+                                            <a class="dropdown-item" href="javascript:"><?= $item ?></a>
+                                        <?php endforeach; ?>
+                                        <div class="dropdown-divider"></div>
+                                    <?php endif; ?>
+                                    <?php foreach ($express_list['public'] as $item): ?>
+                                        <a class="dropdown-item" href="javascript:"><?= $item ?></a>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        </div>
+                        <label>收件人邮编</label>
+                        <input class="form-control" placeholder="请输入收件人邮编" type="text" autocomplete="off"
+                               name="post_code">
+                        <label><a class="print" href="javascript:">打印面单</a></label>
+                        <label><a href='http://www.c-lodop.com/download.html' target='_blank'>下载插件</a></label>
+                        <div class="text-danger">需要设置面单打印功能</div>
+                        <label>快递单号</label>
+                        <input class="form-control" placeholder="请输入快递单号" type="text" autocomplete="off"
+                               name="express_no">
+                        <div class="text-danger mt-3 form-error" style="display: none"></div>
+                    </div>
+                    <div class="mt-2">
+                        <label>商家留言（选填）</label>
+                        <textarea class="form-control" name="words"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary send-confirm-btn">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<script>
+    $(document).on("click", ".apply-status-btn", function () {
+        var url = $(this).attr("href");
+        $.myConfirm({
+            content: "确认“" + $(this).text() + "”？",
+            confirm: function () {
+                $.myLoading();
+                $.ajax({
+                    url: url,
+                    dataType: "json",
+                    success: function (res) {
+                        $.myLoadingHide();
+                        $.myAlert({
+                            content: res.msg,
+                            confirm: function () {
+                                if (res.code == 0)
+                                    location.reload();
+                            }
+                        });
+                    }
+                });
+            }
+        });
+        return false;
+    });
+
+
+    $(document).on("click", ".send-btn", function () {
+        var order_id = $(this).attr("data-order-id");
+        $(".send-modal input[name=order_id]").val(order_id);
+        $(".send-modal").modal("show");
+    });
+    $(document).on("click", ".send-confirm-btn", function () {
+        var btn = $(this);
+        var error = $(".send-form").find(".form-error");
+        btn.btnLoading("正在提交");
+        error.hide();
+        console.log(error);
+        $.ajax({
+            url: "<?=$urlManager->createUrl(['mch/order/send'])?>",
+            type: "post",
+            data: $(".send-form").serialize(),
+            dataType: "json",
+            success: function (res) {
+                if (res.code == 0) {
+                    btn.text(res.msg);
+                    location.reload();
+                    $(".send-modal").modal("hide");
+                }
+                if (res.code == 1) {
+                    btn.btnReset();
+                    error.html(res.msg).show();
+                }
+            }
+        });
+    });
+
+
+</script>
+<!--打印函数-->
+<script>
+    var LODOP; //声明为全局变量
+    //检测是否含有插件
+    function CheckIsInstall() {
+        try {
+            var LODOP = getLodop();
+            if (LODOP.VERSION) {
+                if (LODOP.CVERSION)
+                    $.myAlert({
+                        content: "当前有C-Lodop云打印可用!\n C-Lodop版本:" + LODOP.CVERSION + "(内含Lodop" + LODOP.VERSION + ")"
+                    });
+                else
+                    $.myAlert({
+                        content: "本机已成功安装了Lodop控件！\n 版本号:" + LODOP.VERSION
+                    });
+
+            }
+        } catch (err) {
+        }
+    }
+    ;
+    //打印预览
+    function myPreview() {
+        LODOP.PRINT_INIT("");
+        LODOP.ADD_PRINT_HTM(10, 50, '100%', '100%', $('#print').html());
+    }
+    $(document).on('click', '.print', function () {
+        var id = $(".send-modal input[name=order_id]").val();
+        var express = $(".send-modal input[name=express]").val();
+        var post_code = $(".send-modal input[name=post_code]").val();
+        $.ajax({
+            url: "<?=$urlManager->createAbsoluteUrl(['mch/order/print'])?>",
+            type: 'get',
+            dataType: 'json',
+            data: {
+                id: id,
+                express: express,
+                post_code: post_code
+            },
+            success: function (res) {
+                if (res.code == 0) {
+                    LODOP.PRINT_INIT("");
+                    LODOP.ADD_PRINT_HTM(10, 50, '100%', '100%', res.data.PrintTemplate);
+                    LODOP.PREVIEW();
+                    $(".send-modal input[name=express_no]").val(res.data.Order.LogisticCode);
+                } else {
+                    $.myAlert({
+                        content: res.msg
+                    });
+                }
+            }
+        });
+    });
+</script>
+<script>
+    $(document).on('click', '.update', function () {
+        var order_id = $(this).data('id');
+        $('.order-id').val(order_id);
+    });
+    $(document).on('click', '.add-price', function () {
+        var order_id = $('.order-id').val();
+        var price = $('.money').val();
+        var type = $(this).data('type');
+        var error = $('.form-error');
+        error.hide();
+        $.ajax({
+            url: "<?=$urlManager->createUrl(['mch/couponmall/order/clerk'])?>",
+            type: 'get',
+            dataType: 'json',
+            data: {
+                order_id: order_id,
+                price: price,
+                type: type
+            },
+            success: function (res) {
+                if (res.code == 0) {
+                    window.location.reload();
+                } else {
+                    error.html(res.msg).show()
+                }
+            }
+        });
+    });
+    $(document).on('click', '.is-express', function () {
+        if ($(this).val() == 0) {
+            $('.is-true-express').prop('hidden', true);
+        } else {
+            $('.is-true-express').prop('hidden', false);
+        }
+    });
+</script>
+

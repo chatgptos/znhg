@@ -1,9 +1,14 @@
 {
   "pages": [
     "pages/user/user",
-    "pages/index-new/index",
-    "pages/index/index",
     "pages/cheapmarket/index/cheapmarket",
+    "pages/cheapmarket/order/order",
+    "pages/cheapmarket/shop/shop",
+    "pages/product/product",
+    "pages/cheapmarket/order-comment/order-comment",
+    "pages/cheapmarket/order/details",
+    "pages/index/index",
+    "pages/index-new/index",
     "pages/cheapmarket/details/details",
     "pages/cheapmarket/submit/submit",
     "pages/book/index/index",

@@ -43,6 +43,18 @@ class QsCmGoodsForm extends Model
 
     public $form_list = [];
 
+    public $page = 0;
+
+    public $user_id;
+
+    public $gid;
+
+    public $limit;
+
+    public $coupon;
+
+    public $integral;
+
 
     /**
      * @inheritdoc
@@ -51,7 +63,7 @@ class QsCmGoodsForm extends Model
     {
         return [
             [['name', 'price', 'original_price', 'detail', 'service', 'store_id'], 'required'],
-            [['price', 'original_price'], 'number'],
+            [['price', 'original_price','coupon','integral'], 'number'],
             [['detail', 'cover_pic'], 'string'],
             [['cat_id', 'sort', 'virtual_sales', 'store_id'], 'integer'],
             [['name','shop_id'], 'string', 'max' => 255],
@@ -84,6 +96,8 @@ class QsCmGoodsForm extends Model
             'sales' => '实际销量',
             'shop_id' => '门店id',
             'store_id' => 'Store ID',
+            'coupon' => '券',
+            'integral' => '积分',
         ];
     }
 
@@ -137,7 +151,11 @@ class QsCmGoodsForm extends Model
                 ];
             if (!$this->original_price)
                 $this->original_price = $this->price;
+
+
             $goods = $this->goods;
+            $goods->integral = $this->integral;
+            $goods->coupon = $this->coupon;
             if ($goods->isNewRecord) {
                 $goods->is_delete = 0;
                 $goods->addtime = time();
@@ -146,7 +164,6 @@ class QsCmGoodsForm extends Model
             }
 
             $goods->attributes = $this->attributes;
-
             if ($goods->save()) {
                 QsCmGoodsPic::updateAll(['is_delete' => 1], ['goods_id' => $goods->id]);
                 foreach ($this->goods_pic_list as $pic_url) {

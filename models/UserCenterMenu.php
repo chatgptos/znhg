@@ -112,6 +112,14 @@ class UserCenterMenu extends Model
                 'url' => '/pages/message-list/message-list',
                 'tel' => '',
             ],
+            [
+                'is_show' => 1,
+                'name' => '我的兑换',
+                'icon' => '/images/icon-about-us.png',
+                'open_type' => 'navigator',
+                'url' => '/pages/cheapmarket/order/order',
+                'tel' => '',
+            ],
         ];
         return $default_menu_list;
     }

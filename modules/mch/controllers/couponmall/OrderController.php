@@ -12,7 +12,9 @@ use app\models\QsCmOrder;
 use app\models\QsCmWechatTplMsgSender;
 use app\models\YyOrder;
 use app\models\YyWechatTplMsgSender;
+use app\modules\mch\models\couponmall\OrderClerkForm;
 use app\modules\mch\models\couponmall\OrderForm;
+use app\modules\mch\models\couponmall\OrderSendForm;
 
 class OrderController extends Controller
 {
@@ -109,6 +111,40 @@ class OrderController extends Controller
             ]);
         }
     }
+
+
+    //订单发货 /*
+    //
+    //未完成
+    //*/
+    public function actionSend()
+    {
+        $form = new OrderSendForm();
+        $post = \Yii::$app->request->post();
+        if ($post['is_express'] == 1) {
+            $form->scenario = 'EXPRESS';
+        }
+        $form->attributes = $post;
+        $form->store_id = $this->store->id;
+        $this->renderJson($form->save());
+    }
+
+
+
+    /**
+     * 核销订单
+     */
+    public function actionClerk()
+    {
+        $form = new OrderClerkForm();
+        $form->order_id = \Yii::$app->request->get('order_id');
+        $form->store_id = $this->store->id;
+        $this->renderJson($form->save());
+    }
+
+
+
+
 
 
 }
