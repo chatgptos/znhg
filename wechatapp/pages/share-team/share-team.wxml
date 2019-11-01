@@ -39,12 +39,12 @@
                         <view class="info-time">注册时间：{{item.time}}</view>
                     </view>
                 </view>
-                <view class="info-down flex-y-center">
-                    <view class="info-left">消费{{item.price}}元</view>
-                    <view class="info-right">
-                        <view class="info-order">{{item.count}}个订单</view>
-                    </view>
-                </view>
+                <!--<view class="info-down flex-y-center">-->
+                    <!--<view class="info-left">消费{{item.price}}元</view>-->
+                    <!--<view class="info-right">-->
+                        <!--<view class="info-order">{{item.count}}个订单</view>-->
+                    <!--</view>-->
+                <!--</view>-->
             </view>
         </block>
     </view>
