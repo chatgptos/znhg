@@ -63,4 +63,10 @@ class IntegralLog extends \yii\db\ActiveRecord
             'operator_id' => '分销商id',
         ];
     }
+
+
+
+
+
+
 }

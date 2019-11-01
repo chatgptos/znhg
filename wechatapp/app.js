@@ -58,6 +58,7 @@ App({
     },
 
     login: function () {
+        var page =this;
         var _this = this;
         // wx.showLoading({
         //   title: "正在登录",
@@ -69,7 +70,6 @@ App({
             success: function (res) {
                 if (res.code) {
                     var code = res.code;
-
                     // console.log('getUserInfo')
                     wx.getUserInfo({
                         success: function (res) {
@@ -97,6 +97,7 @@ App({
                                             id: res.data.id,
                                             is_clerk: res.data.is_clerk
                                         });
+
                                     } else {
                                         wx.showToast({ title: res.msg });
                                     }

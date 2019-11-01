@@ -23,6 +23,10 @@ use Yii;
  * @property string $sales
  * @property string $shop_id
  * @property string $store_id
+ * @property string $coupon
+ * @property string $integral
+ *
+ *
  */
 class QsCmGoods extends \yii\db\ActiveRecord
 {
@@ -71,6 +75,8 @@ class QsCmGoods extends \yii\db\ActiveRecord
             'sales' => '实际销量',
             'shop_id' => '门店id',
             'store_id' => 'Store ID',
+            'coupon' => 'Store ID',
+            'integral' => 'Store ID',
         ];
     }
 
@@ -80,6 +86,6 @@ class QsCmGoods extends \yii\db\ActiveRecord
      */
     public function goodsPicList()
     {
-        return YyGoodsPic::findAll(['goods_id'=>$this->id,'is_delete'=>0]);
+        return QsCmGoodsPic::findAll(['goods_id'=>$this->id,'is_delete'=>0]);
     }
 }

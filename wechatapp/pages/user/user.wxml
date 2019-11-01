@@ -4,8 +4,12 @@
     <view class="noWarp-space-between bgfff heigth-box">
         <view class='noWarp'>
             <view>
-                <image bindtap="bindViewTap" class="userinfo-avatar" src='{{(user_info&&user_info.avatar_url!="")?user_info.avatar_url:"/images/sqdr.png"}}'
-                mode="cover"></image>
+                <button wx:if='{{!user_info}}' class="userinfo-avatar" src='{{(user_info&&user_info.avatar_url!="")?user_info.avatar_url:"/images/sqdr.png"}}'   type='primary' open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="bindViewTap">
+                    授权登录
+                </button>
+                <view class="userinfo-avatar"  wx:else> <open-data type="userAvatarUrl"></open-data> </view>
+                <!--<image bindtap="bindViewTap" class="userinfo-avatar" src='{{(user_info&&user_info.avatar_url!="")?user_info.avatar_url:"/images/sqdr.png"}}'-->
+                <!--mode="cover" type='primary' open-type="getUserInfo"  bindgetuserinfo="bindViewTap" wx:else></image>-->
               <!--  <image bindtap="bindViewTap" class="userinfo-avatar" src="{{user_info.avatar_url (user_info.avatar_url!=''))?"user_info.avatar_url":""}}"
                 mode="cover"></image>-->
             </view>

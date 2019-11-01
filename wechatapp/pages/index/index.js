@@ -10,6 +10,14 @@ Page({
         left: 0,
         show_notice: false,
         animationData: {},
+        indicatorDots: true,
+        vertical: false,
+        autoplay: false,
+        interval: 2000,
+        duration: 500,
+        incolor:'#FF9966',
+        activeColor:'#FF5E62',
+        isopen:false
     },
 
     /**
@@ -286,5 +294,12 @@ Page({
         };
 
     },
+
+
+    tabOpen:function(){
+        this.setData({
+            isopen:!this.data.isopen
+        })
+    }
 
 });

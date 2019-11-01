@@ -116,7 +116,6 @@ class GoodsController extends Controller
         }
         if (\Yii::$app->request->isPost){
             $model = \Yii::$app->request->post('model');
-//            var_dump($model);die();
             $model['store_id'] = $this->store->id;
             $form = new QsCmGoodsForm();
             $form->attributes = $model;

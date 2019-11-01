@@ -2,7 +2,7 @@
 //获取应用实例
 
 var api = require('../../api.js');
-const app = getApp();
+var app = getApp();
 
 Page({
 
@@ -16,6 +16,7 @@ Page({
         user_center_bg: "/images/img-user-bg.png",
         parent_id: 0,
         userInfo: {},
+        user_info: 0,
 
         // motto: 'Hello World',
         // hasUserInfo: false,
@@ -48,15 +49,15 @@ Page({
         console.log(parent_id)
         //第一次种下 判断如果没有登入
         if (parent_id == undefined || parent_id == "undefined" || parent_id == 0) {
-            parent_id=app.globalData.parent_id;
+            parent_id = app.globalData.parent_id;
         }
         if (parent_id != undefined && parent_id != "undefined" && parent_id != 0) {
-            app.globalData.parent_id=parent_id;
+            app.globalData.parent_id = parent_id;
             var access_token = wx.getStorageSync("access_token");
             if (access_token == '') {
                 //没有登入就种下
 
-            }else {
+            } else {
                 app.loginBindParent({parent_id: parent_id});
             }
         }
@@ -158,6 +159,9 @@ Page({
                     wx.setStorageSync('pages_user_user', res.data);
                     wx.setStorageSync("share_setting", res.data.share_setting);
                     wx.setStorageSync("user_info", res.data.user_info);
+                    page.setData({
+                        user_info: res.data.user_info,
+                    });
                 }
             },
             complete: function (res) {
@@ -262,14 +266,167 @@ Page({
         })
     },
     //事件处理函数
-    bindViewTap: function () {
+    bindViewTap: function (e) {
+        var page = this;
         var user_info = wx.getStorageSync("user_info");
         console.log(user_info)
-        if (Object.keys(user_info).length === 0 || user_info == "") {
-            wx.navigateTo({
-                url: '/pages/authorize/authorize',
+        var parent_id = wx.getStorageSync('parent_id');
+        console.log(e)
+        console.log(e.detail.userInfo)
+        if (e.detail.userInfo) {
+            var page = this;
+            var _this = this;
+            wx.login({
+                success: function (res) {
+                    if (res.code) {
+                        var code = res.code;
+                        // console.log('getUserInfo')
+                        wx.getUserInfo({
+                            success: function (res) {
+                                console.log(res);
+                                _this.request({
+                                    url: api.passport.login,
+                                    method: "post",
+                                    data: {
+                                        code: code,
+                                        user_info: res.rawData,
+                                        encrypted_data: res.encryptedData,
+                                        iv: res.iv,
+                                        signature: res.signature
+                                    },
+                                    success: function (res) {
+                                        wx.hideLoading();
+                                        //授权升级了
+                                        if (res.code == 0) {
+                                            console.log('api.user.index000000000000000000000000000000000');
+                                            wx.setStorageSync("access_token", res.data.access_token);
+                                            wx.setStorageSync("user_info", {
+                                                nickname: res.data.nickname,
+                                                avatar_url: res.data.avatar_url,
+                                                is_distributor: res.data.is_distributor,
+                                                parent: res.data.parent,
+                                                id: res.data.id,
+                                                is_clerk: res.data.is_clerk
+                                            });
+                                            app.request({
+                                                url: api.user.index,
+                                                success: function (res) {
+                                                    if (res.code == 0) {
+                                                        page.setData(res.data);
+                                                        page.setData({
+                                                            contact_tel: res.data.contact_tel,
+                                                            menu_list: res.data.menu_list,
+                                                            next_level: res.data.next_level,
+                                                            order_count: res.data.order_count,
+                                                            share_setting: res.data.share_setting,
+                                                            show_customer_service: res.data.show_customer_service,
+                                                            user_center_bg: res.data.user_center_bg,
+                                                            user_info: res.data.user_info,
+                                                        });
+                                                        console.log('api.user.index000000000000000000000000000000000loginBindParent');
+                                                        console.log(page.data);
+                                                        app.loginBindParent({parent_id: app.globalData.parent_id});
+                                                    }
+                                                }
+                                            });
+
+                                        } else {
+                                            wx.showToast({title: res.msg});
+                                        }
+                                    }
+                                });
+                            },
+                            fail: function (res) {
+                                wx.showToast({
+                                    title: '请登入',
+                                    image: "/images/icon-warning.png",
+                                });
+                                console.log('getUserInfo')
+                                wx.hideLoading();
+                            }
+                        });
+                    } else {
+                        //console.log(res);
+                    }
+
+                }
+            });
+
+        } else {
+            //用户按了拒绝按钮
+            wx.showModal({
+                title: '警告',
+                content: '您点击了拒绝授权，将无法进入小程序，请授权之后再进入!!!',
+                showCancel: false,
+                confirmText: '返回授权',
+                success: function (res) {
+                    if (res.confirm) {
+                        console.log('用户点击了“返回授权”')
+                    }
+                }
             })
         }
+        // console.log('api.user.index000000000000000000000000000000000');
+        if (Object.keys(user_info).length === 0 || user_info == "" || user_info == {}) {
+
+        }
+    },
+    siteInfo: require('../../siteinfo.js'),
+    request: function (object) {
+        if (!object.data)
+            object.data = {};
+        var access_token = wx.getStorageSync("access_token");
+        if (access_token) {
+            object.data.access_token = access_token;
+        }
+        object.data.store_id = this.siteInfo.store_id;
+
+
+        wx.request({
+            url: object.url,
+            header: object.header || {
+                'content-type': 'application/x-www-form-urlencoded'
+            },
+            data: object.data || {},
+            method: object.method || "GET",
+            dataType: object.dataType || "json",
+            success: function (res) {
+                if (res.data.code == -1) {
+                    getApp().login();
+                } else {
+                    if (object.success)
+                        object.success(res.data);
+                }
+            },
+            fail: function (res) {
+                var app = getApp();
+                if (app.is_on_launch) {
+                    app.is_on_launch = false;
+                    wx.showModal({
+                        title: "网络请求出错",
+                        content: res.errMsg,
+                        showCancel: false,
+                        success: function (res) {
+                            if (res.confirm) {
+                                if (object.fail)
+                                    object.fail(res);
+                            }
+                        }
+                    });
+                } else {
+                    wx.showToast({
+                        title: res.errMsg,
+                        image: "/images/icon-warning.png",
+                    });
+                    if (object.fail)
+                        object.fail(res);
+                }
+            },
+            complete: function (res) {
+                if (object.complete)
+                    object.complete(res);
+            }
+        });
     },
     /**
      * 用户点击右上角分享

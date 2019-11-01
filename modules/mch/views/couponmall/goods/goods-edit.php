@@ -391,6 +391,36 @@ if (!$returnUrl)
 
                         <div class="form-group row">
                             <div class="col-3 text-right">
+                                <label class=" col-form-label required">优惠券数量</label>
+                            </div>
+                            <div class="col-9">
+                                <div class="input-group short-row">
+                                    <input type="number" step="1" class="form-control"
+                                           name="model[coupon]" min="0.01"
+                                           value="<?= $goods['coupon'] ? $goods['coupon'] : 1 ?>">
+                                    <span class="input-group-addon">个券</span>
+                                    <div class="fs-sm text-muted">设置0则小程序端将显示为 免费</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-3 text-right">
+                                <label class=" col-form-label required">积分数量</label>
+                            </div>
+                            <div class="col-9">
+                                <div class="input-group short-row">
+                                    <input type="number" step="1" class="form-control"
+                                           name="model[integral]" min="1"
+                                           value="<?= $goods['integral'] ? $goods['integral'] : 1 ?>">
+                                    <span class="input-group-addon">个积分</span>
+                                    <div class="fs-sm text-muted">设置0则小程序端将显示为 免费</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-3 text-right">
                                 <label class=" col-form-label required">原价</label>
                             </div>
                             <div class="col-9">

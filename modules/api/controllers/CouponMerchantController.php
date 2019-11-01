@@ -11,6 +11,7 @@ use app\extensions\CreateQrcode;
 use app\models\Award;
 use app\models\Cash;
 use app\models\Color;
+use app\models\IntegralLog;
 use app\models\Option;
 use app\models\Qrcode;
 use app\models\Setting;
@@ -346,9 +347,51 @@ class CouponMerchantController extends Controller
         }
 
 
+
+        //记录日志
+        $hld=0;
+        $coupon=$money;
+        $integral=0;
+
+        $integralLog = new IntegralLog();
+        $integralLog->user_id = $user->id;
+        //卖优惠券
+        $integralLog->content = "管理员（小程序抽奖花费） 后台操作账号：" . $user->nickname . " 欢乐豆".$user->hld."已经扣除：" . $hld . " 豆" . " 优惠券".$user->coupon."已经扣除：" . $coupon . " 张（抽奖时扣除）,（交易时扣除去积分" . $integral . '个积分）';
+
+        $integralLog->integral = $integral;
+        $integralLog->hld = $hld;
+        $integralLog->coupon = $coupon;
+        $integralLog->addtime = time();
+        $integralLog->username = $user->nickname;
+        $integralLog->operator = 'admin';
+        $integralLog->store_id = $this->store_id;
+        $integralLog->operator_id = 0;
+        $integralLog->save();
+
+
         if ($awardsListQuanNum) {
             //增加券
             $user->coupon = $user->coupon + $awardsListQuanNum;
+
+            //记录日志
+            $hld=0;
+            $coupon=$awardsListQuanNum;
+            $integral=0;
+
+            $integralLog = new IntegralLog();
+            $integralLog->user_id = $user->id;
+            //卖优惠券
+            $integralLog->content = "管理员（小程序抽奖奖励） 后台操作账号：" . $user->nickname . " 欢乐豆".$user->hld."已经中奖奖励：" . $hld . " 豆" . " 优惠券".$user->coupon."已经中奖奖励：" . $coupon . " 张（抽奖完成时奖励）,（交易时奖励积分" . $integral . '个积分）';
+
+            $integralLog->integral = $integral;
+            $integralLog->hld = $hld;
+            $integralLog->coupon = $coupon;
+            $integralLog->addtime = time();
+            $integralLog->username = $user->nickname;
+            $integralLog->operator = 'admin';
+            $integralLog->store_id = $this->store_id;
+            $integralLog->operator_id = 0;
+            $integralLog->save();
 
         }
         $res = $user->save();
