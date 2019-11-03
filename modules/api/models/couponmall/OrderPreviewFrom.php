@@ -166,7 +166,7 @@ class OrderPreviewFrom extends Model
                     }else{
                         return [
                             'code'  => 2,
-                            'msg'   => '积分/欢乐豆不足，请充值',
+                            'msg'   => '积分/优惠券不足，请充值',
                         ];
                     }
                 }
