@@ -118,8 +118,8 @@ $this->params['is_book'] = 1;
                 <th>商品图片</th>
                 <th>优惠金额</th>
                 <th>状态</th>
-                <th>库存</th>
                 <th>虚拟销量</th>
+                <th>实际库存</th>
                 <th>排序</th>
                 <th>操作</th>
             </tr>
