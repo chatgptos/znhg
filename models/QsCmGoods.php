@@ -25,6 +25,8 @@ use Yii;
  * @property string $store_id
  * @property string $coupon
  * @property string $integral
+ * @property string $stock
+ *
  *
  *
  */
@@ -45,7 +47,7 @@ class QsCmGoods extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'price', 'original_price', 'detail', 'service', 'store_id'], 'required'],
-            [['price', 'original_price'], 'number'],
+            [['price', 'original_price','stock'], 'number'],
             [['detail', 'cover_pic'], 'string'],
             [['cat_id', 'status', 'sort', 'virtual_sales', 'addtime', 'is_delete', 'sales', 'store_id'], 'integer'],
             [['name','shop_id'], 'string', 'max' => 255],
@@ -73,6 +75,7 @@ class QsCmGoods extends \yii\db\ActiveRecord
             'addtime' => '添加时间',
             'is_delete' => '是否删除',
             'sales' => '实际销量',
+            'stock' => '库存',
             'shop_id' => '门店id',
             'store_id' => 'Store ID',
             'coupon' => 'Store ID',

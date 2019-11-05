@@ -111,6 +111,14 @@ class OrderPreviewFrom extends Model
         $order->form_id = $this->form_id;
         if ($order->save()) {
             $goods->sales ++;
+            $goods->stock --;
+            if($goods->stock < 0){
+                $p->rollBack();
+                return [
+                    'code'  => 1,
+                    'msg'   => '库存不够',
+                ];
+            }
             $goods->save();
             foreach ($this->form_list AS $key => $value)
             {
@@ -156,6 +164,7 @@ class OrderPreviewFrom extends Model
             }
 
             if ($order->pay_price <= 0){
+                //暂时不做退款支付的操作 所有 商品只有付钱和积分两种分开
                 //扣除积分
                 if ($goods->coupon > 0 || $goods->integral > 0){
                     $this->user->coupon = $this->user->coupon - $goods->coupon;

@@ -51,6 +51,9 @@ class GoodsForm extends Model
     public $goods_num;
     public $use_attr;
     public $share_type;
+    public $integral_give_num;
+
+
 
     /**
      * @return array
@@ -61,7 +64,7 @@ class GoodsForm extends Model
             [['name', 'service', 'unit'], 'trim'],
             [['store_id', 'name', 'price', 'cat_id', 'detail', 'goods_pic_list', 'cover_pic'], 'required'],
             [['store_id', 'sort', 'virtual_sales', 'freight', 'share_type'], 'integer'],
-            [['price', 'original_price', 'weight'], 'number'],
+            [['price', 'original_price', 'weight','integral_give_num'], 'number'],
             [['price',], 'number', 'min' => 0.01,],
             [['detail', 'service', 'cover_pic', 'video_url',], 'string'],
             [['name'], 'string', 'max' => 255],
@@ -101,6 +104,7 @@ class GoodsForm extends Model
             'full_cut' => '满减',
             'integral' => '积分设置',
             'goods_num' => '商品库存',
+            'integral_give_num' => '前几个获得积分',
         ];
     }
 
@@ -166,6 +170,7 @@ class GoodsForm extends Model
             unset($_this_attributes['attr']);
             $goods->attributes = $_this_attributes;
             $goods->use_attr = $this->use_attr ? 1 : 0;
+
             if ($goods->save()) {
                 GoodsPic::updateAll(['is_delete' => 1], ['goods_id' => $goods->id]);
                 foreach ($this->goods_pic_list as $pic_url) {

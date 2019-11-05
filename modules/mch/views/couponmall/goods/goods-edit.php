@@ -282,6 +282,17 @@ if (!$returnUrl)
                                 <div class="text-muted fs-sm">前端展示的销量=实际销量+虚拟销量</div>
                             </div>
                         </div>
+
+                        <div class="form-group row">
+                            <div class="col-3 text-right">
+                                <label class=" col-form-label">实际库存</label>
+                            </div>
+                            <div class="col-9">
+                                <input class="form-control short-row" type="number" name="model[stock]"
+                                       value="<?= $goods['stock'] ?>">
+                                <div class="text-muted fs-sm">每次兑换一个</div>
+                            </div>
+                        </div>
                         <div class="form-group row">
                             <div class="col-3 text-right">
                                 <label class="col-form-label required">商品缩略图</label>

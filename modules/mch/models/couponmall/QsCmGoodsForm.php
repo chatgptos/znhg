@@ -55,6 +55,8 @@ class QsCmGoodsForm extends Model
 
     public $integral;
 
+    public $stock;
+
 
     /**
      * @inheritdoc
@@ -63,7 +65,7 @@ class QsCmGoodsForm extends Model
     {
         return [
             [['name', 'price', 'original_price', 'detail', 'service', 'store_id'], 'required'],
-            [['price', 'original_price','coupon','integral'], 'number'],
+            [['price', 'original_price','coupon','integral','stock'], 'number'],
             [['detail', 'cover_pic'], 'string'],
             [['cat_id', 'sort', 'virtual_sales', 'store_id'], 'integer'],
             [['name','shop_id'], 'string', 'max' => 255],
@@ -98,6 +100,7 @@ class QsCmGoodsForm extends Model
             'store_id' => 'Store ID',
             'coupon' => '券',
             'integral' => '积分',
+            'stock' => '积分',
         ];
     }
 
@@ -156,6 +159,8 @@ class QsCmGoodsForm extends Model
             $goods = $this->goods;
             $goods->integral = $this->integral;
             $goods->coupon = $this->coupon;
+            $goods->stock = $this->stock -1;//减少库存
+
             if ($goods->isNewRecord) {
                 $goods->is_delete = 0;
                 $goods->addtime = time();

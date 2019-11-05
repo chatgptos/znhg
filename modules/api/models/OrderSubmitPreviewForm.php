@@ -17,6 +17,8 @@ use app\models\CouponAutoSend;
 use app\models\Form;
 use app\models\Goods;
 use app\models\Level;
+use app\models\Order;
+use app\models\OrderDetail;
 use app\models\SeckillGoods;
 use app\models\Option;
 use app\models\PostageRules;
@@ -426,6 +428,26 @@ class OrderSubmitPreviewForm extends Model
                 // 固定积分
                 $goods_item->give = (int)($give * $goods_info->num);
             }
+
+            //会卡死了
+            //查询当前用户订单
+            $query_num_buy_order = Goods::find()->alias('g')->where(['g.id'=>$goods->id,'g.is_delete'=>0,'g.store_id'=>$this->store_id])
+                ->leftJoin(['od'=>OrderDetail::tableName()],'od.goods_id=g.id')
+                ->leftJoin(['o'=>Order::tableName()],'o.id=od.order_id')
+                ->andWhere([
+                    'or',
+                    [
+                        'od.is_delete'=>0,
+                        'o.is_delete'=>0,
+                        'o.is_pay'=>1,
+                        'o.is_confirm'=>1],
+                    'isnull(o.id)'
+                ])->count();
+
+            if($goods->integral_give_num && $query_num_buy_order > 0){
+                $goods_item->give = 0;
+            }
+            //结束
 
             $forehead = (int)$integral->forehead;
             if (strpos($forehead, '%') !== false) {
