@@ -431,7 +431,7 @@ class OrderSubmitPreviewForm extends Model
 
             //会卡死了
             //查询当前用户订单
-            $query_num_buy_order = Goods::find()->alias('g')->where(['g.id'=>$goods->id,'g.is_delete'=>0,'g.store_id'=>$this->store_id])
+            $query_num_buy_order = Goods::find()->alias('g')->where(['o.user_id'=>$this->user_id,'g.id'=>$goods->id,'g.is_delete'=>0,'g.store_id'=>$this->store_id])
                 ->leftJoin(['od'=>OrderDetail::tableName()],'od.goods_id=g.id')
                 ->leftJoin(['o'=>Order::tableName()],'o.id=od.order_id')
                 ->andWhere([
