@@ -26,6 +26,8 @@ use Yii;
  * @property string $coupon
  * @property string $integral
  * @property string $stock
+ * @property string $buy_max
+ * @property string $buy_max_day
  *
  *
  *
@@ -80,6 +82,8 @@ class QsCmGoods extends \yii\db\ActiveRecord
             'store_id' => 'Store ID',
             'coupon' => 'Store ID',
             'integral' => 'Store ID',
+            'buy_max' => '最多允许购买',
+            'buy_max_day' => '每日最多购买',
         ];
     }
 
