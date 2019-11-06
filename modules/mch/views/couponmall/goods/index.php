@@ -116,10 +116,9 @@ $this->params['is_book'] = 1;
                 <th>商品类型</th>
                 <th class="text-left">商品名称</th>
                 <th>商品图片</th>
-                <th>优惠金额</th>
+                <th>库存</th>
                 <th>状态</th>
                 <th>虚拟销量</th>
-                <th>实际库存</th>
                 <th>排序</th>
                 <th>操作</th>
             </tr>
@@ -148,7 +147,7 @@ $this->params['is_book'] = 1;
                     <td class="p-0" style="vertical-align: middle">
                         <div class="goods-pic" style="background-image: url(<?= $goods['cover_pic'] ?>)"></div>
                     </td>
-                    <td class="nowrap text-danger"><?= $goods['price'] ?></td>
+                    <td class="nowrap text-danger"><?= $goods['stock'] ?></td>
                     <td class="nowrap">
                         <?php if ($goods['status'] == 1): ?>
                             <!--                        <span class="badge badge-info">上架</span>-->
@@ -166,9 +165,6 @@ $this->params['is_book'] = 1;
                     </td>
                     <td class="nowrap">
                         <?= $goods['virtual_sales'] ?>
-                    </td>
-                    <td class="nowrap">
-                        <?= $goods['stock'] ?>
                     </td>
                     <td class="nowrap">
                         <?= $goods['sort'] ?>

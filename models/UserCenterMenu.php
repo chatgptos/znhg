@@ -85,7 +85,7 @@ class UserCenterMenu extends Model
                 'name' => '服务中心',
                 'icon' => '/images/icon-help.png',
                 'open_type' => 'navigator',
-                'url' => '/pages/article-list/article-list?id=2',
+                'url' => '/pages/article-list/article-detail?id=2',
                 'tel' => '',
             ],
             [
@@ -93,7 +93,7 @@ class UserCenterMenu extends Model
                 'name' => '关于我们',
                 'icon' => '/images/icon-about-us.png',
                 'open_type' => 'navigator',
-                'url' => '/pages/article-detail/article-detail?id=about_us',
+                'url' => '/pages/article-detail/article-detail?id=1',
                 'tel' => '',
             ],
             [
