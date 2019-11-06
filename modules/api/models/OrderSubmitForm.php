@@ -189,6 +189,9 @@ class OrderSubmitForm extends Model
                     } else {
                         // 固定积分
                         $goods_list[$k]->give = (int)($give * $val->num);
+                        //增加限制 20191030
+
+
                     }
                     if ($this->use_integral == '1') {
                         $forehead = (int)$integral->forehead;
@@ -457,28 +460,38 @@ class OrderSubmitForm extends Model
                 //  $order_detail->integral = $goods->give;
 
 
-
                 //会卡死了
                 //查询当前用户订单
-                $query_num_buy_order = Goods::find()->alias('g')->where(['o.user_id'=>$this->user_id,'g.id'=>$goods->goods_id,'g.is_delete'=>0,'g.store_id'=>$this->store_id])
-                    ->leftJoin(['od'=>OrderDetail::tableName()],'od.goods_id=g.id')
-                    ->leftJoin(['o'=>Order::tableName()],'o.id=od.order_id')
+                $query_num_buy_order = Goods::find()->alias('g')->where(['o.user_id' => $this->user_id, 'g.id' => $goods->goods_id, 'g.is_delete' => 0, 'g.store_id' => $this->store_id])
+                    ->leftJoin(['od' => OrderDetail::tableName()], 'od.goods_id=g.id')
+                    ->leftJoin(['o' => Order::tableName()], 'o.id=od.order_id')
                     ->andWhere([
                         'or',
                         [
-                            'od.is_delete'=>0,
-                            'o.is_delete'=>0,
-                            'o.is_pay'=>1,
-                            'o.is_confirm'=>1],
+                            'od.is_delete' => 0,
+                            'o.is_delete' => 0,
+                            'o.is_pay' => 1,
+                            'o.is_confirm' => 1],
                         'isnull(o.id)'
                     ])->count();
 
-                if($goods->integral_give_num && $query_num_buy_order > 0){
-                    $order_detail->integral = 0;
-                }else{
+                if ($goods->integral_give_num) {
+                    if ($query_num_buy_order > 0) {
+                        //订单大于0个 不发放
+                        $order_detail->integral = 0;
+                    } else {
+                        //没有下过订单 正常方法
+                        if ($goods->num > 1) {//数量大于1
+                            $order_detail->integral = $goods->give/$goods->num;
+                            //只发放一次
+                        }else{
+                            //数量等于1正常发放
+                            $order_detail->integral = $goods->give;
+                        }
+                    }
+                } else {
                     $order_detail->integral = $goods->give;
                 }
-
 
                 $attr_id_list = [];
                 foreach ($goods->attr_list as $item) {

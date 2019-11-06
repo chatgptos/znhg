@@ -443,9 +443,21 @@ class OrderSubmitPreviewForm extends Model
                         'o.is_confirm'=>1],
                     'isnull(o.id)'
                 ])->count();
-
-            if($goods->integral_give_num && $query_num_buy_order > 0){
-                $goods_item->give = 0;
+//
+//            if($goods->integral_give_num && $query_num_buy_order > 0){
+//                $goods_item->give = 0;
+//            }
+            if ($goods->integral_give_num) {
+                if ($query_num_buy_order > 0) {
+                    //订单大于0个 不发放
+                    $goods_item->give = 0;
+                } else {
+                    //没有下过订单 正常方法
+                    if ($goods->num > 1) {//数量大于1
+                        $goods_item->give = (int)($goods_item->give/$goods_info->num);
+                        //只发放一次
+                    }
+                }
             }
             //结束
 
