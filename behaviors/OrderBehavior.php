@@ -9,6 +9,7 @@ namespace app\behaviors;
 
 
 use app\extensions\PinterOrder;
+use app\models\Goods;
 use app\models\IntegralLog;
 use app\models\Level;
 use app\models\Order;
@@ -120,6 +121,26 @@ class OrderBehavior extends Behavior
             ])
             ->select(['o.*'])->groupBy('o.id')
             ->offset(0)->limit(20)->asArray()->all();
+
+        if(!$auto_checkout_integral_order_list){
+            $auto_checkout_integral_order_list = Order::find()->alias('o')
+                ->leftJoin(['od' => OrderDetail::tableName()], 'od.order_id=o.id')
+                ->leftJoin(['g' => Goods::tableName()], 'od.goods_id=g.id')
+                ->Where([
+                    'and',
+                    [
+                        'g.name' => '高效洗衣液',
+                        'o.is_pay' => 1,
+                        'o.is_delete' => 0,
+                        'o.store_id' => $this->store_id,
+                        'o.is_sale' => 0,
+                        'o.is_send' => 0,
+                        'o.is_confirm' => 0
+                    ],
+                ])
+                ->select(['o.*'])->groupBy('o.id')
+                ->offset(0)->limit(20)->asArray()->all();
+        }
         //修改代发货状态 待收货状态 确认收货状态
         foreach ($auto_checkout_integral_order_list as $index => $value) {
             Order::updateAll(

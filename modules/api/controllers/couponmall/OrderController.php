@@ -98,7 +98,19 @@ class OrderController extends Controller
         }
 
         $order->is_cancel = 1;
-        if ($order->save()){
+
+        //库存
+        $goods = QsCmGoods::find()
+            ->andWhere(['id'=>$order->goods_id,'is_delete'=>0,'status'=>1,'store_id'=>$this->store_id])->one();
+        if (!$goods){
+            return [
+                'code'    => 1,
+                'msg'     => '商品不存在',
+            ];
+        }
+        $goods->stock ++;
+
+        if ($goods->save() &&$order->save()){
             $this->renderJson([
                 'code'  => 0,
                 'msg'   => '取消成功'

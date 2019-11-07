@@ -282,6 +282,37 @@ if (!$returnUrl)
                                 <div class="text-muted fs-sm">前端展示的销量=实际销量+虚拟销量</div>
                             </div>
                         </div>
+
+                        <div class="form-group row">
+                            <div class="col-3 text-right">
+                                <label class=" col-form-label">实际库存</label>
+                            </div>
+                            <div class="col-9">
+                                <input class="form-control short-row" type="number" name="model[stock]"
+                                       value="<?= $goods['stock'] ?>">
+                                <div class="text-muted fs-sm">每次兑换一个</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-3 text-right">
+                                <label class=" col-form-label">用户限制总个数</label>
+                            </div>
+                            <div class="col-9">
+                                <input class="form-control short-row" type="number" name="model[buy_max]"
+                                       value="<?= $goods['buy_max'] ?>">
+                                <div class="text-muted fs-sm">每个用户兑换限制个数</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-3 text-right">
+                                <label class=" col-form-label">用户每日限制个数</label>
+                            </div>
+                            <div class="col-9">
+                                <input class="form-control short-row" type="number" name="model[buy_max_day]"
+                                       value="<?= $goods['buy_max_day'] ?>">
+                                <div class="text-muted fs-sm">每日兑换限制个数</div>
+                            </div>
+                        </div>
                         <div class="form-group row">
                             <div class="col-3 text-right">
                                 <label class="col-form-label required">商品缩略图</label>

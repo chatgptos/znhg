@@ -727,6 +727,23 @@ if (!$returnUrl)
                 <div>
                     <div class="form-group row">
                         <div class="col-3 text-right">
+                            <label class=" col-form-label">限制前几件赠送积分</label>
+                        </div>
+                        <div class="col-9">
+                            <div class="input-group short-row">
+                                <input type="text" step="1" class="form-control short-row" name="model[integral_give_num]"
+                                       value="<?= $goods['integral_give_num']?>">
+                                <span class="input-group-addon">前面几个</span>
+                            </div>
+                            <div class="fs-sm text-muted">
+                                会员购物赠送的积分, 如果不填写或填写0，则默认为不设置限制，
+                                <br/>
+                                如: 购买2件，设置1 个, 不管成交几个商品多少， 则购买后第一件商品获得积分
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-3 text-right">
                             <label class=" col-form-label">积分赠送</label>
                         </div>
                         <div class="col-9">
