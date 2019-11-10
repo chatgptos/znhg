@@ -1,6 +1,13 @@
 {
   "pages": [
     "pages/index/index",
+
+    "pages/bookmall/goods/goods",
+    "pages/bookmall/order-submit/order-submit",
+    "pages/bookmall/order/order",
+    "pages/bookmall/order-detail/order-detail",
+    "pages/bookmall/order-comment/order-comment",
+
     "pages/order-submit/order-submit",
     "pages/user/user",
     "pages/mall/mall",

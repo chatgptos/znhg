@@ -642,7 +642,6 @@
 }
 .con-list .body .swiper-item .li .img{
     height: 150rpx;
-    background: yellow;
     width: 100%;
 }
 .con-list .body .swiper-item .li .x-title{
