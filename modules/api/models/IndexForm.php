@@ -23,6 +23,7 @@ use app\models\PtOrderDetail;
 use app\models\Store;
 use app\models\Topic;
 use app\models\UserCoupon;
+use app\modules\mch\models\bookmall\GoodsSearchForm;
 use yii\helpers\VarDumper;
 
 class IndexForm extends Model
@@ -115,6 +116,7 @@ class IndexForm extends Model
                 'nav_count' => $store->nav_count,
                 'notice' => Option::get('notice', $this->store_id, 'admin'),
                 'seckill' => $this->getSeckillData(),
+                'bookmall_seckill' => $this->getBookmallSeckillData(),
                 'pintuan' => $this->getPintuanData(),
             ],
         ];
@@ -151,6 +153,9 @@ class IndexForm extends Model
                 [
                     'name' => 'cat',
                 ],
+                [
+                    'name' => 'bookmall_seckill',
+                ],
             ];
         } else {
             $new_list = [];
@@ -181,6 +186,54 @@ class IndexForm extends Model
         $list = SeckillGoods::find()->alias('mg')
             ->select('g.id,g.name,g.cover_pic AS pic,g.price,mg.attr,mg.start_time')
             ->leftJoin(['g' => Goods::tableName()], 'mg.goods_id=g.id')
+            ->where([
+                'AND',
+                [
+                    'mg.is_delete' => 0,
+                    'g.is_delete' => 0,
+                    'mg.open_date' => date('Y-m-d'),
+                    'g.status' => 1,
+                    'mg.start_time' => date('H'),
+                    'mg.store_id' => $this->store_id,
+                ],
+            ])
+            ->orderBy('g.sort ASC,g.addtime DESC')
+            ->limit(10)
+            ->asArray()->all();
+        foreach ($list as $i => $item) {
+            $item['attr'] = json_decode($item['attr'], true);
+            $list[$i] = $item;
+            $price_list = [];
+            foreach ($item['attr'] as $attr) {
+                if ($attr['seckill_price'] <= 0) {
+                    $price_list[] = doubleval($item['price']);
+                } else {
+                    $price_list[] = doubleval($attr['seckill_price']);
+                }
+            }
+            $list[$i]['price'] = number_format($list[$i]['price'], 2, '.', '');
+            $list[$i]['seckill_price'] = number_format(min($price_list), 2, '.', '');
+            unset($list[$i]['attr']);
+        }
+        if (count($list) == 0)
+            return [
+                'name' => '暂无秒杀活动',
+                'rest_time' => 0,
+                'goods_list' => null,
+            ];
+        return [
+            'name' => intval(date('H')) . '点场',
+            'rest_time' => max(intval(strtotime(date('Y-m-d H:59:59')) - time()), 0),
+            'goods_list' => $list,
+        ];
+    }
+
+
+    public function getBookmallSeckillData()
+    {
+        $list = \app\modules\api\models\bookmall\SeckillGoods::find()->alias('mg')
+            ->select('g.id,g.name,g.cover_pic AS pic,g.price,mg.attr,mg.start_time')
+            ->leftJoin(['g' => \app\modules\api\models\bookmall\Goods::tableName()], 'mg.goods_id=g.id')
             ->where([
                 'AND',
                 [

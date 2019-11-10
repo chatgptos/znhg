@@ -44,6 +44,10 @@ class HomePageModule extends Model
             'display_name' => '整点秒杀',
         ],
         [
+            'name' => 'bookmall_seckill',
+            'display_name' => '整点预售',
+        ],
+        [
             'name' => 'pintuan',
             'display_name' => '拼团',
         ],

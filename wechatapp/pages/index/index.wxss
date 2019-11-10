@@ -651,7 +651,7 @@
     margin-top: 16rpx;
 }
 .con-list .body .swiper-item .li .price{
-    display: flex;
+    /*display: flex;*/
     align-items: center;
     justify-content: center;
 }

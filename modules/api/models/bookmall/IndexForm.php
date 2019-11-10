@@ -113,6 +113,7 @@ class IndexForm extends Model
                 'nav_count' => $store->nav_count,
                 'notice' => Option::get('notice', $this->store_id, 'admin'),
                 'seckill' => $this->getSeckillData(),
+                'bookmall_seckill' => $this->getSeckillData(),
                 'pintuan' => $this->getPintuanData(),
             ],
         ];

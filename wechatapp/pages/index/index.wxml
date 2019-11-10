@@ -196,14 +196,63 @@
         <!-- 拆分的分类 结束 -->
 
         <!-- 秒杀板块 开始 -->
+        <view wx:elif="{{item.name=='bookmall_seckill'}}" style="margin-bottom:30px;">
+            <!--<block wx:for="{{bookmall_seckill.goods_list}}" wx:for-index="cat_index" wx:for-item="cat">-->
+                <view wx:if="{{bookmall_seckill.goods_list.length>0}}">
+                    <view class="title">
+                        <view class="line"></view>
+                        <view class="name">整点预售{{bookmall_seckill.name}}{{bookmall_seckill.times.h?bookmall_seckill.times.h:'--'}}:{{bookmall_seckill.times.m?bookmall_seckill.times.m:'--'}}:{{bookmall_seckill.times.s?bookmall_seckill.times.s:'--'}}</view>
+                        <view class="line"></view>
+                    </view>
+                    <view class="con-list">
+                        <swiper class="body" indicator-dots="{{indicatorDots}}"
+                                autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}"
+                                indicator-color="{{incolor}}"
+                                indicator-active-color="{{activeColor}}">
+                            <swiper-item>
+                                <view class="swiper-item">
+                                    <view class="li" wx:for="{{bookmall_seckill.goods_list}}" wx:for-index="goods_index"
+                                          wx:for-item="goods">
+                                        <navigator url="/pages/bookmall/goods/goods?id={{goods.id}}">
+                                            <view class="img">
+                                                <image style=" height: 64px;width:64px" src="{{goods.pic}}"></image>
+                                            </view>
+                                            <view class="x-title">{{goods.name}}</view>
+                                            <view class="price">
+                                                <view class="new-p">
+                                                    <text>秒杀积分{{goods.seckill_price}}</text>
+                                                </view>
+                                                <view class="old-p">积分:{{goods.price}}
+                                                </view>
+                                            </view>
+                                        </navigator>
+                                    </view>
+                                </view>
+                            </swiper-item>
+                            <swiper-item>
+                                <view class="swiper-item">
+                                    <!--<view class="li"  ></view>-->
+                                    <!--<view class="li"  ></view>-->
+                                    <!--<view class="li"  ></view>-->
+                                    <!--<view class="li"  ></view>-->
+                                </view>
+                            </swiper-item>
+                        </swiper>
+                    </view>
+
+
+                </view>
+            <!--</block>-->
+        </view>
+
         <block wx:elif="{{item.name=='seckill'}}">
             <view class="user-block">
                 <view class="flex-row seckill-header"
                       style="padding: 0 20rpx;height: 80rpx;background: #fff;margin-bottom: 4rpx">
                     <view class="flex-grow-1 flex-row flex-y-center">
-                        <image src="/images/icon-seckill.png"
-                               style="width: 34rpx;height: 34rpx;margin-right: 12rpx"></image>
-                        <view style="font-size: 12pt;color: #ff8b57;margin-right: 16rpx">整点秒杀</view>
+                        <!--<image src="/images/icon-seckill.png"-->
+                               <!--style="width: 34rpx;height: 34rpx;margin-right: 12rpx"></image>-->
+                        <view style="font-size: 12pt;color: #ff8b57;margin-right: 16rpx">整点预售</view>
                         <view style="margin-right: 24rpx">{{seckill.name}}</view>
 
                         <view class="flex-y-center seckill-time-item" style="width: 32rpx;height: 34rpx">
@@ -446,8 +495,8 @@
             <view class="li">商品众筹</view>
         </navigator>
 
-        <navigator url="/pages/fair/fair">
-            <view class="li">商品预售</view>
+        <navigator  bindtap="integral">
+            <view class="li"  bindtap="yushou" >商品预售</view>
         </navigator>
     </view>
 </view>
