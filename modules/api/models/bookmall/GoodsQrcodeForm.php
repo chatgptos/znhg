@@ -135,7 +135,7 @@ class GoodsQrcodeForm extends Model
         $curl->setOpt(CURLOPT_SSL_VERIFYPEER, false);
         $data = json_encode([
             'scene' => "gid:{$goods_id},uid:{$user_id}",
-            'page' => 'pages/goods/goods',
+            'page' => 'pages/bookmall/goods/goods',
             'width' => 240,
         ]);
         \Yii::trace("GET WXAPP QRCODE:" . $data);
