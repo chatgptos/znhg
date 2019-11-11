@@ -197,6 +197,13 @@ App({
     },
 
     loginBindParent: function (object) {
+        if (object.parent_id == "undefined" || object.parent_id == 0){
+            // console.log(object);
+            //第一次种下 判断如果没有登入
+            object.parent_id = app.globalData.parent_id;
+        }else {
+            app.globalData.parent_id = object.parent_id;
+        }
         var access_token = wx.getStorageSync("access_token");
         if (access_token == '') {
             return true;
