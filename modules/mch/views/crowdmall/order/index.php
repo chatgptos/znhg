@@ -190,29 +190,29 @@ isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
             <ul class="nav nav-tabs status">
                 <li class="nav-item">
                     <a class="status-item nav-link <?= $status == -1 ? 'active' : null ?>"
-                       href="<?= yii\helpers\Url::to(['bookmall/order/index']) ?>">全部</a>
+                       href="<?= yii\helpers\Url::to(['crowdmall/order/index']) ?>">全部</a>
                 </li>
 
                 <li class="nav-item">
                     <a class="status-item nav-link <?= $status == 0 ? 'active' : null ?>"
-                       href="<?= yii\helpers\Url::to(array_merge(['bookmall/order/index'], $condition, ['status' => 0])) ?>">未付款<?= isset($store_data['status_count']['status_0']) ? '(' . $store_data['status_count']['status_0'] . ')' : null ?></a>
+                       href="<?= yii\helpers\Url::to(array_merge(['crowdmall/order/index'], $condition, ['status' => 0])) ?>">未付款<?= isset($store_data['status_count']['status_0']) ? '(' . $store_data['status_count']['status_0'] . ')' : null ?></a>
 
                 </li>
                 <li class="nav-item">
                     <a class="status-item nav-link <?= $status == 1 ? 'active' : null ?>"
-                       href="<?= yii\helpers\Url::to(array_merge(['bookmall/order/index'], $condition, ['status' => 1])) ?>">待发货<?= isset($store_data['status_count']['status_1']) ? '(' . $store_data['status_count']['status_1'] . ')' : null ?></a>
+                       href="<?= yii\helpers\Url::to(array_merge(['crowdmall/order/index'], $condition, ['status' => 1])) ?>">待发货<?= isset($store_data['status_count']['status_1']) ? '(' . $store_data['status_count']['status_1'] . ')' : null ?></a>
                 </li>
                 <li class="nav-item">
                     <a class="status-item  nav-link <?= $status == 2 ? 'active' : null ?>"
-                       href="<?= yii\helpers\Url::to(array_merge(['bookmall/order/index'], $condition, ['status' => 2])) ?>">待收货<?= isset($store_data['status_count']['status_2']) ? '(' . $store_data['status_count']['status_2'] . ')' : null ?></a>
+                       href="<?= yii\helpers\Url::to(array_merge(['crowdmall/order/index'], $condition, ['status' => 2])) ?>">待收货<?= isset($store_data['status_count']['status_2']) ? '(' . $store_data['status_count']['status_2'] . ')' : null ?></a>
                 </li>
                 <li class="nav-item">
                     <a class="status-item  nav-link <?= $status == 3 ? 'active' : null ?>"
-                       href="<?= yii\helpers\Url::to(array_merge(['bookmall/order/index'], $condition, ['status' => 3])) ?>">已完成<?= isset($store_data['status_count']['status_3']) ? '(' . $store_data['status_count']['status_3'] . ')' : null ?></a>
+                       href="<?= yii\helpers\Url::to(array_merge(['crowdmall/order/index'], $condition, ['status' => 3])) ?>">已完成<?= isset($store_data['status_count']['status_3']) ? '(' . $store_data['status_count']['status_3'] . ')' : null ?></a>
                 </li>
                 <li class="nav-item">
                     <a class="status-item  nav-link <?= $status == 5 ? 'active' : null ?>"
-                       href="<?= yii\helpers\Url::to(array_merge(['bookmall/order/index'], $condition, ['status' => 5])) ?>">已取消<?= isset($store_data['status_count']['status_5']) ? '(' . $store_data['status_count']['status_5'] . ')' : null ?></a>
+                       href="<?= yii\helpers\Url::to(array_merge(['crowdmall/order/index'], $condition, ['status' => 5])) ?>">已取消<?= isset($store_data['status_count']['status_5']) ? '(' . $store_data['status_count']['status_5'] . ')' : null ?></a>
                 </li>
             </ul>
         </div>
@@ -377,11 +377,11 @@ isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
                                 <?php if ($order_item['is_delete'] == 0): ?>
                                     <div class="mb-2">
                                         <a class="btn btn-sm btn-primary apply-status-btn"
-                                           href="<?= $urlManager->createUrl(['mch/bookmall/order/apply-delete-status', 'id' => $order_item['id'], 'status' => 1]) ?>">同意请求</a>
+                                           href="<?= $urlManager->createUrl(['mch/crowdmall/order/apply-delete-status', 'id' => $order_item['id'], 'status' => 1]) ?>">同意请求</a>
                                     </div>
                                     <div class="mb-2">
                                         <a class="btn btn-sm btn-danger apply-status-btn"
-                                           href="<?= $urlManager->createUrl(['mch/bookmall/order/apply-delete-status', 'id' => $order_item['id'], 'status' => 0]) ?>">拒绝请求</a>
+                                           href="<?= $urlManager->createUrl(['mch/crowdmall/order/apply-delete-status', 'id' => $order_item['id'], 'status' => 0]) ?>">拒绝请求</a>
                                     </div>
                                 <?php endif; ?>
                             <?php else: ?>
@@ -391,7 +391,7 @@ isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
                                 <?php endif; ?>
                             <?php endif; ?>
                             <a class="btn btn-sm btn-primary"
-                               href="<?= $urlManager->createUrl(['mch/bookmall/order/detail', 'order_id' => $order_item['id']]) ?>">详情</a>
+                               href="<?= $urlManager->createUrl(['mch/crowdmall/order/detail', 'order_id' => $order_item['id']]) ?>">详情</a>
                         </td>
                     </tr>
                     <tr>
@@ -572,7 +572,7 @@ isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
         error.hide();
         console.log(error);
         $.ajax({
-            url: "<?=$urlManager->createUrl(['mch/bookmall/order/send'])?>",
+            url: "<?=$urlManager->createUrl(['mch/crowdmall/order/send'])?>",
             type: "post",
             data: $(".send-form").serialize(),
             dataType: "json",
@@ -624,7 +624,7 @@ isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
         var express = $(".send-modal input[name=express]").val();
         var post_code = $(".send-modal input[name=post_code]").val();
         $.ajax({
-            url: "<?=$urlManager->createAbsoluteUrl(['mch/bookmall/order/print'])?>",
+            url: "<?=$urlManager->createAbsoluteUrl(['mch/crowdmall/order/print'])?>",
             type: 'get',
             dataType: 'json',
             data: {
@@ -659,7 +659,7 @@ isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
         var error = $('.form-error');
         error.hide();
         $.ajax({
-            url: "<?=$urlManager->createUrl(['mch/bookmall/order/add-price'])?>",
+            url: "<?=$urlManager->createUrl(['mch/crowdmall/order/add-price'])?>",
             type: 'get',
             dataType: 'json',
             data: {

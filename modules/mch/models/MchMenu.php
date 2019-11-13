@@ -324,43 +324,109 @@ class MchMenu
                 ],
             ],
             [
-//                'id' => 'book',
                 'name' => '众筹管理',
+                'route' => 'mch/crowdmall/goods/goods',
                 'icon' => 'icon-service',
-                'route' => 'mch/crowd/goods/index',
                 'list' => [
                     [
                         'name' => '商品管理',
-                        'route' => 'mch/crowd/goods/index',
+                        'route' => 'mch/crowdmall/goods/goods',
                         'sub' => [
-                            'mch/crowd/goods/goods-edit'
-                        ]
+                            'mch/crowdmall/goods/goods-edit',
+                        ],
                     ],
                     [
-                        'name' => '商品分类',
-                        'route' => 'mch/crowd/goods/cat',
+                        'name' => '分类',
+                        'route' => 'mch/crowdmall/store/cat',
                         'sub' => [
-                            'mch/crowd/goods/cat-edit'
-                        ]
+                            'mch/crowdmall/store/cat-edit',
+                        ],
                     ],
                     [
                         'name' => '订单管理',
-                        'route' => 'mch/crowd/order/index',
+                        'route' => 'mch/crowdmall/order/index',
+                        'icon' => 'icon-activity',
+                        'list' => [
+                            [
+                                'name' => '订单列表',
+                                'route' => 'mch/crowdmall/order/index',
+                                'sub' => [
+                                    'mch/order/detail'
+                                ]
+                            ],
+                            [
+                                'name' => '自提订单',
+                                'route' => 'mch/crowdmall/order/offline',
+                            ],
+                            [
+                                'name' => '售后订单',
+                                'route' => 'mch/crowdmall/order/refund',
+                            ],
+                            [
+                                'name' => '评价管理',
+                                'route' => 'mch/crowdmall/comment/index',
+                            ],
+                        ],
                     ],
                     [
-                        'name' => '基础设置',
-                        'route' => 'mch/crowd/index/setting',
-                    ],
-                    [
-                        'name' => '模板消息',
-                        'route' => 'mch/crowd/notice/setting',
-                    ],
-                    [
-                        'name' => '评论管理',
-                        'route' => 'mch/crowd/comment/index',
+                        'name' => '整点预售',
+                        'route' => 'mch/crowdmall/seckill/index',
+                        'list' => [
+                            [
+                                'name' => '开放时间',
+                                'route' => 'mch/crowdmall/seckill/index',
+                            ],
+                            [
+                                'name' => '商品设置',
+                                'route' => 'mch/crowdmall/seckill/goods',
+                                'sub' => [
+                                    'mch/crowdmall/seckill/goods-edit',
+                                    'mch/crowdmall/seckill/goods-detail',
+                                    'mch/crowdmall/seckill/calendar',
+                                ],
+                            ],
+                        ],
                     ],
                 ],
             ],
+//            [
+////                'id' => 'book',
+//                'name' => '众筹管理',
+//                'icon' => 'icon-service',
+//                'route' => 'mch/crowd/goods/index',
+//                'list' => [
+//                    [
+//                        'name' => '商品管理',
+//                        'route' => 'mch/crowd/goods/index',
+//                        'sub' => [
+//                            'mch/crowd/goods/goods-edit'
+//                        ]
+//                    ],
+//                    [
+//                        'name' => '商品分类',
+//                        'route' => 'mch/crowd/goods/cat',
+//                        'sub' => [
+//                            'mch/crowd/goods/cat-edit'
+//                        ]
+//                    ],
+//                    [
+//                        'name' => '订单管理',
+//                        'route' => 'mch/crowd/order/index',
+//                    ],
+//                    [
+//                        'name' => '基础设置',
+//                        'route' => 'mch/crowd/index/setting',
+//                    ],
+//                    [
+//                        'name' => '模板消息',
+//                        'route' => 'mch/crowd/notice/setting',
+//                    ],
+//                    [
+//                        'name' => '评论管理',
+//                        'route' => 'mch/crowd/comment/index',
+//                    ],
+//                ],
+//            ],
 
             [
                 'name' => '集市管理',
