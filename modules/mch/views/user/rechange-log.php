@@ -44,7 +44,7 @@ if ($status === '' || $status === null || $status == -1)
                     <td>
                         <?= $value['username'] ?>
                     </td>
-                    <td><?= date('Y-m-d H:i', $value['addtime']); ?></td>
+                    <td><?= date('Y-m-d H:i:s', $value['addtime']); ?></td>
                     <td><?= $value['content'] ?></td>
                 </tr>
             <?php endforeach; ?>
