@@ -104,7 +104,7 @@
                             <swiper-item>
                                 <view class="swiper-item">
                                     <view class="li" wx:for="{{cat.goods_list}}" wx:for-index="goods_index"
-                                          wx:for-item="goods">
+                                          wx:for-item="goods" wx:if="{{goods_index <= cat_goods_cols}}">
                                         <navigator url="/pages/goods/goods?id={{goods.id}}">
                                             <view class="img">
                                                 <image style=" height: 64px;width:64px" src="{{goods.pic_url}}"></image>
@@ -124,10 +124,23 @@
                             </swiper-item>
                             <swiper-item>
                                 <view class="swiper-item">
-                                    <!--<view class="li"  ></view>-->
-                                    <!--<view class="li"  ></view>-->
-                                    <!--<view class="li"  ></view>-->
-                                    <!--<view class="li"  ></view>-->
+                                    <view class="li" wx:for="{{cat.goods_list}}" wx:for-index="goods_index"
+                                          wx:for-item="goods" wx:if="{{goods_index > cat_goods_cols}}">
+                                        <navigator url="/pages/goods/goods?id={{goods.id}}">
+                                            <view class="img">
+                                                <image style=" height: 64px;width:64px" src="{{goods.pic_url}}"></image>
+                                            </view>
+                                            <view class="x-title">{{goods.name}}</view>
+                                            <view class="price">
+                                                <view class="new-p">
+                                                    <text wx:if='{{cat_goods_cols == 3}}'>￥</text>
+                                                    {{goods.price}}
+                                                </view>
+                                                <view class="old-p" wx:if='{{cat_goods_cols == 3}}'>￥{{goods.price}}
+                                                </view>
+                                            </view>
+                                        </navigator>
+                                    </view>
                                 </view>
                             </swiper-item>
                         </swiper>
@@ -160,7 +173,7 @@
                             <swiper-item>
                                 <view class="swiper-item">
                                     <view class="li" wx:for="{{cat.goods_list}}" wx:for-index="goods_index"
-                                          wx:for-item="goods">
+                                          wx:for-item="goods"  wx:if="{{goods_index <= cat_goods_cols}}">
                                         <navigator url="/pages/goods/goods?id={{goods.id}}">
                                             <view class="img">
                                                 <image style=" height: 64px;width:64px" src="{{goods.pic_url}}"></image>
@@ -180,10 +193,23 @@
                             </swiper-item>
                             <swiper-item>
                                 <view class="swiper-item">
-                                    <!--<view class="li"  ></view>-->
-                                    <!--<view class="li"  ></view>-->
-                                    <!--<view class="li"  ></view>-->
-                                    <!--<view class="li"  ></view>-->
+                                    <view class="li" wx:for="{{cat.goods_list}}" wx:for-index="goods_index"
+                                          wx:for-item="goods"  wx:if="{{goods_index > cat_goods_cols}}">
+                                        <navigator url="/pages/goods/goods?id={{goods.id}}">
+                                            <view class="img">
+                                                <image style=" height: 64px;width:64px" src="{{goods.pic_url}}"></image>
+                                            </view>
+                                            <view class="x-title">{{goods.name}}</view>
+                                            <view class="price">
+                                                <view class="new-p">
+                                                    <text wx:if='{{cat_goods_cols == 3}}'>￥</text>
+                                                    {{goods.price}}
+                                                </view>
+                                                <view class="old-p" wx:if='{{cat_goods_cols == 3}}'>￥{{goods.price}}
+                                                </view>
+                                            </view>
+                                        </navigator>
+                                    </view>
                                 </view>
                             </swiper-item>
                         </swiper>
@@ -212,7 +238,7 @@
                             <swiper-item>
                                 <view class="swiper-item">
                                     <view class="li" wx:for="{{bookmall_seckill.goods_list}}" wx:for-index="goods_index"
-                                          wx:for-item="goods">
+                                          wx:for-item="goods" wx:if="{{goods_index <= cat_goods_cols}}">
                                         <navigator url="/pages/bookmall/goods/goods?id={{goods.id}}">
                                             <view class="img">
                                                 <image style=" height: 64px;width:64px" src="{{goods.pic}}"></image>
@@ -231,12 +257,25 @@
                             </swiper-item>
                             <swiper-item>
                                 <view class="swiper-item">
-                                    <!--<view class="li"  ></view>-->
-                                    <!--<view class="li"  ></view>-->
-                                    <!--<view class="li"  ></view>-->
-                                    <!--<view class="li"  ></view>-->
+                                    <view class="li" wx:for="{{bookmall_seckill.goods_list}}" wx:for-index="goods_index"
+                                          wx:for-item="goods" wx:if="{{goods_index > cat_goods_cols}}">
+                                        <navigator url="/pages/bookmall/goods/goods?id={{goods.id}}">
+                                            <view class="img">
+                                                <image style=" height: 64px;width:64px" src="{{goods.pic}}"></image>
+                                            </view>
+                                            <view class="x-title">{{goods.name}}</view>
+                                            <view class="price">
+                                                <view class="new-p">
+                                                    <text>秒杀积分{{goods.seckill_price}}</text>
+                                                </view>
+                                                <view class="old-p">积分:{{goods.price}}
+                                                </view>
+                                            </view>
+                                        </navigator>
+                                    </view>
                                 </view>
                             </swiper-item>
+
                         </swiper>
                     </view>
 
