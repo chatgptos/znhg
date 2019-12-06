@@ -120,6 +120,14 @@ class UserCenterMenu extends Model
                 'url' => '/pages/cheapmarket/order/order',
                 'tel' => '',
             ],
+            [
+                'is_show' => 1,
+                'name' => '我的预售',
+                'icon' => '/images/icon-about-us.png',
+                'open_type' => 'navigator',
+                'url' => '/pages/bookmall/order/order',
+                'tel' => '',
+            ],
         ];
         return $default_menu_list;
     }

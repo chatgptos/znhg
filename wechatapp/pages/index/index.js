@@ -60,6 +60,7 @@ Page({
                     wx.setStorageSync('pages_index_index', res.data);
                     wx.setStorageSync('store', res.data.store);
                     page.seckillTimer();
+                    page.bookmall_seckillTimer();
                 }
             },
             complete: function () {
@@ -256,6 +257,25 @@ Page({
         }, 1000);
 
     },
+    bookmall_seckillTimer: function () {
+        var page = this;
+        console.log(page.data.bookmall_seckill);
+        if (!page.data.bookmall_seckill || !page.data.bookmall_seckill.rest_time)
+            return;
+        var timer = setInterval(function () {
+            if (page.data.bookmall_seckill.rest_time > 0) {
+                page.data.bookmall_seckill.rest_time = page.data.bookmall_seckill.rest_time - 1;
+            } else {
+                clearInterval(timer);
+                return;
+            }
+            page.data.bookmall_seckill.times = page.getTimesBySecond(page.data.bookmall_seckill.rest_time);
+            page.setData({
+                bookmall_seckill: page.data.bookmall_seckill,
+            });
+        }, 1000);
+
+    },
 
     onHide: function () {
         app.pageOnHide(this);
@@ -300,6 +320,21 @@ Page({
         this.setData({
             isopen:!this.data.isopen
         })
-    }
+    },
+
+    yushou: function () {
+        var user_info = wx.getStorageSync("user_info");
+        if(user_info.coupon<0){
+            wx.navigateTo({
+                url: '/pages/fair/fair',
+            })
+        }else {
+            wx.navigateTo({
+                url: '/pages/mall/mall',
+            })
+        }
+
+
+    },
 
 });

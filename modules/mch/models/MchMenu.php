@@ -179,41 +179,108 @@ class MchMenu
                 ],
             ],
 
+//            [
+//                'id' => 'book',
+//                'name' => '预售管理',
+//                'icon' => 'icon-service',
+//                'route' => 'mch/book/goods/index',
+//                'list' => [
+//                    [
+//                        'name' => '商品管理',
+//                        'route' => 'mch/book/goods/index',
+//                        'sub' => [
+//                            'mch/book/goods/goods-edit'
+//                        ]
+//                    ],
+//                    [
+//                        'name' => '商品分类',
+//                        'route' => 'mch/book/goods/cat',
+//                        'sub' => [
+//                            'mch/book/goods/cat-edit'
+//                        ]
+//                    ],
+//                    [
+//                        'name' => '订单管理',
+//                        'route' => 'mch/book/order/index',
+//                    ],
+//                    [
+//                        'name' => '基础设置',
+//                        'route' => 'mch/book/index/setting',
+//                    ],
+//                    [
+//                        'name' => '模板消息',
+//                        'route' => 'mch/book/notice/setting',
+//                    ],
+//                    [
+//                        'name' => '评论管理',
+//                        'route' => 'mch/book/comment/index',
+//                    ],
+//                ],
+//            ],
+
             [
-                'id' => 'book',
-                'name' => '预售管理',
+                'name' => '新预售管理',
+                'route' => 'mch/bookmall/goods/goods',
                 'icon' => 'icon-service',
-                'route' => 'mch/book/goods/index',
                 'list' => [
                     [
                         'name' => '商品管理',
-                        'route' => 'mch/book/goods/index',
+                        'route' => 'mch/bookmall/goods/goods',
                         'sub' => [
-                            'mch/book/goods/goods-edit'
-                        ]
+                            'mch/bookmall/goods/goods-edit',
+                        ],
                     ],
                     [
-                        'name' => '商品分类',
-                        'route' => 'mch/book/goods/cat',
+                        'name' => '分类',
+                        'route' => 'mch/bookmall/store/cat',
                         'sub' => [
-                            'mch/book/goods/cat-edit'
-                        ]
+                            'mch/bookmall/store/cat-edit',
+                        ],
                     ],
                     [
                         'name' => '订单管理',
-                        'route' => 'mch/book/order/index',
+                        'route' => 'mch/bookmall/order/index',
+                        'icon' => 'icon-activity',
+                        'list' => [
+                            [
+                                'name' => '订单列表',
+                                'route' => 'mch/bookmall/order/index',
+                                'sub' => [
+                                    'mch/order/detail'
+                                ]
+                            ],
+                            [
+                                'name' => '自提订单',
+                                'route' => 'mch/bookmall/order/offline',
+                            ],
+                            [
+                                'name' => '售后订单',
+                                'route' => 'mch/bookmall/order/refund',
+                            ],
+                            [
+                                'name' => '评价管理',
+                                'route' => 'mch/bookmall/comment/index',
+                            ],
+                        ],
                     ],
                     [
-                        'name' => '基础设置',
-                        'route' => 'mch/book/index/setting',
-                    ],
-                    [
-                        'name' => '模板消息',
-                        'route' => 'mch/book/notice/setting',
-                    ],
-                    [
-                        'name' => '评论管理',
-                        'route' => 'mch/book/comment/index',
+                        'name' => '整点预售',
+                        'route' => 'mch/bookmall/seckill/index',
+                        'list' => [
+                            [
+                                'name' => '开放时间',
+                                'route' => 'mch/bookmall/seckill/index',
+                            ],
+                            [
+                                'name' => '商品设置',
+                                'route' => 'mch/bookmall/seckill/goods',
+                                'sub' => [
+                                    'mch/bookmall/seckill/goods-edit',
+                                    'mch/bookmall/seckill/goods-detail',
+                                    'mch/bookmall/seckill/calendar',
+                                ],
+                            ],
+                        ],
                     ],
                 ],
             ],
