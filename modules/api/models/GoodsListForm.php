@@ -103,6 +103,7 @@ class GoodsListForm extends Model
                 $list[$i]['pic_url'] = Goods::getGoodsPicStatic($item['id'])->pic_url;
             }
             $list[$i]['sales'] = $this->numToW($item['num'] + $item['virtual_sales']).$item['unit'];
+            $list[$i]['name'] = mb_substr($item['name'] , 0 , 16);
         }
         return [
             'code' => 0,
