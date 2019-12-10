@@ -10,6 +10,7 @@ namespace app\modules\mch\controllers\bookmall;
 
 
 use app\modules\mch\models\bookmall\Order;
+use app\modules\mch\models\bookmall\OrderClerkForm;
 use app\modules\mch\models\bookmall\OrderRefund;
 use app\modules\mch\models\bookmall\OrderListForm;
 use app\modules\mch\models\bookmall\OrderPriceForm;
@@ -253,5 +254,19 @@ class OrderController extends Controller
             'clerk' => isset($clerk) ? $clerk : null,
             'shop' => isset($shop) ? $shop : null,
         ]);
+    }
+
+
+
+
+    /**
+     * 核销订单
+     */
+    public function actionClerk()
+    {
+        $form = new OrderClerkForm();
+        $form->order_id = \Yii::$app->request->get('order_id');
+        $form->store_id = $this->store->id;
+        $this->renderJson($form->save());
     }
 }

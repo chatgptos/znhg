@@ -134,6 +134,13 @@ class Order extends \yii\db\ActiveRecord
             'is_sale' => '是否超过售后时间',
             'words' => '商家留言',
             'version' => '版本',
+            'total_coupon' => '优惠券',
+            'total_integral_buy' => '积分',
+            'yukuan_coupon' => '优惠券',
+            'youkuan_integral_buy' => '积分',
+            'is_yukuan' => '是否支付余款',
+            'is_check_yukuan' => '是否检查余款',
+            'yukuan_time' => '是否支付余款',
         ];
     }
     public function getOrderDetail()

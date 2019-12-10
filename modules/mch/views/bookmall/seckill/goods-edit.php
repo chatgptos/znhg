@@ -5,7 +5,7 @@
  * Time: 16:52
  */
 $urlManager = Yii::$app->urlManager;
-$this->title = '秒杀商品编辑';
+$this->title = '整点预售商品编辑';
 $this->params['active_nav_group'] = 10;
 ?>
 <style>
@@ -40,7 +40,7 @@ $this->params['active_nav_group'] = 10;
         <form class="auto-form" method="post">
             <div class="form-group row">
                 <div class="form-group-label col-sm-2 text-right">
-                    <label class="col-form-label required">秒杀商品</label>
+                    <label class="col-form-label required">整点预售商品</label>
                 </div>
                 <div class="col-sm-6">
                     <div class="input-group">
@@ -67,10 +67,10 @@ $this->params['active_nav_group'] = 10;
                             <tr>
                                 <th v-bind:colspan="goods.attr[0].attr_list.length">规格</th>
                                 <th>积分</th>
-                                <th>秒杀积分</th>
+                                <th>整点预售积分</th>
                                 <th>优惠券</th>
                                 <th>库存</th>
-                                <th>秒杀数量</th>
+                                <th>整点预售数量</th>
                             </tr>
                             </thead>
                             <tr v-for="attr_row in goods.attr">
@@ -118,7 +118,7 @@ $this->params['active_nav_group'] = 10;
                                 :00~<?= $i < 10 ? '0' . $i : $i ?>:59</span>
                         </label>
                     <?php endforeach; else: ?>
-                        <div class="text-muted">商城未设置秒杀开放时间，请<a
+                        <div class="text-muted">商城未设置整点预售开放时间，请<a
                                     href="<?= $urlManager->createUrl(['mch/bookmall/seckill/index']) ?>">前往设置</a></div>
                     <?php endif; ?>
                 </div>
@@ -433,7 +433,7 @@ $this->params['active_nav_group'] = 10;
     $(document).on("click", ".seckill-submit-btn", function () {
         if (!app.goods || app.open_time.length == 0 || app.open_date.length == 0) {
             $.myToast({
-                content: "请完善秒杀商品信息",
+                content: "请完善整点预售商品信息",
             });
             return;
         }

@@ -451,7 +451,7 @@ class OrderSubmitForm extends Model
                 $order_form->save();
             }
 
-            // 减去当前用户账户积分
+           /* // 减去当前用户账户积分
             if ($total_price_2 > 0) {
                 $user->integral -= $total_price_2;
                 $user->coupon -= $total_coupon;
@@ -481,7 +481,7 @@ class OrderSubmitForm extends Model
                 $integralLog->operator_id = 0;
                 $integralLog->save();
 
-            }
+            }*/
             $goods_total_pay_price = $order->pay_price - $order->express_price;
             $goods_total_price = 0.00;
             foreach ($goods_list as $goods) {

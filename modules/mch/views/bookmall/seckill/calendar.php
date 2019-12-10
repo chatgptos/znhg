@@ -5,7 +5,7 @@
  * Time: 16:52
  */
 $urlManager = Yii::$app->urlManager;
-$this->title = '秒杀';
+$this->title = '预售整点';
 $this->params['active_nav_group'] = 10;
 ?>
 <link href="<?= Yii::$app->request->baseUrl ?>/statics/mch/css/jquery.datetimepicker.2.5.12.min.css" rel="stylesheet">
@@ -135,7 +135,7 @@ $this->params['active_nav_group'] = 10;
         </ul>
         <ul class="nav nav-right">
             <li class="nav-item">
-                <a class="nav-link" href="<?= $urlManager->createUrl(['mch/bookmall/seckill/goods-edit']) ?>">添加秒杀商品</a>
+                <a class="nav-link" href="<?= $urlManager->createUrl(['mch/bookmall/seckill/goods-edit']) ?>">添加预售整点商品</a>
             </li>
         </ul>
     </div>
@@ -155,7 +155,7 @@ $this->params['active_nav_group'] = 10;
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">秒杀安排表</h5>
+                <h5 class="modal-title">整点预售安排表</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -225,12 +225,12 @@ $this->params['active_nav_group'] = 10;
                 if (seckill) {
                     html = '<div class="seckill-box pointer" onclick="seckillBoxClick(this)" data-date=' + seckill.open_date + '>' +
                         '<div class="seckill-date">' + parseInt(d) + '</div>' +
-                        '<div class="has-seckill">' + seckill.seckill_count + '条秒杀安排</div>' +
+                        '<div class="has-seckill">' + seckill.seckill_count + '条整点预售安排</div>' +
                         '</div>';
                 } else {
                     html = '<div class="seckill-box">' +
                         '<div class="seckill-date">' + parseInt(d) + '</div>' +
-                        '<div class="no-seckill">暂无秒杀</div>' +
+                        '<div class="no-seckill">暂无整点预售</div>' +
                         '</div>';
                 }
                 $(this).html(html);
@@ -266,7 +266,7 @@ $this->params['active_nav_group'] = 10;
     $('#seckill_calendar').datetimepicker('show');
 
     function seckillBoxClick(e) {
-        $('.seckill-deteil .modal-title').html('秒杀安排表');
+        $('.seckill-deteil .modal-title').html('整点预售安排表');
         $('.seckill-deteil .modal-loading').show();
         $('.seckill-deteil .my-modal-content').hide();
         $('.seckill-deteil').modal('show');

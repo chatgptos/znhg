@@ -7,7 +7,7 @@
 ?>
 <div class="home-block">
     <div class="block-content">
-        <div class="block-name">秒杀</div>
+        <div class="block-name">整点预售</div>
     </div>
     <img class="block-img" src="<?= Yii::$app->request->baseUrl ?>/statics/images/seckill-bg.png">
 </div>

@@ -5,7 +5,7 @@
  * Time: 16:52
  */
 $urlManager = Yii::$app->urlManager;
-$this->title = '秒杀';
+$this->title = '整点预售';
 $this->params['active_nav_group'] = 10;
 ?>
 <style>

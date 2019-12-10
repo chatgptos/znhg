@@ -5,13 +5,13 @@
  * Time: 16:52
  */
 $urlManager = Yii::$app->urlManager;
-$this->title = '秒杀';
+$this->title = '整点预售';
 $this->params['active_nav_group'] = 10;
 ?>
 
 <div class="alert alert-info rounded-0">
-    <div>注：设置了开放时间，小程序端才有相关秒杀时间点出现</div>
-    <div>注：秒杀入口可以在
+    <div>注：设置了开放时间，小程序端才有相关整点预售时间点出现</div>
+    <div>注：整点预售入口可以在
         <a target="_blank" href="<?= $urlManager->createUrl(['mch/store/home-nav']) ?>">导航图标</a>、
         <a target="_blank"
            href="<?= $urlManager->createUrl(['mch/store/home-block']) ?>">图片魔方</a>、

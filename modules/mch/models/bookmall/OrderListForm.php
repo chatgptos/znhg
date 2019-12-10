@@ -59,9 +59,33 @@ class OrderListForm extends Model
                 'o.is_pay' => 0,
             ]);
         }
+
+        if ($this->status == 7) {//待确认预售
+            $query->andWhere([
+                'o.is_pay' => 1,
+                'o.is_yukuan' => 0,
+                'o.is_check_yukuan' => 0,
+            ]);
+        }
+        if ($this->status == 8) {//待支付余款
+            $query->andWhere([
+                'o.is_pay' => 1,
+                'o.is_yukuan' => 0,
+                'o.is_check_yukuan' => 1,//通过
+            ]);
+        }
+        if ($this->status == 9) {//失败
+            $query->andWhere([
+                'o.is_pay' => 1,
+                'o.is_yukuan' => 0,
+                'o.is_check_yukuan' => 2,
+            ]);
+        }
+
         if ($this->status == 1) {//待发货
             $query->andWhere([
                 'o.is_pay' => 1,
+                'o.is_yukuan' => 1,
                 'o.is_send' => 0,
             ]);
         }
