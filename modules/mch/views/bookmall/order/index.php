@@ -190,29 +190,51 @@ isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
             <ul class="nav nav-tabs status">
                 <li class="nav-item">
                     <a class="status-item nav-link <?= $status == -1 ? 'active' : null ?>"
-                       href="<?= yii\helpers\Url::to(['order/index']) ?>">全部</a>
+                       href="<?= yii\helpers\Url::to(['bookmall/order/index']) ?>">全部</a>
                 </li>
 
                 <li class="nav-item">
                     <a class="status-item nav-link <?= $status == 0 ? 'active' : null ?>"
-                       href="<?= yii\helpers\Url::to(array_merge(['order/index'], $condition, ['status' => 0])) ?>">未付款<?= isset($store_data['status_count']['status_0']) ? '(' . $store_data['status_count']['status_0'] . ')' : null ?></a>
+                       href="<?= yii\helpers\Url::to(array_merge(['bookmall/order/index'], $condition, ['status' => 0])) ?>">未付款<?= isset($store_data['status_count']['status_0']) ? '(' . $store_data['status_count']['status_0'] . ')' : null ?></a>
 
+                </li>
+
+
+                <li class="nav-item">
+                    <a class="status-item nav-link <?= $status == 7 ? 'active' : null ?>"
+                       href="<?= yii\helpers\Url::to(array_merge(['bookmall/order/index'], $condition, ['status' => 7])) ?>">待确认预售<?= isset($store_data['status_count']['status_0']) ? '(' . $store_data['status_count']['status_0'] . ')' : null ?></a>
+
+                </li>
+
+                <li class="nav-item">
+                    <a class="status-item nav-link <?= $status == 8 ? 'active' : null ?>"
+                       href="<?= yii\helpers\Url::to(array_merge(['bookmall/order/index'], $condition, ['status' => 8])) ?>">待支付余款<?= isset($store_data['status_count']['status_0']) ? '(' . $store_data['status_count']['status_0'] . ')' : null ?></a>
+
+                </li>
+
+
+                <li class="nav-item">
+                    <a class="status-item nav-link <?= $status == 9 ? 'active' : null ?>"
+                       href="<?= yii\helpers\Url::to(array_merge(['bookmall/order/index'], $condition, ['status' => 9])) ?>">失败<?= isset($store_data['status_count']['status_0']) ? '(' . $store_data['status_count']['status_0'] . ')' : null ?></a>
+
+                </li>
+
+
+                <li class="nav-item">
+                    <a class="status-item nav-link <?= $status == 1 ? 'active' : null ?>"
+                       href="<?= yii\helpers\Url::to(array_merge(['bookmall/order/index'], $condition, ['status' => 1])) ?>">待发货<?= isset($store_data['status_count']['status_1']) ? '(' . $store_data['status_count']['status_1'] . ')' : null ?></a>
                 </li>
                 <li class="nav-item">
                     <a class="status-item nav-link <?= $status == 1 ? 'active' : null ?>"
-                       href="<?= yii\helpers\Url::to(array_merge(['order/index'], $condition, ['status' => 1])) ?>">待发货<?= isset($store_data['status_count']['status_1']) ? '(' . $store_data['status_count']['status_1'] . ')' : null ?></a>
-                </li>
-                <li class="nav-item">
-                    <a class="status-item  nav-link <?= $status == 2 ? 'active' : null ?>"
-                       href="<?= yii\helpers\Url::to(array_merge(['order/index'], $condition, ['status' => 2])) ?>">待收货<?= isset($store_data['status_count']['status_2']) ? '(' . $store_data['status_count']['status_2'] . ')' : null ?></a>
+                       href="<?= yii\helpers\Url::to(array_merge(['bookmall/order/index'], $condition, ['status' => 1])) ?>">待发货<?= isset($store_data['status_count']['status_1']) ? '(' . $store_data['status_count']['status_1'] . ')' : null ?></a>
                 </li>
                 <li class="nav-item">
                     <a class="status-item  nav-link <?= $status == 3 ? 'active' : null ?>"
-                       href="<?= yii\helpers\Url::to(array_merge(['order/index'], $condition, ['status' => 3])) ?>">已完成<?= isset($store_data['status_count']['status_3']) ? '(' . $store_data['status_count']['status_3'] . ')' : null ?></a>
+                       href="<?= yii\helpers\Url::to(array_merge(['bookmall/order/index'], $condition, ['status' => 3])) ?>">已完成<?= isset($store_data['status_count']['status_3']) ? '(' . $store_data['status_count']['status_3'] . ')' : null ?></a>
                 </li>
                 <li class="nav-item">
                     <a class="status-item  nav-link <?= $status == 5 ? 'active' : null ?>"
-                       href="<?= yii\helpers\Url::to(array_merge(['order/index'], $condition, ['status' => 5])) ?>">已取消<?= isset($store_data['status_count']['status_5']) ? '(' . $store_data['status_count']['status_5'] . ')' : null ?></a>
+                       href="<?= yii\helpers\Url::to(array_merge(['bookmall/order/index'], $condition, ['status' => 5])) ?>">已取消<?= isset($store_data['status_count']['status_5']) ? '(' . $store_data['status_count']['status_5'] . ')' : null ?></a>
                 </li>
             </ul>
         </div>
@@ -385,10 +407,21 @@ isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
                                     </div>
                                 <?php endif; ?>
                             <?php else: ?>
-                                <?php if ($order_item['is_pay'] == 1 && $order_item['is_confirm'] != 1): ?>
+                                <?php if ($order_item['is_pay'] == 1 && $order_item['is_confirm'] != 1 && $order_item['is_yukuan'] == 1): ?>
                                     <a class="btn btn-sm btn-primary send-btn" href="javascript:"
                                        data-order-id="<?= $order_item['id'] ?>"><?= ($order_item['is_send'] == 1) ? "修改快递单号" : "发货" ?></a>
                                 <?php endif; ?>
+
+<!--                                --><?php //if ($order_item['is_pay'] == 1 && $order_item['is_confirm'] != 1 && $order_item['is_yukuan'] == 0): ?>
+<!--                                    <a class="btn btn-sm btn-primary send-btn" href="javascript:"-->
+<!--                                       data-order-id="--><?//= $order_item['id'] ?><!--">--><?//= ($order_item['is_send'] == 1) ? "修改快递单号" : "确认预售" ?><!--</a>-->
+<!--                                --><?php //endif; ?>
+
+                                <?php if ($order_item['is_pay'] == 1 && $order_item['is_confirm'] != 1&& $order_item['is_yukuan'] == 0): ?>
+                                    <a class="btn btn-sm btn-primary update" href="javascript:" data-toggle="modal"
+                                       data-target="#yukuan" data-id="<?= $order_item['id'] ?>">确认预售</a>
+                                <?php endif; ?>
+
                             <?php endif; ?>
                             <a class="btn btn-sm btn-primary"
                                href="<?= $urlManager->createUrl(['mch/bookmall/order/detail', 'order_id' => $order_item['id']]) ?>">详情</a>
@@ -423,6 +456,29 @@ isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
             <div class="text-muted"><?= $row_count ?>条数据</div>
         </div>
 
+        <!--新加入的-->
+        <!-- 修改价格 -->
+        <div class="modal fade" data-backdrop="static" id="yukuan">
+            <div class="modal-dialog modal-sm" role="document" style="max-width: 400px">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <b class="modal-title">确认预售订单</b>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input class="order-id" type="hidden">
+                        <!--                <input class=" form-control money" type="number" placeholder="请填写增加或减少的价格">-->
+                        <div class="text-danger form-error mb-3" style="display: none">错误信息</div>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="javascript:" class="btn btn-primary add-yukuan" data-type="1">确认</a>
+                        <!--                <a href="javascript:" class="btn btn-primary add-price" data-type="2">优惠</a>-->
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- 发货 -->
         <div class="modal fade send-modal" data-backdrop="static">
             <div class="modal-dialog modal-sm" role="document" style="max-width: 400px">
@@ -591,6 +647,9 @@ isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
     });
 
 
+
+
+
 </script>
 <!--打印函数-->
 <script>
@@ -614,11 +673,13 @@ isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
         }
     }
     ;
+
     //打印预览
     function myPreview() {
         LODOP.PRINT_INIT("");
         LODOP.ADD_PRINT_HTM(10, 50, '100%', '100%', $('#print').html());
     }
+
     $(document).on('click', '.print', function () {
         var id = $(".send-modal input[name=order_id]").val();
         var express = $(".send-modal input[name=express]").val();
@@ -682,5 +743,31 @@ isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
         } else {
             $('.is-true-express').prop('hidden', false);
         }
+    });
+
+
+    $(document).on('click', '.add-yukuan', function () {
+        var order_id = $('.order-id').val();
+        var price = $('.money').val();
+        var type = $(this).data('type');
+        var error = $('.form-error');
+        error.hide();
+        $.ajax({
+            url: "<?=$urlManager->createUrl(['mch/bookmall/order/clerk'])?>",
+            type: 'get',
+            dataType: 'json',
+            data: {
+                order_id: order_id,
+                price: price,
+                type: type
+            },
+            success: function (res) {
+                if (res.code == 0) {
+                    window.location.reload();
+                } else {
+                    error.html(res.msg).show()
+                }
+            }
+        });
     });
 </script>

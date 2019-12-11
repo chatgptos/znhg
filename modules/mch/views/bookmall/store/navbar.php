@@ -360,7 +360,7 @@ $this->params['active_nav_group'] = 11;
                     url: '/pages/video/video-list',
                 },
                 {
-                    name: '秒杀',
+                    name: '整点预售',
                     url: '/pages/seckill/seckill',
                 },
                 {

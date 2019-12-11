@@ -44,16 +44,41 @@ class OrderListForm extends Model
                 'is_pay' => 0,
             ]);
         }
+
+
+        if ($this->status == 5) {//余款订单
+            $query->andWhere([
+                'is_pay' => 1,
+                'is_send' => 0,
+                'is_confirm' => 0,
+                'is_yukuan' => 0,
+            ]);
+        }
+
+
+
+        if ($this->status == 6) {//预售失败
+            $query->andWhere([
+                'is_pay' => 1,
+                'is_send' => 0,
+                'is_confirm' => 0,
+                'is_yukuan' => 0,
+                'is_check_yukuan' => 2,//失败
+            ]);
+        }
+
         if ($this->status == 1) {//待发货
             $query->andWhere([
                 'is_pay' => 1,
                 'is_send' => 0,
+                'is_yukuan' => 1,
             ]);
         }
         if ($this->status == 2) {//待收货
             $query->andWhere([
                 'is_send' => 1,
                 'is_confirm' => 0,
+                'is_yukuan' => 1,
             ]);
         }
         if ($this->status == 3) {//已完成
@@ -64,6 +89,7 @@ class OrderListForm extends Model
         if ($this->status == 4) {//售后订单
             return $this->getRefundList();
         }
+
         $count = $query->count();
         $pagination = new Pagination(['totalCount' => $count, 'page' => $this->page - 1, 'pageSize' => $this->limit]);
         /* @var Order[] $list */
@@ -104,6 +130,8 @@ class OrderListForm extends Model
                 'is_comment' => $order->is_comment,
                 'apply_delete' => $order->apply_delete,
                 'is_offline'=>$order->is_offline,
+                'is_yukuan'=>$order->is_yukuan,
+                'is_check_yukuan'=>$order->is_check_yukuan,
 //                'qrcode'=>$qrcode,
                 'offline_qrcode'=>$order->offline_qrcode,
                 'express'=>$order->express,

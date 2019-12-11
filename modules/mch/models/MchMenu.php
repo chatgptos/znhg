@@ -246,7 +246,8 @@ class MchMenu
                                 'name' => '订单列表',
                                 'route' => 'mch/bookmall/order/index',
                                 'sub' => [
-                                    'mch/order/detail'
+                                    'mch/bookmall/order/detail',
+                                    'mch/bookmall/order/index',
                                 ]
                             ],
                             [

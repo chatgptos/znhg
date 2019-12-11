@@ -40,7 +40,7 @@ $this->params['active_nav_group'] = 1;
                         <?php endif; ?>
                     </td>
                     <td>
-                        <a href="<?= $urlManager->createUrl(['mch/order/index', 'shop_id' => $item['id']]) ?>"><?= $item['order_count'] ?></a>
+                        <a href="<?= $urlManager->createUrl(['mch/bookmall/order/', 'shop_id' => $item['id']]) ?>"><?= $item['order_count'] ?></a>
                     </td>
                     <td>
                         <a href="<?= $urlManager->createUrl(['mch/user/card', 'shop_id' => $item['id']]) ?>"><?= $item['card_count'] ?></a>

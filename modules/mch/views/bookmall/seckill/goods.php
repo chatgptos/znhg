@@ -5,7 +5,7 @@
  * Time: 16:52
  */
 $urlManager = Yii::$app->urlManager;
-$this->title = '秒杀';
+$this->title = '整点预售';
 $this->params['active_nav_group'] = 10;
 ?>
 
@@ -21,7 +21,7 @@ $this->params['active_nav_group'] = 10;
         </ul>
         <ul class="nav nav-right">
             <li class="nav-item">
-                <a class="nav-link" href="<?= $urlManager->createUrl(['mch/bookmall/seckill/goods-edit']) ?>">添加秒杀商品</a>
+                <a class="nav-link" href="<?= $urlManager->createUrl(['mch/bookmall/seckill/goods-edit']) ?>">添加整点预售商品</a>
             </li>
         </ul>
     </div>
@@ -38,7 +38,7 @@ $this->params['active_nav_group'] = 10;
             <?php if (!$list || count($list) == 0): ?>
                 <tr>
                     <td colspan="4" class="text-center p-5">
-                        <a href="<?= $urlManager->createUrl(['mch/bookmall/seckill/goods-edit']) ?>">添加秒杀商品</a>
+                        <a href="<?= $urlManager->createUrl(['mch/bookmall/seckill/goods-edit']) ?>">添加整点预售商品</a>
                     </td>
                 </tr>
             <?php else: foreach ($list as $item): ?>
@@ -65,7 +65,7 @@ $this->params['active_nav_group'] = 10;
     $(document).on("click", ".delete-btn", function () {
         var url = $(this).attr("href");
         $.confirm({
-            content: "确认删除？删除后该商品的所有秒杀设置将全部删除！",
+            content: "确认删除？删除后该商品的所有整点预售设置将全部删除！",
             confirm: function () {
                 $.loading();
                 $.ajax({

@@ -8,6 +8,7 @@
 namespace app\modules\api\models\bookmall;
 
 
+use app\models\IntegralLog;
 use app\models\Setting;
 use app\models\User;
 use app\modules\api\models\Model;
@@ -51,6 +52,10 @@ class OrderPayDataForm extends Model
             ];
 
 
+        // 获取用户当前积分
+        $user = User::findOne(['id' => $this->order->user_id, 'type' => 1, 'is_delete' => 0]);
+
+
         $goods_names = '';
         $goods_list = OrderDetail::find()->alias('od')->leftJoin(['g' => Goods::tableName()], 'g.id=od.goods_id')->where([
             'od.order_id' => $this->order->id,
@@ -60,10 +65,62 @@ class OrderPayDataForm extends Model
             $goods_names .= $goods['name'] . ';';
         $goods_names = mb_substr($goods_names, 0, 32, 'utf-8');
         if ($this->pay_type == 'WECHAT_PAY') {
+
+            // 减去当前用户账户积分
+            if($this->order->is_pay ==0){
+                //积分
+                $total_coupon = $this->order->total_coupon;
+                $total_price_2 = $this->order->total_integral_buy;
+            }elseif($this->order->is_pay ==1 && $this->order->is_yukuan ==0){
+                //积分
+                $total_coupon = $this->order->yukuan_coupon;
+                $total_price_2 = $this->order->youkuan_integral_buy;
+            }else{
+                return [
+                    'code' => 1,
+                    'msg' => '订单已经支付',
+                ];
+            }
+
+
+
+            $t = \Yii::$app->db->beginTransaction();
+
+
             $res = $this->unifiedOrder($goods_names);
             if (isset($res['code']) && $res['code'] == 1) {
                 return $res;
             }
+            if ($total_price_2 > 0) {
+                $user->integral -= $total_price_2;
+                $user->coupon -= $total_coupon;
+                if ($user->coupon < 0 || $user->integral < 0) {
+                    return [
+                        'code' => 1,
+                        'msg' => '优惠券/积分不够',
+                    ];
+                }
+                $user->save();
+                //记录日志
+                $hld = 0;
+                $coupon = $total_coupon;
+                $integral = $total_price_2;
+
+                $integralLog = new IntegralLog();
+                $integralLog->user_id = $user->id;
+                //卖优惠券
+                $integralLog->content = "管理员（优惠券预售商城） 后台操作账号：" . $user->nickname . " 欢乐豆" . $user->hld . "已经扣除：" . $hld . " 豆" . " 优惠券" . $user->coupon . "已经扣除：" . $coupon . " 张（购买时候时候已经扣除优惠券）,（交易时扣除去积分" . $integral . '个积分）';
+                $integralLog->integral = $integral;
+                $integralLog->hld = $hld;
+                $integralLog->coupon = $coupon;
+                $integralLog->addtime = time();
+                $integralLog->username = $user->nickname;
+                $integralLog->operator = 'admin';
+                $integralLog->store_id = $this->store_id;
+                $integralLog->operator_id = 0;
+                $integralLog->save();
+            }
+
 
             //记录prepay_id发送模板消息用到
             FormId::addFormId([
@@ -84,13 +141,31 @@ class OrderPayDataForm extends Model
             ];
             $pay_data['paySign'] = $this->wechat->pay->makeSign($pay_data);
             $this->setReturnData($this->order);
-            return [
-                'code' => 0,
-                'msg' => 'success',
-                'data' => (object)$pay_data,
-                'res' => $res,
-                'body' => $goods_names,
-            ];
+
+
+
+
+            if ($res) {
+                $t->commit();
+                return [
+                    'code' => 0,
+                    'msg' => 'success',
+                    'data' => (object)$pay_data,
+                    'res' => $res,
+                    'body' => $goods_names,
+                ];
+            } else {
+                $t->rollBack();
+                return $this->getModelError($res);
+            }
+
+//            return [
+//                'code' => 0,
+//                'msg' => 'success',
+//                'data' => (object)$pay_data,
+//                'res' => $res,
+//                'body' => $goods_names,
+//            ];
         }
     }
 
@@ -183,10 +258,16 @@ class OrderPayDataForm extends Model
 
         //扣除订单的积分和优惠券
 
-        $this->order->is_pay = 1;
-        $this->order->pay_type = 1;
-        $this->order->pay_time = time();
-        $this->order->is_pay = 1;
+        if($this->order->is_pay == 0){
+            $this->order->is_pay = 1;
+            $this->order->pay_type = 1;
+            $this->order->pay_time = time();
+        }else{
+            $this->order->is_yukuan = 1;
+            $this->order->yukuan_time = time();
+        }
+
+
         $res = $this->order->save();
 //
 //        var_dump($this->order->is_pay);
