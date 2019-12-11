@@ -62,6 +62,9 @@ use Codeception\PHPUnit\ResultPrinter\HTML;
  * @property string $is_yukuan
  * @property string $yukuan_time
  * @property string $is_check_yukuan
+ * @property string $check_yukuan_time
+ *
+ *
  *
  *
  *
@@ -153,6 +156,7 @@ class Order extends \yii\db\ActiveRecord
             'is_yukuan' => '是否支付余款',
             'is_check_yukuan' => '是否检查余款',
             'yukuan_time' => '是否支付余款',
+            'check_yukuan_time' => '后台确认时间',
         ];
     }
     public function getOrderDetail()

@@ -323,6 +323,16 @@ isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
                                 <?php endif; ?>
                             </div>
 
+                            <div>
+                                预售状态：
+                                <?php if ($order_item['is_check_yukuan'] == 2): ?>
+                                    <span class="badge badge-default">失败</span>
+                                <?php elseif ($order_item['is_check_yukuan'] == 1): ?>
+                                    <span class="badge badge-success">后台通过</span>
+                                <?php else: ?>
+                                <?php endif; ?>
+                            </div>
+
 
                             <?php if ($order_item['apply_delete'] == 1): ?>
                                 <div>
@@ -412,14 +422,11 @@ isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
                                        data-order-id="<?= $order_item['id'] ?>"><?= ($order_item['is_send'] == 1) ? "修改快递单号" : "发货" ?></a>
                                 <?php endif; ?>
 
-<!--                                --><?php //if ($order_item['is_pay'] == 1 && $order_item['is_confirm'] != 1 && $order_item['is_yukuan'] == 0): ?>
-<!--                                    <a class="btn btn-sm btn-primary send-btn" href="javascript:"-->
-<!--                                       data-order-id="--><?//= $order_item['id'] ?><!--">--><?//= ($order_item['is_send'] == 1) ? "修改快递单号" : "确认预售" ?><!--</a>-->
-<!--                                --><?php //endif; ?>
-
-                                <?php if ($order_item['is_pay'] == 1 && $order_item['is_confirm'] != 1&& $order_item['is_yukuan'] == 0): ?>
+                                <?php if ($order_item['is_pay'] == 1 && $order_item['is_confirm'] != 1&& $order_item['is_yukuan'] == 0&& $order_item['is_check_yukuan'] == 0): ?>
                                     <a class="btn btn-sm btn-primary update" href="javascript:" data-toggle="modal"
                                        data-target="#yukuan" data-id="<?= $order_item['id'] ?>">确认预售</a>
+                                    <a class="badge badge-danger update" href="javascript:" data-toggle="modal"
+                                       data-target="#yukuanback" data-id="<?= $order_item['id'] ?>">取消订单退回积分</a>
                                 <?php endif; ?>
 
                             <?php endif; ?>
@@ -457,7 +464,7 @@ isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
         </div>
 
         <!--新加入的-->
-        <!-- 修改价格 -->
+        <!-- 预售 -->
         <div class="modal fade" data-backdrop="static" id="yukuan">
             <div class="modal-dialog modal-sm" role="document" style="max-width: 400px">
                 <div class="modal-content">
@@ -474,6 +481,28 @@ isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
                     </div>
                     <div class="modal-footer">
                         <a href="javascript:" class="btn btn-primary add-yukuan" data-type="1">确认</a>
+                        <!--                <a href="javascript:" class="btn btn-primary add-price" data-type="2">优惠</a>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 取消预售 -->
+        <div class="modal fade" data-backdrop="static" id="yukuanback">
+            <div class="modal-dialog modal-sm" role="document" style="max-width: 400px">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <b class="modal-title">取消预售订单</b>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input class="order-id-yukuanback" type="hidden">
+                        <!--                <input class=" form-control money" type="number" placeholder="请填写增加或减少的价格">-->
+                        <div class="text-danger form-error mb-3" style="display: none">错误信息</div>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="javascript:" class="btn btn-primary add-yukuanback" data-type="1">确认</a>
                         <!--                <a href="javascript:" class="btn btn-primary add-price" data-type="2">优惠</a>-->
                     </div>
                 </div>
@@ -758,7 +787,33 @@ isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
             dataType: 'json',
             data: {
                 order_id: order_id,
-                price: price,
+                status: 1,
+                type: type
+            },
+            success: function (res) {
+                if (res.code == 0) {
+                    window.location.reload();
+                } else {
+                    error.html(res.msg).show()
+                }
+            }
+        });
+    });
+
+
+    $(document).on('click', '.add-yukuanback', function () {
+        var order_id = $('.order-id').val();
+        var price = $('.money').val();
+        var type = $(this).data('type');
+        var error = $('.form-error');
+        error.hide();
+        $.ajax({
+            url: "<?=$urlManager->createUrl(['mch/bookmall/order/clerk'])?>",
+            type: 'get',
+            dataType: 'json',
+            data: {
+                order_id: order_id,
+                status: 2,
                 type: type
             },
             success: function (res) {
