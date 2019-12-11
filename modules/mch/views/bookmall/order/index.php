@@ -315,21 +315,33 @@ isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
                         </td>
                         <td class="order-tab-4">
                             <div>
-                                付款状态：
+                                预售款付款状态：
                                 <?php if ($order_item['is_pay'] == 1): ?>
-                                    <span class="badge badge-success">已付款</span>
+                                    <span class="badge badge-success">已付预售款</span>
                                 <?php else: ?>
-                                    <span class="badge badge-default">未付款</span>
+                                    <span class="badge badge-default">未付预售款</span>
                                 <?php endif; ?>
                             </div>
 
+
                             <div>
-                                预售状态：
+                                余款付款状态：
+                                <?php if ($order_item['is_yukuan'] == 1): ?>
+                                    <span class="badge badge-success">已付余款</span>
+                                <?php else: ?>
+                                    <span class="badge badge-default">未付余款</span>
+                                <?php endif; ?>
+                            </div>
+
+
+                            <div>
+                                审核状态：
                                 <?php if ($order_item['is_check_yukuan'] == 2): ?>
                                     <span class="badge badge-default">失败</span>
                                 <?php elseif ($order_item['is_check_yukuan'] == 1): ?>
                                     <span class="badge badge-success">后台通过</span>
                                 <?php else: ?>
+                                    <span class="badge badge-success">后台审核中</span>
                                 <?php endif; ?>
                             </div>
 

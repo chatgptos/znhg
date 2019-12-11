@@ -97,6 +97,53 @@ class WechatTplMsgSender
         }
     }
 
+
+    /**
+     * 发送支付通知模板消息 余款支付
+     */
+    public function payYukuanMsg()
+    {
+        try {
+            if (!$this->wechat_template_message->pay_tpl)
+                return;
+            $goods_list = OrderDetail::find()
+                ->select('g.name,od.num')
+                ->alias('od')->leftJoin(['g' => Goods::tableName()], 'od.goods_id=g.id')
+                ->where(['od.order_id' => $this->order->id, 'od.is_delete' => 0])->asArray()->all();
+            $goods_names = '';
+            foreach ($goods_list as $goods) {
+                $goods_names .= $goods['name'];
+            }
+            $data = [
+                'touser' => $this->user->wechat_open_id,
+                'template_id' => $this->wechat_template_message->pay_tpl,
+                'form_id' => $this->form_id->form_id,
+                'page' => 'pages/bookmall/order/order?status=5',
+                'data' => [
+                    'keyword1' => [
+                        'value' => $this->order->order_no,
+                        'color' => '#333333',
+                    ],
+                    'keyword2' => [
+                        'value' => date('Y-m-d H:i:s', $this->order->pay_time),
+                        'color' => '#333333',
+                    ],
+                    'keyword3' => [
+                        'value' => $this->order->youkuan_integral_buy,
+                        'color' => '#333333',
+                    ],
+                    'keyword4' => [
+                        'value' => $goods_names,
+                        'color' => '#333333',
+                    ],
+                ],
+            ];
+            $this->sendTplMsg($data);
+        } catch (\Exception $e) {
+            \Yii::warning($e->getMessage());
+        }
+    }
+
     /**
      * 发送订单取消模板消息
      */

@@ -93,6 +93,10 @@ class OrderClerkForm extends Model
                         'data' => '保存失败',
                     ];;
                 }
+            }else{
+                $wechat = $this->getWechat();
+                $wechat_tpl_meg_sender = new WechatTplMsgSender($order->store_id, $order->id, $wechat);
+                $wechat_tpl_meg_sender->payYukuanMsg();
             }
         }
 
