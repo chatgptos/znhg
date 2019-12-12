@@ -69,12 +69,12 @@ class OrderPayDataForm extends Model
             // 减去当前用户账户积分
             if($this->order->is_pay ==0){
                 //积分
-                $total_coupon = $this->order->total_coupon;
-                $total_price_2 = $this->order->total_integral_buy;
+                $advance_coupon = $this->order->advance_coupon;
+                $total_price_2 = $this->order->advance_integral_buy;
             }elseif($this->order->is_pay ==1 && $this->order->is_yukuan ==0){
                 //积分
-                $total_coupon = $this->order->yukuan_coupon;
-                $total_price_2 = $this->order->youkuan_integral_buy;
+                $advance_coupon = $this->order->yukuan_coupon;
+                $total_price_2 = $this->order->yukuan_integral_buy;
             }else{
                 return [
                     'code' => 1,
@@ -93,7 +93,7 @@ class OrderPayDataForm extends Model
             }
             if ($total_price_2 > 0) {
                 $user->integral -= $total_price_2;
-                $user->coupon -= $total_coupon;
+                $user->coupon -= $advance_coupon;
                 if ($user->coupon < 0 || $user->integral < 0) {
                     return [
                         'code' => 1,
@@ -103,7 +103,7 @@ class OrderPayDataForm extends Model
                 $user->save();
                 //记录日志
                 $hld = 0;
-                $coupon = $total_coupon;
+                $coupon = $advance_coupon;
                 $integral = $total_price_2;
 
                 $integralLog = new IntegralLog();

@@ -46,8 +46,8 @@ class OrderSubmitForm extends Model
     public $form;//自定义表单信息
 
 
-    public $total_coupon;//优惠券
-    public $total_integral_buy;//积分
+    public $advance_coupon;//优惠券
+    public $advance_integral_buy;//积分
 
     public function rules()
     {
@@ -251,10 +251,27 @@ class OrderSubmitForm extends Model
             $total_price = empty($data['total_price']) ? 0 : $data['total_price'];
 
             //替代
-//            $total_price = empty($data['total_integral_buy']) ? 0 : $data['total_integral_buy'];
+//            $total_price = empty($data['advance_integral_buy']) ? 0 : $data['advance_integral_buy'];
             //优惠券
-            $total_coupon = empty($data['total_coupon']) ? 0 : $data['total_coupon'];
-            $total_integral_buy = empty($data['total_integral_buy']) ? 0 : $data['total_integral_buy'];
+            $advance_coupon = empty($data['advance_coupon']) ? 0 : $data['advance_coupon'];
+            $advance_integral_buy = empty($data['advance_integral_buy']) ? 0 : $data['advance_integral_buy'];
+
+
+            $yukuan_coupon = empty($data['yukuan_coupon']) ? 0 : $data['yukuan_coupon'];
+            $yukuan_integral_buy = empty($data['yukuan_integral_buy']) ? 0 : $data['yukuan_integral_buy'];
+
+
+            //比例预售款
+            $advance = empty($data['advance']) ? 0 : $data['advance'];
+            if(!$advance){
+                return [
+                    'code' => 1,
+                    'msg' => '需要设置预售款比例',
+                ];
+            }
+
+
+            //预售改变逻辑预售款+余款
 
             $resIntegral = [
                 'forehead' => 0,
@@ -408,8 +425,11 @@ class OrderSubmitForm extends Model
         $order->is_offline = $this->offline;
         $order->integral = json_encode($resIntegral, JSON_UNESCAPED_UNICODE);
         $order->version = $this->version;
-        $order->total_coupon = $total_coupon;
-        $order->total_integral_buy = $total_price_2;
+        $order->advance_integral_buy = intval($total_price_2*$advance/100);
+        $order->yukuan_integral_buy = intval($total_price_2*(1-$advance/100));
+//        $order->advance_integral_buy = $advance_integral_buy;
+        $order->advance_coupon = intval($advance_coupon);
+        $order->yukuan_coupon = intval($yukuan_coupon);
 
 //        if($this->offline == 1){
 //            $qrcode_form = new QrcodeForm();
@@ -454,7 +474,7 @@ class OrderSubmitForm extends Model
            /* // 减去当前用户账户积分
             if ($total_price_2 > 0) {
                 $user->integral -= $total_price_2;
-                $user->coupon -= $total_coupon;
+                $user->coupon -= $advance_coupon;
                 if ($user->coupon < 0 || $user->integral < 0) {
                     return [
                         'code' => 1,
@@ -464,7 +484,7 @@ class OrderSubmitForm extends Model
                 $user->save();
                 //记录日志
                 $hld = 0;
-                $coupon = $total_coupon;
+                $coupon = $advance_coupon;
                 $integral = $total_price_2;
 
                 $integralLog = new IntegralLog();
@@ -677,8 +697,8 @@ class OrderSubmitForm extends Model
         }
         $total_price = 0;
         //优惠券个数
-        $total_coupon = 0;
-        $total_integral_buy = 0;
+        $advance_coupon = 0;
+        $advance_integral_buy = 0;
         $goods_attr_info = $goods->getAttrInfo($attr_id_list);
         $attr_list = Attr::find()->alias('a')
             ->select('a.id attr_id,ag.attr_group_name,a.attr_name')
@@ -698,7 +718,7 @@ class OrderSubmitForm extends Model
             'integral_give_num' => $goods->integral_give_num,
             'coupon' => doubleval(empty($goods_attr_info['coupon']) ? $goods->coupon : $goods_attr_info['coupon']) * $goods_info->num,
             'integral_buy' => doubleval(empty($goods_attr_info['integral_buy']) ? $goods->integral_buy : $goods_attr_info['integral_buy']) * $goods_info->num,
-
+            'advance'=> doubleval($goods->advance),//预售款比例
         ];
 
         //秒杀价计算
@@ -710,15 +730,29 @@ class OrderSubmitForm extends Model
                 $this->setSeckillSellNum($seckill_data['id'], $attr_id_list, $res['seckill_price_num']);
             }
         }
-        $total_price += $goods_item->price;
+
+        //$total_price先保留 1积分等于1元
+//        $total_price += $goods_item->price;
+        $total_price += $goods_item->integral_buy;
+
+
         //优惠券个数
-        $total_coupon += $goods_item->coupon;
-        $total_integral_buy += $goods_item->integral_buy;
+        $advance_coupon += ($goods_item->coupon)*($goods_item->advance/100);
+        $advance_integral_buy += ($goods_item->integral_buy)*($goods_item->advance/100);
+
+
+        //余款
+        $yukuan_coupon= ($goods_item->coupon)*(1-$goods_item->advance/100);
+        $yukuan_integral_buy= ($goods_item->integral_buy)*(1-$goods_item->advance/100);
+
         return [
             'total_price' => $total_price,
             'list' => [$goods_item],
-            'total_coupon' => $total_coupon,
-            'total_integral_buy' => $total_integral_buy,
+            'advance_coupon' => $advance_coupon,
+            'advance_integral_buy' => $advance_integral_buy,
+            'yukuan_integral_buy' => $yukuan_integral_buy,
+            'yukuan_coupon' => $yukuan_coupon,
+            'advance' => $goods_item->advance,
         ];
     }
 

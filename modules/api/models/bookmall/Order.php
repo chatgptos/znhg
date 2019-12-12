@@ -55,10 +55,10 @@ use Codeception\PHPUnit\ResultPrinter\HTML;
  * @property integer $is_sale
  * @property string $words
  * @property string $version
- * @property string $total_coupon
- * @property string $total_integral_buy
+ * @property string $advance_coupon
+ * @property string $advance_integral_buy
  * @property string $yukuan_coupon
- * @property string $youkuan_integral_buy
+ * @property string $yukuan_integral_buy
  * @property string $is_yukuan
  * @property string $yukuan_time
  * @property string $is_check_yukuan
@@ -89,7 +89,7 @@ class Order extends \yii\db\ActiveRecord
         return [
             [['store_id', 'user_id', 'order_no', 'first_price', 'second_price', 'third_price'], 'required'],
             [['store_id', 'user_id', 'is_pay', 'pay_type', 'pay_time', 'is_send', 'send_time', 'is_confirm', 'confirm_time', 'is_comment', 'apply_delete', 'addtime', 'is_delete', 'is_price', 'parent_id', 'is_offline', 'clerk_id', 'is_cancel', 'shop_id', 'user_coupon_id', 'give_integral', 'parent_id_1', 'parent_id_2', 'is_sale'], 'integer'],
-            [['total_integral_buy','total_coupon','total_price', 'pay_price', 'express_price', 'first_price', 'second_price', 'third_price', 'coupon_sub_price', 'before_update_price', 'discount'], 'number'],
+            [['yukuan_coupon','yukuan_integral_buy','advance_integral_buy','advance_coupon','total_price', 'pay_price', 'express_price', 'first_price', 'second_price', 'third_price', 'coupon_sub_price', 'before_update_price', 'discount'], 'number'],
             [['address_data', 'content', 'offline_qrcode', 'integral', 'words'], 'string'],
             [['order_no', 'name', 'mobile', 'express', 'express_no', 'version'], 'string', 'max' => 255],
             [['address', 'remark'], 'string', 'max' => 1000],
@@ -149,10 +149,10 @@ class Order extends \yii\db\ActiveRecord
             'is_sale' => '是否超过售后时间',
             'words' => '商家留言',
             'version' => '版本',
-            'total_coupon' => '优惠券',
-            'total_integral_buy' => '积分',
+            'advance_coupon' => '优惠券',
+            'advance_integral_buy' => '积分',
             'yukuan_coupon' => '优惠券',
-            'youkuan_integral_buy' => '积分',
+            'yukuan_integral_buy' => '积分',
             'is_yukuan' => '是否支付余款',
             'is_check_yukuan' => '是否检查余款',
             'yukuan_time' => '是否支付余款',

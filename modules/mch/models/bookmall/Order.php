@@ -56,7 +56,7 @@ use Codeception\PHPUnit\ResultPrinter\HTML;
  * @property string $words
  * @property string $version
  * @property string $yukuan_coupon
- * @property string $youkuan_integral_buy
+ * @property string $yukuan_integral_buy
  * @property string $is_yukuan
  * @property string $is_check_yukuan
  * @property string $check_yukuan_time
@@ -143,10 +143,10 @@ class Order extends \yii\db\ActiveRecord
             'is_sale' => '是否超过售后时间',
             'words' => '商家留言',
             'version' => '版本',
-            'total_coupon' => '优惠券',
-            'total_integral_buy' => '积分',
+            'advance_coupon' => '优惠券',
+            'advance_integral_buy' => '积分',
             'yukuan_coupon' => '优惠券',
-            'youkuan_integral_buy' => '积分',
+            'yukuan_integral_buy' => '积分',
             'is_yukuan' => '是否支付余款',
             'is_check_yukuan' => '是否检查余款',
             'check_yukuan_time' => '后台支付设置时间',

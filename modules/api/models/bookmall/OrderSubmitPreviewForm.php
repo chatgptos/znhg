@@ -345,8 +345,8 @@ class OrderSubmitPreviewForm extends Model
         }
         $total_price = 0;
         //优惠券个数
-        $total_coupon = 0;
-        $total_integral_buy = 0;
+        $advance_coupon = 0;
+        $advance_integral_buy = 0;
 
 
         $goods_attr_info = $goods->getAttrInfo($attr_id_list);
@@ -369,8 +369,13 @@ class OrderSubmitPreviewForm extends Model
             'attr_list' => $attr_list,
             'coupon' => doubleval(empty($goods_attr_info['coupon']) ? $goods->coupon : $goods_attr_info['coupon']) * $goods_info->num,
 //            'integral_buy' => doubleval(empty($goods_attr_info['integral_buy']) ? $goods->integral_buy : $goods_attr_info['integral_buy']) * $goods_info->num,
+            'integral_buy' => doubleval(empty($goods_attr_info['integral_buy']) ? $goods->integral_buy : $goods_attr_info['integral_buy']) * $goods_info->num,
             'give' => 0,
+            'advance'=> doubleval($goods->advance),//预售款比例
         ];
+
+
+
 
 
         //秒杀价计算
@@ -390,8 +395,19 @@ class OrderSubmitPreviewForm extends Model
         }
         $total_price += $goods_item->price;
         //优惠券个数
-        $total_coupon += $goods_item->coupon;
-        $total_integral_buy += $goods_item->integral_buy;
+//        $advance_coupon += $goods_item->coupon;
+//        $advance_integral_buy += $goods_item->integral_buy;
+
+
+        //优惠券个数
+        $advance_coupon += ($goods_item->coupon)*($goods_item->advance/100);
+        $advance_integral_buy += ($goods_item->integral_buy)*($goods_item->advance/100);
+        //余款
+        $yukuan_coupon= ($goods_item->coupon)*(1-$goods_item->advance/100);
+        $yukuan_integral_buy= ($goods_item->integral_buy)*(1-$goods_item->advance/100);
+
+
+
 
         $address = Address::find()->select('id,name,mobile,province_id,province,city_id,city,district_id,district,detail,is_default')->where([
             'id' => $this->address_id,
@@ -522,8 +538,11 @@ class OrderSubmitPreviewForm extends Model
                 'express_price' => $express_price,
                 'integral' => $resIntegral,
                 'goods_card_list' => $goods_card_list,
-                'total_coupon' => $total_coupon,
-                'total_integral_buy' => $total_integral_buy,
+                'advance_coupon' => intval($advance_coupon),
+                'advance_integral_buy' => intval($advance_integral_buy),
+                'yukuan_integral_buy' => intval($yukuan_integral_buy),
+                'yukuan_coupon' => intval($yukuan_coupon),
+                'advance' => $goods_item->advance,
             ],
         ];
     }

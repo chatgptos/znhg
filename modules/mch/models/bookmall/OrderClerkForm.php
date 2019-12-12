@@ -53,17 +53,17 @@ class OrderClerkForm extends Model
             //返回积分
             // 减去当前用户账户积分
 
-            $total_price_2 = $order->total_integral_buy;
-            $total_coupon = $order->total_coupon;
+            $total_price_2 = $order->advance_integral_buy;
+            $advance_coupon = $order->advance_coupon;
             $t = \Yii::$app->db->beginTransaction();
 
-            if ($total_price_2 > 0 || $total_coupon > 0) {
+            if ($total_price_2 > 0 || $advance_coupon > 0) {
                 $user->integral += $total_price_2;
-                $user->coupon += $total_coupon;
+                $user->coupon += $advance_coupon;
                 $user->save();
                 //记录日志
                 $hld = 0;
-                $coupon = $total_coupon;
+                $coupon = $advance_coupon;
                 $integral = $total_price_2;
 
                 $integralLog = new IntegralLog();

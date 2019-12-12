@@ -129,7 +129,7 @@ class WechatTplMsgSender
                         'color' => '#333333',
                     ],
                     'keyword3' => [
-                        'value' => $this->order->youkuan_integral_buy,
+                        'value' => $this->order->yukuan_integral_buy,
                         'color' => '#333333',
                     ],
                     'keyword4' => [
