@@ -364,35 +364,75 @@ class OrderSubmitPreviewForm extends Model
             'goods_pic' => $goods_pic,
 //            'goods_pic' => $goods->getGoodsPic(0)->pic_url,
             'num' => $goods_info->num,
-            'price' => doubleval(empty($goods_attr_info['price']) ? $goods->price : $goods_attr_info['price']) * $goods_info->num,
-            'integral_buy' => doubleval(empty($goods_attr_info['price']) ? $goods->price : $goods_attr_info['price']) * $goods_info->num,
+            'price' => intval(empty($goods_attr_info['price']) ? $goods->price : $goods_attr_info['price']) * $goods_info->num,
+            'integral_buy' => intval(empty($goods_attr_info['price']) ? $goods->price : $goods_attr_info['price']) * $goods_info->num,
             'attr_list' => $attr_list,
-            'coupon' => doubleval(empty($goods_attr_info['coupon']) ? $goods->coupon : $goods_attr_info['coupon']) * $goods_info->num,
+            'coupon' => intval(empty($goods_attr_info['coupon']) ? $goods->coupon : $goods_attr_info['coupon']) * $goods_info->num,
 //            'integral_buy' => doubleval(empty($goods_attr_info['integral_buy']) ? $goods->integral_buy : $goods_attr_info['integral_buy']) * $goods_info->num,
-            'integral_buy' => doubleval(empty($goods_attr_info['integral_buy']) ? $goods->integral_buy : $goods_attr_info['integral_buy']) * $goods_info->num,
+            'integral_buy' => intval(empty($goods_attr_info['integral_buy']) ? $goods->integral_buy : $goods_attr_info['integral_buy']) * $goods_info->num,
             'give' => 0,
-            'advance'=> doubleval($goods->advance),//预售款比例
+            'advance' => intval($goods->advance),//预售款比例
         ];
-
-
-
-
-
         //秒杀价计算
         $seckill_data = $this->getSeckillData($goods, $attr_id_list);
         if ($seckill_data) {
             $temp_price = $this->getSeckillPrice($seckill_data, $goods, $attr_id_list, $goods_info->num);
+            //查询当前总共订单量
+//            $query_num_buy_order = Goods::find()->alias('g')->where(['g.id' => $goods->id, 'g.is_delete' => 0, 'g.store_id' => $this->store_id])
+//                ->leftJoin(['od' => OrderDetail::tableName()], 'od.goods_id=g.id')
+//                ->leftJoin(['o' => Order::tableName()], 'o.id=od.order_id')
+//                ->andWhere([
+//                    'or',
+//                    [
+//                        'od.is_delete' => 0,
+//                        'o.is_delete' => 0,
+//                        'o.is_pay' => 1,
+//                        'o.pay_time' => date('Y-m-d'),
+//                    ],
+//                    'isnull(o.id)'
+//                ])->count();
+
+            $num = $seckill_data['sell_num'];
+            $charge_coupon = 1;
+            $charge_integral_buy = 1;
+
+            if ($goods->is_buy_integral_down) {
+                $charge_integral_buy = $this->getCharge($num, $goods);
+            }
+
+            if ($goods->is_coupon_down) {
+                $charge_coupon = $this->getCharge($num, $goods);
+            }
             if ($temp_price !== false) {
-                $goods_item->price = $temp_price;
-                $goods_item->coupon = $seckill_data['seckill_coupon'];
-                $goods_item->integral_buy = $temp_price;
+                $goods_item->price = intval($temp_price['total_price'] * (1 - $charge_coupon / 100));
+                $goods_item->coupon = intval($seckill_data['seckill_coupon'] * (1 - $charge_coupon / 100));
+                $goods_item->integral_buy = intval($temp_price['total_price'] * (1 - $charge_integral_buy / 100));
             } else {
                 return [
                     'code' => 1,
                     'msg' => '秒杀商品库存不足',
                 ];
             }
+        } else {
+            return [
+                'code' => 1,
+                'msg' => '未到开放时间',
+            ];
         }
+
+        //现在需要把商品的优惠券转换成秒杀的并且限制个数
+        //设置的参数：
+        /*
+         *0.设置秒杀价格和秒杀优惠券和积分      ok
+         *1.秒杀价格计算出来的 下单积分和优惠券  ok
+         *2.秒杀生成订单根据比例advance
+         *
+         *3.根据商品设置的层级价格     1.判断数量属于哪个区间 2.秒杀价格*比例=下单价格
+         *5.现实首页的下一个阶段的价格 和 数量
+         *4.整个流程：后台设置 用户下单 （显示下一阶段价格）用户购买支付预售款 用户支付余款 发货
+         *
+         *
+         * */
         $total_price += $goods_item->price;
         //优惠券个数
 //        $advance_coupon += $goods_item->coupon;
@@ -400,13 +440,11 @@ class OrderSubmitPreviewForm extends Model
 
 
         //优惠券个数
-        $advance_coupon += ($goods_item->coupon)*($goods_item->advance/100);
-        $advance_integral_buy += ($goods_item->integral_buy)*($goods_item->advance/100);
+        $advance_coupon += ($goods_item->coupon) * ($goods_item->advance / 100);
+        $advance_integral_buy += ($goods_item->integral_buy) * ($goods_item->advance / 100);
         //余款
-        $yukuan_coupon= ($goods_item->coupon)*(1-$goods_item->advance/100);
-        $yukuan_integral_buy= ($goods_item->integral_buy)*(1-$goods_item->advance/100);
-
-
+        $yukuan_coupon = ($goods_item->coupon) * (1 - $goods_item->advance / 100);
+        $yukuan_integral_buy = ($goods_item->integral_buy) * (1 - $goods_item->advance / 100);
 
 
         $address = Address::find()->select('id,name,mobile,province_id,province,city_id,city,district_id,district,detail,is_default')->where([
@@ -529,7 +567,7 @@ class OrderSubmitPreviewForm extends Model
             'code' => 0,
             'msg' => 'success',
             'data' => [
-                'total_price' => $total_price,
+                'total_price' => intval($total_price),
                 'goods_info' => $goods_info,
                 'list' => [
                     $goods_item
@@ -545,6 +583,25 @@ class OrderSubmitPreviewForm extends Model
                 'advance' => $goods_item->advance,
             ],
         ];
+    }
+
+
+    public function getCharge($num, $goods)
+    {
+        $charge = 0;
+
+        if ($num <= $goods->chargeNum && $num > 0) {
+            $charge = $goods->charge;  //1张
+        } elseif ($num <= $goods->chargeNum1 && $num > $goods->chargeNum) {
+            $charge = $goods->charge1; //1-6
+        } elseif ($num <= $goods->chargeNum2 && $num > $goods->chargeNum1) {
+            $charge = $goods->charge2;//7-18
+        } elseif ($num <= $goods->chargeNum3 && $num > $goods->chargeNum2) {
+            $charge = $goods->charge3; //18以上
+        } else {
+            $charge = $goods->charge5;  //1张
+        }
+        return $charge;
     }
 
     private function getShopList()
@@ -657,9 +714,13 @@ class OrderSubmitPreviewForm extends Model
                 'price' => $buy_num * $seckill_price,
                 'm_data' => $seckill_data,
             ]);
-            return $buy_num * $seckill_price;
+//            return $buy_num * $seckill_price;
+            return [
+                'seckill_price_num' => $buy_num,
+                'original_price_num' => 0,
+                'total_price' => $buy_num * $seckill_price
+            ];
         }
-
         $seckill_num = ($seckill_data['seckill_num'] - $seckill_data['sell_num']);
         $original_num = $buy_num - $seckill_num;
         return false;

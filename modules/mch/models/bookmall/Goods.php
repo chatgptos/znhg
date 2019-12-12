@@ -59,7 +59,8 @@ class Goods extends \yii\db\ActiveRecord
         return [
             [['store_id', 'name', 'detail', 'attr'], 'required'],
             [['store_id', 'cat_id', 'status', 'addtime', 'is_delete', 'sort', 'virtual_sales', 'individual_share', 'freight', 'use_attr', 'share_type'], 'integer'],
-            [['price', 'original_price', 'share_commission_first', 'share_commission_second', 'share_commission_third', 'weight','integral_give_num'], 'number'],
+            [['charge','chargeNum','charge1','chargeNum1','charge2','chargeNum2','charge3','chargeNum3','chargeNum5','charge5'
+                ,'is_buy_integral_down','is_coupon_down','advance','price', 'original_price', 'share_commission_first', 'share_commission_second', 'share_commission_third', 'weight','integral_give_num'], 'number'],
             [['detail', 'attr', 'cover_pic', 'video_url', 'full_cut', 'integral'], 'string'],
             [['name', 'unit'], 'string', 'max' => 255],
             [['service'], 'string', 'max' => 2000],
@@ -100,6 +101,20 @@ class Goods extends \yii\db\ActiveRecord
             'use_attr' => '是否使用规格：0=不使用，1=使用',
             'share_type' => '佣金配比 0--百分比 1--固定金额',
             'integral_give_num' => '第几个获得积分',
+
+            'advance' => '第几个获得积分',
+            'charge' => '百分比手续费',
+            'chargeNum' => '百分比手续费',
+            'charge1' => '百分比手续费2级',
+            'chargeNum1' => '百分比手续费',
+            'charge2' => '百分比手续费3级',
+            'chargeNum2' => '百分比手续费',
+            'charge3' => '百分比手续费级',
+            'charge5' => '百分比手续费级',
+            'chargeNum3' => '百分比手续费',
+            'chargeNum5' => '其他手续费',
+            'is_buy_integral_down' => '欢乐豆对优惠券是否打开 买优惠券',
+            'is_coupon_down' => '优惠券对欢乐豆是否打开 卖优惠券',
         ];
     }
 

@@ -237,7 +237,8 @@ if (!$returnUrl)
                         </div>
                         <div class="col-9">
                             <div class="input-group short-row">
-                                <input readonly class="form-control cat-name" value="<?= isset($goods->cat->name) ? $goods->cat->name : '' ?>">
+                                <input readonly class="form-control cat-name"
+                                       value="<?= isset($goods->cat->name) ? $goods->cat->name : '' ?>">
                                 <input type="hidden" name="model[cat_id]" class="form-control cat-id"
                                        value="<?= isset($goods->cat->id) ? $goods->cat->id : '' ?>">
                                 <span class="input-group-btn">
@@ -246,27 +247,27 @@ if (!$returnUrl)
                             </div>
                         </div>
                     </div>
-<!--                     
-                    <div class="form-group row">
-                        <div class="col-3 text-right">
-                            <label class=" col-form-label">淘宝一键采集</label>
-                        </div>
-                        <div class="col-9">
-                            <div class="input-group short-row">
-                                <input class="form-control copy-url" placeholder="请输入淘宝商品详情地址连接">
-                                <span class="input-group-btn">
-                                    <a class="btn btn-secondary copy-btn" href="javascript:">立即获取</a>
-                                </span>
-                            </div>
-                            <div class="short-row text-muted fs-sm">
-                                例如：商品链接为:http://item.taobao.com/item.htm?id=522155891308
-                                或:http://detail.tmall.com/item.htm?id=522155891308
-                            </div>
-                            <div class="short-row text-muted fs-sm">若不使用，则该项为空</div>
-                            <div class="copy-error text-danger fs-sm" hidden></div>
-                        </div>
-                    </div>
- -->
+                    <!--
+                                        <div class="form-group row">
+                                            <div class="col-3 text-right">
+                                                <label class=" col-form-label">淘宝一键采集</label>
+                                            </div>
+                                            <div class="col-9">
+                                                <div class="input-group short-row">
+                                                    <input class="form-control copy-url" placeholder="请输入淘宝商品详情地址连接">
+                                                    <span class="input-group-btn">
+                                                        <a class="btn btn-secondary copy-btn" href="javascript:">立即获取</a>
+                                                    </span>
+                                                </div>
+                                                <div class="short-row text-muted fs-sm">
+                                                    例如：商品链接为:http://item.taobao.com/item.htm?id=522155891308
+                                                    或:http://detail.tmall.com/item.htm?id=522155891308
+                                                </div>
+                                                <div class="short-row text-muted fs-sm">若不使用，则该项为空</div>
+                                                <div class="copy-error text-danger fs-sm" hidden></div>
+                                            </div>
+                                        </div>
+                     -->
                     <div class="form-group row">
                         <div class="col-3 text-right">
                             <label class=" col-form-label">京东一键采集</label>
@@ -405,7 +406,7 @@ if (!$returnUrl)
                                 <div class="video-preview"></div>
                                 <div>
                                     <span
-                                        class="text-danger fs-sm">支持格式mp4;支持编码H.264;视频大小不能超过<?= \app\models\UploadForm::getMaxUploadSize() ?>
+                                            class="text-danger fs-sm">支持格式mp4;支持编码H.264;视频大小不能超过<?= \app\models\UploadForm::getMaxUploadSize() ?>
                                         MB</span></div>
                             </div>
                         </div>
@@ -510,7 +511,7 @@ if (!$returnUrl)
                                 <option value="0">默认模板</option>
                                 <?php foreach ($postageRiles as $p): ?>
                                     <option
-                                        value="<?= $p->id ?>" <?= $p->id == $goods['freight'] ? 'selected' : '' ?>><?= $p->name ?></option>
+                                            value="<?= $p->id ?>" <?= $p->id == $goods['freight'] ? 'selected' : '' ?>><?= $p->name ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -673,12 +674,12 @@ if (!$returnUrl)
                                                        v-bind:name="'attr['+index+'][price]'"
                                                        v-bind:value="item.price">
                                             </td>
-<!--                                            <td>-->
-<!--                                                <input class="form-control form-control-sm" type="number" min="0"-->
-<!--                                                       step="0.01" style="width: 70px"-->
-<!--                                                       v-bind:name="'attr['+index+'][integral_buy]'"-->
-<!--                                                       v-bind:value="item.integral_buy">-->
-<!--                                            </td>-->
+                                            <!--                                            <td>-->
+                                            <!--                                                <input class="form-control form-control-sm" type="number" min="0"-->
+                                            <!--                                                       step="0.01" style="width: 70px"-->
+                                            <!--                                                       v-bind:name="'attr['+index+'][integral_buy]'"-->
+                                            <!--                                                       v-bind:value="item.integral_buy">-->
+                                            <!--                                            </td>-->
                                             <td>
                                                 <input class="form-control form-control-sm" type="number" min="0"
                                                        step="0.01" style="width: 70px"
@@ -744,8 +745,9 @@ if (!$returnUrl)
                         </div>
                         <div class="col-9">
                             <div class="input-group short-row">
-                                <input type="text" step="1" class="form-control short-row" name="model[integral_give_num]"
-                                       value="<?= $goods['integral_give_num']?>">
+                                <input type="text" step="1" class="form-control short-row"
+                                       name="model[integral_give_num]"
+                                       value="<?= $goods['integral_give_num'] ?>">
                                 <span class="input-group-addon">前面几个</span>
                             </div>
                             <div class="fs-sm text-muted">
@@ -828,7 +830,7 @@ if (!$returnUrl)
                                 <div flex="dir:left box:last">
                                     <input type="hidden" name="goods_card[]" :value="item.id">
                                     <div
-                                        style="width: 100%;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;word-break: break-all">
+                                            style="width: 100%;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;word-break: break-all">
                                         {{item.name}}
                                     </div>
                                     <div class="pl-2" style="border-left: 1px solid #ddd;">
@@ -872,13 +874,15 @@ if (!$returnUrl)
                             -->
                             <label class="radio-label">
                                 <input <?= $goods['individual_share'] == 0 ? 'checked' : null ?>
-                                    value="0" name="model[individual_share]" type="radio" class="custom-control-input">
+                                        value="0" name="model[individual_share]" type="radio"
+                                        class="custom-control-input">
                                 <span class="label-icon"></span>
                                 <span class="label-text">不开启</span>
                             </label>
                             <label class="radio-label">
                                 <input <?= $goods['individual_share'] == 1 ? 'checked' : null ?>
-                                    value="1" name="model[individual_share]" type="radio" class="custom-control-input">
+                                        value="1" name="model[individual_share]" type="radio"
+                                        class="custom-control-input">
                                 <span class="label-icon"></span>
                                 <span class="label-text">开启</span>
                             </label>
@@ -911,19 +915,19 @@ if (!$returnUrl)
                             -->
                             <label class="radio-label share-type">
                                 <input <?= $goods->share_type == 0 ? 'checked' : null ?>
-                                    name="model[share_type]"
-                                    value="0"
-                                    type="radio"
-                                    class="custom-control-input">
+                                        name="model[share_type]"
+                                        value="0"
+                                        type="radio"
+                                        class="custom-control-input">
                                 <span class="label-icon"></span>
                                 <span class="label-text">百分比</span>
                             </label>
                             <label class="radio-label share-type">
                                 <input <?= $goods->share_type == 1 ? 'checked' : null ?>
-                                    name="model[share_type]"
-                                    value="1"
-                                    type="radio"
-                                    class="custom-control-input">
+                                        name="model[share_type]"
+                                        value="1"
+                                        type="radio"
+                                        class="custom-control-input">
                                 <span class="label-icon"></span>
                                 <span class="label-text">固定金额</span>
                             </label>
@@ -944,7 +948,7 @@ if (!$returnUrl)
                                            step="0.01"
                                            min="0" max="100">
                                     <span
-                                        class="input-group-addon percent"><?= $goods->share_type == 1 ? "元" : "%" ?></span>
+                                            class="input-group-addon percent"><?= $goods->share_type == 1 ? "元" : "%" ?></span>
                                 </div>
                                 <div class="input-group mb-3">
                                     <span class="input-group-addon">二级佣金</span>
@@ -955,7 +959,7 @@ if (!$returnUrl)
                                            step="0.01"
                                            min="0" max="100">
                                     <span
-                                        class="input-group-addon percent"><?= $goods->share_type == 1 ? "元" : "%" ?></span>
+                                            class="input-group-addon percent"><?= $goods->share_type == 1 ? "元" : "%" ?></span>
                                 </div>
                                 <div class="input-group mb-3">
                                     <span class="input-group-addon">三级佣金</span>
@@ -966,7 +970,7 @@ if (!$returnUrl)
                                            step="0.01"
                                            min="0" max="100">
                                     <span
-                                        class="input-group-addon percent"><?= $goods->share_type == 1 ? "元" : "%" ?></span>
+                                            class="input-group-addon percent"><?= $goods->share_type == 1 ? "元" : "%" ?></span>
                                 </div>
                                 <div class="fs-sm">
                                     <a href="<?= $urlManager->createUrl(['mch/share/basic']) ?>"
@@ -995,6 +999,198 @@ if (!$returnUrl)
                     </div>
                 </div>
             </div>
+
+
+            <div class="step-block" flex="dir:left box:first">
+                <div>
+                    <span>预售比例配置</span>
+                    <span class="step-location" id="step6"></span>
+                </div>
+                <div>
+
+                    <div class="form-group row">
+                        <div class="col-3 text-right">
+                            <label class=" col-form-label required">支付金额比例（预售款+余款）</label>
+                        </div>
+                        <div class="col-3">
+                            <div class="col-3">
+                                <div class="input-group short-row">
+                                    <input class="form-control" name="model[advance]"
+                                           value="<?= $goods['advance'] ? $goods['advance'] : 0 ?>">
+                                    <span class="input-group-addon">%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-3 text-right">
+                            <label class=" col-form-label required">积分阶段下降是否打开</label>
+                        </div>
+                        <div class="col-3">
+                            <div class="input-group short-row">
+                                <label class="radio-label">
+                                    <input id="radio1"
+                                           value="0" <?= $goods['is_buy_integral_down'] == 0 ? "checked" : "" ?>
+                                           name="model[is_buy_integral_down]" type="radio" class="custom-control-input">
+                                    <span class="label-icon"></span>
+                                    <span class="label-text">否</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input id="radio2"
+                                           value="1" <?= $goods['is_buy_integral_down'] == 1 ? "checked" : "" ?>
+                                           name="model[is_buy_integral_down]" type="radio" class="custom-control-input">
+                                    <span class="label-icon"></span>
+                                    <span class="label-text">是</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <div class="col-3 text-right">
+                            <label class=" col-form-label required">优惠券阶段下降是否打开</label>
+                        </div>
+                        <div class="col-3">
+                            <div class="input-group short-row">
+                                <label class="radio-label">
+                                    <input id="radio1"
+                                           value="0" <?= $goods['is_coupon_down'] == 0 ? "checked" : "" ?>
+                                           name="model[is_coupon_down]" type="radio" class="custom-control-input">
+                                    <span class="label-icon"></span>
+                                    <span class="label-text">否</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input id="radio2"
+                                           value="1" <?= $goods['is_coupon_down'] == 1 ? "checked" : "" ?>
+                                           name="model[is_coupon_down]" type="radio" class="custom-control-input">
+                                    <span class="label-icon"></span>
+                                    <span class="label-text">是</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-3 text-right">
+                            <label class=" col-form-label required">百分比1级</label>
+                        </div>
+                        <div class="col-3">
+                            <div class="input-group short-row">
+                                <input class="form-control" name="model[charge]"
+                                       value="<?= $goods['charge'] ? $goods['charge'] : 0 ?>">
+                                <span class="input-group-addon">订单</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-3 text-right">
+                            <label class=" col-form-label required">第一级数量</label>
+                        </div>
+                        <div class="col-3">
+                            <div class="input-group short-row">
+                                <input class="form-control" name="model[chargeNum]"
+                                       value="<?= $goods['chargeNum'] ? $goods['chargeNum'] : 0 ?>">
+                                <span class="input-group-addon">张</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-3 text-right">
+                            <label class=" col-form-label required">百分比2级</label>
+                        </div>
+                        <div class="col-3">
+                            <div class="input-group short-row">
+                                <input class="form-control" name="model[charge1]"
+                                       value="<?= $goods['charge1'] ? $goods['charge1'] : 0 ?>">
+                                <span class="input-group-addon">%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-3 text-right">
+                            <label class=" col-form-label required">第2级数量</label>
+                        </div>
+                        <div class="col-3">
+                            <div class="input-group short-row">
+                                <input class="form-control" name="model[chargeNum1]"
+                                       value="<?= $goods['chargeNum1'] ? $goods['chargeNum1'] : 0 ?>">
+                                <span class="input-group-addon">订单</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-3 text-right">
+                            <label class=" col-form-label required">百分比3级</label>
+                        </div>
+                        <div class="col-3">
+                            <div class="input-group short-row">
+                                <input class="form-control" name="model[charge2]"
+                                       value="<?= $goods['charge2'] ? $goods['charge2'] : 0 ?>">
+                                <span class="input-group-addon">%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-3 text-right">
+                            <label class=" col-form-label required">第3级数量</label>
+                        </div>
+                        <div class="col-3">
+                            <div class="input-group short-row">
+                                <input class="form-control" name="model[chargeNum2]"
+                                       value="<?= $goods['chargeNum2'] ? $goods['chargeNum2'] : 0 ?>">
+                                <span class="input-group-addon">订单</span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <div class="col-3 text-right">
+                            <label class=" col-form-label required">百分比four级</label>
+                        </div>
+                        <div class="col-3">
+                            <div class="input-group short-row">
+                                <input class="form-control" name="model[charge3]"
+                                       value="<?= $goods['charge3'] ? $goods['charge3'] : 0 ?>">
+                                <span class="input-group-addon">%</span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <div class="col-3 text-right">
+                            <label class=" col-form-label required">第four级数量</label>
+                        </div>
+                        <div class="col-3">
+                            <div class="input-group short-row">
+                                <input class="form-control" name="model[chargeNum3]"
+                                       value="<?= $goods['chargeNum3'] ? $goods['chargeNum3'] : 0 ?>">
+                                <span class="input-group-addon">订单</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-3 text-right">
+                            <label class=" col-form-label required">其他比例</label>
+                        </div>
+                        <div class="col-3">
+                            <div class="input-group short-row">
+                                <input class="form-control" name="model[charge5]"
+                                       value="<?= $goods['charge5'] ? $goods['charge5'] : 0 ?>">
+                                <span class="input-group-addon">%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
             <div class="form-group row text-center">
                 <div class="form-group-label col-sm-2 text-right mt-3">

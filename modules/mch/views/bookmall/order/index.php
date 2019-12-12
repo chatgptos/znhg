@@ -225,8 +225,8 @@ isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
                        href="<?= yii\helpers\Url::to(array_merge(['bookmall/order/index'], $condition, ['status' => 1])) ?>">待发货<?= isset($store_data['status_count']['status_1']) ? '(' . $store_data['status_count']['status_1'] . ')' : null ?></a>
                 </li>
                 <li class="nav-item">
-                    <a class="status-item nav-link <?= $status == 1 ? 'active' : null ?>"
-                       href="<?= yii\helpers\Url::to(array_merge(['bookmall/order/index'], $condition, ['status' => 1])) ?>">待发货<?= isset($store_data['status_count']['status_1']) ? '(' . $store_data['status_count']['status_1'] . ')' : null ?></a>
+                    <a class="status-item nav-link <?= $status == 2 ? 'active' : null ?>"
+                       href="<?= yii\helpers\Url::to(array_merge(['bookmall/order/index'], $condition, ['status' => 2])) ?>">待收货<?= isset($store_data['status_count']['status_1']) ? '(' . $store_data['status_count']['status_1'] . ')' : null ?></a>
                 </li>
                 <li class="nav-item">
                     <a class="status-item  nav-link <?= $status == 3 ? 'active' : null ?>"
