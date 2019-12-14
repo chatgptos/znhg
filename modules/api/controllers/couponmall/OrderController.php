@@ -8,20 +8,20 @@
 namespace app\modules\api\controllers\couponmall;
 
 
-use app\models\QsCmGoods;
-use app\models\QsCmOrder;
-use app\models\QsCmOrderForm;
-use app\models\Shop;
-use app\models\YyGoods;
-use app\models\YyOrder;
-use app\models\YyOrderForm;
-use app\modules\api\behaviors\LoginBehavior;
+use app\modules\api\models\couponmall\Goods;
+use app\modules\api\models\couponmall\Order;
+use app\modules\api\models\couponmall\OrderForm;
 use app\modules\api\models\couponmall\OrderClerkForm;
 use app\modules\api\models\couponmall\OrderCommentForm;
 use app\modules\api\models\couponmall\OrderCommentPreview;
 use app\modules\api\models\couponmall\OrderListForm;
 use app\modules\api\models\couponmall\OrderPreviewFrom;
 use app\modules\api\models\QrcodeForm;
+use app\models\Shop;
+use app\models\YyGoods;
+use app\models\YyOrder;
+use app\models\YyOrderForm;
+use app\modules\api\behaviors\LoginBehavior;
 
 class OrderController extends Controller
 {
@@ -81,7 +81,7 @@ class OrderController extends Controller
      */
     public function actionCancel($id = 0)
     {
-        $order = QsCmOrder::find()
+        $order = Order::find()
             ->andWhere([
                 'is_delete' => 0,
                 'store_id' => $this->store->id,
@@ -100,7 +100,7 @@ class OrderController extends Controller
         $order->is_cancel = 1;
 
         //库存
-        $goods = QsCmGoods::find()
+        $goods = Goods::find()
             ->andWhere(['id'=>$order->goods_id,'is_delete'=>0,'status'=>1,'store_id'=>$this->store_id])->one();
         if (!$goods){
             return [
@@ -140,7 +140,7 @@ class OrderController extends Controller
      */
     public function actionOrderDetails($id = 0)
     {
-        $order = QsCmOrder::find()
+        $order = Order::find()
             ->alias('o')
             ->select([
                 'o.*',
@@ -153,7 +153,7 @@ class OrderController extends Controller
                 'o.is_cancel' => 0,
                 'o.id' => $id,
             ])
-            ->leftJoin(['g'=>QsCmGoods::tableName()],'g.id=o.goods_id')
+            ->leftJoin(['g'=>Goods::tableName()],'g.id=o.goods_id')
             ->asArray()->one();
         if (!$order){
             $this->renderJson([
@@ -162,7 +162,7 @@ class OrderController extends Controller
             ]);
         }
 
-        $orderForm = QsCmOrderForm::find()
+        $orderForm = OrderForm::find()
             ->andWhere(['store_id'=>$this->store->id,'order_id'=>$order['id']])
             ->select('key,value')
             ->asArray()
@@ -204,7 +204,7 @@ class OrderController extends Controller
      */
     public function actionClerkOrderDetails($id = 0)
     {
-        $order = QsCmOrder::find()
+        $order = Order::find()
             ->alias('o')
             ->select([
                 'o.*',
@@ -216,7 +216,7 @@ class OrderController extends Controller
                 'o.is_cancel' => 0,
                 'o.id' => $id,
             ])
-            ->leftJoin(['g'=>QsCmGoods::tableName()],'g.id=o.goods_id')
+            ->leftJoin(['g'=>Goods::tableName()],'g.id=o.goods_id')
             ->asArray()->one();
         if (!$order){
             $this->renderJson([
@@ -225,7 +225,7 @@ class OrderController extends Controller
             ]);
         }
 
-        $orderForm = QsCmOrderForm::find()
+        $orderForm = OrderForm::find()
             ->andWhere(['store_id'=>$this->store->id,'order_id'=>$order['id']])
             ->select('key,value')
             ->asArray()
@@ -269,7 +269,7 @@ class OrderController extends Controller
     public function actionGetQrcode()
     {
         $order_no = \Yii::$app->request->get('order_no');
-        $order = QsCmOrder::findOne(['order_no'=>$order_no,'store_id'=>$this->store->id]);
+        $order = Order::findOne(['order_no'=>$order_no,'store_id'=>$this->store->id]);
 //        if(!empty($order->offline_qrcode)){
 //            return json_encode([
 //                'code' => 0,
@@ -323,7 +323,7 @@ class OrderController extends Controller
     public function actionApplyRefund()
     {
         $order_id = \Yii::$app->request->get('order_id');
-        $order = QsCmOrder::find()
+        $order = Order::find()
             ->andWhere([
                 'id'            => $order_id,
                 'is_delete'     => 0,

@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\modules\api\models\couponmall;
 
 use Yii;
 
@@ -12,7 +12,7 @@ use Yii;
  * @property string $success_notice
  * @property string $refund_notice
  */
-class QsCmSetting extends \yii\db\ActiveRecord
+class Setting extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc

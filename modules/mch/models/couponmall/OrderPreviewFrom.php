@@ -5,12 +5,12 @@
  * Time: 11:32
  */
 
-namespace app\modules\api\models\couponmall;
+namespace app\modules\mch\models\couponmall;
 
 
 use app\models\IntegralLog;
 use app\models\User;
-use app\modules\api\models\Model;
+use app\modules\mch\models\Model;
 
 class OrderPreviewFrom extends Model
 {

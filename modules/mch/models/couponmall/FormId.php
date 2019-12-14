@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\modules\mch\models\couponmall;
 
 use Yii;
 
@@ -17,7 +17,7 @@ use Yii;
  * @property integer $send_count
  * @property integer $addtime
  */
-class QsCmFormId extends \yii\db\ActiveRecord
+class FormId extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc

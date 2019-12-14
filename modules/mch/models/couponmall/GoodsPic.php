@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\modules\mch\models\couponmall;
 
 use Yii;
 
@@ -12,7 +12,7 @@ use Yii;
  * @property string $pic_url
  * @property integer $is_delete
  */
-class QsCmGoodsPic extends \yii\db\ActiveRecord
+class GoodsPic extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc

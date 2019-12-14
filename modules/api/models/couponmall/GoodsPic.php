@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\modules\api\models\couponmall;
 
 use Yii;
 
@@ -12,14 +12,14 @@ use Yii;
  * @property string $pic_url
  * @property integer $is_delete
  */
-class ZcGoodsPic extends \yii\db\ActiveRecord
+class GoodsPic extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%zc_goods_pic}}';
+        return '{{%qs_goods_pic}}';
     }
 
     /**

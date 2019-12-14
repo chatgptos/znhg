@@ -5,11 +5,11 @@
  * Time: 14:53
  */
 
-namespace app\modules\api\models\couponmall;
+namespace app\modules\mch\models\couponmall;
 
 
 use app\models\Store;
-use app\modules\api\models\Model;
+use app\modules\mch\models\Model;
 use Curl\Curl;
 use Grafika\Color;
 use Grafika\Grafika;

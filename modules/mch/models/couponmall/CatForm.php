@@ -8,12 +8,11 @@
 namespace app\modules\mch\models\couponmall;
 
 
-use app\models\QsCmCat;
-use app\models\YyCat;
+use app\models\Cat;
 use app\modules\mch\models\Model;
 use yii\data\Pagination;
 
-class QsCmCatForm extends Model
+class CatForm extends Model
 {
     public $cat;
 
@@ -56,7 +55,7 @@ class QsCmCatForm extends Model
      */
     public function getList($store_id)
     {
-        $query = QsCmCat::find()
+        $query = Cat::find()
             ->andWhere(['is_delete'=>0,'store_id'=>$store_id]);
         $count = $query->count();
         $p = new Pagination(['totalCount' => $count, 'pageSize' => 20]);

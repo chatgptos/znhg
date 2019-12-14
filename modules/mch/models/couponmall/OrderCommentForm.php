@@ -5,10 +5,10 @@
  * Time: 10:11
  */
 
-namespace app\modules\api\models\couponmall;
+namespace app\modules\mch\models\couponmall;
 
 
-use app\modules\api\models\Model;
+use app\modules\mch\models\Model;
 use yii\helpers\Html;
 
 class OrderCommentForm extends Model

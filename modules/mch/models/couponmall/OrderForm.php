@@ -7,20 +7,12 @@
 
 namespace app\modules\mch\models\couponmall;
 
-
-use app\models\Goods;
+use app\models\User;
+use app\models\Model;
+use yii\data\Pagination;
 use app\models\PtGoods;
 use app\models\PtOrder;
 use app\models\PtOrderDetail;
-use app\models\QsCmGoods;
-use app\models\QsCmOrder;
-use app\models\QsCmOrderForm;
-use app\models\User;
-use app\models\YyGoods;
-use app\models\YyOrder;
-use app\models\YyOrderForm;
-use app\models\Model;
-use yii\data\Pagination;
 
 class OrderForm extends Model
 {
@@ -55,7 +47,7 @@ class OrderForm extends Model
         if (!$this->validate())
             return $this->getModelError();
 
-        $query = QsCmOrder::find()
+        $query = Order::find()
             ->alias('o')
             ->select([
                 'o.*',
@@ -63,7 +55,7 @@ class OrderForm extends Model
                 'u.nickname',
             ])
             ->andWhere(['o.is_delete' => 0, 'o.store_id' => $this->store_id])
-            ->leftJoin(['g' => QsCmGoods::tableName()], 'g.id=o.goods_id')
+            ->leftJoin(['g' => Goods::tableName()], 'g.id=o.goods_id')
             ->leftJoin(['u' => User::tableName()], 'u.id=o.user_id');
         if ($this->status == 0) {//未付款
             $query->andWhere([
@@ -145,7 +137,7 @@ class OrderForm extends Model
             ->all();
 
         foreach ($list AS $k => $v) {
-            $list[$k]['orderFrom'] = QsCmOrderForm::find()
+            $list[$k]['orderFrom'] = OrderForm::find()
                 ->select([
                     'key', 'value'
                 ])

@@ -7,6 +7,8 @@
 
 namespace app\modules\mch\models\crowd;
 
+use app\models\Store;
+use app\models\User;
 use xanyext\wechat\Wechat;
 
 /**

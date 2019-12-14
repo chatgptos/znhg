@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\modules\api\models\couponmall;
 
 use Yii;
 
@@ -19,14 +19,14 @@ use Yii;
  * @property integer $is_delete
  * @property integer $addtime
  */
-class ZcOrderComment extends \yii\db\ActiveRecord
+class OrderComment extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%zc_order_comment}}';
+        return '{{%qs_order_comment}}';
     }
 
     /**

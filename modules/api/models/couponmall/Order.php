@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\modules\api\models\couponmall;
 
 use Yii;
 
@@ -32,7 +32,7 @@ use Yii;
  * @property string $coupon
  * @property string $integral
  */
-class QsCmOrder extends \yii\db\ActiveRecord
+class Order extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc

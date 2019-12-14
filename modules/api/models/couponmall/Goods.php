@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\modules\api\models\couponmall;
 
 use Yii;
 
@@ -32,7 +32,7 @@ use Yii;
  *
  *
  */
-class QsCmGoods extends \yii\db\ActiveRecord
+class Goods extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
@@ -93,6 +93,6 @@ class QsCmGoods extends \yii\db\ActiveRecord
      */
     public function goodsPicList()
     {
-        return QsCmGoodsPic::findAll(['goods_id'=>$this->id,'is_delete'=>0]);
+        return GoodsPic::findAll(['goods_id'=>$this->id,'is_delete'=>0]);
     }
 }

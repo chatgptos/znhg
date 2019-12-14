@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\modules\mch\models\couponmall;
 
 use Yii;
 
@@ -20,14 +20,14 @@ use Yii;
  * @property integer $addtime
  * @property string $option
  */
-class ZcForm extends \yii\db\ActiveRecord
+class Form extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%zc_form}}';
+        return '{{%qs_form}}';
     }
 
     /**

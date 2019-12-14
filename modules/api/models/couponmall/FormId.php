@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\modules\api\models\couponmall;
 
 use Yii;
 
@@ -17,14 +17,14 @@ use Yii;
  * @property integer $send_count
  * @property integer $addtime
  */
-class ZcFormId extends \yii\db\ActiveRecord
+class FormId extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%zc_form_id}}';
+        return '{{%qs_form_id}}';
     }
 
     /**

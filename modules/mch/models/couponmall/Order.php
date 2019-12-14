@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\modules\mch\models\couponmall;
 
 use Yii;
 
@@ -29,15 +29,17 @@ use Yii;
  * @property string $shop_id
  * @property integer $is_refund
  * @property string $form_id
+ * @property string $coupon
+ * @property string $integral
  */
-class ZcOrder extends \yii\db\ActiveRecord
+class Order extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%zc_order}}';
+        return '{{%qs_order}}';
     }
 
     /**
@@ -82,6 +84,29 @@ class ZcOrder extends \yii\db\ActiveRecord
             'shop_id' => '自提门店ID',
             'is_refund' => '是否退款',
             'form_id' => '表单ID',
+            'coupon' => '欢乐豆',
+            'integral' => '积分',
+//            'express_price' => '运费',
+//            'name' => '收货人姓名',
+//            'mobile' => '收货人手机',
+//            'address' => '收货地址',
+//            'remark' => '订单备注',
+//            'is_send' => '发货状态：0=未发货，1=已发货',
+//            'send_time' => '发货时间',
+//            'express' => '物流公司',
+//            'express_no' => 'Express No',
+//            'is_confirm' => '确认收货状态：0=未确认，1=已确认收货',
+//            'confirm_time' => '确认收货时间',
+//            'is_price' => '是否发放佣金',
+//            'parent_id' => '用户上级ID',
+//            'first_price' => '一级佣金',
+//            'second_price' => '二级佣金',
+//            'third_price' => '三级佣金',
+//            'coupon_sub_price' => '优惠券抵消金额',
+//            'address_data' => '收货地址信息，json格式',
+//            'content' => '备注',
+//            'is_offline' => '是否到店自提 0--否 1--是',
+//            'before_update_price' => '修改前的价格',
         ];
     }
 }

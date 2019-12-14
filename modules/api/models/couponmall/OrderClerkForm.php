@@ -7,11 +7,7 @@
 
 namespace app\modules\api\models\couponmall;
 
-
-use app\models\Order;
-use app\models\QsCmOrder;
 use app\models\User;
-use app\models\YyOrder;
 use app\modules\api\models\Model;
 
 /**
@@ -32,7 +28,7 @@ class OrderClerkForm extends Model
      */
     public function save()
     {
-        $order = QsCmOrder::findOne(['id'=>$this->order_id,'store_id'=>$this->store_id,'is_pay'=>1,'apply_delete'=>0]);
+        $order = Order::findOne(['id'=>$this->order_id,'store_id'=>$this->store_id,'is_pay'=>1,'apply_delete'=>0]);
         if(!$order){
             return [
                 'code'=>1,

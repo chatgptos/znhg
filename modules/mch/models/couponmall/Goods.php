@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\modules\mch\models\couponmall;
 
 use Yii;
 
@@ -23,15 +23,23 @@ use Yii;
  * @property string $sales
  * @property string $shop_id
  * @property string $store_id
+ * @property string $coupon
+ * @property string $integral
+ * @property string $stock
+ * @property string $buy_max
+ * @property string $buy_max_day
+ *
+ *
+ *
  */
-class ZcGoods extends \yii\db\ActiveRecord
+class Goods extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%zc_goods}}';
+        return '{{%qs_goods}}';
     }
 
     /**
@@ -41,7 +49,7 @@ class ZcGoods extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'price', 'original_price', 'detail', 'service', 'store_id'], 'required'],
-            [['price', 'original_price'], 'number'],
+            [['price', 'original_price','stock'], 'number'],
             [['detail', 'cover_pic'], 'string'],
             [['cat_id', 'status', 'sort', 'virtual_sales', 'addtime', 'is_delete', 'sales', 'store_id'], 'integer'],
             [['name','shop_id'], 'string', 'max' => 255],
@@ -69,8 +77,13 @@ class ZcGoods extends \yii\db\ActiveRecord
             'addtime' => '添加时间',
             'is_delete' => '是否删除',
             'sales' => '实际销量',
+            'stock' => '库存',
             'shop_id' => '门店id',
             'store_id' => 'Store ID',
+            'coupon' => 'Store ID',
+            'integral' => 'Store ID',
+            'buy_max' => '最多允许购买',
+            'buy_max_day' => '每日最多购买',
         ];
     }
 
@@ -80,6 +93,6 @@ class ZcGoods extends \yii\db\ActiveRecord
      */
     public function goodsPicList()
     {
-        return YyGoodsPic::findAll(['goods_id'=>$this->id,'is_delete'=>0]);
+        return GoodsPic::findAll(['goods_id'=>$this->id,'is_delete'=>0]);
     }
 }

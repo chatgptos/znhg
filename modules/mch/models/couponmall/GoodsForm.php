@@ -7,21 +7,10 @@
 
 namespace app\modules\mch\models\couponmall;
 
-
-use app\models\Attr;
-use app\models\AttrGroup;
-use app\models\PtGoods;
-use app\models\PtGoodsPic;
-use app\models\QsCmForm;
-use app\models\QsCmGoods;
-use app\models\QsCmGoodsPic;
-use app\models\YyForm;
-use app\models\YyGoods;
-use app\models\YyGoodsPic;
 use app\modules\mch\models\Model;
 use yii\data\Pagination;
 
-class QsCmGoodsForm extends Model
+class GoodsForm extends Model
 {
     public $goods;
 
@@ -117,7 +106,7 @@ class QsCmGoodsForm extends Model
      */
     public function getList($store_id)
     {
-        $query = QsCmGoods::find()
+        $query = Goods::find()
             ->alias('g')
             ->andWhere(['g.is_delete' => 0, 'g.store_id' => $store_id])
             ->select(['g.*', 'c.name AS cname'])
@@ -178,18 +167,18 @@ class QsCmGoodsForm extends Model
 
             $goods->attributes = $this->attributes;
             if ($goods->save()) {
-                QsCmGoodsPic::updateAll(['is_delete' => 1], ['goods_id' => $goods->id]);
+                GoodsPic::updateAll(['is_delete' => 1], ['goods_id' => $goods->id]);
                 foreach ($this->goods_pic_list as $pic_url) {
-                    $goods_pic = new QsCmGoodsPic();
+                    $goods_pic = new GoodsPic();
                     $goods_pic->goods_id = $goods->id;
                     $goods_pic->pic_url = $pic_url;
                     $goods_pic->is_delete = 0;
                     $goods_pic->save();
                 }
 
-                QsCmForm::updateAll(['is_delete' => 1], ['goods_id'=>$goods->id]);
+                Form::updateAll(['is_delete' => 1], ['goods_id'=>$goods->id]);
                 foreach ($this->form_list AS $form){
-                    $form_list = new QsCmForm();
+                    $form_list = new Form();
                     $form_list->goods_id = $goods->id;
                     $form_list->store_id = $this->store_id;
                     $form_list->name = $form['name'];

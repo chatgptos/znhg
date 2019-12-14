@@ -8,25 +8,13 @@
 namespace app\modules\api\models\couponmall;
 
 
-use app\models\Article;
-use app\models\Order;
-use app\models\PtGoods;
-use app\models\PtGoodsPic;
-use app\models\PtOrder;
-use app\models\PtOrderComment;
 use app\models\PtOrderDetail;
-use app\models\QsCmGoods;
-use app\models\QsCmGoodsPic;
-use app\models\QsCmOrderComment;
 use app\models\Shop;
 use app\models\User;
-use app\models\YyGoods;
-use app\models\YyGoodsPic;
-use app\models\YyOrderComment;
 use app\modules\api\models\Model;
 use yii\data\Pagination;
 
-class QsCmGoodsForm extends Model
+class GoodsForm extends Model
 {
     public $page = 0;
     public $store_id;
@@ -47,7 +35,7 @@ class QsCmGoodsForm extends Model
         $page = \Yii::$app->request->get('page')?:1;
         $limit = (int)\Yii::$app->request->get('limit')?:6;
         $cid = \Yii::$app->request->get('cid');
-        $query = QsCmGoods::find()
+        $query = Goods::find()
               ->andWhere(['is_delete' => 0, 'store_id' => $this->store_id, 'status' => 1]);
         if ((int)$cid){
             // 分类
@@ -76,11 +64,11 @@ class QsCmGoodsForm extends Model
      */
     public function getInfo()
     {
-        $info = QsCmGoods::find()
+        $info = Goods::find()
             ->andWhere(['is_delete'=>0,'store_id'=>$this->store_id,'status'=>1,'id'=>$this->gid])
             ->asArray()
             ->one();
-        $goods = QsCmGoods::find()
+        $goods = Goods::find()
             ->andWhere(['is_delete'=>0,'store_id'=>$this->store_id,'status'=>1,'id'=>$this->gid])->one();
         if (!$info){
             return [
@@ -88,7 +76,7 @@ class QsCmGoodsForm extends Model
                 'msg'   => '商品不存在或已下架',
             ];
         }
-        $info['pic_list'] = QsCmGoodsPic::find()
+        $info['pic_list'] = GoodsPic::find()
             ->select('pic_url')
             ->andWhere(['goods_id'=>$this->gid,'is_delete'=>0])
             ->column();
@@ -141,7 +129,7 @@ class QsCmGoodsForm extends Model
      */
     public function comment()
     {
-        $query = QsCmOrderComment::find()
+        $query = OrderComment::find()
             ->alias('c')
             ->select([
                 'c.score','c.content','c.pic_list','c.addtime',

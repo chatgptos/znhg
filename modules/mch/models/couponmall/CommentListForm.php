@@ -5,11 +5,11 @@
  * Time: 15:07
  */
 
-namespace app\modules\api\models\couponmall;
+namespace app\modules\mch\models\couponmall;
 
 
 use app\models\User;
-use app\modules\api\models\Model;
+use app\modules\mch\models\Model;
 use yii\data\Pagination;
 
 class CommentListForm extends Model

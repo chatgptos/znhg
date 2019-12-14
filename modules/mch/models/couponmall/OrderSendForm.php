@@ -8,15 +8,9 @@
 namespace app\modules\mch\models\couponmall;
 
 
-use app\models\FormId;
-use app\models\Goods;
-use app\models\Order;
 use app\models\OrderDetail;
-use app\models\QsCmOrder;
 use app\models\Store;
 use app\models\User;
-use app\models\WechatTemplateMessage;
-use app\models\WechatTplMsgSender;
 use app\modules\mch\models\Model;
 
 class OrderSendForm extends Model
@@ -51,7 +45,7 @@ class OrderSendForm extends Model
     {
         if (!$this->validate())
             return $this->getModelError();
-        $order = QsCmOrder::findOne([
+        $order = Order::findOne([
             'is_delete' => 0,
             'store_id' => $this->store_id,
             'id' => $this->order_id,

@@ -5,8 +5,10 @@
  * Time: 11:53
  */
 
-namespace app\models;
+namespace app\modules\mch\models\couponmall;
 
+use app\models\Store;
+use app\models\User;
 use xanyext\wechat\Wechat;
 
 /**
@@ -17,7 +19,7 @@ use xanyext\wechat\Wechat;
  * @property FormId $form_id
  * @property Wechat $wechat
  */
-class ZcWechatTplMsgSender
+class WechatTplMsgSender
 {
     public $store_id;
     public $order_id;
@@ -41,8 +43,8 @@ class ZcWechatTplMsgSender
         $this->order_id = $order_id;
         $this->wechat = $wechat;
         $this->store = Store::findOne($this->store_id);
-        $this->order = ZcOrder::findOne($this->order_id);
-        $this->setting = ZcSetting::findOne(['store_id' => $this->store->id]);
+        $this->order = Order::findOne($this->order_id);
+        $this->setting = Setting::findOne(['store_id' => $this->store->id]);
         if (!$this->order)
             return;
         $this->user = User::findOne($this->order->user_id);
@@ -57,7 +59,7 @@ class ZcWechatTplMsgSender
         try {
             if (!$this->setting->success_notice)
                 return;
-            $goods = ZcGoods::find()
+            $goods = Goods::find()
                 ->select('name')
                 ->andWhere(['id'=>$this->order->goods_id])
                 ->one();
@@ -65,7 +67,7 @@ class ZcWechatTplMsgSender
                 'touser' => $this->user->wechat_open_id,
                 'template_id' => $this->setting->success_notice,
                 'form_id' => $this->order->form_id,
-                'page' => 'pages/book/order/order?status=1',
+                'page' => 'pages/couponmall/order/order?status=1',
                 'data' => [
                     'keyword1' => [
                         'value' => $this->order->order_no,
@@ -106,7 +108,7 @@ class ZcWechatTplMsgSender
                 'touser' => $this->user->wechat_open_id,
                 'template_id' => $this->setting->refund_notice,
                 'form_id' => $this->order->form_id,
-                'page' => 'pages/order/order?status=4',
+                'page' => 'pages/couponmall/order?status=4',
                 'data' => [
                     'keyword1' => [
                         'value' => $refund_price,

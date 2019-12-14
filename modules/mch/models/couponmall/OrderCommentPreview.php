@@ -5,9 +5,9 @@
  * Time: 17:23
  */
 
-namespace app\modules\api\models\couponmall;
+namespace app\modules\mch\models\couponmall;
 
-use app\modules\api\models\Model;
+use app\modules\mch\models\Model;
 
 class OrderCommentPreview extends Model
 {

@@ -5,9 +5,9 @@
  * Time: 14:30
  */
 
-namespace app\modules\api\models\couponmall;
+namespace app\modules\mch\models\couponmall;
 
-use app\modules\api\models\Model;
+use app\modules\mch\models\Model;
 use yii\data\Pagination;
 
 class OrderListForm extends Model

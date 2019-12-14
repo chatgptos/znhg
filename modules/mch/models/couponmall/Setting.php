@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\modules\mch\models\couponmall;
 
 use Yii;
 
@@ -12,14 +12,14 @@ use Yii;
  * @property string $success_notice
  * @property string $refund_notice
  */
-class ZcSetting extends \yii\db\ActiveRecord
+class Setting extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%zc_setting}}';
+        return '{{%qs_setting}}';
     }
 
     /**

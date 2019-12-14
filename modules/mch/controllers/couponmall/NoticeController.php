@@ -8,17 +8,16 @@
 namespace app\modules\mch\controllers\couponmall;
 
 
-use app\models\QsCmSetting;
 use app\models\YySetting;
-use app\modules\mch\models\book\NoticeForm;
+use app\modules\mch\models\couponmall\Setting;
 
 class NoticeController extends Controller
 {
     public function actionSetting()
     {
-        $setting = QsCmSetting::findOne(['store_id'=>$this->store->id]);
+        $setting = Setting::findOne(['store_id'=>$this->store->id]);
         if (!$setting){
-            $setting = new QsCmSetting();
+            $setting = new Setting();
         }
         if (\Yii::$app->request->isPost){
             $model = \Yii::$app->request->post('model');

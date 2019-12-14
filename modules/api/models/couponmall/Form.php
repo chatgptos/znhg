@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\modules\api\models\couponmall;
 
 use Yii;
 
@@ -20,7 +20,7 @@ use Yii;
  * @property integer $addtime
  * @property string $option
  */
-class QsCmForm extends \yii\db\ActiveRecord
+class Form extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
