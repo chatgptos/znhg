@@ -197,52 +197,10 @@ class StoreDataForm extends Model
                     5
                 ),
             ],
-            'panel_6' => $this->getUserTopList(10),  'panel_5' => [
-                'data_1' => $this->getGoodsSaleTopList(
-                    strtotime(date('Y-m-d 00:00:00')),
-                    strtotime(date('Y-m-d 23:59:59')),
-                    5
-                ),
-                'data_2' => $this->getGoodsSaleTopList(
-                    strtotime(date('Y-m-d 00:00:00') . ' -1 day'),
-                    strtotime(date('Y-m-d 23:59:59') . ' -1 day'),
-                    5
-                ),
-                'data_3' => $this->getGoodsSaleTopList(
-                    strtotime(date('Y-m-d 00:00:00') . ' -6 day'),
-                    strtotime(date('Y-m-d 23:59:59')),
-                    5
-                ),
-                'data_4' => $this->getGoodsSaleTopList(
-                    strtotime(date('Y-m-d 00:00:00') . ' -29 day'),
-                    strtotime(date('Y-m-d 23:59:59')),
-                    5
-                ),
-            ],
+            'panel_6' => $this->getUserTopList(10),
 
+            'panel_8' => $this->getCouponUserTopList(10),
 
-            'panel_8' => $this->getCouponUserTopList(10),  'panel_7' => [
-                'data_1' => $this->getCouponGoodsSaleTopList(
-                    strtotime(date('Y-m-d 00:00:00')),
-                    strtotime(date('Y-m-d 23:59:59')),
-                    5
-                ),
-                'data_2' => $this->getCouponGoodsSaleTopList(
-                    strtotime(date('Y-m-d 00:00:00') . ' -1 day'),
-                    strtotime(date('Y-m-d 23:59:59') . ' -1 day'),
-                    5
-                ),
-                'data_3' => $this->getCouponGoodsSaleTopList(
-                    strtotime(date('Y-m-d 00:00:00') . ' -6 day'),
-                    strtotime(date('Y-m-d 23:59:59')),
-                    5
-                ),
-                'data_4' => $this->getCouponGoodsSaleTopList(
-                    strtotime(date('Y-m-d 00:00:00') . ' -29 day'),
-                    strtotime(date('Y-m-d 23:59:59')),
-                    5
-                ),
-            ],
             'panel_7' => [
                 'data_1' => $this->getCouponGoodsSaleTopList(
                     strtotime(date('Y-m-d 00:00:00')),
@@ -759,17 +717,23 @@ class StoreDataForm extends Model
                 'o.store_id' => $this->store_id,
                 'o.is_pay' => 1,
                 'o.is_delete' => 0,
-            ])->groupBy('o.user_id')->limit($limit)->orderBy('integral,coupon DESC')
+            ])->groupBy('o.user_id')->limit($limit)->orderBy('coupon,integral DESC')
             ->select('u.id,u.nickname,u.avatar_url AS avatar,SUM(o.coupon) AS coupon,SUM(o.integral) AS integral')
             ->asArray()->all();
         if (!$list)
             return [];
         foreach ($list as $i => $item) {
-            $money = doubleval($item['money']);
-            if ($money >= 10000) {
-                $list[$i]['money'] = number_format($money / 10000, 2, '.', '') . 'w';
+            $coupon = doubleval($item['coupon']);
+            if ($coupon >= 10000) {
+                $list[$i]['coupon'] = number_format($coupon / 10000, 2, '.', '') . 'w';
             } else {
-                $list[$i]['money'] = number_format($money, 2, '.', '');
+                $list[$i]['coupon'] = number_format($coupon, 2, '.', '');
+            }
+            $integral = doubleval($item['integral']);
+            if ($coupon >= 10000) {
+                $list[$i]['integral'] = number_format($integral / 10000, 2, '.', '') . 'w';
+            } else {
+                $list[$i]['integral'] = number_format($integral, 2, '.', '');
             }
         }
         return $list;
