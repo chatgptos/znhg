@@ -860,12 +860,12 @@ $this->params['active_nav_group'] = 0;
                         {
                             name: '成交积分',
                             type: 'line',
-                            data: res.data.panel_9.order_goods_price_data.data.coupon,
+                            data: res.data.panel_9.order_goods_price_data.data.integral,
                         },
                         {
                             name: '成交优惠券',
                             type: 'line',
-                            data: res.data.panel_9.order_goods_price_data.data.integral,
+                            data: res.data.panel_9.order_goods_price_data.data.coupon,
                         },
                     ]
                 };
