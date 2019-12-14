@@ -7,20 +7,6 @@
 
 namespace app\modules\mch\models\crowd;
 
-
-use app\models\Attr;
-use app\models\AttrGroup;
-use app\models\PtGoods;
-use app\models\PtGoodsPic;
-use app\models\QsCmForm;
-use app\models\QsCmGoods;
-use app\models\QsCmGoodsPic;
-use app\models\YyForm;
-use app\models\YyGoods;
-use app\models\YyGoodsPic;
-use app\models\ZcForm;
-use app\models\ZcGoods;
-use app\models\ZcGoodsPic;
 use app\modules\mch\models\Model;
 use yii\data\Pagination;
 

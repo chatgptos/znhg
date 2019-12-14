@@ -7,10 +7,6 @@
 
 namespace app\modules\mch\models\crowd;
 
-
-use app\models\QsCmCat;
-use app\models\YyCat;
-use app\models\ZcCat;
 use app\modules\mch\models\Model;
 use yii\data\Pagination;
 
