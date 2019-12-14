@@ -1,5 +1,8 @@
 {
   "pages": [
+    "pages/mall/mall",
+    "pages/counter/index",
+    "pages/mall-crowd/index",
     "pages/index/index",
     "pages/bookmall/order/order",
 
@@ -10,9 +13,6 @@
 
     "pages/order-submit/order-submit",
     "pages/user/user",
-    "pages/mall/mall",
-    "pages/mall-crowd/index",
-    "pages/counter/index",
     "pages/catmall/mall",
     "pages/coupon-merchant-mall/index",
     "pages/cheapmarket/index/cheapmarket",
