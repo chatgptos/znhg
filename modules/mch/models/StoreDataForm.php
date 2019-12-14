@@ -262,7 +262,6 @@ class StoreDataForm extends Model
         ])->sum('coupon');
 
 
-
         $integral_count = User::find()->where([
             'store_id' => $this->store_id,
             'is_delete' => 0,
@@ -277,28 +276,27 @@ class StoreDataForm extends Model
         $jruser_count = User::find()->where([
             'store_id' => $this->store_id,
             'is_delete' => 0,
-        ])->andWhere(['>=', 'addtime', strtotime(date("Y-m-d"),time())])->count();
+        ])->andWhere(['>=', 'addtime', strtotime(date("Y-m-d"), time())])->count();
 
 
         $jrintegral_count = User::find()->where([
             'store_id' => $this->store_id,
             'is_delete' => 0,
-        ])->andWhere(['>=', 'addtime', strtotime(date("Y-m-d"),time())])->sum('integral');;
+        ])->andWhere(['>=', 'addtime', strtotime(date("Y-m-d"), time())])->sum('integral');;
 
 
         $jrhld_count = User::find()->where([
             'store_id' => $this->store_id,
             'is_delete' => 0,
-        ])->andWhere(['>=', 'addtime', strtotime(date("Y-m-d"),time())])->sum('hld');
+        ])->andWhere(['>=', 'addtime', strtotime(date("Y-m-d"), time())])->sum('hld');
 
 
         $jrcoupon_count = User::find()->where([
             'store_id' => $this->store_id,
             'is_delete' => 0,
-        ])->andWhere(['>=', 'addtime', strtotime(date("Y-m-d"),time())])->sum('coupon');
+        ])->andWhere(['>=', 'addtime', strtotime(date("Y-m-d"), time())])->sum('coupon');
 
 
- 
         $htuser_count = User::find()->where([
             'store_id' => $this->store_id,
             'is_delete' => 0,
@@ -323,9 +321,6 @@ class StoreDataForm extends Model
         ])->andWhere(['>=', 'addtime', strtotime('yesterday')])->sum('coupon');;
 
 
-
-
-
         return [
             'user_count' => $user_count ? intval($user_count) : 0,
             'goods_count' => $goods_count ? intval($goods_count) : 0,
@@ -337,10 +332,10 @@ class StoreDataForm extends Model
             'jrintegral_count' => $jrintegral_count ? intval($jrintegral_count) : 0,
             'jrhld_count' => $jrhld_count ? intval($jrhld_count) : 0,
             'jrcoupon_count' => $jrcoupon_count ? intval($jrcoupon_count) : 0,
-            'htuser_count' => $htuser_count-$jruser_count ? intval($htuser_count-$jruser_count) : 0,
-            'htintegral_count' => $htintegral_count-$jrintegral_count ? intval($htintegral_count-$jrintegral_count) : 0,
-            'hthld_count' => $hthld_count-$jrhld_count ? intval($hthld_count-$jrhld_count) : 0,
-            'htcoupon_count' => $htcoupon_count-$jrcoupon_count ? intval($htcoupon_count-$jrcoupon_count) : 0,
+            'htuser_count' => $htuser_count - $jruser_count ? intval($htuser_count - $jruser_count) : 0,
+            'htintegral_count' => $htintegral_count - $jrintegral_count ? intval($htintegral_count - $jrintegral_count) : 0,
+            'hthld_count' => $hthld_count - $jrhld_count ? intval($hthld_count - $jrhld_count) : 0,
+            'htcoupon_count' => $htcoupon_count - $jrcoupon_count ? intval($htcoupon_count - $jrcoupon_count) : 0,
         ];
     }
 
@@ -481,9 +476,9 @@ class StoreDataForm extends Model
         }
         $count = $query->select('SUM(o.coupon) AS coupon  ,SUM(o.integral) AS  integral')->asArray()->one();
 
-        $data=[
-            'coupon'=>$count['coupon'] ? doubleval($count['coupon']) : 0,
-            'integral'=>$count['integral'] ? doubleval($count['integral']) : 0,
+        $data = [
+            'coupon' => $count['coupon'] ? doubleval($count['coupon']) : 0,
+            'integral' => $count['integral'] ? doubleval($count['integral']) : 0,
         ];
         return $data;
     }
@@ -618,9 +613,9 @@ class StoreDataForm extends Model
             $data1[] = $val['coupon'];
             $data2[] = $val['integral'];
         }
-        $data=[
-            'coupon'=>array_reverse($data1),
-            'integral'=>array_reverse($data2),
+        $data = [
+            'coupon' => array_reverse($data1),
+            'integral' => array_reverse($data2),
         ];
 
 //        echo '<pre>';
@@ -662,13 +657,13 @@ class StoreDataForm extends Model
     public function getCouponGoodsSaleTopList($start_time = null, $end_time = null, $limit = 10)
     {
         $query = QsCmOrder::find()->alias('od')
-        ->leftJoin(['g' => QsCmGoods::tableName()], 'od.goods_id=g.id')
-        ->where([
-            'g.store_id' => $this->store_id,
-            'g.is_delete' => 0,
-            'od.is_delete' => 0,
-            'od.is_pay' => 1,
-        ]);
+            ->leftJoin(['g' => QsCmGoods::tableName()], 'od.goods_id=g.id')
+            ->where([
+                'g.store_id' => $this->store_id,
+                'g.is_delete' => 0,
+                'od.is_delete' => 0,
+                'od.is_pay' => 1,
+            ]);
         if ($start_time !== null) {
             $query->andWhere(['>=', 'od.addtime', $start_time]);
         }
@@ -706,7 +701,6 @@ class StoreDataForm extends Model
     }
 
 
-
     /**
      * 获取用户消费排行列表
      */
@@ -717,11 +711,14 @@ class StoreDataForm extends Model
                 'o.store_id' => $this->store_id,
                 'o.is_pay' => 1,
                 'o.is_delete' => 0,
-            ])->groupBy('o.user_id')->limit($limit)->orderBy('coupon,integral DESC')
-            ->select('u.id,u.nickname,u.avatar_url AS avatar,SUM(o.coupon) AS coupon,SUM(o.integral) AS integral')
+            ])->groupBy('o.user_id')
+            ->orderBy('integral DESC ,coupon DESC')
+//            ->orderBy(['integral'=>SORT_DESC,'coupon'=>SORT_DESC])
+            ->limit($limit)
+            ->select('u.id,u.nickname,u.avatar_url AS avatar,SUM(o.coupon) as coupon,SUM(o.integral) as integral')
             ->asArray()->all();
         if (!$list)
-            return [];
+            return []; 
         foreach ($list as $i => $item) {
             $coupon = doubleval($item['coupon']);
             if ($coupon >= 10000) {
