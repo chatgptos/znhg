@@ -5,20 +5,14 @@
  * Time: 16:41
  */
 
-namespace app\modules\api\controllers\crowd;
+namespace app\modules\api\controllers\crowdapply;
 
-use app\models\Banner;
-use app\models\Option;
-use app\models\PtCat;
-use app\models\PtGoods;
-use app\models\YyCat;
-use app\models\YySetting;
-use app\modules\api\models\book\CommentListForm;
-use app\modules\api\models\book\GoodsQrcodeForm;
-use app\modules\api\models\book\ShopListForm;
-use app\modules\api\models\book\QsCmGoodsForm;
-use app\modules\api\models\group\PtGoodsAttrInfoForm;
-use app\modules\api\models\group\PtGoodsForm;
+use app\modules\api\models\crowdapply\Cat;
+use app\modules\api\models\crowdapply\Setting;
+use app\modules\api\models\crowdapply\CommentListForm;
+use app\modules\api\models\crowdapply\GoodsQrcodeForm;
+use app\modules\api\models\crowdapply\ShopListForm;
+use app\modules\api\models\crowdapply\GoodsForm;
 
 /**
  * Class IndexController
@@ -34,19 +28,18 @@ class IndexController extends Controller
     public function actionIndex()
     {
         // 获取导航分类
-        $cat = YyCat::find()
+        $cat = Cat::find()
             ->select('id,name')
             ->andWhere(['is_delete'=>0,'store_id'=>$this->store_id])
             ->orderBy('sort ASC')
             ->asArray()
             ->all();
 //        $ad = Option::get('pt_ad', $this->store_id);
-
-        $yyGoods = new QsCmGoodsForm();
+        $yyGoods = new GoodsForm();
         $yyGoods->store_id = $this->store_id;
         $yyGoods->user_id = \Yii::$app->user->id;
         $goods = $yyGoods->getList();
-        $catShow = YySetting::findOne(['store_id'=>$this->store_id]);
+        $catShow = Setting::findOne(['store_id'=>$this->store_id]);
         return json_encode([
             'code'  => 0,
             'msg'   => 'success',
@@ -64,7 +57,7 @@ class IndexController extends Controller
      */
     public function actionGoodList()
     {
-        $yyGoods = new QsCmGoodsForm();
+        $yyGoods = new GoodsForm();
         $yyGoods->store_id = $this->store_id;
         $yyGoods->user_id = \Yii::$app->user->id;
         $goods = $yyGoods->getList();
@@ -82,7 +75,7 @@ class IndexController extends Controller
      */
     public function actionGoodDetails($gid = 0)
     {
-        $ptGoods = new QsCmGoodsForm();
+        $ptGoods = new GoodsForm();
         $ptGoods->store_id = $this->store_id;
         $ptGoods->gid = $gid;
         $ptGoods->user_id = \Yii::$app->user->id;

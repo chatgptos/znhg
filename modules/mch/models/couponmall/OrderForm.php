@@ -137,7 +137,7 @@ class OrderForm extends Model
             ->all();
 
         foreach ($list AS $k => $v) {
-            $list[$k]['orderFrom'] = OrderForm::find()
+            $list[$k]['orderFrom'] = \app\modules\api\models\couponmall\OrderForm::find()
                 ->select([
                     'key', 'value'
                 ])

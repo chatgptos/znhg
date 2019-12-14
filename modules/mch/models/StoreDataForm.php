@@ -12,8 +12,9 @@ use app\models\Goods;
 use app\models\Order;
 use app\models\OrderDetail;
 use app\models\OrderRefund;
-use app\models\QsCmGoods;
-use app\models\QsCmOrder;
+
+
+
 use app\models\User;
 use app\modules\mch\models\couponmall\OrderForm;
 use yii\helpers\VarDumper;
@@ -419,7 +420,7 @@ class StoreDataForm extends Model
      */
     public function getCouponOrderGoodsCount($start_time = null, $end_time = null)
     {
-        $query = QsCmOrder::find()->alias('o')
+        $query = \app\modules\mch\models\couponmall\Order::find()->alias('o')
             ->where([
                 'o.is_pay' => 1,
                 'o.is_delete' => 0,
@@ -462,7 +463,7 @@ class StoreDataForm extends Model
      */
     public function getCouponOrderPriceCount($start_time = null, $end_time = null)
     {
-        $query = QsCmOrder::find()->alias('o')
+        $query = \app\modules\mch\models\couponmall\Order::find()->alias('o')
             ->where([
                 'o.is_pay' => 1,
                 'o.is_delete' => 0,
@@ -656,8 +657,8 @@ class StoreDataForm extends Model
      */
     public function getCouponGoodsSaleTopList($start_time = null, $end_time = null, $limit = 10)
     {
-        $query = QsCmOrder::find()->alias('od')
-            ->leftJoin(['g' => QsCmGoods::tableName()], 'od.goods_id=g.id')
+        $query = \app\modules\mch\models\couponmall\Order::find()->alias('od')
+            ->leftJoin(['g' => \app\modules\mch\models\couponmall\Goods::tableName()], 'od.goods_id=g.id')
             ->where([
                 'g.store_id' => $this->store_id,
                 'g.is_delete' => 0,
@@ -706,7 +707,7 @@ class StoreDataForm extends Model
      */
     public function getCouponUserTopList($limit = 10)
     {
-        $list = QsCmOrder::find()->alias('o')->leftJoin(['u' => User::tableName()], 'o.user_id=u.id')
+        $list = \app\modules\mch\models\couponmall\Order::find()->alias('o')->leftJoin(['u' => User::tableName()], 'o.user_id=u.id')
             ->where([
                 'o.store_id' => $this->store_id,
                 'o.is_pay' => 1,

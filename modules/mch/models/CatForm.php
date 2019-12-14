@@ -7,7 +7,6 @@
 
 namespace app\modules\mch\models;
 
-use app\models\Cat;
 use app\models\Model;
 use yii\data\Pagination;
 

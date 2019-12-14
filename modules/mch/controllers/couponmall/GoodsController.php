@@ -10,6 +10,7 @@ namespace app\modules\mch\controllers\couponmall;
 
 use app\models\PostageRules;
 use app\modules\mch\models\couponmall\Cat;
+use app\modules\mch\models\couponmall\CatForm;
 use app\modules\mch\models\couponmall\Form;
 use app\modules\mch\models\couponmall\Goods;
 use app\modules\mch\models\couponmall\GoodsForm;
@@ -24,7 +25,7 @@ class GoodsController extends Controller
      */
     public function actionCat()
     {
-        $form = new Form();
+        $form = new CatForm();
         $arr = $form->getList($this->store->id);
         return $this->render('cat',[
             'list'      => $arr[0],
@@ -45,7 +46,7 @@ class GoodsController extends Controller
         if (\Yii::$app->request->isPost){
             $model = \Yii::$app->request->post('model');
             $model['store_id'] = $this->store->id;
-            $form = new Form();
+            $form = new CatForm();
             $form->attributes = $model;
             $form->cat = $cat;
             return json_encode($form->save(),JSON_UNESCAPED_UNICODE);

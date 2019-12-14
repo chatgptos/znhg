@@ -5,20 +5,23 @@
  * Time: 11:28
  */
 
-namespace app\modules\api\controllers\crowd;
+namespace app\modules\api\controllers\crowdapply;
 
 
+use app\modules\api\models\crowdapply\Goods;
+use app\modules\api\models\crowdapply\Order;
+use app\modules\api\models\crowdapply\OrderForm;
+use app\modules\api\models\crowdapply\OrderClerkForm;
+use app\modules\api\models\crowdapply\OrderCommentForm;
+use app\modules\api\models\crowdapply\OrderCommentPreview;
+use app\modules\api\models\crowdapply\OrderListForm;
+use app\modules\api\models\crowdapply\OrderPreviewFrom;
+use app\modules\api\models\QrcodeForm;
 use app\models\Shop;
 use app\models\YyGoods;
 use app\models\YyOrder;
 use app\models\YyOrderForm;
 use app\modules\api\behaviors\LoginBehavior;
-use app\modules\api\models\book\OrderClerkForm;
-use app\modules\api\models\book\OrderCommentForm;
-use app\modules\api\models\book\OrderCommentPreview;
-use app\modules\api\models\book\OrderListForm;
-use app\modules\api\models\book\OrderPreviewFrom;
-use app\modules\api\models\QrcodeForm;
 
 class OrderController extends Controller
 {
@@ -78,7 +81,7 @@ class OrderController extends Controller
      */
     public function actionCancel($id = 0)
     {
-        $order = YyOrder::find()
+        $order = Order::find()
             ->andWhere([
                 'is_delete' => 0,
                 'store_id' => $this->store->id,
@@ -95,7 +98,19 @@ class OrderController extends Controller
         }
 
         $order->is_cancel = 1;
-        if ($order->save()){
+
+        //库存
+        $goods = Goods::find()
+            ->andWhere(['id'=>$order->goods_id,'is_delete'=>0,'status'=>1,'store_id'=>$this->store_id])->one();
+        if (!$goods){
+            return [
+                'code'    => 1,
+                'msg'     => '商品不存在',
+            ];
+        }
+        $goods->stock ++;
+
+        if ($goods->save() &&$order->save()){
             $this->renderJson([
                 'code'  => 0,
                 'msg'   => '取消成功'
@@ -125,7 +140,7 @@ class OrderController extends Controller
      */
     public function actionOrderDetails($id = 0)
     {
-        $order = YyOrder::find()
+        $order = Order::find()
             ->alias('o')
             ->select([
                 'o.*',
@@ -138,7 +153,7 @@ class OrderController extends Controller
                 'o.is_cancel' => 0,
                 'o.id' => $id,
             ])
-            ->leftJoin(['g'=>YyGoods::tableName()],'g.id=o.goods_id')
+            ->leftJoin(['g'=>Goods::tableName()],'g.id=o.goods_id')
             ->asArray()->one();
         if (!$order){
             $this->renderJson([
@@ -147,7 +162,7 @@ class OrderController extends Controller
             ]);
         }
 
-        $orderForm = YyOrderForm::find()
+        $orderForm = OrderForm::find()
             ->andWhere(['store_id'=>$this->store->id,'order_id'=>$order['id']])
             ->select('key,value')
             ->asArray()
@@ -189,7 +204,7 @@ class OrderController extends Controller
      */
     public function actionClerkOrderDetails($id = 0)
     {
-        $order = YyOrder::find()
+        $order = Order::find()
             ->alias('o')
             ->select([
                 'o.*',
@@ -201,7 +216,7 @@ class OrderController extends Controller
                 'o.is_cancel' => 0,
                 'o.id' => $id,
             ])
-            ->leftJoin(['g'=>YyGoods::tableName()],'g.id=o.goods_id')
+            ->leftJoin(['g'=>Goods::tableName()],'g.id=o.goods_id')
             ->asArray()->one();
         if (!$order){
             $this->renderJson([
@@ -210,7 +225,7 @@ class OrderController extends Controller
             ]);
         }
 
-        $orderForm = YyOrderForm::find()
+        $orderForm = OrderForm::find()
             ->andWhere(['store_id'=>$this->store->id,'order_id'=>$order['id']])
             ->select('key,value')
             ->asArray()
@@ -254,7 +269,7 @@ class OrderController extends Controller
     public function actionGetQrcode()
     {
         $order_no = \Yii::$app->request->get('order_no');
-        $order = YyOrder::findOne(['order_no'=>$order_no,'store_id'=>$this->store->id]);
+        $order = Order::findOne(['order_no'=>$order_no,'store_id'=>$this->store->id]);
 //        if(!empty($order->offline_qrcode)){
 //            return json_encode([
 //                'code' => 0,
@@ -308,7 +323,7 @@ class OrderController extends Controller
     public function actionApplyRefund()
     {
         $order_id = \Yii::$app->request->get('order_id');
-        $order = YyOrder::find()
+        $order = Order::find()
             ->andWhere([
                 'id'            => $order_id,
                 'is_delete'     => 0,

@@ -19,7 +19,7 @@ use xanyext\wechat\Wechat;
  * @property FormId $form_id
  * @property Wechat $wechat
  */
-class QsCmWechatTplMsgSender
+class WechatTplMsgSender
 {
     public $store_id;
     public $order_id;
