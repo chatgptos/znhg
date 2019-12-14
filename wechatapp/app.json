@@ -1,7 +1,7 @@
 {
   "pages": [
-    "pages/bookmall/order/order",
     "pages/index/index",
+    "pages/bookmall/order/order",
 
     "pages/bookmall/goods/goods",
     "pages/bookmall/order-submit/order-submit",
