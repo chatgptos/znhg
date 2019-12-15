@@ -154,18 +154,22 @@ class OrderPreviewFrom extends Model
             if ($order->pay_price <= 0){
                 //暂时不做退款支付的操作 所有 商品只有付钱和积分两种分开
                 //扣除积分
+
+                //是否扣除券和积分
                 if ($goods->coupon > 0 || $goods->integral > 0){
                     $this->user->coupon = $this->user->coupon - $goods->coupon;
                     $this->user->integral  = $this->user->integral - $goods->integral;
 
-                    if($this->user->integral >=0 && $this->user->coupon >=0){
-                        $this->user->save();
-                    }else{
-                        return [
-                            'code'  => 2,
-                            'msg'   => '积分/优惠券不足，请充值',
-                        ];
-                    }
+                }
+                //增加总筹股东券资格
+                $this->user->crowdstockright ++;
+                if($this->user->integral >=0 && $this->user->coupon >=0){
+                    $this->user->save();
+                }else{
+                    return [
+                        'code'  => 2,
+                        'msg'   => '积分/优惠券不足，请充值',
+                    ];
                 }
 
                 //当天限制一人
@@ -232,7 +236,7 @@ class OrderPreviewFrom extends Model
                 $integralLog = new IntegralLog();
                 $integralLog->user_id = $this->user->id;
                 //卖优惠券
-                $integralLog->content = "管理员（优惠券商城兑换） 后台操作账号：" . $this->user->nickname . " 欢乐豆".$this->user->hld."已经扣除：" . $hld . " 豆" . " 优惠券".$this->user->coupon."已经扣除：" . $coupon . " 张（购买时候时候已经扣除优惠券）,（交易时扣除去积分" . $integral . '个积分）';
+                $integralLog->content = "购买股东资格券：" . $this->user->nickname . " 欢乐豆".$this->user->hld."已经扣除：" . $hld . " 豆" . " 优惠券".$this->user->coupon."已经扣除：" . $coupon . " 张扣除去积分" . $integral . '个积分）';
 
                 $integralLog->integral = $goods->integral;
                 $integralLog->hld = $hld;
@@ -274,15 +278,6 @@ class OrderPreviewFrom extends Model
                     return $res;
                 }
 
-                //记录prepay_id发送模板消息用到
-//                YyFormId::addFormId([
-//                    'store_id' => $this->store_id,
-//                    'user_id' => $this->user->id,
-//                    'wechat_open_id' => $this->user->wechat_open_id,
-//                    'form_id' => $res['prepay_id'],
-//                    'type' => 'prepay_id',
-//                    'order_no' => $this->order->order_no,
-//                ]);
                 $order->form_id = $res['prepay_id'];
                 $order->save();
                 $pay_data = [
@@ -293,14 +288,6 @@ class OrderPreviewFrom extends Model
                     'signType' => 'MD5',
                 ];
                 $pay_data['paySign'] = $this->wechat->pay->makeSign($pay_data);
-//                $this->setReturnData($this->order);
-//                return [
-//                    'code' => 0,
-//                    'msg' => 'success',
-//                    'data' => (object)$pay_data,
-//                    'res' => $res,
-//                    'body' => $goods_names,
-//                ];
             }
 
 

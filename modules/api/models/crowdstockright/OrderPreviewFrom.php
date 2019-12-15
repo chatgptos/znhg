@@ -97,6 +97,8 @@ class OrderPreviewFrom extends Model
         $order->addtime = time();
         $order->is_delete = 0;
         $order->form_id = $this->form_id;
+        $order->return_coupon = $goods->return_coupon;
+        $order->return_integral = $goods->return_integral;
         if ($order->save()) {
             $goods->sales ++;
             $goods->stock --;
@@ -157,13 +159,51 @@ class OrderPreviewFrom extends Model
                 if ($goods->coupon > 0 || $goods->integral > 0){
                     $this->user->coupon = $this->user->coupon - $goods->coupon;
                     $this->user->integral  = $this->user->integral - $goods->integral;
+                    //扣除总筹股东券资格
+                    $this->user->crowdstockright --;
+                    //失效股东券资格券
+                    $orderCrowdapply = \app\modules\api\models\crowdapply\Order::findOne(['user_id'=>$order->user_id,'store_id'=>$this->store_id,'is_pay'=>1,'apply_delete'=>0,'is_use'=>0]);
 
-                    if($this->user->integral >=0 && $this->user->coupon >=0){
+                    if(!$orderCrowdapply){
+                        $p->rollBack();
+                        return [
+                            'code'=>1,
+                            'msg'=>'没有资格券'
+                        ];
+                    }
+                    $orderCrowdapply->is_use=1;
+                    if(!$orderCrowdapply->save()){
+                        $p->rollBack();
+                        return [
+                            'code'=>1,
+                            'msg'=>'没有资格券'
+                        ];
+                    }
+                    if($this->user->integral >=0 && $this->user->coupon >=0 && $this->user->crowdstockright >= 0){
                         $this->user->save();
+                    }elseif($this->user->crowdstockright < 0){
+                        $p->rollBack();
+                        return [
+                            'code'  => 1,
+                            'msg'   => '请先获取资格',
+                        ];
+                    }elseif($this->user->integral <0){
+                        $p->rollBack();
+                        return [
+                            'code'  => 1,
+                            'msg'   => '积分不足',
+                        ];
+                    }elseif($this->user->coupon <0){
+                        $p->rollBack();
+                        return [
+                            'code'  => 1,
+                            'msg'   => '优惠券不足',
+                        ];
                     }else{
+                        $p->rollBack();
                         return [
                             'code'  => 2,
-                            'msg'   => '积分/优惠券不足，请充值',
+                            'msg'   => '网络问题,请稍后重试',
                         ];
                     }
                 }
@@ -231,8 +271,8 @@ class OrderPreviewFrom extends Model
 
                 $integralLog = new IntegralLog();
                 $integralLog->user_id = $this->user->id;
-                //卖优惠券
-                $integralLog->content = "管理员（优惠券商城兑换） 后台操作账号：" . $this->user->nickname . " 欢乐豆".$this->user->hld."已经扣除：" . $hld . " 豆" . " 优惠券".$this->user->coupon."已经扣除：" . $coupon . " 张（购买时候时候已经扣除优惠券）,（交易时扣除去积分" . $integral . '个积分）';
+                //购买总筹股权 扣除积分
+                $integralLog->content = "(购买总筹股权)：" . $this->user->nickname . " 欢乐豆".$this->user->hld."已经扣除：" . $hld . " 豆" . " 优惠券".$this->user->coupon."已经扣除：" . $coupon . " 张" . $integral . '个积分）';
 
                 $integralLog->integral = $goods->integral;
                 $integralLog->hld = $hld;
@@ -330,7 +370,7 @@ class OrderPreviewFrom extends Model
         $store_id = empty($this->store_id) ? 0 : $this->store_id;
         $order_no = null;
         while (true) {
-            $order_no = 'Y'.date('YmdHis') . rand(10000, 99999);
+            $order_no = 'CSR'.date('YmdHis') . rand(10000, 99999);
             $exist_order_no = Order::find()->where(['order_no' => $order_no])->exists();
             if (!$exist_order_no)
                 break;

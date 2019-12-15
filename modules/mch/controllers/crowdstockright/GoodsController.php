@@ -120,7 +120,7 @@ class GoodsController extends Controller
             $form = new GoodsForm();
             $form->attributes = $model;
             $form->goods = $goods;
-//            var_dump($model['form_list']);
+//            var_dump($form->attributes);
 //            $form->$form_list = $model['form_list'];
             return json_encode($form->save(),JSON_UNESCAPED_UNICODE);
         }

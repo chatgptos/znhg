@@ -112,7 +112,7 @@ $this->params['is_book'] = 1;
             <tr>
                 <th>ID</th>
                 <th>用户</th>
-                <th>商品名称</th>
+                <th>权益名称</th>
                 <th>评分</th>
                 <th>详情</th>
                 <th>操作</th>

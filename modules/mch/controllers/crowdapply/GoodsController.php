@@ -9,8 +9,8 @@ namespace app\modules\mch\controllers\crowdapply;
 
 
 use app\models\PostageRules;
-use app\modules\mch\models\couponmall\Cat;
-use app\modules\mch\models\couponmall\CatForm;
+use app\modules\mch\models\crowdapply\Cat;
+use app\modules\mch\models\crowdapply\CatForm;
 use app\modules\mch\models\crowdapply\Form;
 use app\modules\mch\models\crowdapply\Goods;
 use app\modules\mch\models\crowdapply\GoodsForm;
@@ -46,7 +46,7 @@ class GoodsController extends Controller
         if (\Yii::$app->request->isPost){
             $model = \Yii::$app->request->post('model');
             $model['store_id'] = $this->store->id;
-            $form = new Form();
+            $form = new CatForm();
             $form->attributes = $model;
             $form->cat = $cat;
             return json_encode($form->save(),JSON_UNESCAPED_UNICODE);

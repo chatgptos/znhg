@@ -6,7 +6,7 @@
  */
 
 $urlManager = Yii::$app->urlManager;
-$this->title = '优惠商品编辑';
+$this->title = '报名活动编辑';
 $staticBaseUrl = Yii::$app->request->baseUrl . '/statics';
 $this->params['active_nav_group'] = 10;
 $this->params['is_book'] = 1;
@@ -217,7 +217,7 @@ if (!$returnUrl)
                     <a flex="cross:center" class="head-step" href="#step1">选择分类</a>
                     <a flex="cross:center" class="head-step" href="#step2">基本信息</a>
                     <a flex="cross:center" class="head-step" href="#step3">自定义表单</a>
-                    <a flex="cross:center" class="head-step" href="#step4">商品详情</a>
+                    <a flex="cross:center" class="head-step" href="#step4">报名活动详情</a>
                 </div>
             </div>
             <div id="app">
@@ -229,7 +229,7 @@ if (!$returnUrl)
                     <div>
                         <div class="form-group row">
                             <div class="col-3 text-right">
-                                <label class=" col-form-label required">商品分类</label>
+                                <label class=" col-form-label required">报名活动分类</label>
                             </div>
                             <div class="col-9">
                                 <div class="input-group short-row">
@@ -254,7 +254,7 @@ if (!$returnUrl)
                     <div>
                         <div class="form-group row">
                             <div class="col-3 text-right">
-                                <label class=" col-form-label required">商品名称</label>
+                                <label class=" col-form-label required">报名活动名称</label>
                             </div>
                             <div class="col-9">
                                 <input class="form-control short-row" type="text" name="model[name]"
@@ -263,7 +263,7 @@ if (!$returnUrl)
                         </div>
                         <div class="form-group row">
                             <div class="col-3 text-right">
-                                <label class=" col-form-label">商品排序</label>
+                                <label class=" col-form-label">报名活动排序</label>
                             </div>
                             <div class="col-9">
                                 <input class="form-control short-row" type="text" name="model[sort]"
@@ -315,7 +315,7 @@ if (!$returnUrl)
                         </div>
                         <div class="form-group row">
                             <div class="col-3 text-right">
-                                <label class="col-form-label required">商品缩略图</label>
+                                <label class="col-form-label required">报名活动缩略图</label>
                             </div>
                             <div class="col-9">
                                 <div class="upload-group short-row">
@@ -354,7 +354,7 @@ if (!$returnUrl)
 
                         <div class="form-group row">
                             <div class="col-3 text-right">
-                                <label class="col-form-label required">商品图片</label>
+                                <label class="col-form-label required">报名活动图片</label>
                             </div>
                             <div class="col-9">
                                 <?php if ($goods->goodsPicList()):foreach ($goods->goodsPicList() as $goods_pic): ?>

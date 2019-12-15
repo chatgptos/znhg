@@ -19,7 +19,7 @@ class Setting extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%qs_setting}}';
+        return '{{%crowdapply_setting}}';
     }
 
     /**

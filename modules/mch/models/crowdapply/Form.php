@@ -27,7 +27,7 @@ class Form extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%qs_form}}';
+        return '{{%crowdapply_form}}';
     }
 
     /**

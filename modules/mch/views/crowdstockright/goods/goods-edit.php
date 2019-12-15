@@ -6,7 +6,7 @@
  */
 
 $urlManager = Yii::$app->urlManager;
-$this->title = '优惠商品编辑';
+$this->title = '权益编辑';
 $staticBaseUrl = Yii::$app->request->baseUrl . '/statics';
 $this->params['active_nav_group'] = 10;
 $this->params['is_book'] = 1;
@@ -217,7 +217,7 @@ if (!$returnUrl)
                     <a flex="cross:center" class="head-step" href="#step1">选择分类</a>
                     <a flex="cross:center" class="head-step" href="#step2">基本信息</a>
                     <a flex="cross:center" class="head-step" href="#step3">自定义表单</a>
-                    <a flex="cross:center" class="head-step" href="#step4">商品详情</a>
+                    <a flex="cross:center" class="head-step" href="#step4">权益详情</a>
                 </div>
             </div>
             <div id="app">
@@ -229,7 +229,7 @@ if (!$returnUrl)
                     <div>
                         <div class="form-group row">
                             <div class="col-3 text-right">
-                                <label class=" col-form-label required">商品分类</label>
+                                <label class=" col-form-label required">权益分类</label>
                             </div>
                             <div class="col-9">
                                 <div class="input-group short-row">
@@ -254,7 +254,7 @@ if (!$returnUrl)
                     <div>
                         <div class="form-group row">
                             <div class="col-3 text-right">
-                                <label class=" col-form-label required">商品名称</label>
+                                <label class=" col-form-label required">权益名称</label>
                             </div>
                             <div class="col-9">
                                 <input class="form-control short-row" type="text" name="model[name]"
@@ -263,7 +263,7 @@ if (!$returnUrl)
                         </div>
                         <div class="form-group row">
                             <div class="col-3 text-right">
-                                <label class=" col-form-label">商品排序</label>
+                                <label class=" col-form-label">权益排序</label>
                             </div>
                             <div class="col-9">
                                 <input class="form-control short-row" type="text" name="model[sort]"
@@ -315,7 +315,7 @@ if (!$returnUrl)
                         </div>
                         <div class="form-group row">
                             <div class="col-3 text-right">
-                                <label class="col-form-label required">商品缩略图</label>
+                                <label class="col-form-label required">权益缩略图</label>
                             </div>
                             <div class="col-9">
                                 <div class="upload-group short-row">
@@ -354,7 +354,7 @@ if (!$returnUrl)
 
                         <div class="form-group row">
                             <div class="col-3 text-right">
-                                <label class="col-form-label required">商品图片</label>
+                                <label class="col-form-label required">权益图片</label>
                             </div>
                             <div class="col-9">
                                 <?php if ($goods->goodsPicList()):foreach ($goods->goodsPicList() as $goods_pic): ?>
@@ -733,6 +733,55 @@ if (!$returnUrl)
                                     </template>
                                     </tbody>
                                 </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+                <div class="step-block" flex="dir:left box:first">
+                    <div>
+                        <span>权益奖励</span>
+                        <span class="step-location" id="step2"></span>
+                    </div>
+                    <div>
+
+
+                        <div class="form-group row">
+                            <div class="col-3 text-right">
+                                <label class=" col-form-label required">积分</label>
+                            </div>
+                            <div class="col-9">
+                                <div class="input-group short-row">
+                                    <input type="number" step="1" class="form-control"
+                                           name="model[return_coupon]" min="0.01"
+                                           value="<?= $goods['return_integral'] ? $goods['return_integral'] : 0 ?>">
+                                    <span class="input-group-addon">分</span>
+                                    <div class="fs-sm text-muted">设置0则不奖励</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-3 text-right">
+                                <label class=" col-form-label required">优惠券</label>
+                            </div>
+                            <div class="col-9">
+                                <div class="input-group short-row">
+                                    <input type="number" step="1" class="form-control"
+                                           name="model[return_integral]" min="0.01"
+                                           value="<?= $goods['return_coupon'] ? $goods['return_coupon'] : 0 ?>">
+                                    <span class="input-group-addon">张</span>
+                                    <div class="fs-sm text-muted">设置0则不奖励</div>
+                                </div>
                             </div>
                         </div>
                     </div>

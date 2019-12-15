@@ -22,7 +22,7 @@ class Cat extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%qs_cat}}';
+        return '{{%crowdapply_cat}}';
     }
 
     /**

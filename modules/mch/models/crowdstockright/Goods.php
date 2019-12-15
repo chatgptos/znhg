@@ -39,7 +39,7 @@ class Goods extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%qs_goods}}';
+        return '{{%crowdstockright_goods}}';
     }
 
     /**
@@ -49,7 +49,7 @@ class Goods extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'price', 'original_price', 'detail', 'service', 'store_id'], 'required'],
-            [['price', 'original_price','stock'], 'number'],
+            [['return_coupon','return_integral','price', 'original_price','stock'], 'number'],
             [['detail', 'cover_pic'], 'string'],
             [['cat_id', 'status', 'sort', 'virtual_sales', 'addtime', 'is_delete', 'sales', 'store_id'], 'integer'],
             [['name','shop_id'], 'string', 'max' => 255],
@@ -84,6 +84,8 @@ class Goods extends \yii\db\ActiveRecord
             'integral' => 'Store ID',
             'buy_max' => '最多允许购买',
             'buy_max_day' => '每日最多购买',
+            'return_coupon' => '欢乐豆',
+            'return_integral' => '积分',
         ];
     }
 

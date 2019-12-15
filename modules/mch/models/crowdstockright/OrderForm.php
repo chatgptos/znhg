@@ -144,7 +144,6 @@ class OrderForm extends Model
                 ->andWhere(['store_id' => $this->store_id, 'order_id' => $v['id'], 'goods_id' => $v['goods_id'], 'is_delete' => 0])
                 ->all();
         }
-//        var_dump($list);die();
         return [
             'list' => $list,
             'p' => $p,

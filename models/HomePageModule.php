@@ -44,13 +44,31 @@ class HomePageModule extends Model
             'display_name' => '整点秒杀',
         ],
         [
-            'name' => 'bookmall_seckill',
-            'display_name' => '整点预售',
-        ],
-        [
             'name' => 'pintuan',
             'display_name' => '拼团',
         ],
+
+        //新增
+        [
+            'name' => 'bookmall_seckill',
+            'display_name' => '整点预售',
+        ],
+        //新增
+        [
+            'name' => 'crowdapply',
+            'display_name' => '活动报名',
+        ],
+        //新增
+        [
+            'name' => 'crowdstockright',
+            'display_name' => '众筹股东',
+        ],
+        //新增
+        [
+            'name' => 'cheapmarket',
+            'display_name' => '兑换商城',
+        ],
+
     ];
 
 

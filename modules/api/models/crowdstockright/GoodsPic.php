@@ -19,7 +19,7 @@ class GoodsPic extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%qs_goods_pic}}';
+        return '{{%crowdstockright_goods_pic}}';
     }
 
     /**

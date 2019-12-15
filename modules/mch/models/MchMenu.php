@@ -288,7 +288,7 @@ class MchMenu
 
             [
 //                'id' => 'book',
-                'name' => '优惠商场管理',
+                'name' => '优惠券商场管理',
                 'icon' => 'icon-service',
                 'route' => 'mch/couponmall/goods/index',
                 'list' => [
@@ -325,7 +325,7 @@ class MchMenu
                 ],
             ],
             [
-                'name' => '众筹管理C',
+                'name' => '众筹C管理',
                 'route' => 'mch/crowdc/goods/goods',
                 'icon' => 'icon-service',
                 'list' => [
@@ -399,21 +399,21 @@ class MchMenu
                 'route' => 'mch/crowdapply/goods/index',
                 'list' => [
                     [
-                        'name' => '商品管理',
+                        'name' => '活动管理',
                         'route' => 'mch/crowdapply/goods/index',
                         'sub' => [
                             'mch/crowdapply/goods/goods-edit'
                         ]
                     ],
                     [
-                        'name' => '商品分类',
+                        'name' => '活动分类',
                         'route' => 'mch/crowdapply/goods/cat',
                         'sub' => [
                             'mch/crowdapply/goods/cat-edit'
                         ]
                     ],
                     [
-                        'name' => '订单管理',
+                        'name' => '报名记录管理',
                         'route' => 'mch/crowdapply/order/index',
                     ],
                     [
@@ -425,7 +425,7 @@ class MchMenu
                         'route' => 'mch/crowdapply/notice/setting',
                     ],
                     [
-                        'name' => '评论管理',
+                        'name' => '报名评论管理',
                         'route' => 'mch/crowdapply/comment/index',
                     ],
                 ],
@@ -439,21 +439,21 @@ class MchMenu
                 'route' => 'mch/crowdstockright/goods/index',
                 'list' => [
                     [
-                        'name' => '商品管理',
+                        'name' => '权益管理',
                         'route' => 'mch/crowdstockright/goods/index',
                         'sub' => [
                             'mch/crowdstockright/goods/goods-edit'
                         ]
                     ],
                     [
-                        'name' => '商品分类',
+                        'name' => '权益分类',
                         'route' => 'mch/crowdstockright/goods/cat',
                         'sub' => [
                             'mch/crowdstockright/goods/cat-edit'
                         ]
                     ],
                     [
-                        'name' => '订单管理',
+                        'name' => '权益记录管理',
                         'route' => 'mch/crowdstockright/order/index',
                     ],
                     [

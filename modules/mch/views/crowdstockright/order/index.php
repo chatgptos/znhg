@@ -108,13 +108,13 @@ $condition = [
                                 <div class="col-5">
                                     <select class="form-control" name="keyword_1">
                                         <option value="1" <?= Yii::$app->request->get('keyword_1') == 1 ? "selected" : "" ?>>
-                                            订单号
+                                            权益编号
                                         </option>
                                         <option value="2" <?= Yii::$app->request->get('keyword_1') == 2 ? "selected" : "" ?>>
                                             用户
                                         </option>
                                         <option value="3" <?= Yii::$app->request->get('keyword_1') == 3 ? "selected" : "" ?>>
-                                            商品名
+                                            权益名
                                         </option>
                                     </select>
                                 </div>
@@ -172,7 +172,7 @@ $condition = [
                                 <span class="status-item mr-3">会员：<?= $user->nickname ?>的订单</span>
                             <?php endif; ?>
                             <?php if (isset($clerk)): ?>
-                                <span class="status-item mr-3">核销员：<?= $clerk->nickname ?>的订单</span>
+                                <span class="status-item mr-3">发放员：<?= $clerk->nickname ?>的订单</span>
                             <?php endif; ?>
                             <?php if (isset($shop)): ?>
                                 <span class="status-item mr-3">货柜：<?= $shop->name ?>的订单</span>
@@ -190,15 +190,15 @@ $condition = [
                 </li>
                 <li class="nav-item">
                     <a class="status-item nav-link <?= $status == 0 ? 'active' : null ?>"
-                       href="<?= $urlManager->createUrl(array_merge(['mch/crowdstockright/order/index'], $condition, ['status' => 0])) ?>">待付款</a>
+                       href="<?= $urlManager->createUrl(array_merge(['mch/crowdstockright/order/index'], $condition, ['status' => 0])) ?>">待支付</a>
                 </li>
                 <li class="nav-item">
                     <a class="status-item nav-link <?= $status == 1 ? 'active' : null ?>"
-                       href="<?= $urlManager->createUrl(array_merge(['mch/crowdstockright/order/index'], $condition, ['status' => 1])) ?>">待使用</a>
+                       href="<?= $urlManager->createUrl(array_merge(['mch/crowdstockright/order/index'], $condition, ['status' => 1])) ?>">待发放</a>
                 </li>
                 <li class="nav-item">
                     <a class="status-item nav-link <?= $status == 2 ? 'active' : null ?>"
-                       href="<?= $urlManager->createUrl(array_merge(['mch/crowdstockright/order/index'], $condition, ['status' => 2])) ?>">已使用</a>
+                       href="<?= $urlManager->createUrl(array_merge(['mch/crowdstockright/order/index'], $condition, ['status' => 2])) ?>">已发放</a>
                 </li>
                 <li class="nav-item">
                     <a class="status-item nav-link <?= $status == 3 ? 'active' : null ?>"
@@ -212,9 +212,10 @@ $condition = [
         </div>
         <table class="table table-bordered bg-white">
             <tr>
-                <th class="order-tab-1">商品信息</th>
+                <th class="order-tab-1">权益信息</th>
                 <th class="order-tab-2">金额</th>
-                <th class="order-tab-3">实际付款</th>
+                <th class="order-tab-3">实际支付</th>
+                <th class="order-tab-3">活动结束返回用户</th>
                 <th class="order-tab-4">订单状态</th>
                 <th class="order-tab-5">操作</th>
             </tr>
@@ -225,7 +226,7 @@ $condition = [
                     <tr>
                         <td colspan="5">
                             <span class="mr-5"><?= date('Y-m-d H:i:s', $order_item['addtime']) ?></span>
-                            <span class="mr-5">订单号：<?= $order_item['order_no'] ?></span>
+                            <span class="mr-5">权益编号：<?= $order_item['order_no'] ?></span>
                             <span>用户：<?= $order_item['nickname'] ?></span>
                         </td>
                     </tr>
@@ -247,18 +248,24 @@ $condition = [
                             <?php foreach ($order_item['orderFrom'] AS $k => $v): ?>
                                 <div><?= $v->key ?>：<?= $v->value ?></div>
                             <?php endforeach; ?>
-
                         </td>
                         <td class="order-tab-3">
                             <div><?= $order_item['pay_price'] ?>元</div>
+                            <div><?= $order_item['coupon'] ?>积分</div>
+                            <div><?= $order_item['integral'] ?>券</div>
+                        </td>
+                        <td class="order-tab-3">
+                            <div><span class="text-danger">0元(暂无)</span></div>
+                            <div><span class="text-danger"><?= $order_item['return_integral'] ?>积分</span></div>
+                            <div><span class="text-danger"><?= $order_item['return_coupon']?>券</span></div>
                         </td>
                         <td class="order-tab-4">
                             <div>
-                                付款状态：
+                                支付状态：
                                 <?php if ($order_item['is_pay'] == 1): ?>
-                                    <span class="badge badge-success">已付款</span>
+                                    <span class="badge badge-success">已支付</span>
                                 <?php else: ?>
-                                    <span class="badge badge-default">未付款</span>
+                                    <span class="badge badge-default">未支付</span>
                                     <?php if ($order_item['is_cancel'] == 1): ?>
                                         <span class="badge badge-warning">已取消</span>
                                     <?php endif; ?>
@@ -269,9 +276,9 @@ $condition = [
                                 <div>
                                     发货状态：
                                     <?php if ($order_item['is_use'] == 1): ?>
-                                        <span class="badge badge-success">已使用</span>
+                                        <span class="badge badge-success">已发放</span>
                                     <?php else: ?>
-                                        <span class="badge badge-default">未使用</span>
+                                        <span class="badge badge-default">未发放</span>
                                     <?php endif; ?>
                                 </div>
                             <?php endif; ?>
@@ -294,11 +301,9 @@ $condition = [
                                     退款
                                 </a>
                             <?php endif; ?>
-                        </td>
-                        <td class="order-tab-5">
                             <?php if ($order_item['is_pay'] == 1 && $order_item['is_confirm'] != 1&& $order_item['is_use'] != 1): ?>
                                 <a class="btn btn-sm btn-primary update" href="javascript:" data-toggle="modal"
-                                   data-target="#price" data-id="<?= $order_item['id'] ?>">核销</a>
+                                   data-target="#price" data-id="<?= $order_item['id'] ?>">发放奖励</a>
                             <?php endif; ?>
                         </td>
                     </tr>
@@ -385,7 +390,7 @@ $condition = [
     <div class="modal-dialog modal-sm" role="document" style="max-width: 400px">
         <div class="modal-content">
             <div class="modal-header">
-                <b class="modal-title">确认核销</b>
+                <b class="modal-title">确认发放</b>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

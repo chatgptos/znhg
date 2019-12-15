@@ -35,6 +35,9 @@ use yii\web\IdentityInterface;
  * @property integer $hld
  * @property integer $coupon
  * @property integer $coupon_total
+ * @property integer $crowdstockright
+ *
+ *
  *
  *
  *
@@ -97,6 +100,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             'coupon' => '用户优惠券',
             'coupon_total' => '用户总优惠券',
             'fuliquan' => '福利权份数',
+            'crowdstockright' => '福利权份数',
         ];
     }
 

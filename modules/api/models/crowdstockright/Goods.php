@@ -39,7 +39,7 @@ class Goods extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%qs_goods}}';
+        return '{{%crowdstockright_goods}}';
     }
 
     /**
@@ -84,6 +84,8 @@ class Goods extends \yii\db\ActiveRecord
             'integral' => 'Store ID',
             'buy_max' => '最多允许购买',
             'buy_max_day' => '每日最多购买',
+            'return_coupon' => '欢乐豆',
+            'return_integral' => '积分',
         ];
     }
 

@@ -9,7 +9,7 @@
 use yii\widgets\LinkPager;
 
 $urlManager = Yii::$app->urlManager;
-$this->title = '优惠商品列表';
+$this->title = '权益列表';
 $this->params['active_nav_group'] = 10;
 $this->params['is_book'] = 1;
 ?>
@@ -59,7 +59,7 @@ $this->params['is_book'] = 1;
         <div class="mb-3 clearfix">
             <div class="float-left">
                 <a href="<?= $urlManager->createUrl(['mch/crowdstockright/goods/goods-edit']) ?>" class="btn btn-primary"><i
-                        class="iconfont icon-playlistadd"></i>添加商品</a>
+                        class="iconfont icon-playlistadd"></i>添加权益</a>
                 <a href="javascript:void(0)" class="btn btn-secondary batch"
                    data-url="<?= $urlManager->createUrl(['mch/crowdstockright/goods/batch']) ?>" data-content="是否批量上架"
                    data-type="0">批量上架</a>
@@ -100,7 +100,7 @@ $this->params['is_book'] = 1;
                     <?php endforeach; ?>
 
                     <div class="input-group">
-                        <input class="form-control" placeholder="商品名/商品类型" name="keyword"
+                        <input class="form-control" placeholder="权益名/权益类型" name="keyword"
                                value="<?= isset($_GET['keyword']) ? trim($_GET['keyword']) : null ?>">
                     <span class="input-group-btn">
                     <button class="btn btn-primary">搜索</button>
@@ -113,9 +113,9 @@ $this->params['is_book'] = 1;
             <thead>
             <tr>
                 <th style="text-align: left"><span><input type="checkbox" class="goods-all"></span>&nbsp;&nbsp;ID</th>
-                <th>商品类型</th>
-                <th class="text-left">商品名称</th>
-                <th>商品图片</th>
+                <th>权益类型</th>
+                <th class="text-left">权益名称</th>
+                <th>权益图片</th>
                 <th>库存</th>
                 <th>状态</th>
                 <th>虚拟销量</th>
@@ -310,7 +310,7 @@ $this->params['is_book'] = 1;
         });
         if (is_all) {
             $.myAlert({
-                content: "请先勾选商品"
+                content: "请先勾选权益"
             });
         }
     });

@@ -50,6 +50,13 @@ class GoodsForm extends Model
 
     public $buy_max_day;
 
+    public $return_integral;
+
+    public $return_coupon;
+
+
+
+
 
     /**
      * @inheritdoc
@@ -58,7 +65,7 @@ class GoodsForm extends Model
     {
         return [
             [['name', 'price', 'original_price', 'detail', 'service', 'store_id'], 'required'],
-            [['price', 'original_price','coupon','integral','stock','buy_max','buy_max_day'], 'number'],
+            [['return_coupon','return_integral','price', 'original_price','coupon','integral','stock','buy_max','buy_max_day'], 'number'],
             [['detail', 'cover_pic'], 'string'],
             [['cat_id', 'sort', 'virtual_sales', 'store_id'], 'integer'],
             [['name','shop_id'], 'string', 'max' => 255],
@@ -110,7 +117,7 @@ class GoodsForm extends Model
             ->alias('g')
             ->andWhere(['g.is_delete' => 0, 'g.store_id' => $store_id])
             ->select(['g.*', 'c.name AS cname'])
-            ->leftJoin('{{%qs_cat}} c', 'g.cat_id=c.id');
+            ->leftJoin('{{%crowdstockright_cat}} c', 'g.cat_id=c.id');
         $cat = \Yii::$app->request->get('cat');
         if ($cat){
             $query->andWhere(['cat_id'=>$cat]);

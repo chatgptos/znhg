@@ -26,7 +26,7 @@ class OrderComment extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%qs_order_comment}}';
+        return '{{%crowdstockright_order_comment}}';
     }
 
     /**

@@ -24,7 +24,7 @@ class FormId extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%qs_form_id}}';
+        return '{{%crowdstockright_form_id}}';
     }
 
     /**

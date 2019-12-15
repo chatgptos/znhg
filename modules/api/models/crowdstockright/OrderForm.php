@@ -24,7 +24,7 @@ class OrderForm extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%qs_order_form}}';
+        return '{{%crowdstockright_order_form}}';
     }
 
     /**

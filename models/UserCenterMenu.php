@@ -128,6 +128,22 @@ class UserCenterMenu extends Model
                 'url' => '/pages/bookmall/order/order',
                 'tel' => '',
             ],
+            [
+                'is_show' => 1,
+                'name' => '股权',
+                'icon' => '/images/icon-about-us.png',
+                'open_type' => 'navigator',
+                'url' => '/pages/crowdstockright/order/order',
+                'tel' => '',
+            ],
+            [
+                'is_show' => 1,
+                'name' => '报名',
+                'icon' => '/images/icon-about-us.png',
+                'open_type' => 'navigator',
+                'url' => '/pages/crowdapply/order/order',
+                'tel' => '',
+            ],
         ];
         return $default_menu_list;
     }

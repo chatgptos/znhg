@@ -11,6 +11,7 @@ use app\modules\mch\models\crowdstockright\Order;
 use app\modules\mch\models\crowdstockright\OrderClerkForm;
 use app\modules\mch\models\crowdstockright\OrderForm;
 use app\modules\mch\models\crowdstockright\OrderSendForm;
+use app\modules\mch\models\crowdstockright\WechatTplMsgSender;
 
 class OrderController extends Controller
 {

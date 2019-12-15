@@ -11,6 +11,7 @@ use app\modules\mch\models\couponmall\Order;
 use app\modules\mch\models\couponmall\OrderClerkForm;
 use app\modules\mch\models\couponmall\OrderForm;
 use app\modules\mch\models\couponmall\OrderSendForm;
+use app\modules\mch\models\crowdstockright\WechatTplMsgSender;
 
 class OrderController extends Controller
 {

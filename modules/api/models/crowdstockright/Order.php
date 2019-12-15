@@ -39,7 +39,7 @@ class Order extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%qs_order}}';
+        return '{{%crowdstockright_order}}';
     }
 
     /**
@@ -86,6 +86,8 @@ class Order extends \yii\db\ActiveRecord
             'form_id' => '表单ID',
             'coupon' => '欢乐豆',
             'integral' => '积分',
+            'return_coupon' => '欢乐豆',
+            'return_integral' => '积分',
 //            'express_price' => '运费',
 //            'name' => '收货人姓名',
 //            'mobile' => '收货人手机',

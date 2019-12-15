@@ -39,7 +39,7 @@ class Goods extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%qs_goods}}';
+        return '{{%crowdapply_goods}}';
     }
 
     /**

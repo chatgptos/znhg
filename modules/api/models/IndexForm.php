@@ -23,6 +23,7 @@ use app\models\PtOrderDetail;
 use app\models\Store;
 use app\models\Topic;
 use app\models\UserCoupon;
+use app\modules\api\models\couponmall\Setting;
 use app\modules\mch\models\bookmall\GoodsSearchForm;
 use yii\helpers\VarDumper;
 
@@ -117,8 +118,80 @@ class IndexForm extends Model
                 'notice' => Option::get('notice', $this->store_id, 'admin'),
                 'seckill' => $this->getSeckillData(),
                 'bookmall_seckill' => $this->getBookmallSeckillData(),
+                'crowdapply' => $this->getCrowdapply(),
+                'crowdstockright' => $this->getCrowdstockright(),
+                'cheapmarket' => $this->getCheapmarket(),
                 'pintuan' => $this->getPintuanData(),
             ],
+        ];
+    }
+//报名
+
+    private function getCrowdapply()
+    {
+        // 获取导航分类
+        $cat = \app\modules\api\models\crowdapply\Cat::find()
+            ->select('id,name')
+            ->andWhere(['is_delete'=>0,'store_id'=>$this->store_id])
+            ->orderBy('sort ASC')
+            ->asArray()
+            ->all();
+//        $ad = Option::get('pt_ad', $this->store_id);
+        $yyGoods = new \app\modules\api\models\crowdapply\GoodsForm();
+        $yyGoods->store_id = $this->store_id;
+        $yyGoods->user_id = \Yii::$app->user->id;
+        $goods = $yyGoods->getList();
+        $catShow = Setting::findOne(['store_id'=>$this->store_id]);
+        return[
+            'cat'     => $cat[0],
+            'goods_list'   => $goods['list'],
+            'cat_show'   => $catShow->cat,
+        ];
+    }
+
+
+    private function getCrowdstockright()
+    {
+        // 获取导航分类
+        $cat = \app\modules\api\models\crowdstockright\Cat::find()
+            ->select('id,name')
+            ->andWhere(['is_delete'=>0,'store_id'=>$this->store_id])
+            ->orderBy('sort ASC')
+            ->asArray()
+            ->all();
+//        $ad = Option::get('pt_ad', $this->store_id);
+        $yyGoods = new \app\modules\api\models\crowdstockright\GoodsForm();
+        $yyGoods->store_id = $this->store_id;
+        $yyGoods->user_id = \Yii::$app->user->id;
+        $goods = $yyGoods->getList();
+        $catShow = Setting::findOne(['store_id'=>$this->store_id]);
+        return[
+            'cat'     => $cat[0],
+            'goods_list'   => $goods['list'],
+            'cat_show'   => $catShow->cat,
+        ];
+    }
+
+
+    private function getCheapmarket()
+    {
+        // 获取导航分类
+        $cat = \app\modules\api\models\couponmall\Cat::find()
+            ->select('id,name')
+            ->andWhere(['is_delete'=>0,'store_id'=>$this->store_id])
+            ->orderBy('sort ASC')
+            ->asArray()
+            ->all();
+//        $ad = Option::get('pt_ad', $this->store_id);
+        $yyGoods = new \app\modules\api\models\couponmall\GoodsForm();
+        $yyGoods->store_id = $this->store_id;
+        $yyGoods->user_id = \Yii::$app->user->id;
+        $goods = $yyGoods->getList();
+        $catShow = Setting::findOne(['store_id'=>$this->store_id]);
+        return[
+            'cat'     => $cat[0],
+            'goods_list'   => $goods['list'],
+            'cat_show'   => $catShow->cat,
         ];
     }
 

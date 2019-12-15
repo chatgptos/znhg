@@ -10,7 +10,7 @@ use yii\widgets\LinkPager;
 
 $urlManager = Yii::$app->urlManager;
 $statics = Yii::$app->request->baseUrl . '/statics';
-$this->title = '优惠订单列表';
+$this->title = '报名记录列表';
 $this->params['active_nav_group'] = 10;
 $this->params['is_book'] = 1;
 $status = Yii::$app->request->get('status', -1);
@@ -108,13 +108,13 @@ $condition = [
                                 <div class="col-5">
                                     <select class="form-control" name="keyword_1">
                                         <option value="1" <?= Yii::$app->request->get('keyword_1') == 1 ? "selected" : "" ?>>
-                                            订单号
+                                            报名活动编
                                         </option>
                                         <option value="2" <?= Yii::$app->request->get('keyword_1') == 2 ? "selected" : "" ?>>
                                             用户
                                         </option>
                                         <option value="3" <?= Yii::$app->request->get('keyword_1') == 3 ? "selected" : "" ?>>
-                                            商品名
+                                            报名活动名
                                         </option>
                                     </select>
                                 </div>
@@ -212,7 +212,7 @@ $condition = [
         </div>
         <table class="table table-bordered bg-white">
             <tr>
-                <th class="order-tab-1">商品信息</th>
+                <th class="order-tab-1">报名活动信息</th>
                 <th class="order-tab-2">金额</th>
                 <th class="order-tab-3">实际付款</th>
                 <th class="order-tab-4">订单状态</th>
@@ -225,7 +225,7 @@ $condition = [
                     <tr>
                         <td colspan="5">
                             <span class="mr-5"><?= date('Y-m-d H:i:s', $order_item['addtime']) ?></span>
-                            <span class="mr-5">订单号：<?= $order_item['order_no'] ?></span>
+                            <span class="mr-5">报名活动编：<?= $order_item['order_no'] ?></span>
                             <span>用户：<?= $order_item['nickname'] ?></span>
                         </td>
                     </tr>

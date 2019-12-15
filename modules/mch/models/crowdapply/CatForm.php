@@ -8,7 +8,6 @@
 namespace app\modules\mch\models\crowdapply;
 
 
-use app\models\Cat;
 use app\modules\mch\models\Model;
 use yii\data\Pagination;
 

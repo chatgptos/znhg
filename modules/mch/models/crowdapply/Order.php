@@ -39,7 +39,7 @@ class Order extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%qs_order}}';
+        return '{{%crowdapply_order}}';
     }
 
     /**
