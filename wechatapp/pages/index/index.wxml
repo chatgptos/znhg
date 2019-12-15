@@ -224,7 +224,7 @@
             <view wx:if="{{crowdapply.goods_list.length>0}}">
                 <view class="title">
                     <view class="line"></view>
-                    <view class="name">活动报名</view>
+                    <view class="name">{{crowdapply.cat.name}}</view>
                     <view class="line"></view>
                 </view>
                 <view class="con-list">
@@ -285,7 +285,7 @@
             <view wx:if="{{crowdstockright.goods_list.length>0}}">
                 <view class="title">
                     <view class="line"></view>
-                    <view class="name">众筹股权</view>
+                    <view class="name">{{crowdstockright.cat.name}}</view>
                     <view class="line"></view>
                 </view>
                 <view class="con-list">
@@ -346,7 +346,7 @@
             <view wx:if="{{cheapmarket.goods_list.length>0}}">
                 <view class="title">
                     <view class="line"></view>
-                    <view class="name">兑换商城</view>
+                    <view class="name">{{cheapmarket.cat.name}}</view>
                     <view class="line"></view>
                 </view>
                 <view class="con-list">

@@ -141,7 +141,10 @@ class IndexForm extends Model
         $yyGoods->store_id = $this->store_id;
         $yyGoods->user_id = \Yii::$app->user->id;
         $goods = $yyGoods->getList();
-        $catShow = Setting::findOne(['store_id'=>$this->store_id]);
+        $catShow = \app\modules\api\models\crowdapply\Setting::findOne(['store_id'=>$this->store_id]);
+        if (!$catShow->cat){
+            $cat[0]['name']='报名活动';
+        }
         return[
             'cat'     => $cat[0],
             'goods_list'   => $goods['list'],
@@ -164,7 +167,10 @@ class IndexForm extends Model
         $yyGoods->store_id = $this->store_id;
         $yyGoods->user_id = \Yii::$app->user->id;
         $goods = $yyGoods->getList();
-        $catShow = Setting::findOne(['store_id'=>$this->store_id]);
+        $catShow = \app\modules\api\models\crowdstockright\Setting::findOne(['store_id'=>$this->store_id]);
+        if (!$catShow->cat){
+            $cat[0]['name']='众筹股东权益';
+        }
         return[
             'cat'     => $cat[0],
             'goods_list'   => $goods['list'],
@@ -182,12 +188,15 @@ class IndexForm extends Model
             ->orderBy('sort ASC')
             ->asArray()
             ->all();
-//        $ad = Option::get('pt_ad', $this->store_id);
+        $ad = Option::get('pt_ad', $this->store_id);
         $yyGoods = new \app\modules\api\models\couponmall\GoodsForm();
         $yyGoods->store_id = $this->store_id;
         $yyGoods->user_id = \Yii::$app->user->id;
         $goods = $yyGoods->getList();
         $catShow = Setting::findOne(['store_id'=>$this->store_id]);
+        if (!$catShow->cat){
+            $cat[0]['name']='兑换商城';
+        }
         return[
             'cat'     => $cat[0],
             'goods_list'   => $goods['list'],
