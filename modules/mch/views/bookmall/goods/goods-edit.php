@@ -1074,12 +1074,25 @@ if (!$returnUrl)
 
                     <div class="form-group row">
                         <div class="col-3 text-right">
-                            <label class=" col-form-label required">百分比1级</label>
+                            <label class=" col-form-label required">优惠多少百分比1级</label>
                         </div>
                         <div class="col-3">
                             <div class="input-group short-row">
                                 <input class="form-control" name="model[charge]"
                                        value="<?= $goods['charge'] ? $goods['charge'] : 0 ?>">
+                                <span class="input-group-addon">%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-3 text-right">
+                            <label class=" col-form-label required">优惠多少第一级数量</label>
+                        </div>
+                        <div class="col-3">
+                            <div class="input-group short-row">
+                                <input class="form-control" name="model[chargeNum]"
+                                       value="<?= $goods['chargeNum'] ? $goods['chargeNum'] : 0 ?>">
                                 <span class="input-group-addon">订单</span>
                             </div>
                         </div>
@@ -1087,20 +1100,7 @@ if (!$returnUrl)
 
                     <div class="form-group row">
                         <div class="col-3 text-right">
-                            <label class=" col-form-label required">第一级数量</label>
-                        </div>
-                        <div class="col-3">
-                            <div class="input-group short-row">
-                                <input class="form-control" name="model[chargeNum]"
-                                       value="<?= $goods['chargeNum'] ? $goods['chargeNum'] : 0 ?>">
-                                <span class="input-group-addon">张</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <div class="col-3 text-right">
-                            <label class=" col-form-label required">百分比2级</label>
+                            <label class=" col-form-label required">优惠多少百分比2级</label>
                         </div>
                         <div class="col-3">
                             <div class="input-group short-row">
@@ -1113,7 +1113,7 @@ if (!$returnUrl)
 
                     <div class="form-group row">
                         <div class="col-3 text-right">
-                            <label class=" col-form-label required">第2级数量</label>
+                            <label class=" col-form-label required">优惠多少第2级数量</label>
                         </div>
                         <div class="col-3">
                             <div class="input-group short-row">
@@ -1126,7 +1126,7 @@ if (!$returnUrl)
 
                     <div class="form-group row">
                         <div class="col-3 text-right">
-                            <label class=" col-form-label required">百分比3级</label>
+                            <label class=" col-form-label required">优惠多少百分比3级</label>
                         </div>
                         <div class="col-3">
                             <div class="input-group short-row">
@@ -1138,7 +1138,7 @@ if (!$returnUrl)
                     </div>
                     <div class="form-group row">
                         <div class="col-3 text-right">
-                            <label class=" col-form-label required">第3级数量</label>
+                            <label class=" col-form-label required">优惠多少第3级数量</label>
                         </div>
                         <div class="col-3">
                             <div class="input-group short-row">
@@ -1152,7 +1152,7 @@ if (!$returnUrl)
 
                     <div class="form-group row">
                         <div class="col-3 text-right">
-                            <label class=" col-form-label required">百分比four级</label>
+                            <label class=" col-form-label required">优惠多少百分比four级</label>
                         </div>
                         <div class="col-3">
                             <div class="input-group short-row">
@@ -1166,7 +1166,7 @@ if (!$returnUrl)
 
                     <div class="form-group row">
                         <div class="col-3 text-right">
-                            <label class=" col-form-label required">第four级数量</label>
+                            <label class=" col-form-label required">优惠多少第four级数量</label>
                         </div>
                         <div class="col-3">
                             <div class="input-group short-row">
@@ -1178,7 +1178,7 @@ if (!$returnUrl)
                     </div>
                     <div class="form-group row">
                         <div class="col-3 text-right">
-                            <label class=" col-form-label required">其他比例</label>
+                            <label class=" col-form-label required">优惠多少其他比例</label>
                         </div>
                         <div class="col-3">
                             <div class="input-group short-row">

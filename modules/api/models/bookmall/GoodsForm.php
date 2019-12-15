@@ -65,6 +65,15 @@ class GoodsForm extends Model
 
 
         $seckill_data = $this->getSeckillData($goods->id);
+
+        if (!$seckill_data){
+            return [
+                'code' => 1,
+                'msg' => '整点预售结束',
+            ];
+        }
+
+
         $num = $seckill_data['sell_num'];
         $charge_coupon = 1;
         $charge_integral_buy = 1;
@@ -84,8 +93,9 @@ class GoodsForm extends Model
         $seckill_data['next']=array(
              'next_coupon'=>$next_coupon,
              'next_integral_buy'=>$next_integral_buy,
-             'next_num'=>$next_integral_buy,
+             'next_num'=>$next_num,
         );
+
         return [
             'code' => 0,
             'data' => (object)[
@@ -178,7 +188,7 @@ class GoodsForm extends Model
         $date=array(
             'charge'=>$charge,
             'nextnum'=>$nextnum,
-        );
+        ); 
 
         return $date;
     }
