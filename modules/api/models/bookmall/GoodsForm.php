@@ -188,7 +188,7 @@ class GoodsForm extends Model
         $date=array(
             'charge'=>$charge,
             'nextnum'=>$nextnum,
-        ); 
+        );
 
         return $date;
     }
