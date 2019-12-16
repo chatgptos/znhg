@@ -130,7 +130,7 @@ class UserCenterMenu extends Model
             ],
             [
                 'is_show' => 1,
-                'name' => '股权',
+                'name' => '股权资格',
                 'icon' => '/images/icon-about-us.png',
                 'open_type' => 'navigator',
                 'url' => '/pages/crowdstockright/order/order',
@@ -142,6 +142,14 @@ class UserCenterMenu extends Model
                 'icon' => '/images/icon-about-us.png',
                 'open_type' => 'navigator',
                 'url' => '/pages/crowdapply/order/order',
+                'tel' => '',
+            ],
+            [
+                'is_show' => 1,
+                'name' => '众筹订单',
+                'icon' => '/images/icon-about-us.png',
+                'open_type' => 'navigator',
+                'url' => '/pages/crowdc/order/order',
                 'tel' => '',
             ],
         ];

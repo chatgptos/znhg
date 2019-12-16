@@ -68,6 +68,11 @@ class HomePageModule extends Model
             'name' => 'cheapmarket',
             'display_name' => '兑换商城',
         ],
+        //新增
+        [
+            'name' => 'crowdc_seckill',
+            'display_name' => '众筹商城',
+        ],
 
     ];
 

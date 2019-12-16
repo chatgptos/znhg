@@ -1,15 +1,15 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/mall/mall",
     "pages/counter/index",
-    "pages/mall-crowd/index",
-    "pages/bookmall/order/order",
-
+    "pages/mall/mall",
+    
+    "pages/bookmall/order/order", 
     "pages/bookmall/goods/goods",
     "pages/bookmall/order-submit/order-submit",
     "pages/bookmall/order-detail/order-detail",
     "pages/bookmall/order-comment/order-comment",
+    
     "pages/product/product",
     "pages/order-submit/order-submit",
     "pages/user/user",
@@ -40,6 +40,14 @@
     "pages/crowdapply/order/details",
     "pages/crowdapply/details/details",
     "pages/crowdapply/submit/submit",
+
+
+    "pages/crowdc/goods/goods",
+    "pages/crowdc/order/order",
+    "pages/crowdc/goodscrowd/index",
+    "pages/crowdc/order-submit/order-submit",
+    "pages/crowdc/order-detail/order-detail",
+    "pages/crowdc/order-comment/order-comment",
 
     "pages/book/index/index",
     "pages/fair/fair",

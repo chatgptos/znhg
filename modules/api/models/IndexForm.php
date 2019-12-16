@@ -122,9 +122,11 @@ class IndexForm extends Model
                 'crowdstockright' => $this->getCrowdstockright(),
                 'cheapmarket' => $this->getCheapmarket(),
                 'pintuan' => $this->getPintuanData(),
+                'crowdc_seckill' => $this->getCrowdSeckillData(),
             ],
         ];
     }
+
 //报名
 
     private function getCrowdapply()
@@ -132,7 +134,7 @@ class IndexForm extends Model
         // 获取导航分类
         $cat = \app\modules\api\models\crowdapply\Cat::find()
             ->select('id,name')
-            ->andWhere(['is_delete'=>0,'store_id'=>$this->store_id])
+            ->andWhere(['is_delete' => 0, 'store_id' => $this->store_id])
             ->orderBy('sort ASC')
             ->asArray()
             ->all();
@@ -141,14 +143,14 @@ class IndexForm extends Model
         $yyGoods->store_id = $this->store_id;
         $yyGoods->user_id = \Yii::$app->user->id;
         $goods = $yyGoods->getList();
-        $catShow = \app\modules\api\models\crowdapply\Setting::findOne(['store_id'=>$this->store_id]);
-        if (!$catShow->cat){
-            $cat[0]['name']='报名活动';
+        $catShow = \app\modules\api\models\crowdapply\Setting::findOne(['store_id' => $this->store_id]);
+        if (!$catShow->cat) {
+            $cat[0]['name'] = '报名活动';
         }
-        return[
-            'cat'     => $cat[0],
-            'goods_list'   => $goods['list'],
-            'cat_show'   => $catShow->cat,
+        return [
+            'cat' => $cat[0],
+            'goods_list' => $goods['list'],
+            'cat_show' => $catShow->cat,
         ];
     }
 
@@ -158,7 +160,7 @@ class IndexForm extends Model
         // 获取导航分类
         $cat = \app\modules\api\models\crowdstockright\Cat::find()
             ->select('id,name')
-            ->andWhere(['is_delete'=>0,'store_id'=>$this->store_id])
+            ->andWhere(['is_delete' => 0, 'store_id' => $this->store_id])
             ->orderBy('sort ASC')
             ->asArray()
             ->all();
@@ -167,14 +169,14 @@ class IndexForm extends Model
         $yyGoods->store_id = $this->store_id;
         $yyGoods->user_id = \Yii::$app->user->id;
         $goods = $yyGoods->getList();
-        $catShow = \app\modules\api\models\crowdstockright\Setting::findOne(['store_id'=>$this->store_id]);
-        if (!$catShow->cat){
-            $cat[0]['name']='众筹股东权益';
+        $catShow = \app\modules\api\models\crowdstockright\Setting::findOne(['store_id' => $this->store_id]);
+        if (!$catShow->cat) {
+            $cat[0]['name'] = '众筹股东权益';
         }
-        return[
-            'cat'     => $cat[0],
-            'goods_list'   => $goods['list'],
-            'cat_show'   => $catShow->cat,
+        return [
+            'cat' => $cat[0],
+            'goods_list' => $goods['list'],
+            'cat_show' => $catShow->cat,
         ];
     }
 
@@ -184,7 +186,7 @@ class IndexForm extends Model
         // 获取导航分类
         $cat = \app\modules\api\models\couponmall\Cat::find()
             ->select('id,name')
-            ->andWhere(['is_delete'=>0,'store_id'=>$this->store_id])
+            ->andWhere(['is_delete' => 0, 'store_id' => $this->store_id])
             ->orderBy('sort ASC')
             ->asArray()
             ->all();
@@ -193,14 +195,14 @@ class IndexForm extends Model
         $yyGoods->store_id = $this->store_id;
         $yyGoods->user_id = \Yii::$app->user->id;
         $goods = $yyGoods->getList();
-        $catShow = Setting::findOne(['store_id'=>$this->store_id]);
-        if (!$catShow->cat){
-            $cat[0]['name']='兑换商城';
+        $catShow = Setting::findOne(['store_id' => $this->store_id]);
+        if (!$catShow->cat) {
+            $cat[0]['name'] = '兑换商城';
         }
-        return[
-            'cat'     => $cat[0],
-            'goods_list'   => $goods['list'],
-            'cat_show'   => $catShow->cat,
+        return [
+            'cat' => $cat[0],
+            'goods_list' => $goods['list'],
+            'cat_show' => $catShow->cat,
         ];
     }
 
@@ -282,6 +284,55 @@ class IndexForm extends Model
             ->orderBy('g.sort ASC,g.addtime DESC')
             ->limit(10)
             ->asArray()->all();
+        foreach ($list as $i => $item) {
+            $item['attr'] = json_decode($item['attr'], true);
+            $list[$i] = $item;
+            $price_list = [];
+            foreach ($item['attr'] as $attr) {
+                if ($attr['seckill_price'] <= 0) {
+                    $price_list[] = doubleval($item['price']);
+                } else {
+                    $price_list[] = doubleval($attr['seckill_price']);
+                }
+            }
+            $list[$i]['price'] = number_format($list[$i]['price'], 2, '.', '');
+            $list[$i]['seckill_price'] = number_format(min($price_list), 2, '.', '');
+            unset($list[$i]['attr']);
+        }
+        if (count($list) == 0)
+            return [
+                'name' => '暂无秒杀活动',
+                'rest_time' => 0,
+                'goods_list' => null,
+            ];
+        return [
+            'name' => intval(date('H')) . '点场',
+            'rest_time' => max(intval(strtotime(date('Y-m-d H:59:59')) - time()), 0),
+            'goods_list' => $list,
+        ];
+    }
+
+
+    public function getCrowdSeckillData()
+    {
+        $list = \app\modules\api\models\crowdc\SeckillGoods::find()->alias('mg')
+            ->select('g.id,g.name,g.cover_pic AS pic,g.price,mg.attr,mg.start_time')
+            ->leftJoin(['g' => \app\modules\api\models\crowdc\Goods::tableName()], 'mg.goods_id=g.id')
+            ->where([
+                'AND',
+                [
+                    'mg.is_delete' => 0,
+                    'g.is_delete' => 0,
+                    'mg.open_date' => date('Y-m-d'),
+                    'g.status' => 1,
+                    'mg.start_time' => date('H'),
+                    'mg.store_id' => $this->store_id,
+                ],
+            ])
+            ->orderBy('g.sort ASC,g.addtime DESC')
+            ->limit(10)
+            ->asArray()
+            ->all();
         foreach ($list as $i => $item) {
             $item['attr'] = json_decode($item['attr'], true);
             $list[$i] = $item;
