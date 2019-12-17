@@ -59,7 +59,7 @@ class AppNavbar
         $navbar['mall']=
 //            ['titleData' => ['商城商品','预售商品','众筹商品'],
             ['titleData' => ['商城商品','预售商品'],
-            'titleActive' => 2,
+            'titleActive' => 0,
             ];
         return $navbar;
     }
