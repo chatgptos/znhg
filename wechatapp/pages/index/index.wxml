@@ -3,7 +3,7 @@
 
 <view class="index">
 
-    <view class='notice flex-row' wx:if='{{notice}}' bindtap='showNotice'>
+    <view class='notice flex-row' wx:if='{{notice}}' bindtap='showNotice' >
         <view class='flex-grow-0 flex-y-center notice-a'>
             <image src='/images/icon-notice.png' style='width:36rpx;height:36rpx;margin-right:24rpx;'></image>
             <view>公告：</view>
@@ -83,6 +83,79 @@
                 </view>
             </navigator>
         </view>
+
+
+
+
+        <!-- 首页推荐 开始 -->
+        <view wx:elif="{{item.name=='recommend'}}">
+            <block wx:for="{{cat_list}}" wx:for-index="cat_index" wx:for-item="cat">
+
+                <view wx:if="{{cat.goods_list.length>0}}">
+                    <view class="title">
+                        <view class="line"></view>
+                        <view class="name">{{cat.name}}</view>
+                        <view class="line"></view>
+                    </view>
+
+
+                    <view class="con-list">
+                        <swiper class="body" indicator-dots="{{indicatorDots}}"
+                                autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}"
+                                indicator-color="{{incolor}}"
+                                indicator-active-color="{{activeColor}}">
+                            <swiper-item>
+                                <view class="swiper-item">
+                                    <view class="li" wx:for="{{cat.goods_list}}" wx:for-index="goods_index"
+                                          wx:for-item="goods" wx:if="{{goods_index <= cat_goods_cols}}">
+                                        <navigator url="/pages/goods/goods?id={{goods.id}}">
+                                            <view class="img">
+                                                <image style=" height: 64px;width:64px" src="{{goods.pic_url}}"></image>
+                                            </view>
+                                            <view class="x-title">{{goods.name}}</view>
+                                            <view class="price">
+                                                <view class="new-p">
+                                                    <text wx:if='{{cat_goods_cols == 3}}'>￥</text>
+                                                    {{goods.price}}
+                                                </view>
+                                                <view class="old-p" wx:if='{{cat_goods_cols == 3}}'>￥{{goods.price}}
+                                                </view>
+                                            </view>
+                                        </navigator>
+                                    </view>
+                                </view>
+                            </swiper-item>
+                            <swiper-item>
+                                <view class="swiper-item">
+                                    <view class="li" wx:for="{{cat.goods_list}}" wx:for-index="goods_index"
+                                          wx:for-item="goods" wx:if="{{goods_index > cat_goods_cols}}">
+                                        <navigator url="/pages/goods/goods?id={{goods.id}}">
+                                            <view class="img">
+                                                <image style=" height: 64px;width:64px" src="{{goods.pic_url}}"></image>
+                                            </view>
+                                            <view class="x-title">{{goods.name}}</view>
+                                            <view class="price">
+                                                <view class="new-p">
+                                                    <text wx:if='{{cat_goods_cols == 3}}'>￥</text>
+                                                    {{goods.price}}
+                                                </view>
+                                                <view class="old-p" wx:if='{{cat_goods_cols == 3}}'>￥{{goods.price}}
+                                                </view>
+                                            </view>
+                                        </navigator>
+                                    </view>
+                                </view>
+                            </swiper-item>
+                        </swiper>
+                    </view>
+                </view>
+            </block>
+        </view>
+
+
+
+
+
 
         <!-- 全部分类 开始 -->
         <view wx:elif="{{item.name=='cat'}}">
@@ -828,7 +901,7 @@
 </view>
 
 
-<view class="after-navber">
+<view class="after-navber" style="margin-bottom:60px;">
     <!--商城公告 开始-->
 
     <!--<view class='notice flex-row' wx:if='{{notice}}' bindtap='showNotice'>-->

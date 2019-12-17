@@ -57,8 +57,8 @@ class AppNavbar
         $navbar = Option::get('navbar', $store_id, 'app', json_encode($default_navbar, JSON_UNESCAPED_UNICODE));
         $navbar = json_decode($navbar, true);
         $navbar['mall']=
-//            ['titleData' => ['商城商品','预售商品','众筹商品'],
-            ['titleData' => ['商城商品','预售商品'],
+            ['titleData' => ['商城商品','预售商品','众筹商品'],
+//            ['titleData' => ['商城商品','预售商品'],
             'titleActive' => 0,
             ];
         return $navbar;

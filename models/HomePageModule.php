@@ -73,6 +73,12 @@ class HomePageModule extends Model
             'name' => 'crowdc_seckill',
             'display_name' => '众筹商城',
         ],
+        //新增
+        [
+            'name' => 'recommend',
+            'display_name' => '首页推荐',
+        ],
+
 
     ];
 

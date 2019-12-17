@@ -1,3 +1,4 @@
+var mta= require('../../analysis/mta_analysis.js')
 var api = require('../../api.js');
 var app = getApp();
 var share_count = 0;
@@ -41,6 +42,7 @@ Page({
         console.log('console.log(parent_id)------------------'+parent_id+'user_id'+user_id)
         app.loginBindParent({ parent_id: parent_id });
         console.log('console.log(loginBindParent)------------------')
+
     },
 
     /**
@@ -285,7 +287,9 @@ Page({
         app.pageOnUnload(this);
         clearInterval(int);
     },
-    showNotice: function () {
+    showNotice: function (e) {
+        console.log(e)
+        mta.Event.stat('buy',{'price':'true'})
         this.setData({
             show_notice: true
         });
