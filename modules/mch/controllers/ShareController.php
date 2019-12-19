@@ -16,6 +16,7 @@ use app\models\Option;
 use app\models\Qrcode;
 use app\models\Setting;
 use app\models\Share;
+use app\models\TreeGrid;
 use app\models\User;
 use app\models\WechatTemplateMessage;
 use app\models\WechatTplMsgSender;
@@ -27,7 +28,10 @@ use app\modules\mch\models\ShareListForm;
 use app\modules\mch\models\ShareOrderForm;
 use app\modules\mch\models\ShareSettingForm;
 use app\modules\mch\models\StoreDataForm;
+use yii\data\ActiveDataProvider;
 use yii\helpers\VarDumper;
+
+
 
 class ShareController extends Controller
 {
@@ -40,134 +44,75 @@ class ShareController extends Controller
         $form = new ShareListForm();
         $form->attributes = \Yii::$app->request->get();
         $form->store_id = $this->store->id;
-        $form->limit = 10;
+        $form->limit = 20;
         $arr = $form->getList();
 
 
-
-
-
-        $categorys = array(
-            array('id'=>1, 'categoryName'=>'1级分类 1', 'parentId'=>0),
-            array('id'=>2, 'categoryName'=>'1级分类 2', 'parentId'=>0),
-            array('id'=>3, 'categoryName'=>'1级分类 3', 'parentId'=>0),
-            array('id'=>4, 'categoryName'=>'2级分类 1', 'parentId'=>1),
-            array('id'=>5, 'categoryName'=>'2级分类 2', 'parentId'=>2),
-            array('id'=>6, 'categoryName'=>'3级分类 1', 'parentId'=>4),
-            array('id'=>7, 'categoryName'=>'3级分类 2', 'parentId'=>5),
-            array('id'=>8, 'categoryName'=>'4级分类 1', 'parentId'=>6),
-            array('id'=>9, 'categoryName'=>'3级分类 2', 'parentId'=>5),
-        );
-
-
-
-            $result = $this->getSons($categorys, 1);
-
-//            var_dump($result);
-//            die;
-        foreach ($result as $item){
-            echo $item['categoryName'].'<br>';
-            echo '<hr>';
-        }
-
-        $result = $this->getSubs($categorys, 1);
-        echo '<hr>';
-        foreach ($result as $item){
-//            echo str_repeat('  ', $item['level']).$item['categoryName'].'<br>';
-//            echo '<hr>';
-
-            echo $item['categoryName'].' >> ';
-
-        }
-
-        var_dump($result);
-        echo '<hr>';
-
-        $result = $this->getParents($categorys, 7);
-        foreach ($result as $item){
-            echo $item['categoryName'].' >> ';
-//            echo '<hr>';
-        }
-        die;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        $list = $form->getTeam();
-        $count = $form->getCount();
         $setting = Setting::findOne(['store_id' => $this->store->id]);
+//        $list = $form->getTeam();
+        $count = $form->getCount();
+
         return $this->render('index', [
             'list' => $arr[0],
             'pagination' => $arr[1],
             'setting' => $setting,
-            'team' => json_encode($list, JSON_UNESCAPED_UNICODE),
+//            'team' => json_encode($list, JSON_UNESCAPED_UNICODE),
+            'team' => json_encode($arr[2], JSON_UNESCAPED_UNICODE),
             'count' => $count
         ]);
     }
 
-        //获取某分类的直接子分类
-        public function getSons($categorys, $catId = 0)
-        {
-            $sons = array();
-            foreach ($categorys as $item) {
-                if ($item['parentId'] == $catId)
-                    $sons[] = $item;
-            }
-            return $sons;
+
+
+
+
+
+
+
+
+
+
+    //获取某分类的直接子分类
+    public function getSons($categorys, $catId = 0)
+    {
+        $sons = array();
+        foreach ($categorys as $item) {
+            if ($item['parent_id'] == $catId)
+                $sons[] = $item;
         }
+        return $sons;
+    }
 
-        //获取某个分类的所有子分类
-        public function getSubs($categorys, $catId = 0, $level = 1)
-        {
-            $subs = array();
-            foreach ($categorys as $item) {
-                if ($item['parentId'] == $catId) {
-                    $item['level'] = $level;
-                    $subs[] = $item;
-                    $subs = array_merge($subs,$this->getSubs($categorys, $item['id'], $level + 1));
-                }
-
+    //获取某个分类的所有子分类
+    public function getSubs($categorys, $catId = 0, $level = 1)
+    {
+        $subs = array();
+        foreach ($categorys as $item) {
+            if ($item['parent_id'] == $catId) {
+                $item['level'] = $level;
+                $subs[] = $item;
+                $subs = array_merge($subs,$this->getSubs($categorys, $item['id'], $level + 1));
             }
-            return $subs;
-        }
 
-        //获取某个分类的所有父分类
-        //方法一，递归
-        public function getParents($categorys, $catId)
-        {
-            $tree = array();
-            foreach ($categorys as $item) {
-                if ($item['id'] == $catId) {
-                    if ($item['parentId'] > 0)
-                        $tree = array_merge($tree, $this->getParents($categorys, $item['parentId']));
-                    $tree[] = $item;
-                    break;
-                }
+        }
+        return $subs;
+    }
+
+    //获取某个分类的所有父分类
+    //方法一，递归
+    public function getParents($categorys, $catId)
+    {
+        $tree = array();
+        foreach ($categorys as $item) {
+            if ($item['id'] == $catId) {
+                if ($item['parent_id'] > 0)
+                    $tree = array_merge($tree, $this->getParents($categorys, $item['parentId']));
+                $tree[] = $item;
+                break;
             }
-            return $tree;
         }
-
-
-bootstr
-
-
-
-
-
-
-
-
-
+        return $tree;
+    }
 
 
 

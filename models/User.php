@@ -198,4 +198,51 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return $this->hasMany(User::className(), ['parent_id' => 'id'])->where(['is_delete' => 0])->orderBy('addtime DESC');
     }
+
+
+    //获取某分类的直接子分类
+    public function getSons($categorys, $catId = 0)
+    {
+        $sons = array();
+        foreach ($categorys as $item) {
+            if ($item['parentId'] == $catId)
+                $sons[] = $item;
+        }
+        return $sons;
+    }
+
+    //获取某个分类的所有子分类
+    public function getSubs($categorys, $catId = 0, $level = 1)
+    {
+        $subs = array();
+        foreach ($categorys as $item) {
+            if ($item['parentId'] == $catId) {
+                $item['level'] = $level;
+                $subs[] = $item;
+                $subs = array_merge($subs,$this->getSubs($categorys, $item['id'], $level + 1));
+            }
+
+        }
+        return $subs;
+    }
+
+    //获取某个分类的所有父分类
+    //方法一，递归
+    public function getParents($categorys, $catId)
+    {
+        $tree = array();
+        foreach ($categorys as $item) {
+            if ($item['id'] == $catId) {
+                if ($item['parentId'] > 0)
+                    $tree = array_merge($tree, $this->getParents($categorys, $item['parentId']));
+                $tree[] = $item;
+                break;
+            }
+        }
+        return $tree;
+    }
+
+
+
+
 }

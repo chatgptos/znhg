@@ -7,6 +7,7 @@
 /* @var $pagination yii\data\Pagination */
 /* @var $setting \app\models\Setting */
 use yii\widgets\LinkPager;
+use leandrogehlen\treegrid\TreeGrid;
 
 $urlManager = Yii::$app->urlManager;
 $this->title = '分销商列表';
@@ -15,6 +16,8 @@ $status = Yii::$app->request->get('status');
 if ($status === '' || $status === null || $status == -1)
     $status = -1;
 ?>
+
+
 <div class="panel mb-3" id="app">
     <div class="panel-header"><?= $this->title ?></div>
     <div class="panel-body">
@@ -73,6 +76,7 @@ if ($status === '' || $status === null || $status == -1)
                 </td>
                 <td>上级分销商</td>
                 <td>下级分销商</td>
+                <td>下级分销商</td>
                 <td>状态</td>
                 <td>申请时间</td>
                 <td>审核时间</td>
@@ -101,26 +105,20 @@ if ($status === '' || $status === null || $status == -1)
 
                     <td>
                         <?php if ($value['status'] == 1): ?>
-                            <?php if ($setting->level == 0): ?>
+                            <?php if ($value['allson_num'] == 0): ?>
                                 <span>0</span>
                             <?php else: ?>
-                                <?php if ($setting->level >= 1): ?>
-                                    <div><a class="team" data-index="<?= $value['id'] ?>" data-level="1"
+                                <span>共(<?= $value['allson_num'] ?>)</span>
+                                     <!--循环出不同level的不通过次数-->
+
+
+                              <?php if ($value['level_s_children']): ?>
+                                <?php foreach ($value['level_s_children'] as $level => $levelcount): ?>
+                                    <div><a class="team" data-index="<?= $value['id'] ?>" data-level=<?= $level ?>
                                             href="javascript:" data-toggle="modal"
-                                            data-target="#exampleModal"><?= $setting->first_name ? $setting->first_name : "一级" ?>
-                                            ：<?= $value['first'] ?></a></div>
-                                <?php endif; ?>
-                                <?php if ($setting->level >= 2): ?>
-                                    <div><a class="team" data-index="<?= $value['id'] ?>" data-level="2"
-                                            href="javascript:" data-toggle="modal"
-                                            data-target="#exampleModal"><?= $setting->second_name ? $setting->second_name : "二级" ?>
-                                            ：<?= $value['second'] ?></a></div>
-                                <?php endif; ?>
-                                <?php if ($setting->level == 3): ?>
-                                    <div><a class="team" data-index="<?= $value['id'] ?>" data-level="3"
-                                            href="javascript:" data-toggle="modal"
-                                            data-target="#exampleModal"><?= $setting->third_name ? $setting->third_name : "三级" ?>
-                                            ：<?= $value['third'] ?></a></div>
+                                            data-target="#exampleModal"><?= $level ?>级
+                                            ：<?= $levelcount ?></a></div>
+                                <?php endforeach; ?>
                                 <?php endif; ?>
                             <?php endif; ?>
                         <?php endif; ?>
@@ -204,6 +202,8 @@ if ($status === '' || $status === null || $status == -1)
         </div>
     </div>
 </div>
+
+
 <?= $this->render('/layouts/ss'); ?>
 <script>
     var app = new Vue({
@@ -222,20 +222,14 @@ if ($status === '' || $status === null || $status == -1)
         app.list = [];
         app.name = '';
         app.level = '';
+        // console.log(team)
         $.each(team, function (i) {
             if (team[i].id == index) {
-                if (level == 1) {
-                    app.list = team[i].firstChildren;
-                    app.level = "<?=$setting->first_name?>" || "一级";
-                }
-                if (level == 2) {
-                    app.list = team[i].secondChildren;
-                    app.level = "<?=$setting->second_name?>" || "二级";
-                }
-                if (level == 3) {
-                    app.list = team[i].thirdChildren;
-                    app.level = "<?=$setting->third_name?>" || "三级";
-                }
+                var applist = team[i].list_son;
+                var levelMax = team[i].levelMax;
+                app.list = applist[level];
+                console.log(applist);
+                app.level = level+'级';
                 app.name = team[i].nickname;
             }
         })
