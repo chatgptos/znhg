@@ -27,7 +27,7 @@ $this->params['is_book'] = 1;
         <form class="auto-form" method="post" autocomplete="off">
             <div class="form-group row">
                 <div class="col-sm-3 text-right">
-                    <label class="col-form-label">优惠成功通知模板ID</label>
+                    <label class="col-form-label">权益成功通知模板ID</label>
                 </div>
                 <div class="col-sm-6">
                     <input class="form-control" value="<?= $setting['success_notice'] ?>"
@@ -43,7 +43,7 @@ $this->params['is_book'] = 1;
 
             <div class="form-group row" hidden>
                 <div class="col-sm-3 text-right">
-                    <label class="col-form-label">优惠失败退款通知模板ID</label>
+                    <label class="col-form-label">权益失败退款通知模板ID</label>
                 </div>
                 <div class="col-sm-6">
                     <input class="form-control"
@@ -60,7 +60,7 @@ $this->params['is_book'] = 1;
 
             <div class="form-group row">
                 <div class="col-sm-3 text-right">
-                    <label class="col-form-label">优惠失败退款通知模板ID</label>
+                    <label class="col-form-label">权益失败退款通知模板ID</label>
                 </div>
                 <div class="col-sm-6">
                     <input class="form-control" value="<?= $setting['refund_notice'] ?>"

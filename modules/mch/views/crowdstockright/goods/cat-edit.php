@@ -6,7 +6,7 @@
  */
 
 $urlManager = Yii::$app->urlManager;
-$this->title = '优惠产品分类';
+$this->title = '权益产品分类';
 $this->params['active_nav_group'] = 10;
 $this->params['is_book'] = 1;
 ?>

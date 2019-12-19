@@ -192,4 +192,10 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public static function getCardCount($id){
         return UserCard::find()->where(['is_delete'=>0,'user_id'=>$id])->count();
     }
+
+
+    public function getChildrenList()
+    {
+        return $this->hasMany(User::className(), ['parent_id' => 'id'])->where(['is_delete' => 0])->orderBy('addtime DESC');
+    }
 }

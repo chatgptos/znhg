@@ -407,7 +407,7 @@ if (!$returnUrl)
 
                         <div class="form-group row">
                             <div class="col-3 text-right">
-                                <label class=" col-form-label required">优惠金额</label>
+                                <label class=" col-form-label required">权益金额</label>
                             </div>
                             <div class="col-9">
                                 <div class="input-group short-row">
@@ -422,7 +422,7 @@ if (!$returnUrl)
 
                         <div class="form-group row">
                             <div class="col-3 text-right">
-                                <label class=" col-form-label required">优惠券数量</label>
+                                <label class=" col-form-label required">权益券数量</label>
                             </div>
                             <div class="col-9">
                                 <div class="input-group short-row">
@@ -772,7 +772,7 @@ if (!$returnUrl)
 
                         <div class="form-group row">
                             <div class="col-3 text-right">
-                                <label class=" col-form-label required">优惠券</label>
+                                <label class=" col-form-label required">权益券</label>
                             </div>
                             <div class="col-9">
                                 <div class="input-group short-row">

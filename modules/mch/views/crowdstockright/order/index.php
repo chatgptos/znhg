@@ -10,7 +10,7 @@ use yii\widgets\LinkPager;
 
 $urlManager = Yii::$app->urlManager;
 $statics = Yii::$app->request->baseUrl . '/statics';
-$this->title = '优惠订单列表';
+$this->title = '权益订单列表';
 $this->params['active_nav_group'] = 10;
 $this->params['is_book'] = 1;
 $status = Yii::$app->request->get('status', -1);
@@ -402,7 +402,7 @@ $condition = [
             </div>
             <div class="modal-footer">
                 <a href="javascript:" class="btn btn-primary add-price" data-type="1">确认</a>
-<!--                <a href="javascript:" class="btn btn-primary add-price" data-type="2">优惠</a>-->
+<!--                <a href="javascript:" class="btn btn-primary add-price" data-type="2">权益</a>-->
             </div>
         </div>
     </div>

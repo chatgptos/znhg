@@ -391,83 +391,192 @@ class MchMenu
                     ],
                 ],
             ],
-
             [
-//                'id' => 'book',
-                'name' => '众筹报名管理',
-                'icon' => 'icon-service',
+                'name' => '众筹B管理',
                 'route' => 'mch/crowdapply/goods/index',
+                'icon' => 'icon-service',
                 'list' => [
                     [
-                        'name' => '活动管理',
+                        'name' => '众筹报名管理',
+                        'icon' => 'icon-service',
                         'route' => 'mch/crowdapply/goods/index',
-                        'sub' => [
-                            'mch/crowdapply/goods/goods-edit'
-                        ]
+                        'list' => [
+                            [
+                                'name' => '活动管理',
+                                'route' => 'mch/crowdapply/goods/index',
+                                'sub' => [
+                                    'mch/crowdapply/goods/goods-edit'
+                                ]
+                            ],
+                            [
+                                'name' => '活动分类',
+                                'route' => 'mch/crowdapply/goods/cat',
+                                'sub' => [
+                                    'mch/crowdapply/goods/cat-edit'
+                                ]
+                            ],
+                            [
+                                'name' => '报名记录管理',
+                                'route' => 'mch/crowdapply/order/index',
+                            ],
+                            [
+                                'name' => '基础设置',
+                                'route' => 'mch/crowdapply/index/setting',
+                            ],
+                            [
+                                'name' => '模板消息',
+                                'route' => 'mch/crowdapply/notice/setting',
+                            ],
+                            [
+                                'name' => '报名评论管理',
+                                'route' => 'mch/crowdapply/comment/index',
+                            ],
+                        ],
                     ],
                     [
-                        'name' => '活动分类',
-                        'route' => 'mch/crowdapply/goods/cat',
-                        'sub' => [
-                            'mch/crowdapply/goods/cat-edit'
-                        ]
-                    ],
-                    [
-                        'name' => '报名记录管理',
-                        'route' => 'mch/crowdapply/order/index',
-                    ],
-                    [
-                        'name' => '基础设置',
-                        'route' => 'mch/crowdapply/index/setting',
-                    ],
-                    [
-                        'name' => '模板消息',
-                        'route' => 'mch/crowdapply/notice/setting',
-                    ],
-                    [
-                        'name' => '报名评论管理',
-                        'route' => 'mch/crowdapply/comment/index',
+                        'name' => '众筹资格管理',
+                        'icon' => 'icon-service',
+                        'route' => 'mch/crowdstockright/goods/index',
+                        'list' => [
+                            [
+                                'name' => '权益管理',
+                                'route' => 'mch/crowdstockright/goods/index',
+                                'sub' => [
+                                    'mch/crowdstockright/goods/goods-edit'
+                                ]
+                            ],
+                            [
+                                'name' => '权益分类',
+                                'route' => 'mch/crowdstockright/goods/cat',
+                                'sub' => [
+                                    'mch/crowdstockright/goods/cat-edit'
+                                ]
+                            ],
+                            [
+                                'name' => '权益记录管理',
+                                'route' => 'mch/crowdstockright/order/index',
+                            ],
+                            [
+                                'name' => '基础设置',
+                                'route' => 'mch/crowdstockright/index/setting',
+                            ],
+                            [
+                                'name' => '模板消息',
+                                'route' => 'mch/crowdstockright/notice/setting',
+                            ],
+                            [
+                                'name' => '评论管理',
+                                'route' => 'mch/crowdstockright/comment/index',
+                            ],
+                        ],
                     ],
                 ],
             ],
 
-
             [
-//                'id' => 'book',
-                'name' => '众筹资格管理',
+                'name' => '结算管理',
+                'route' => 'mch/settlementbonus/goods/index',
                 'icon' => 'icon-service',
-                'route' => 'mch/crowdstockright/goods/index',
                 'list' => [
                     [
-                        'name' => '权益管理',
-                        'route' => 'mch/crowdstockright/goods/index',
-                        'sub' => [
-                            'mch/crowdstockright/goods/goods-edit'
-                        ]
+                        'name' => '奖金结算管理',
+                        'icon' => 'icon-service',
+                        'route' => 'mch/settlementbonus/goods/index',
+                        'list' => [
+                            [
+                                'name' => '奖金管理',
+                                'route' => 'mch/settlementbonus/goods/index',
+                                'sub' => [
+                                    'mch/settlementbonus/goods/goods-edit'
+                                ]
+                            ],
+                            [
+                                'name' => '奖金分类',
+                                'route' => 'mch/settlementbonus/goods/cat',
+                                'sub' => [
+                                    'mch/settlementbonus/goods/cat-edit'
+                                ]
+                            ],
+                            [
+                                'name' => '奖金发放记录',
+                                'route' => 'mch/settlementbonus/order/index',
+                            ],
+
+//                            [
+//                                'name' => '加权分红放记录管理',
+//                                'route' => 'mch/settlementbonus/order/offline1',
+//                            ],
+//
+//                            [
+//                                'name' => '返点奖金放记录管理',
+//                                'route' => 'mch/settlementbonus/order/offline2',
+//                            ],
+//
+//                            [
+//                                'name' => '福利分红发放记录管理',
+//                                'route' => 'mch/settlementbonus/order/offline3',
+//                            ],
+//                            [
+//                                'name' => '基础设置',
+//                                'route' => 'mch/settlementbonus/index/setting',
+//                            ],
+//                            [
+//                                'name' => '模板消息',
+//                                'route' => 'mch/settlementbonus/notice/setting',
+//                            ],
+//                            [
+//                                'name' => '奖金评论管理',
+//                                'route' => 'mch/settlementbonus/comment/index',
+//                            ],
+                        ],
                     ],
+
                     [
-                        'name' => '权益分类',
-                        'route' => 'mch/crowdstockright/goods/cat',
-                        'sub' => [
-                            'mch/crowdstockright/goods/cat-edit'
-                        ]
+                        'name' => '用户结算管理',
+                        'icon' => 'icon-service',
+                        'route' => 'mch/settlementstatistics/data/user',
+                        'list' => [
+                            [
+                                'name' => '用户推荐用户统计',
+                                'route' => 'mch/settlementstatistics/data/user',
+                                'sub' => [
+                                    'mch/settlementstatistics/data/goods'
+                                ]
+                            ],
+//                            [
+//                                'name' => '数据统计',
+//                                'route' => 'mch/group/data/goods',
+//                                'sub' => [
+//                                    'mch/group/data/user'
+//                                ]
+//                            ],
+//                            [
+//                                'name' => '用户积分统计',
+//                                'route' => 'mch/settlementstatistics/data/user',
+//                                'sub' => [
+//                                    'mch/settlementstatistics/data/user'
+//                                ]
+//                            ],
+//                            [
+//                                'name' => '用户现金消费统计',
+//                                'route' => 'mch/settlementstatistics/data/user',
+//                            ],
+//                            [
+//                                'name' => '用户的用户统计',
+//                                'route' => 'mch/settlementstatistics/data/user',
+//                            ],
+//                            [
+//                                'name' => '模板消息',
+//                                'route' => 'mch/settlementstatistics/data/user',
+//                            ],
+//                            [
+//                                'name' => '用户评论管理',
+//                                'route' => 'mch/settlementstatistics/data/user',
+//                            ],
+                        ],
                     ],
-                    [
-                        'name' => '权益记录管理',
-                        'route' => 'mch/crowdstockright/order/index',
-                    ],
-                    [
-                        'name' => '基础设置',
-                        'route' => 'mch/crowdstockright/index/setting',
-                    ],
-                    [
-                        'name' => '模板消息',
-                        'route' => 'mch/crowdstockright/notice/setting',
-                    ],
-                    [
-                        'name' => '评论管理',
-                        'route' => 'mch/crowdstockright/comment/index',
-                    ],
+
+
                 ],
             ],
 

@@ -7,7 +7,7 @@
 use yii\widgets\LinkPager;
 
 $urlManager = Yii::$app->urlManager;
-$this->title = '优惠评论列表';
+$this->title = '权益评论列表';
 $this->params['active_nav_group'] = 10;
 $this->params['is_book'] = 1;
 ?>
