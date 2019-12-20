@@ -33,15 +33,15 @@ class DataController extends Controller
         $form->attributes = \Yii::$app ->request->get();
         $arr = $form->user_search();
 
-        $cat_list = User::find()->where(['store_id' => $this->store->id, 'is_delete' => 0, 'parent_id' => 0])
-            ->orderBy('addtime DESC')
-            ->all();
+
+
+
+
 
         return $this->render('user',[
             'list'=>$arr['list'],
             'pagination'=>$arr['pagination'],
             'row_count'=>$arr['row_count'],
-            'cat_list' => $cat_list,
         ]);
     }
 }

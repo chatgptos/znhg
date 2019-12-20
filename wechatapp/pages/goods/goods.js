@@ -1,4 +1,5 @@
 // goods.js
+var mta = require('../../analysis/mta_analysis.js');
 var api = require('../../api.js');
 var utils = require('../../utils.js');
 var app = getApp();
@@ -218,6 +219,7 @@ Page({
 
     buyNow: function () {
         this.submit('BUY_NOW');
+        mta.Event.stat("myprice",{})
     },
 
     submit: function (type) {
@@ -387,6 +389,7 @@ Page({
                 }
             }
         });
+        mta.Event.stat("myprice",{})
 
     },
 

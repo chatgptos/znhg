@@ -1,4 +1,5 @@
 // order-submit.js
+var mta = require('../../analysis/mta_analysis.js');
 var api = require('../../api.js');
 var app = getApp();
 var longitude = "";
@@ -101,6 +102,7 @@ Page({
     },
 
     orderSubmit: function () {
+        mta.Event.stat("buy",{})
         var page = this;
         var offline = page.data.offline;
         var data = {};

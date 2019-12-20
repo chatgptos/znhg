@@ -1,6 +1,7 @@
 {
   "pages": [
-    "pages/index/index", 
+    "pages/index/index",
+    "pages/choujiang/choujiang",
     "pages/mall/mall",
     
     "pages/bookmall/order/order", 

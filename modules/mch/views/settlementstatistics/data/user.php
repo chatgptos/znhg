@@ -114,8 +114,8 @@ $this->params['page_navs'] = [
                 <th class="text-center">排行</th>
                 <th>用户信息</th>
                 <th>消费金额</th>
-                <th>父级</th>
-                <th>子分类</th>
+                <th>推荐总人数</th>
+                <th>推荐付费用户人数</th>
                 <th>消费金额</th>
                 <th>消费金额</th>
                 <th>订单数</th>
@@ -126,75 +126,6 @@ $this->params['page_navs'] = [
             <col style="width: 10%;">
             <col style="width: 10%;">
             <tbody>
-            <?php foreach ($cat_list as $index => $cat): ?>
-                <tr>
-                    <td><?= $cat['id'] ?></td>
-                    <td><?= $cat['nickname'] ?></td>
-                    <td>
-                        <?php if (!empty($cat['pic_url'])): ?>
-                            <img src="<?= $cat['pic_url'] ?>"
-                                 style="width: 20px;height: 20px;">
-                        <?php endif; ?>
-                    </td>
-                    <td>
-
-                        <a class="btn btn-sm btn-primary"
-                           href="<?= $urlManager->createUrl(['mch/store/cat-edit', 'id' => $cat['id']]) ?>">修改</a>
-                        <a class="btn btn-sm btn-primary copy" data-clipboard-text="/pages/cat/cat"
-                           href="javascript:" hidden>复制链接</a>
-                        <a class="btn btn-sm btn-danger del"
-                           href="<?= $urlManager->createUrl(['mch/store/cat-del', 'id' => $cat['id']]) ?>">删除</a>
-                    </td>
-                </tr>
-                <?php foreach ($cat->childrenList as $sub_cat): ?>
-                    <tr class="bg-faded">
-                        <td><?= $sub_cat['id'] ?></td>
-                        <td><span class="mr-2">●</span><?= $sub_cat['nickname'] ?></td>
-                        <td>
-                            <?php if (!empty($sub_cat['pic_url'])): ?>
-                                <img src="<?= $sub_cat['pic_url'] ?>"
-                                     style="width: 20px;height: 20px;">
-                            <?php endif; ?>
-                        </td>
-                        <td>
-
-                            <a class="btn btn-sm btn-primary"
-                               href="<?= $urlManager->createUrl(['mch/store/cat-edit', 'id' => $sub_cat['id']]) ?>">修改</a>
-                            <a class="btn btn-sm btn-primary copy"
-                               data-clipboard-text="/pages/list/list?cat_id=<?= $sub_cat['id'] ?>"
-                               href="javascript:" hidden>复制链接</a>
-                            <a class="btn btn-sm btn-danger del"
-                               href="<?= $urlManager->createUrl(['mch/store/cat-del', 'id' => $sub_cat['id']]) ?>">删除</a>
-                        </td>
-                    </tr>
-
-
-
-                    <?php foreach ($sub_cat->childrenList as $sub_cat1): ?>
-                        <tr class="bg-faded">
-                            <td><?= $sub_cat1['id'] ?></td>
-                            <td><span class="mr-2">●●●</span><?= $sub_cat1['nickname'] ?></td>
-                            <td>
-                                <?php if (!empty($sub_cat1['pic_url'])): ?>
-                                    <img src="<?= $sub_cat1['pic_url'] ?>"
-                                         style="width: 20px;height: 20px;">
-                                <?php endif; ?>
-                            </td>
-                            <td>
-
-                                <a class="btn btn-sm btn-primary"
-                                   href="<?= $urlManager->createUrl(['mch/store/cat-edit', 'id' => $sub_cat1['id']]) ?>">修改</a>
-                                <a class="btn btn-sm btn-primary copy"
-                                   data-clipboard-text="/pages/list/list?cat_id=<?= $sub_cat1['id'] ?>"
-                                   href="javascript:" hidden>复制链接</a>
-                                <a class="btn btn-sm btn-danger del"
-                                   href="<?= $urlManager->createUrl(['mch/store/cat-del', 'id' => $sub_cat1['id']]) ?>">删除</a>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php endforeach; ?>
-            <?php endforeach; ?>
-
 
 
             <?php foreach ($list as $index => $value): ?>
@@ -212,36 +143,9 @@ $this->params['page_navs'] = [
                         </div>
                     </td>
                     <td class="nowrap"><?= $value['parent_id'] ?></td>
-
-
-                <?php var_dump($value->childrenList);  foreach ($value->childrenList as $sub_cat): ?>
-                    <tr class="bg-faded">
-                        <td><?= $sub_cat['id'] ?></td>
-                        <td><span class="mr-2">●</span><?= $sub_cat['name'] ?></td>
-                        <td>
-                            <?php if (!empty($sub_cat['pic_url'])): ?>
-                                <img src="<?= $sub_cat['pic_url'] ?>"
-                                     style="width: 20px;height: 20px;">
-                            <?php endif; ?>
-                        </td>
-                        <td><?= $sub_cat['sort']; ?></td>
-                        <td>
-
-                            <a class="btn btn-sm btn-primary"
-                               href="<?= $urlManager->createUrl(['mch/store/cat-edit', 'id' => $sub_cat['id']]) ?>">修改</a>
-                            <a class="btn btn-sm btn-primary copy"
-                               data-clipboard-text="/pages/list/list?cat_id=<?= $sub_cat['id'] ?>"
-                               href="javascript:" hidden>复制链接</a>
-                            <a class="btn btn-sm btn-danger del"
-                               href="<?= $urlManager->createUrl(['mch/store/cat-del', 'id' => $sub_cat['id']]) ?>">删除</a>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-
-
-
-
-
+                    <td class="nowrap"><?= $value['tj']['allson_num'] ?></td>
+                    <td class="nowrap"><?= $value['tj']['allson_num'] ?></td>
+                    <td class="nowrap"><?= $value['parent_id'] ?></td>
                     <td class="nowrap"><?= $value['parent_id'] ?></td>
                     <td class="nowrap"><?= $value['sales_price'] ?></td>
                     <td class="nowrap"><?= $value['sales_count'] ?></td>
