@@ -39,4 +39,19 @@ class DataController extends Controller
             'row_count'=>$arr['row_count'],
         ]);
     }
+
+
+    public function actionUser1()
+    {
+        $form = new DataGoodsForm();
+        $form->store_id = $this->store->id;
+        $form->attributes = \Yii::$app ->request->get();
+        $arr = $form->user_search2();
+
+        return $this->render('user1',[
+            'list'=>$arr['list'],
+            'pagination'=>$arr['pagination'],
+            'row_count'=>$arr['row_count'],
+        ]);
+    }
 }

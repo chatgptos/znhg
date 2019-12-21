@@ -5,25 +5,15 @@
  * Time: 13:51
  */
 
-namespace app\modules\mch\controllers;
+namespace app\modules\mch\controllers\settlementstatistics;
 
 
-use app\models\Award;
-use app\models\IntegralLog;
-use app\models\Level;
-use app\models\Shop;
 use app\models\Store;
 use app\models\User;
-use app\models\UserCoupon;
-use app\modules\mch\models\AwardForm;
-use app\modules\mch\models\AwardListForm;
-use app\modules\mch\models\LevelForm;
-use app\modules\mch\models\LevelListForm;
-use app\modules\mch\models\UserCardListForm;
-use app\modules\mch\models\UserCouponForm;
+use app\modules\mch\models\settlementstatistics\Award;
+use app\modules\mch\models\settlementstatistics\AwardForm;
+use app\modules\mch\models\settlementstatistics\AwardListForm;
 use app\modules\mch\models\UserForm;
-use app\modules\mch\models\UserListForm;
-use yii\data\Pagination;
 
 class ChoujiangController extends Controller
 {
@@ -89,7 +79,7 @@ class ChoujiangController extends Controller
         }
         $level->status = $type;
         if ($type == 0) {
-            $exit = Award::find()->where(['store_id' => $this->store->id, 'level' => $level->level])->exists();
+            $exit = User::find()->where(['store_id' => $this->store->id, 'level' => $level->level])->exists();
             if ($exit) {
                 $this->renderJson([
                     'code' => 1,
@@ -154,7 +144,7 @@ class ChoujiangController extends Controller
             $this->redirect(\Yii::$app->urlManager->createUrl(['mch/user/index']))->send();
         }
         if (\Yii::$app->request->isAjax) {
-            $form = new UserForm();
+            $form = new AwardForm();
             $form->store_id = $this->store->id;
             $form->user = $user;
             $form->attributes = \Yii::$app->request->post();
@@ -162,7 +152,7 @@ class ChoujiangController extends Controller
         }
         $level = Award::findAll(['store_id' => $this->store->id, 'status' => 1, 'is_delete' => 0]);
 
-//        $user_list = User::findAll(['store_id' => $this->store->id,'is_distributor' => 1]);
+        $user_list = Award::findAll(['store_id' => $this->store->id,'is_distributor' => 1]);
 
 
 //        $user_list = User::find(['store_id' => $this->store->id,'is_distributor' => 1])->asArray()->all();;
@@ -174,7 +164,7 @@ class ChoujiangController extends Controller
 //        }
         return $this->render('edit', [
             'user' => $user,
-//            'parent_list' => $user_list,
+            'parent_list' => $user_list,
             'level' => $level
         ]);
     }

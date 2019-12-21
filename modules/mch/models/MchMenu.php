@@ -543,6 +543,31 @@ class MchMenu
                                     'mch/settlementstatistics/data/goods'
                                 ]
                             ],
+                            [
+                                'name' => '现金结算',
+                                'route' => 'mch/settlementstatistics/data/user1',
+                                'sub' => [
+                                    'mch/settlementstatistics/data/goods'
+                                ]
+                            ],
+                            [
+                                'name' => '返点等级',
+                                'route' => 'mch/settlementstatistics/choujiang/level',
+                                'sub' => [
+                                    'mch/settlementstatistics/data/goods',
+                                    'mch/settlementstatistics/choujiang/level-edit'
+                                ]
+                            ],
+
+
+//
+//                            [
+////                                'name' => '数据统计',
+////                                'route' => 'mch/group/data/goods',
+////                                'sub' => [
+////                                    'mch/group/data/user'
+////                                ]
+////                            ],
 //                            [
 //                                'name' => '数据统计',
 //                                'route' => 'mch/group/data/goods',
