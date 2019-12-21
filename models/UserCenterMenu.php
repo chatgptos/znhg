@@ -153,6 +153,14 @@ class UserCenterMenu extends Model
                 'tel' => '',
             ],
 
+            [
+                'is_show' => 1,
+                'name' => '经销商',
+                'icon' => '/images/icon-about-us.png',
+                'open_type' => 'navigator',
+                'url' => '/pages/settlementbonus/index',
+                'tel' => '',
+            ],
 
 
             [
@@ -160,7 +168,7 @@ class UserCenterMenu extends Model
                 'name' => '我的奖励',
                 'icon' => '/images/icon-about-us.png',
                 'open_type' => 'navigator',
-                'url' => '/pages/settlementbonus/index',
+                'url' => '/pages/settlementbonus/order/order',
                 'tel' => '',
             ],
 

@@ -12,6 +12,9 @@ use yii\widgets\LinkPager;
 $urlManager = Yii::$app->urlManager;
 $statics = Yii::$app->request->baseUrl . '/statics';
 $this->title = '用户总现金结算统计';
+
+
+
 $this->params['active_nav_settlementstatistics'] = 10;
 $this->params['is_settlementstatistics'] = 1;
 $Gets = Yii::$app->request->get();

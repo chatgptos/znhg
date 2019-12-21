@@ -43,8 +43,13 @@ class DataController extends Controller
 
     public function actionUser1()
     {
+        if(intval(date(h))>=5){
+            echo '白天不要查看';die;
+        }
         $form = new DataGoodsForm();
         $form->store_id = $this->store->id;
+
+
         $form->attributes = \Yii::$app ->request->get();
         $arr = $form->user_search2();
 

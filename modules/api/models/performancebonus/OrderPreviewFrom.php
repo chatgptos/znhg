@@ -5,7 +5,7 @@
  * Time: 11:32
  */
 
-namespace app\modules\api\models\settlementbonus;
+namespace app\modules\api\models\performancebonus;
 
 
 use app\models\IntegralLog;
@@ -84,14 +84,6 @@ class OrderPreviewFrom extends Model
 
         $this->user = User::findOne(['id' => $this->user_id, 'type' => 1, 'is_delete' => 0]);
 
-
-//        查找当月有没有申请记录
-
-
-
-
-
-
         $order = new Order();
         $order->store_id = $this->store_id;
         $order->goods_id = $goods->id;
@@ -168,7 +160,7 @@ class OrderPreviewFrom extends Model
                     $this->user->coupon = $this->user->coupon - $goods->coupon;
                     $this->user->integral  = $this->user->integral - $goods->integral;
                     //扣除总筹股东券资格
-                    $this->user->settlementbonus --;
+                    $this->user->performancebonus --;
                     //失效股东券资格券
                     $orderCrowdapply = \app\modules\api\models\crowdapply\Order::findOne(['user_id'=>$order->user_id,'store_id'=>$this->store_id,'is_pay'=>1,'apply_delete'=>0,'is_use'=>0]);
 
@@ -187,9 +179,9 @@ class OrderPreviewFrom extends Model
                             'msg'=>'没有资格券'
                         ];
                     }
-                    if($this->user->integral >=0 && $this->user->coupon >=0 && $this->user->settlementbonus >= 0){
+                    if($this->user->integral >=0 && $this->user->coupon >=0 && $this->user->performancebonus >= 0){
                         $this->user->save();
-                    }elseif($this->user->settlementbonus < 0){
+                    }elseif($this->user->performancebonus < 0){
                         $p->rollBack();
                         return [
                             'code'  => 1,
@@ -264,35 +256,6 @@ class OrderPreviewFrom extends Model
                         'msg' => "购买数量超过限制！ 商品“" . $goods->name . '”最多允许购买' . $goods->buy_max . '件，请返回重新下单购买其他商品',
                     ];
                 }
-
-
-
-
-                //查询当月限制
-                $query_month = Order::find()
-                    ->alias('o')
-                    ->select([
-                        'o.id',
-                    ])
-                    ->where([
-                        'AND',
-                        [
-                            'o.is_delete' => 0,
-                            'o.store_id' => $this->store_id,
-                            'o.user_id' => $this->user_id,
-                            'o.is_cancel' => 0,
-                        ],
-                        ['>', 'o.addtime', strtotime(date('Y-m'))],
-                    ]);
-
-                if($query_month){
-                    return [
-                        'code' => 1,
-                        'msg' => '或已经在结算中，当月只能申请一次',
-                    ];
-                }
-
-
 
                 $order->coupon = $goods->coupon;
                 $order->integral = $goods->integral;

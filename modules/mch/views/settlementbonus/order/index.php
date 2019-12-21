@@ -8,12 +8,12 @@
 
 use yii\widgets\LinkPager;
 
-//$urlManager = Yii::$app->urlManager;
-//$statics = Yii::$app->request->baseUrl . '/statics';
-//$this->title = '奖金订单列表';
-//$this->params['active_nav_group'] = 10;
-//$this->params['is_book'] = 1;
-//$status = Yii::$app->request->get('status', -1);
+$urlManager = Yii::$app->urlManager;
+$statics = Yii::$app->request->baseUrl . '/statics';
+$this->title = '奖金记录列表';
+$this->params['active_nav_group'] = 10;
+$this->params['is_book'] = 1;
+$status = Yii::$app->request->get('status', -1);
 $condition = [
     'user_id' => Yii::$app->request->get('user_id'),
     'is_offline' => Yii::$app->request->get('is_offline'),
@@ -212,7 +212,7 @@ $page_navs_list=[];
                         <div class="mr-4">
                             <div class="form-group row">
                                 <div>
-                                    <label>下单时间：</label>
+                                    <label>申请时间：</label>
                                 </div>
                                 <div>
                                     <div class="input-group">
@@ -329,7 +329,7 @@ $page_navs_list=[];
                 </li>
                 <li class="nav-item">
                     <a class="status-item nav-link <?= $status == 0 ? 'active' : null ?>"
-                       href="<?= $urlManager->createUrl(array_merge(['mch/settlementbonus/order/index'], $condition, ['status' => 0])) ?>">待支付</a>
+                       href="<?= $urlManager->createUrl(array_merge(['mch/settlementbonus/order/index'], $condition, ['status' => 0])) ?>">待申请</a>
                 </li>
                 <li class="nav-item">
                     <a class="status-item nav-link <?= $status == 1 ? 'active' : null ?>"
@@ -401,11 +401,11 @@ $page_navs_list=[];
                         </td>
                         <td class="order-tab-4">
                             <div>
-                                支付状态：
+                                申请状态：
                                 <?php if ($order_item['is_pay'] == 1): ?>
-                                    <span class="badge badge-success">已支付</span>
+                                    <span class="badge badge-success">已申请</span>
                                 <?php else: ?>
-                                    <span class="badge badge-default">未支付</span>
+                                    <span class="badge badge-default">未申请</span>
                                     <?php if ($order_item['is_cancel'] == 1): ?>
                                         <span class="badge badge-warning">已取消</span>
                                     <?php endif; ?>
@@ -537,12 +537,21 @@ $page_navs_list=[];
             </div>
             <div class="modal-body">
                 <input class="order-id" type="hidden">
-<!--                <input class=" form-control money" type="number" placeholder="请填写增加或减少的价格">-->
+                商城业绩:<input class="all_son_sum_price" ><br/>
+                商城点奖:<input class="all_son_sum_price_level" ><br/>
+                预售业绩:<input class="all_son_sum_price_bookmall" ><br/>
+                预售点奖:<input class="all_son_sum_price_level_bookmall" ><br/>
+                众筹业绩:<input class="all_son_sum_price_crowdc" ><br/>
+                众筹点奖:<input class="all_son_sum_price_level_crowdc" ><br/>
+                预计发放:<input class="all" ><br/>
+                <input class=" form-control money" type="number" placeholder="请填写增加或减少的积分">
                 <div class="text-danger form-error mb-3" style="display: none">错误信息</div>
             </div>
             <div class="modal-footer">
-                <a href="javascript:" class="btn btn-primary add-price" data-type="1">确认</a>
+<!--                <a href="javascript:" class="btn btn-primary add-price" data-type="1">确认</a>-->
 <!--                <a href="javascript:" class="btn btn-primary add-price" data-type="2">奖金</a>-->
+                <a href="javascript:" class="btn btn-primary add-price" data-type="1">加价</a>
+                <a href="javascript:" class="btn btn-danger add-price" data-type="2">优惠</a>
             </div>
         </div>
     </div>
@@ -752,6 +761,36 @@ $page_navs_list=[];
     $(document).on('click', '.update', function () {
         var order_id = $(this).data('id');
         $('.order-id').val(order_id);
+
+        $.loading();
+        $.ajax({
+            url: "<?=$urlManager->createUrl(['mch/settlementbonus/order/getsettlementbonus'])?>",
+            type: 'get',
+            dataType: 'json',
+            data: {
+                order_id: order_id,
+            },
+            success: function (res) {
+                if (res.code == 0) {
+                    $('.all_son_sum_price').val(res.data.all_son_sum_price);
+                    $('.all_son_sum_price_level').val(res.data.all_son_sum_price_level);
+                    $('.all_son_sum_price_bookmall').val(res.data.all_son_sum_price_bookmall);
+                    $('.all_son_sum_price_level_bookmall').val(res.data.all_son_sum_price_level_bookmall);
+                    $('.all_son_sum_price_crowdc').val(res.data.all_son_sum_price_crowdc);
+                    $('.all_son_sum_price_level_crowdc').val(res.data.all_son_sum_price_level_crowdc);
+                    $('.all').val(res.data.all);
+
+                    $.loadingHide();
+                } else {
+                    $('.send-price').val(res.msg);
+                }
+            }
+        });
+
+
+
+
+
     });
     $(document).on('click', '.add-price', function () {
         var order_id = $('.order-id').val();

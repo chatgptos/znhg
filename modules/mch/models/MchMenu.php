@@ -544,7 +544,7 @@ class MchMenu
                                 ]
                             ],
                             [
-                                'name' => '现金结算',
+                                'name' => '总消费和返点结算',
                                 'route' => 'mch/settlementstatistics/data/user1',
                                 'sub' => [
                                     'mch/settlementstatistics/data/goods'

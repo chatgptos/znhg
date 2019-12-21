@@ -5,7 +5,7 @@
  * Time: 16:41
  */
 
-namespace app\modules\api\controllers\crowdapply;
+namespace app\modules\api\controllers\performancebonus;
 
 
 class Controller extends \app\modules\api\controllers\Controller

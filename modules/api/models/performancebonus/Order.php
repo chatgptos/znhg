@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\mch\models\settlementbonus;
+namespace app\modules\api\models\performancebonus;
 
 use Yii;
 
@@ -31,12 +31,6 @@ use Yii;
  * @property string $form_id
  * @property string $coupon
  * @property string $integral
- * @property string $return_coupon
- * @property string $return_integral
- *
- *
- *
- *
  */
 class Order extends \yii\db\ActiveRecord
 {
@@ -45,7 +39,7 @@ class Order extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%settlementbonus_order}}';
+        return '{{%performancebonus_order}}';
     }
 
     /**
@@ -94,17 +88,6 @@ class Order extends \yii\db\ActiveRecord
             'integral' => '积分',
             'return_coupon' => '欢乐豆',
             'return_integral' => '积分',
-            'settlementbonus_time' => '结算日期日期',
-            'is_settlementbonus' => '是否已经结算',
-            'all_son_sum_price' => '是否已经结算',
-            'all_son_sum_price_level' => '是否已经结算',
-            'all_son_sum_price_bookmall' => '是否已经结算',
-            'all_son_sum_price_level_bookmall' => '是否已经结算',
-            'all_son_sum_price_crowdc' => '是否已经结算',
-            'all_son_sum_price_level_crowdc' => '是否已经结算',
-
-
-
 //            'express_price' => '运费',
 //            'name' => '收货人姓名',
 //            'mobile' => '收货人手机',

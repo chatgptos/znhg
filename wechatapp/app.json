@@ -1,7 +1,18 @@
 {
   "pages": [
-    "pages/settlementbonus/index",
     "pages/user/user",
+    "pages/settlementbonus/index",
+    "pages/share/index",
+    "pages/settlementbonus/index/cheapmarket",
+    "pages/settlementbonus/order/order",
+    "pages/settlementbonus/shop/shop",
+    "pages/settlementbonus/order-comment/order-comment",
+    "pages/settlementbonus/order/details",
+    "pages/settlementbonus/details/details",
+    "pages/settlementbonus/submit/submit",
+
+
+
     "pages/index/index",
     "pages/choujiang/choujiang",
     "pages/mall/mall",
@@ -66,7 +77,6 @@
     "pages/order-refund/order-refund",
     "pages/order-refund-detail/order-refund-detail",
     "pages/add-share/index",
-    "pages/share/index",
     "pages/cash/cash",
     "pages/share-money/share-money",
     "pages/cash-detail/cash-detail",

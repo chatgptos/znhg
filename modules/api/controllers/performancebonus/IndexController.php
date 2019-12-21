@@ -5,14 +5,14 @@
  * Time: 16:41
  */
 
-namespace app\modules\api\controllers\crowdapply;
+namespace app\modules\api\controllers\performancebonus;
 
-use app\modules\api\models\crowdapply\Cat;
-use app\modules\api\models\crowdapply\Setting;
-use app\modules\api\models\crowdapply\CommentListForm;
-use app\modules\api\models\crowdapply\GoodsQrcodeForm;
-use app\modules\api\models\crowdapply\ShopListForm;
-use app\modules\api\models\crowdapply\GoodsForm;
+use app\modules\api\models\performancebonus\Cat;
+use app\modules\api\models\performancebonus\Setting;
+use app\modules\api\models\performancebonus\CommentListForm;
+use app\modules\api\models\performancebonus\GoodsQrcodeForm;
+use app\modules\api\models\performancebonus\ShopListForm;
+use app\modules\api\models\performancebonus\GoodsForm;
 
 /**
  * Class IndexController

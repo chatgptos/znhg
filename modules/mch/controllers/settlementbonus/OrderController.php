@@ -143,8 +143,22 @@ class OrderController extends Controller
     {
         $form = new OrderClerkForm();
         $form->order_id = \Yii::$app->request->get('order_id');
+        $form->price = \Yii::$app->request->get('price');
         $form->store_id = $this->store->id;
         $this->renderJson($form->save());
+    }
+
+
+
+    /**
+     * 获取奖励金额
+     */
+    public function actionGetsettlementbonus()
+    {
+        $form = new OrderClerkForm();
+        $form->order_id = \Yii::$app->request->get('order_id');
+        $form->store_id = $this->store->id;
+        $this->renderJson($form->Getsettlementbonus());
     }
 
 
