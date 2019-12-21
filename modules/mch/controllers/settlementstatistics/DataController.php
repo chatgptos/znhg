@@ -33,11 +33,6 @@ class DataController extends Controller
         $form->attributes = \Yii::$app ->request->get();
         $arr = $form->user_search();
 
-
-
-
-
-
         return $this->render('user',[
             'list'=>$arr['list'],
             'pagination'=>$arr['pagination'],
