@@ -1,5 +1,7 @@
 {
   "pages": [
+    "pages/settlementbonus/index",
+    "pages/user/user",
     "pages/index/index",
     "pages/choujiang/choujiang",
     "pages/mall/mall",
@@ -10,7 +12,6 @@
     "pages/bookmall/order-detail/order-detail",
     "pages/bookmall/order-comment/order-comment", 
     "pages/order-submit/order-submit",
-    "pages/user/user",  
     "pages/coupon-merchant-mall/index",
     "pages/cheapmarket/index/cheapmarket",
     "pages/cheapmarket/order/order",

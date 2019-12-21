@@ -152,6 +152,20 @@ class UserCenterMenu extends Model
                 'url' => '/pages/crowdc/order/order',
                 'tel' => '',
             ],
+
+
+
+            [
+                'is_show' => 1,
+                'name' => '我的奖励',
+                'icon' => '/images/icon-about-us.png',
+                'open_type' => 'navigator',
+                'url' => '/pages/settlementbonus/index',
+                'tel' => '',
+            ],
+
+
+
         ];
         return $default_menu_list;
     }
