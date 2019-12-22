@@ -5,7 +5,7 @@
  * Time: 16:52
  */
 $urlManager = Yii::$app->urlManager;
-$this->title = '商品整点预售详情';
+$this->title = '商品众筹详情';
 $this->params['active_nav_group'] = 10;
 ?>
 <style>
@@ -14,7 +14,7 @@ $this->params['active_nav_group'] = 10;
     }
 </style>
 <div class="panel mb-3">
-    <div class="panel-header">商品整点预售详情：<?= $list[0]['name'] ?></div>
+    <div class="panel-header">商品众筹详情：<?= $list[0]['name'] ?></div>
     <div class="panel-body">
         <form method="get" class="input-group mb-3" style="max-width: 30rem;">
             <input type="hidden" name="r" value="<?= Yii::$app->request->get('r') ?>">
@@ -33,8 +33,8 @@ $this->params['active_nav_group'] = 10;
                 <thead>
                 <tr>
                     <td colspan="<?= count($item['attr'][0]['attr_list']) + 4 ?>">
-                        <span class="mr-3">整点预售日期：<?= $item['open_date'] ?></span>
-                        <span class="mr-3">整点预售时间：<?= $item['start_time'] < 10 ? '0' . $item['start_time'] : $item['start_time'] ?>
+                        <span class="mr-3">众筹日期：<?= $item['open_date'] ?></span>
+                        <span class="mr-3">众筹时间：<?= $item['start_time'] < 10 ? '0' . $item['start_time'] : $item['start_time'] ?>
                             :00~<?= $item['start_time'] < 10 ? '0' . $item['start_time'] : $item['start_time'] ?>
                             :59</span>
                         <span class="mr-3">限购数量：<?= $item['buy_max'] == 0 ? '不限购' : ($item['buy_max'] . '件') ?></span>
@@ -44,7 +44,7 @@ $this->params['active_nav_group'] = 10;
                 </tr>
                 <tr>
                     <th colspan="<?= count($item['attr'][0]['attr_list']) ?>">规格</th>
-                    <th>整点预售积分</th>
+                    <th>众筹积分</th>
 <!--                    <th>积分</th>-->
                     <th>优惠券</th>
                     <th>数量</th>

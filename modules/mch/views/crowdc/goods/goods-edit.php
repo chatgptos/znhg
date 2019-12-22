@@ -1003,14 +1003,14 @@ if (!$returnUrl)
 
             <div class="step-block" flex="dir:left box:first">
                 <div>
-                    <span>预售比例配置</span>
+                    <span>众筹比例配置</span>
                     <span class="step-location" id="step6"></span>
                 </div>
                 <div>
 
                     <div class="form-group row">
                         <div class="col-3 text-right">
-                            <label class=" col-form-label required">支付金额比例（预售款+余款）</label>
+                            <label class=" col-form-label required">支付金额比例（众筹款+余款）</label>
                         </div>
                         <div class="col-3">
                             <div class="col-3">

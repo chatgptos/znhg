@@ -371,7 +371,7 @@ class MchMenu
                         ],
                     ],
                     [
-                        'name' => '整点预售',
+                        'name' => '整点众筹',
                         'route' => 'mch/crowdc/seckill/index',
                         'list' => [
                             [

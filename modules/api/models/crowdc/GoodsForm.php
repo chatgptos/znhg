@@ -65,6 +65,9 @@ class GoodsForm extends Model
 
 
         $seckill_data = $this->getSeckillData($goods->id);
+
+//        var_dump($seckill_data);
+//        die;
         $num = $seckill_data['sell_num'];
         $charge_coupon = 1;
         $charge_integral_buy = 1;
@@ -81,10 +84,32 @@ class GoodsForm extends Model
             $next_integral_buy = intval($seckill_data['seckill_integral_buy'] * (1 - $charge_integral_buy / 100));
             $next_num = intval($this->getCharge($num, $goods)['nextnum']);
         }
-        $seckill_data['next']=array(
-             'next_coupon'=>$next_coupon,
-             'next_integral_buy'=>$next_integral_buy,
-             'next_num'=>$next_integral_buy,
+        $seckill_data=array(
+            'next'=>array(
+                'next_coupon'=>$next_coupon,
+                'next_integral_buy'=>$next_integral_buy,
+                'next_num'=>$next_integral_buy,
+            ),
+            'crowdctime'=>array(
+                'start_date_crowdc'=>$seckill_data['start_date_crowdc'],
+                'end_date_crowdc'=>$seckill_data['end_date_crowdc'],
+            ),
+            'crowdc'=>array(
+                'end_date_crowdc' => $seckill_data['end_date_crowdc'],
+                'integral_all_crowdc' => floatval($goods->price),//需要的积分
+                'integral_has_crowdc' => floatval($goods->price),//已经筹集到的积分
+                'date_num_has_crowdc' => floatval($goods->price),//天数剩余
+                'send_date_num' => floatval($goods->price),//发货的天数
+                'send_way' => '自提/快递',//发货的天数
+                'has_people_num' => floatval($goods->getSalesVolume()),//拥有的用户
+                'all_limit_num' => $goods->getNum(),//总份数
+                'remaining' => $goods->getNum()-$goods->getSalesVolume(),//余份数
+                'returnback_integral' => $goods->getNum()-$goods->getSalesVolume(),//余份数
+
+
+            ),
+
+
         );
         return [
             'code' => 0,
@@ -94,7 +119,7 @@ class GoodsForm extends Model
                 'name' => $goods->name,
                 'price' => floatval($goods->price),
                 'detail' => $goods->detail,
-                'sales_volume' => $goods->getSalesVolume() + $goods->virtual_sales,
+                'sales_volume' => $goods->getSalesVolume() + $goods->virtual_sales, //销量
                 'attr_group_list' => $goods->getAttrGroupList(),
                 'num' => $goods->getNum(),
                 'is_favorite' => $is_favorite,
@@ -127,6 +152,9 @@ class GoodsForm extends Model
         $seckill_price = 0.00;
         $seckill_coupon = 0;
         $seckill_integral_buy = 0;
+
+
+
         foreach ($attr_data as $i => $attr_data_item) {
             $total_seckill_num += $attr_data_item['seckill_num'];
             $total_sell_num += $attr_data_item['sell_num'];
@@ -141,6 +169,8 @@ class GoodsForm extends Model
             }
         }
         return [
+            'start_date_crowdc' => $seckill_goods->start_date_crowdc,
+            'end_date_crowdc' => $seckill_goods->end_date_crowdc,
             'seckill_coupon' => $seckill_coupon,
             'seckill_integral_buy' => $seckill_integral_buy,
             'seckill_num' => $total_seckill_num,

@@ -515,14 +515,14 @@
         
         <!-- 拆分的分类 结束 -->
 
-        <!-- 预售整点 开始 -->
+        <!-- 众筹 开始 -->
         <view wx:elif="{{item.name=='crowdc_seckill'}}" style="margin-bottom:30px;margin-top:30px;">
             <!--<block wx:for="{{crowdc_seckill.goods_list}}" wx:for-index="cat_index" wx:for-item="cat">-->
             <view wx:if="{{crowdc_seckill.goods_list.length>0}}">
                 <view class="title">
                     <view class="line"></view>
                     <view class="name">
-                        整点预售{{crowdc_seckill.name}}{{crowdc_seckill.times.h?crowdc_seckill.times.h:'--'}}:{{crowdc_seckill.times.m?crowdc_seckill.times.m:'--'}}:{{crowdc_seckill.times.s?crowdc_seckill.times.s:'--'}}
+                        整点抢鲜{{crowdc_seckill.name}}{{crowdc_seckill.times.h?crowdc_seckill.times.h:'--'}}:{{crowdc_seckill.times.m?crowdc_seckill.times.m:'--'}}:{{crowdc_seckill.times.s?crowdc_seckill.times.s:'--'}}
                     </view>
                     <view class="line"></view>
                 </view>

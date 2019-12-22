@@ -17,13 +17,15 @@ class SeckillGoodsEditForm extends Model
     public $attr;
     public $open_time;
     public $open_date;
+    public $start_date_crowdc;
+    public $end_date_crowdc;
 
     public $buy_max;
 
     public function rules()
     {
         return [
-            [['goods_id', 'attr', 'open_time', 'open_date',], 'required'],
+            [['goods_id', 'attr', 'open_time', 'open_date','start_date_crowdc','end_date_crowdc'], 'required'],
             ['buy_max', 'default', 'value' => 0],
             ['buy_max', 'integer', 'min' => 0],
         ];
@@ -49,6 +51,7 @@ class SeckillGoodsEditForm extends Model
             ];
         $open_date = json_decode($this->open_date, true);
         $open_time = json_decode($this->open_time, true);
+
         \Yii::$app->request->getHostInfo();
         foreach ($open_date as $date) {
             foreach ($open_time as $time) {
@@ -56,7 +59,9 @@ class SeckillGoodsEditForm extends Model
                     'goods_id' => $this->goods_id,
                     'start_time' => intval($time),
                     'open_date' => $date,
-                    'is_delete' => 0,
+                    'start_date_crowdc' => $this->start_date_crowdc,
+                    'end_date_crowdc' => $this->end_date_crowdc,
+                    'is_delete' => 0
                 ]);
                 \Yii::trace("---->" . ($model == null));
                 if (!$model) {
@@ -65,6 +70,8 @@ class SeckillGoodsEditForm extends Model
                     $model->goods_id = $this->goods_id;
                     $model->start_time = intval($time);
                     $model->open_date = $date;
+                    $model->start_date_crowdc = $this->start_date_crowdc;
+                    $model->end_date_crowdc = $this->end_date_crowdc;
                     $model->is_delete = 0;
                 }
                 $model->attr = $this->attr;

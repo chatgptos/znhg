@@ -118,7 +118,7 @@ class SeckillController extends Controller
         ]);
     }
 
-    //删除单个秒杀记录
+    //删除单个众筹众筹
     public function actionSeckillDelete($id)
     {
         SeckillGoods::updateAll(['is_delete' => 1], [
@@ -131,7 +131,7 @@ class SeckillController extends Controller
         ]);
     }
 
-    //删除该商品的所有秒杀记录
+    //删除该商品的所有众筹众筹
     public function actionGoodsDelete($goods_id)
     {
         SeckillGoods::updateAll(['is_delete' => 1], [
@@ -144,7 +144,7 @@ class SeckillController extends Controller
         ]);
     }
 
-    //秒杀商品（日历视图）
+    //众筹商品（日历视图）
     public function actionCalendar()
     {
         if (\Yii::$app->request->isAjax) {
@@ -159,7 +159,7 @@ class SeckillController extends Controller
         }
     }
 
-    //秒杀日期商品列表
+    //众筹日期商品列表
     public function actionDate()
     {
         $form = new SeckillDateForm();
@@ -170,7 +170,7 @@ class SeckillController extends Controller
         $this->renderJson([
             'code' => 0,
             'data' => [
-                'title' => $res['data']['date'] . '秒杀安排表',
+                'title' => $res['data']['date'] . '众筹安排表',
                 'content' => $this->render('date', $res['data']),
             ],
         ]);

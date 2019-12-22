@@ -15,6 +15,11 @@ use Yii;
  * @property string $attr
  * @property integer $is_delete
  * @property integer $buy_max
+ * @property integer $start_date_crowdc
+ * @property integer $end_date_crowdc
+ *
+ *
+ *
  */
 class SeckillGoods extends \yii\db\ActiveRecord
 {
@@ -53,6 +58,8 @@ class SeckillGoods extends \yii\db\ActiveRecord
             'attr' => '规格秒杀价数量',
             'is_delete' => 'Is Delete',
             'buy_max' => '限购数量，0=不限购',
+            'start_date_crowdc' => '限购数量，0=不限购',
+            'end_date_crowdc' => '限购数量，0=不限购',
         ];
     }
 }

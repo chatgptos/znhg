@@ -202,7 +202,7 @@ isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
 
                 <li class="nav-item">
                     <a class="status-item nav-link <?= $status == 7 ? 'active' : null ?>"
-                       href="<?= yii\helpers\Url::to(array_merge(['crowdc/order/index'], $condition, ['status' => 7])) ?>">待确认预售<?= isset($store_data['status_count']['status_0']) ? '(' . $store_data['status_count']['status_0'] . ')' : null ?></a>
+                       href="<?= yii\helpers\Url::to(array_merge(['crowdc/order/index'], $condition, ['status' => 7])) ?>">待确认众筹<?= isset($store_data['status_count']['status_0']) ? '(' . $store_data['status_count']['status_0'] . ')' : null ?></a>
 
                 </li>
 
@@ -315,11 +315,11 @@ isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
                         </td>
                         <td class="order-tab-4">
                             <div>
-                                预售款付款状态：
+                                众筹款付款状态：
                                 <?php if ($order_item['is_pay'] == 1): ?>
-                                    <span class="badge badge-success">已付预售款</span>
+                                    <span class="badge badge-success">已付众筹款</span>
                                 <?php else: ?>
-                                    <span class="badge badge-default">未付预售款</span>
+                                    <span class="badge badge-default">未付众筹款</span>
                                 <?php endif; ?>
                             </div>
 
@@ -436,7 +436,7 @@ isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
 
                                 <?php if ($order_item['is_pay'] == 1 && $order_item['is_confirm'] != 1&& $order_item['is_yukuan'] == 0&& $order_item['is_check_yukuan'] == 0): ?>
                                     <a class="btn btn-sm btn-primary update" href="javascript:" data-toggle="modal"
-                                       data-target="#yukuan" data-id="<?= $order_item['id'] ?>">确认预售</a>
+                                       data-target="#yukuan" data-id="<?= $order_item['id'] ?>">确认众筹</a>
                                     <a class="badge badge-danger update" href="javascript:" data-toggle="modal"
                                        data-target="#yukuanback" data-id="<?= $order_item['id'] ?>">取消订单退回积分</a>
                                 <?php endif; ?>
@@ -476,12 +476,12 @@ isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
         </div>
 
         <!--新加入的-->
-        <!-- 预售 -->
+        <!-- 众筹 -->
         <div class="modal fade" data-backdrop="static" id="yukuan">
             <div class="modal-dialog modal-sm" role="document" style="max-width: 400px">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <b class="modal-title">确认预售订单</b>
+                        <b class="modal-title">确认众筹订单</b>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -498,12 +498,12 @@ isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
                 </div>
             </div>
         </div>
-        <!-- 取消预售 -->
+        <!-- 取消众筹 -->
         <div class="modal fade" data-backdrop="static" id="yukuanback">
             <div class="modal-dialog modal-sm" role="document" style="max-width: 400px">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <b class="modal-title">取消预售订单</b>
+                        <b class="modal-title">取消众筹订单</b>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>

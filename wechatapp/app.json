@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/index/index",
     "pages/user/user",
     "pages/settlementbonus/index",
     "pages/share/index",
@@ -13,7 +14,6 @@
 
 
 
-    "pages/index/index",
     "pages/choujiang/choujiang",
     "pages/mall/mall",
     
