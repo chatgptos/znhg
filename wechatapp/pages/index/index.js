@@ -63,6 +63,7 @@ Page({
                     wx.setStorageSync('store', res.data.store);
                     page.seckillTimer();
                     page.bookmall_seckillTimer();
+                    page.crowdc_seckillTimer();
                 }
             },
             complete: function () {
@@ -274,6 +275,26 @@ Page({
             page.data.bookmall_seckill.times = page.getTimesBySecond(page.data.bookmall_seckill.rest_time);
             page.setData({
                 bookmall_seckill: page.data.bookmall_seckill,
+            });
+        }, 1000);
+
+    },
+
+    crowdc_seckillTimer: function () {
+        var page = this;
+        console.log(page.data.crowdc_seckill);
+        if (!page.data.crowdc_seckill || !page.data.crowdc_seckill.rest_time)
+            return;
+        var timer = setInterval(function () {
+            if (page.data.crowdc_seckill.rest_time > 0) {
+                page.data.crowdc_seckill.rest_time = page.data.crowdc_seckill.rest_time - 1;
+            } else {
+                clearInterval(timer);
+                return;
+            }
+            page.data.crowdc_seckill.times = page.getTimesBySecond(page.data.crowdc_seckill.rest_time);
+            page.setData({
+                crowdc_seckill: page.data.crowdc_seckill,
             });
         }, 1000);
 

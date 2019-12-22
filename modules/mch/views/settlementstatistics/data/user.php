@@ -90,6 +90,16 @@ $this->params['page_navs'] = [
     <div class="panel-header"><?= $this->title ?></div>
     <div class="panel-body">
         <div class="mb-3 clearfix">
+            <form method="get" class="input-group mb-3" style="max-width: 30rem;">
+                <input type="hidden" name="status" value="<?= Yii::$app->request->get('status') ?>">
+                <span class="input-group-addon">日期查找</span>
+                <input class="form-control" id="date_begin" value="<?= Yii::$app->request->get('date_begin') ?>" name="date_begin">
+                <span class="input-group-addon">~</span>
+                <input class="form-control" id="date_end" value="<?= Yii::$app->request->get('date_end') ?>" name="date_end">
+                <span class="input-group-btn">
+                    <button class="btn btn-secondary">查找</button>
+                </span>
+            </form>
             <div class="float-left">
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
@@ -130,7 +140,7 @@ $this->params['page_navs'] = [
                 </form>
             </div>
         </div>
-        <div class="fs-sm text-danger">注：消费金额和订单数根据已成团的订单来计算；</div>
+        <div class="fs-sm text-danger">注：消费金额和订单数根据已订单来计算；</div>
         <table class="table table-hover table-bordered bg-white">
             <thead>
             <tr>
@@ -166,8 +176,8 @@ $this->params['page_navs'] = [
                         </div>
                     </td>
                     <td class="nowrap"><?= $value['id'] ?></td>
-                    <td class="nowrap"><?= $value['allson_num'] ?></td>
-                    <td class="nowrap"><?= $value['allson_num_haslevel'] ?></td>
+                    <td class="nowrap"><?= $value['son_num'] ?></td>
+                    <td class="nowrap"><?= $value['son_num_haslevel'] ?></td>
                     <td class="nowrap"><?= $value['integral'] ?></td>
                     <td class="nowrap"><?= $value['sales_price'] ?></td>
                     <td class="nowrap"><?= $value['sales_count'] ?></td>
@@ -181,3 +191,49 @@ $this->params['page_navs'] = [
         </div>
     </div>
 </div>
+
+<script>
+    $(document).on("click", ".delete-btn", function () {
+        var url = $(this).attr("href");
+        $.confirm({
+            content: "确认删除？",
+            confirm: function () {
+                $.loading();
+                $.ajax({
+                    url: url,
+                    type: "get",
+                    dataType: "json",
+                    success: function (res) {
+                        location.reload();
+                    }
+                });
+            }
+        });
+        return false;
+    });
+
+
+    $.datetimepicker.setLocale('zh');
+
+    $(function () {
+        $('#date_begin').datetimepicker({
+            format: 'Y-m-d',
+            onShow: function (ct) {
+                this.setOptions({
+                    maxDate: $('#date_end').val() ? $('#date_end').val() : false
+                })
+            },
+            timepicker: false
+        });
+        $('#date_end').datetimepicker({
+            format: 'Y-m-d',
+            onShow: function (ct) {
+                this.setOptions({
+                    minDate: $('#date_begin').val() ? $('#date_begin').val() : false
+                })
+            },
+            timepicker: false
+        });
+    });
+
+</script>

@@ -165,15 +165,6 @@ class StoreController extends Controller
         $cat_list = Cat::find()->where(['store_id' => $this->store->id, 'is_delete' => 0, 'parent_id' => 0])
             ->orderBy('sort,addtime DESC')
             ->all();
-
-
-        echo '<pre>';
-        var_dump($cat_list[0]);
-
-        echo '<------->';
-       var_dump($cat_list[0]->childrenList);
-
-        var_dump($cat_list[0]->childrenList);
         return $this->render('cat', [
             'cat_list' => $cat_list,
         ]);

@@ -474,7 +474,7 @@ class MchMenu
             ],
 
             [
-                'name' => '结算管理',
+                'name' => '奖金结算管理',
                 'route' => 'mch/settlementbonus/goods/index',
                 'icon' => 'icon-service',
                 'list' => [

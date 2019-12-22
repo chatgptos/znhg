@@ -54,11 +54,14 @@ class IndexForm extends Model
             'store_id' => $this->store_id,
         ])->orderBy('sort ASC,addtime DESC')->select('name,pic_url,url,name,open_type')->asArray()->all();
 
-        $cat_list = Cat::find()->where([
+        $cat_list = Cat::find()
+            ->where([
+            'is_show' => 1,
             'is_delete' => 0,
             'parent_id' => 0,
             'store_id' => $this->store_id,
-        ])->orderBy('sort ASC')->asArray()->all();
+        ])
+            ->orderBy('sort ASC')->asArray()->all();
         foreach ($cat_list as $i => $cat) {
             $cat_list[$i]['page_url'] = '/pages/list/list?cat_id=' . $cat['id'];
             $cat_list[$i]['open_type'] = 'navigate';
@@ -71,6 +74,29 @@ class IndexForm extends Model
             $goods_list = $goods_list_form_res['code'] == 0 ? $goods_list_form_res['data']['list'] : [];
             $cat_list[$i]['goods_list'] = $goods_list;
         }
+
+
+        //首页推荐
+        $recommend_goods_list_form = new GoodsListForm();
+        $recommend_goods_list_form->store_id = $this->store_id;
+        $recommend_goods_list_form->is_hot = 1;
+        $recommend_goods_list_form->limit = $store->cat_goods_count;
+        $recommend_goods_list_form_res = $recommend_goods_list_form->search();
+        $recommend_goods_list_res['goods_list'] = $recommend_goods_list_form_res['code'] == 0 ? $recommend_goods_list_form_res['data']['list'] : [];
+        $recommend_goods_list_res['name']='推荐商品';
+
+        //首页精选
+        $best_goods_list_form = new GoodsListForm();
+        $best_goods_list_form->store_id = $this->store_id;
+        $best_goods_list_form->is_best = 1;
+        $best_goods_list_form->limit = $store->cat_goods_count;
+        $best_goods_list_form_res = $best_goods_list_form->search();
+        $best_goods_list_res['goods_list'] = $best_goods_list_form_res['code'] == 0 ? $best_goods_list_form_res['data']['list'] : [];
+        $best_goods_list_res['name']='首页精选商品';
+
+
+
+
 
         $block_list = HomeBlock::find()->where(['store_id' => $this->store_id, 'is_delete' => 0])->all();
         $new_block_list = [];
@@ -111,6 +137,8 @@ class IndexForm extends Model
                 'nav_icon_list' => $nav_icon_list,
                 'cat_goods_cols' => $store->cat_goods_cols,
                 'cat_list' => $cat_list,
+                'recommend' => $recommend_goods_list_res, //热门推荐
+                'best' => $best_goods_list_res, //精选
                 'block_list' => $new_block_list,
                 'coupon_list' => $coupon_list,
                 'topic_list' => $topic_list,

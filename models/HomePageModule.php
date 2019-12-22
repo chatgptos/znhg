@@ -78,6 +78,11 @@ class HomePageModule extends Model
             'name' => 'recommend',
             'display_name' => '首页推荐',
         ],
+        //新增
+        [
+            'name' => 'best',
+            'display_name' => '首页精选',
+        ],
 
 
     ];

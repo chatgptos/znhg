@@ -25,13 +25,15 @@ class GoodsListForm extends Model
 
     public $sort;
     public $sort_type;
+    public $is_hot;
+    public $is_best;
 
 
     public function rules()
     {
         return [
             [['keyword'], 'trim'],
-            [['store_id', 'cat_id', 'page', 'limit',], 'integer'],
+            [['is_best','is_hot','store_id', 'cat_id', 'page', 'limit',], 'integer'],
             [['limit',], 'integer', 'max' => 100],
             [['limit',], 'default', 'value' => 12],
             [['sort', 'sort_type',], 'integer',],
@@ -44,11 +46,16 @@ class GoodsListForm extends Model
         if (!$this->validate())
             return $this->getModelError();
         $query = Goods::find()->alias('g')->where([
+//            'g.is_hot' => 1,
             'g.status' => 1,
             'g.is_delete' => 0,
         ]);
         if ($this->store_id)
             $query->andWhere(['g.store_id' => $this->store_id]);
+        if ($this->is_hot)
+            $query->andWhere(['g.is_hot' => $this->is_hot]);
+        if ($this->is_best)
+            $query->andWhere(['g.is_best' => $this->is_best]);
         if ($this->cat_id) {
             $query->andWhere(
                 [
@@ -61,6 +68,7 @@ class GoodsListForm extends Model
         if ($this->keyword)
             $query->andWhere(['LIKE', 'g.name', $this->keyword]);
         $count = $query->count();
+
         $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $this->limit, 'page' => $this->page - 1]);
         $pic_query = GoodsPic::find()->where(['is_delete' => 0])->groupBy('goods_id');
         if ($this->sort == 0) {

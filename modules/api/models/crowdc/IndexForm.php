@@ -114,6 +114,7 @@ class IndexForm extends Model
                 'notice' => Option::get('notice', $this->store_id, 'admin'),
                 'seckill' => $this->getSeckillData(),
                 'crowdc_seckill' => $this->getSeckillData(),
+                'bookmall_seckill' => $this->getSeckillData(),
                 'pintuan' => $this->getPintuanData(),
             ],
         ];
@@ -178,7 +179,7 @@ class IndexForm extends Model
     public function getSeckillData()
     {
         $list = SeckillGoods::find()->alias('mg')
-            ->select('g.id,g.name,g.cover_pic AS pic,g.price,mg.attr,mg.start_time')
+            ->select('g.id,g.name,g.cover_pic AS pic,g.price,mg.attr,mg.start_time,mg.start_date_crowdc,mg.end_date_crowdc,mg.open_date')
             ->leftJoin(['g' => Goods::tableName()], 'mg.goods_id=g.id')
             ->where([
                 'AND',
@@ -207,6 +208,23 @@ class IndexForm extends Model
             }
             $list[$i]['price'] = number_format($list[$i]['price'], 2, '.', '');
             $list[$i]['seckill_price'] = number_format(min($price_list), 2, '.', '');
+            $list[$i]['rest_time_list'] = number_format(min($price_list), 2, '.', '');
+
+
+//            $list[$i]['end_date_crowdc']=$list;
+            $list[$i]['integral_all_crowdc']=1111;//需要的积分
+            $list[$i]['integral_has_crowdc']=111;//已经筹集到的积分
+            $list[$i]['date_num_has_crowdc']=111;//天数剩余
+            $list[$i]['send_date_num']=11;//发货的天数
+            $list[$i]['send_way']=11;//发货的天数
+            $list[$i]['has_people_num']=11;//拥有的用户
+            $list[$i]['all_limit_num']=11;//总份数
+            $list[$i]['remaining']=11;//余份数
+            $list[$i]['returnback_integral']=11;//余份数
+            $list[$i]['rest_time']=max(intval(strtotime($list[$i]['start_date_crowdc'] - time()), 0));//余份数
+
+
+
             unset($list[$i]['attr']);
         }
         if (count($list) == 0)

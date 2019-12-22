@@ -27,6 +27,8 @@ class DataGoodsForm extends Model
     public $limit;
     public $page;
     public $keyword;
+    public $date_begin;
+    public $date_end;
 
     public function rules()
     {
@@ -36,7 +38,7 @@ class DataGoodsForm extends Model
             [['limit'], 'default', 'value' => 20],
             [['status'], 'default', 'value' => 1],
             [['keyword'], 'trim'],
-            [['keyword'], 'string'],
+            [['date_begin','date_end','keyword'], 'string'],
         ];
     }
 
@@ -104,6 +106,7 @@ class DataGoodsForm extends Model
         if (!$this->validate()) {
             return $this->getModelError();
         }
+
         $query = User::find()->alias('u')->where(['u.store_id' => $this->store_id, 'u.is_delete' => 0])
             ->leftJoin(['o' => Order::tableName()], 'o.user_id = u.id')
 //            ->andWhere([
@@ -112,6 +115,18 @@ class DataGoodsForm extends Model
 //                'isnull(o.id)'
 //            ])
             ->groupBy('u.id');
+
+//        $query->andWhere(['>', 'u.addtime', strtotime($this->date_begin)]);
+//        var_dump(strtotime($this->date_begin));
+//        die;
+
+        if($this->date_begin){
+            $query->andWhere(['>', 'u.addtime', strtotime($this->date_begin)]);
+        }
+        if($this->date_begin){
+            $query->andWhere(['<', 'u.addtime', strtotime($this->date_end)]);
+        }
+
         if ($this->keyword) {
             $query->andWhere(['like', 'u.nickname', $this->keyword]);
         }
@@ -164,9 +179,9 @@ class DataGoodsForm extends Model
         } else if ($this->status == 2) {
             array_multisort(array_column($list, 'sales_count'), SORT_DESC, $list);
         } else if ($this->status == 3) {
-            array_multisort(array_column($list, 'allson_num'), SORT_DESC, $list);
+            array_multisort(array_column($list, 'son_num'), SORT_DESC, $list);
         } else if ($this->status == 4) {
-            array_multisort(array_column($list, 'allson_num_haslevel'), SORT_DESC, $list);
+            array_multisort(array_column($list, 'son_num_haslevel'), SORT_DESC, $list);
         } else {
             array_multisort(array_column($list, 'integral'), SORT_DESC, $list);
         }

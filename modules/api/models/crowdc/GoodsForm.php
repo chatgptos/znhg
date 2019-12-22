@@ -84,32 +84,26 @@ class GoodsForm extends Model
             $next_integral_buy = intval($seckill_data['seckill_integral_buy'] * (1 - $charge_integral_buy / 100));
             $next_num = intval($this->getCharge($num, $goods)['nextnum']);
         }
-        $seckill_data=array(
-            'next'=>array(
-                'next_coupon'=>$next_coupon,
-                'next_integral_buy'=>$next_integral_buy,
-                'next_num'=>$next_integral_buy,
-            ),
-            'crowdctime'=>array(
-                'start_date_crowdc'=>$seckill_data['start_date_crowdc'],
-                'end_date_crowdc'=>$seckill_data['end_date_crowdc'],
-            ),
-            'crowdc'=>array(
-                'end_date_crowdc' => $seckill_data['end_date_crowdc'],
-                'integral_all_crowdc' => floatval($goods->price),//需要的积分
-                'integral_has_crowdc' => floatval($goods->price),//已经筹集到的积分
-                'date_num_has_crowdc' => floatval($goods->price),//天数剩余
-                'send_date_num' => floatval($goods->price),//发货的天数
-                'send_way' => '自提/快递',//发货的天数
-                'has_people_num' => floatval($goods->getSalesVolume()),//拥有的用户
-                'all_limit_num' => $goods->getNum(),//总份数
-                'remaining' => $goods->getNum()-$goods->getSalesVolume(),//余份数
-                'returnback_integral' => $goods->getNum()-$goods->getSalesVolume(),//余份数
-
-
-            ),
-
-
+        $seckill_data['next']=array(
+        'next_coupon'=>$next_coupon,
+        'next_integral_buy'=>$next_integral_buy,
+        'next_num'=>$next_integral_buy,
+         );
+        $seckill_data['crowdc']=array(
+            'end_date_crowdc' => $seckill_data['end_date_crowdc'],
+            'integral_all_crowdc' => floatval($goods->price),//需要的积分
+            'integral_has_crowdc' => floatval($goods->price),//已经筹集到的积分
+            'date_num_has_crowdc' => floatval($goods->price),//天数剩余
+            'send_date_num' => floatval($goods->price),//发货的天数
+            'send_way' => '自提/快递',//发货的天数
+            'has_people_num' => floatval($goods->getSalesVolume()),//拥有的用户
+            'all_limit_num' => $goods->getNum(),//总份数
+            'remaining' => $goods->getNum()-$goods->getSalesVolume(),//余份数
+            'returnback_integral' => $goods->getNum()-$goods->getSalesVolume(),//余份数
+        );
+        $seckill_data['crowdctime']=array(
+            'start_date_crowdc'=>$seckill_data['start_date_crowdc'],
+            'end_date_crowdc'=>$seckill_data['end_date_crowdc'],
         );
         return [
             'code' => 0,
@@ -176,6 +170,8 @@ class GoodsForm extends Model
             'seckill_num' => $total_seckill_num,
             'sell_num' => $total_sell_num,
             'seckill_price' => (float)$seckill_price,
+            'begin_time_crowdc' => strtotime($seckill_goods->start_date_crowdc . ' ' . $seckill_goods->start_time . ':00:00'),
+            'end_time_crowdc' => strtotime($seckill_goods->end_date_crowdc . ' ' . $seckill_goods->start_time . ':59:59'),
             'begin_time' => strtotime($seckill_goods->open_date . ' ' . $seckill_goods->start_time . ':00:00'),
             'end_time' => strtotime($seckill_goods->open_date . ' ' . $seckill_goods->start_time . ':59:59'),
             'now_time' => time(),

@@ -173,7 +173,6 @@ class OrderBehavior extends Behavior
         }
         $user_id_arr = Order::find()->select('user_id')->where(['is_delete' => 0, 'store_id' => $this->store_id, 'is_confirm' => 1, 'is_send' => 1])
             ->andWhere(['<=', 'confirm_time', $sale_time])->groupBy('user_id')->asArray()->all();
-
         foreach ($user_id_arr as $index => $value) {
             $user = User::findOne(['id' => $value, 'store_id' => $this->store_id]);
             $order_money = Order::find()->where(['store_id' => $this->store_id, 'user_id' => $user->id, 'is_delete' => 0])
@@ -185,9 +184,12 @@ class OrderBehavior extends Behavior
             }
             $next_level = Level::find()->where(['store_id' => $this->store_id, 'is_delete' => 0, 'status' => 1])
                 ->andWhere(['<=', 'money', $order_money])->orderBy(['level' => SORT_DESC, 'id' => SORT_DESC])->asArray()->one();
-            if ($user->level < $next_level['level']) {
-                $user->level = $next_level['level'];
-                $user->save();
+
+            if($user){
+                if ($user->level < $next_level['level']) {
+                    $user->level = $next_level['level'];
+                    $user->save();
+                }
             }
         }
         flock($fp, LOCK_UN);
