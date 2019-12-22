@@ -83,7 +83,7 @@ class IndexForm extends Model
         $recommend_goods_list_form->limit = $store->cat_goods_count;
         $recommend_goods_list_form_res = $recommend_goods_list_form->search();
         $recommend_goods_list_res['goods_list'] = $recommend_goods_list_form_res['code'] == 0 ? $recommend_goods_list_form_res['data']['list'] : [];
-        $recommend_goods_list_res['name']='推荐商品';
+        $recommend_goods_list_res['name']='首页推荐';
 
         //首页精选
         $best_goods_list_form = new GoodsListForm();
@@ -92,7 +92,7 @@ class IndexForm extends Model
         $best_goods_list_form->limit = $store->cat_goods_count;
         $best_goods_list_form_res = $best_goods_list_form->search();
         $best_goods_list_res['goods_list'] = $best_goods_list_form_res['code'] == 0 ? $best_goods_list_form_res['data']['list'] : [];
-        $best_goods_list_res['name']='首页精选商品';
+        $best_goods_list_res['name']='首页精选';
 
 
 
