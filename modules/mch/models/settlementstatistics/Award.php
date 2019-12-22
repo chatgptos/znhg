@@ -26,7 +26,7 @@ class Award extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%award}}';
+        return '{{%settlementbonus_goods_setting}}';
     }
 
     /**
