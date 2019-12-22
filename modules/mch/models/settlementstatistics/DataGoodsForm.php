@@ -109,11 +109,11 @@ class DataGoodsForm extends Model
 
         $query = User::find()->alias('u')->where(['u.store_id' => $this->store_id, 'u.is_delete' => 0])
             ->leftJoin(['o' => Order::tableName()], 'o.user_id = u.id')
-//            ->andWhere([
-//                'or',
-//                ['o.is_delete' => 0, 'o.is_pay' => 1],
-//                'isnull(o.id)'
-//            ])
+            ->andWhere([
+                'or',
+                ['o.is_delete' => 0, 'o.is_pay' => 1],
+                'isnull(o.id)'
+            ])
             ->groupBy('u.id');
 
 //        $query->andWhere(['>', 'u.addtime', strtotime($this->date_begin)]);
