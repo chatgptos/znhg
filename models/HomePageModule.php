@@ -55,6 +55,11 @@ class HomePageModule extends Model
         ],
         //新增
         [
+            'name' => 'crowdc_seckill',
+            'display_name' => '众筹',
+        ],
+        //新增
+        [
             'name' => 'crowdapply',
             'display_name' => '活动报名',
         ],

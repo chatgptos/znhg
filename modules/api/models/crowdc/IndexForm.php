@@ -114,7 +114,6 @@ class IndexForm extends Model
                 'notice' => Option::get('notice', $this->store_id, 'admin'),
                 'seckill' => $this->getSeckillData(),
                 'crowdc_seckill' => $this->getSeckillData(),
-                'bookmall_seckill' => $this->getSeckillData(),
                 'pintuan' => $this->getPintuanData(),
             ],
         ];

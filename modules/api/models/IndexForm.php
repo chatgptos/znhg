@@ -344,7 +344,7 @@ class IndexForm extends Model
     public function getCrowdSeckillData()
     {
         $list = \app\modules\api\models\crowdc\SeckillGoods::find()->alias('mg')
-            ->select('g.id,g.name,g.cover_pic AS pic,g.price,mg.attr,mg.start_time')
+            ->select('g.id,g.name,g.cover_pic AS pic,g.price,mg.attr,mg.start_time,mg.start_date_crowdc,mg.end_date_crowdc,mg.open_date')
             ->leftJoin(['g' => \app\modules\api\models\crowdc\Goods::tableName()], 'mg.goods_id=g.id')
             ->where([
                 'AND',
@@ -374,11 +374,28 @@ class IndexForm extends Model
             }
             $list[$i]['price'] = number_format($list[$i]['price'], 2, '.', '');
             $list[$i]['seckill_price'] = number_format(min($price_list), 2, '.', '');
+            $list[$i]['rest_time_list'] = number_format(min($price_list), 2, '.', '');
+
+
+//            $list[$i]['end_date_crowdc']=$list;
+            $list[$i]['integral_all_crowdc']=1111;//需要的积分
+            $list[$i]['integral_has_crowdc']=111;//已经筹集到的积分
+            $list[$i]['date_num_has_crowdc']=111;//天数剩余
+            $list[$i]['send_date_num']=11;//发货的天数
+            $list[$i]['send_way']=11;//发货的天数
+            $list[$i]['has_people_num']=11;//拥有的用户
+            $list[$i]['all_limit_num']=11;//总份数
+            $list[$i]['remaining']=11;//余份数
+            $list[$i]['returnback_integral']=11;//余份数
+            $list[$i]['rest_time']=max(intval(strtotime($list[$i]['start_date_crowdc'] - time()), 0));//余份数
+
+
+
             unset($list[$i]['attr']);
         }
         if (count($list) == 0)
             return [
-                'name' => '暂无秒杀活动',
+                'name' => '暂无预售活动',
                 'rest_time' => 0,
                 'goods_list' => null,
             ];
