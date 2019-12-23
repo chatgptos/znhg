@@ -114,27 +114,26 @@ $this->params['active_nav_group'] = 2;
                     </label>
                 </th>
                 <th>商品类型</th>
-                <th class="text-left">商品名称</th>
+                <th >商品名称</th>
                 <th>商品图片</th>
                 <th>售价</th>
                 <th>库存</th>
                 <th>状态</th>
                 <th>排序</th>
-                <th>推荐</th>
-                <th>精选</th>
+                <th>推荐 精选</th>
                 <th>操作</th>
             </tr>
             </thead>
-            <col style="width: 10%">
-            <col style="width: 7%">
-            <col style="width: 19%">
-            <col style="width: 8%">
-            <col style="width: 8%">
-            <col style="width: 10%">
-            <col style="width: 10%">
-            <col style="width: 10%">
+            <col style="width: 3%">
+            <col style="width: 4%">
             <col style="width: 5%">
-            <col style="width: 13%">
+            <col style="width: 5%">
+            <col style="width: 3%">
+            <col style="width: 2%">
+            <col style="width: 5%">
+            <col style="width: 2%">
+            <col style="width: 5%">
+            <col style="width: 6%">
             <tbody>
             <?php foreach ($list as $index => $goods): ?>
                 <tr>
@@ -199,8 +198,6 @@ $this->params['active_nav_group'] = 2;
                                class="badge badge-primary"
                                data-toggle="tooltip" data-placement="top" title="点击设置为推荐">普通</a>
                         <?php endif ?>
-                    </td>
-                    <td class="nowrap">
                         <?php if ($goods['is_best'] == 1): ?>
                             <a onclick="setBest(<?= $goods['id'] ?>,'nobest');"
                                class="badge badge-danger"
