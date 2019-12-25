@@ -166,7 +166,7 @@ isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
                             <div class="form-group">
                                 <button class="btn btn-primary mr-2">筛选</button>
                                 <a class="btn btn-secondary"
-                                   href="<?= Yii::$app->request->url . "&flag=EXPORT" ?>">批量导出</a>
+                                   href="<?= Yii::$app->request->url . "?flag=EXPORT" ?>">批量导出</a>
                             </div>
                         </div>
                     </div>

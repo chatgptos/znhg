@@ -150,6 +150,7 @@ $this->params['active_nav_group'] = 0;
     }
 </style>
 <div class="row home-row" id="app" style="display: none">
+
     <div class="home-col col-md-4">
         <div class="panel panel-1" v-if="panel_1">
             <div class="panel-header">今日数据</div>
@@ -419,15 +420,122 @@ $this->params['active_nav_group'] = 0;
         </div>
 
 
-
-
-
-
-
-
     </div>
     <div class="home-col col-md-6">
 
+
+        <div class="panel panel-5 mb-3" v-if="panel_5">
+            <div class="panel-header">
+                <span>后台系统公告</span>
+                <ul class="nav nav-right">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="javascript:" data-tab=".tab-1">功能</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:" data-tab=".tab-2">运营</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:" data-tab=".tab-3">数据</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:" data-tab=".tab-4">报表</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="panel-body">
+                <div class="tab-body tab-1 active">
+                    <table class="table">
+                        <col style="width: 10%">
+                        <col style="width: 75%">
+                        <col style="width: 15%">
+                        <thead>
+                        <tr>
+                            <th>排名</th>
+                            <th>功能名称</th>
+                            <th class="text-center">信息</th>
+                        </tr>
+                        </thead>
+                        <tr  >
+                            <td>1</td>
+                            <td>
+                                <div>后台可以一键导出订单数据啦</div>
+                            </td>
+                            <td class="text-center">使用</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="tab-body tab-2">
+                    <table class="table">
+                        <col style="width: 10%">
+                        <col style="width: 75%">
+                        <col style="width: 15%">
+                        <thead>
+                        <tr>
+                            <th>排名</th>
+                            <th>功能名称</th>
+                            <th class="text-center">信息</th>
+                        </tr>
+                        </thead>
+                        <tr >
+                            <td>1</td>
+                            <td>
+                                <div>预售</div>
+                            </td>
+                            <td class="text-center">可以测试并使用啦</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="tab-body tab-3">
+                    <table class="table">
+                        <col style="width: 10%">
+                        <col style="width: 75%">
+                        <col style="width: 15%">
+                        <thead>
+                        <tr>
+                            <th>排名</th>
+                            <th>功能名称</th>
+                            <th class="text-center">信息</th>
+                        </tr>
+                        </thead>
+                        <tr >
+                            <td>1</td>
+                            <td>
+                                <div>报名/众筹</div>
+                            </td>
+                            <td class="text-center">可以创建发起报名活动啦</td>
+                        </tr>
+                        <tr >
+                            <td>1</td>
+                            <td>
+                                <div>众筹资格</div>
+                            </td>
+                            <td class="text-center">可以发起众筹抢购啦（请在首页布局增加众筹模块）</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="tab-body tab-4">
+                    <table class="table">
+                        <col style="width: 10%">
+                        <col style="width: 75%">
+                        <col style="width: 15%">
+                        <thead>
+                        <tr>
+                            <th>排名</th>
+                            <th>功能名称</th>
+                            <th class="text-center">信息</th>
+                        </tr>
+                        </thead>
+                        <tr >
+                            <td>1</td>
+                            <td>
+                                <div>奖金结算</div>
+                            </td>
+                            <td class="text-center">可以按时间统计推挂钩付费用户数量啦</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
 
 
         <div class="panel panel-5 mb-3" v-if="panel_5">
