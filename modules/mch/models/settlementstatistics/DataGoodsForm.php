@@ -40,7 +40,7 @@ class DataGoodsForm extends Model
             [['limit'], 'default', 'value' => 20],
             [['status'], 'default', 'value' => 1],
             [['keyword'], 'trim'],
-            [['date_begin','date_end','keyword'], 'string'],
+            [['flag','date_begin','date_end','keyword'], 'string'],
         ];
     }
 
@@ -74,6 +74,7 @@ class DataGoodsForm extends Model
 //        echo '<pre>';
 //        var_dump($query);
 //        die;
+
 
 
         if ($this->keyword) {
@@ -125,7 +126,7 @@ class DataGoodsForm extends Model
         if($this->date_begin){
             $query->andWhere(['>', 'u.addtime', strtotime($this->date_begin)]);
         }
-        if($this->date_begin){
+        if($this->date_end){
             $query->andWhere(['<', 'u.addtime', strtotime($this->date_end)]);
         }
 
@@ -193,7 +194,7 @@ class DataGoodsForm extends Model
 //        var_dump($this->flag);
 //        die;
         if ($this->flag == "EXPORT") {
-//            Export::user($list);
+            Export::user($list,$this->date_begin,$this->date_end);
         }
 
 

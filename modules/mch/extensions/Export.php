@@ -115,7 +115,7 @@ class Export
                 $attr_list = json_decode($v['attr']);
                 if (is_array($attr_list)) {
                     foreach ($attr_list as $attr) {
-                        $goods_str .= $attr->attr_group_name . "：" . $attr->attr_name.',';
+                        $goods_str .= $attr->attr_group_name . "：" . $attr->attr_name . ',';
                     }
                 }
                 $out[] = self::Check($goods_str);
@@ -137,7 +137,7 @@ class Export
                 if ($order_form) {
                     $str = '';
                     foreach ($order_form as $key => $item) {
-                        $str .= $item['key'] . ':' . $item['value'].',';
+                        $str .= $item['key'] . ':' . $item['value'] . ',';
                     }
                     $content = self::Check($str);
                 } else {
@@ -228,62 +228,39 @@ class Export
      * @param $info
      * 导出推荐用户数据 2.0
      */
-    public static function user($info)
+    public static function user($info ,$date_begin =0 ,$date_end =0)
     {
-        die;
-        $title = "序号,订单号,用户,商品名,规格,数量,收件人,电话,地址,总金额（含运费）,运费,实际付款,付款状态,申请状态,发货状态,收货状态,快递单号,快递公司,下单时间,备注";
+        $title = "序号,用户id,用户昵称,推荐用户数,推荐付费用户数,最大层级,订单数,消费金额,积分,欢乐豆,优惠券,注册时间";
         $title .= "\n";
-        $EXCEL_OUT = iconv('UTF-8', 'GBK', $title);
-        $count = 1;
+        $EXCEL_OUT = $title;
         foreach ($info as $index => $value) {
-            $order_form = OrderForm::findAll(['store_id' => $value['store_id'], 'order_id' => $value['id'], 'is_delete' => 0]);
-            foreach ($value['goods_list'] as $i => $v) {
-                $price = round($v['total_price'] * $value['pay_price'] / ($value['total_price'] - $value['express_price']), 2);
-                $goods_str = "";//规格
-                $out = array();
-                $out[] = $count;
-                $count++;
-                $out[] = trim("\"\t" . $value['order_no'] . "\"");
-                $out[] = trim("\"\t" . self::Check($value['nickname']) . "\"");
-                $out[] = trim("\"\t" . self::Check($v['name']) . "\"");
-                $attr_list = json_decode($v['attr']);
-                if (is_array($attr_list)) {
-                    foreach ($attr_list as $attr) {
-                        $goods_str .= $attr->attr_group_name . "：" . $attr->attr_name.',';
-                    }
-                }
-                $out[] = self::Check($goods_str);
-                $out[] = $v['num'] . $v['unit'];
-
-                $out[] = self::Check($value['name']);
-                $out[] = trim("\"\t" . $value['mobile'] . "\"");
-                $out[] = self::Check($value['address']);
-                $out[] = $value['total_price'] . "元";
-                $out[] = $value['express_price'] . "元";
-                $out[] = $price . "元";
-                $out[] = ($value['is_pay'] == 1) ? "已付款" : "未付款";
-                $out[] = ($value['apply_delete'] == 1) ? "取消中" : "无";
-                $out[] = ($value['is_send'] == 1) ? "已发货" : "未发货";
-                $out[] = ($value['is_confirm'] == 1) ? "已收货" : "未收货";
-                $out[] = self::Check($value['express_no']);
-                $out[] = self::Check($value['express']);
-                $out[] = trim("\"\t" . date('Y-m-d H:i', $value['addtime']) . "\"");
-                if ($order_form) {
-                    $str = '';
-                    foreach ($order_form as $key => $item) {
-                        $str .= $item['key'] . ':' . $item['value'].',';
-                    }
-                    $content = self::Check($str);
-                } else {
-                    $content = self::Check($value['content']);
-                }
-                $out[] = $content;
-                $EXCEL_OUT .= mb_convert_encoding(implode($out, ',') . "\n", 'GBK', 'UTF-8');//需要先启用 mbstring 扩展库，在 php.ini里将; extension=php_mbstring.dll 前面的 ; 去掉
-
-            }
+            $out = array();
+            $out[] = $index + 1;
+            $out[] = $value['id'];
+            $out[] = self::Check($value['nickname']);
+            $out[] = $value['son_num'];
+            $out[] = $value['son_num_haslevel'];
+            $out[] = $value['levelMax'];
+            $out[] = $value['sales_count'];
+            $out[] = $value['sales_price'];
+            $out[] = $value['integral'];
+            $out[] = $value['hld'];
+            $out[] = $value['coupon'];
+//            $out[] = trim("\"\t" . $value['nickname'] . "\"");
+            $out[] =  date('Y-m-d H:i', $value['addtime']) ;
+//            $out[] = trim("\"\t" . date('Y-m-d H:i', $value['addtime']) . "\"");
 //            $EXCEL_OUT .= iconv('UTF-8', 'GB2312', implode($out,',')."\n");
+//            $EXCEL_OUT .= mb_convert_encoding(implode($out, ',') . "\n", 'GB2312', 'UTF-8');
+            $EXCEL_OUT .= implode($out,',')."\n" ;
         }
-        $name = "订单导出-" . date('YmdHis', time());//导出文件名称
+
+        if($date_begin){
+            $name = "用户统计数据$date_begin.至.$date_end'导出". date('YmdHis', time());//导出文件名称
+
+        }else{
+            $name = "用户统计数据导出" . date('YmdHis', time());//导出文件名称
+        }
+
         header("Content-Disposition:attachment;filename={$name}.csv"); //“生成文件名称”=自定义
         self::exportHeader($EXCEL_OUT);
         exit();
