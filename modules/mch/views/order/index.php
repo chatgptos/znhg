@@ -118,6 +118,9 @@ isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
                                         <option value="3" <?= isset($Gets['keyword_1']) && $Gets['keyword_1'] == 3 ? "selected" : "" ?>>
                                             收货人
                                         </option>
+                                        <option value="5" <?= isset($Gets['keyword_1']) && $Gets['keyword_1'] == 5 ? "selected" : "" ?>>
+                                            商品名称/商品类型/订单电话/快递单号
+                                        </option>
                                     </select>
                                 </div>
                                 <div class="col-7">
@@ -166,7 +169,9 @@ isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
                             <div class="form-group">
                                 <button class="btn btn-primary mr-2">筛选</button>
                                 <a class="btn btn-secondary"
-                                   href="<?= Yii::$app->request->url . "?flag=EXPORT" ?>">批量导出</a>
+                                   href="<?= Yii::$app->request->url . "&flag=EXPORT" ?>">批量导出(含条件)</a>
+                                <a class="btn btn-secondary"
+                                   href="<?= Yii::$app->request->url . "?flag=EXPORT" ?>">批量导出全部</a>
                             </div>
                         </div>
                     </div>

@@ -17,6 +17,7 @@ use app\models\PtGoods;
 use app\models\PtOrder;
 use app\models\PtOrderDetail;
 use app\models\User;
+use app\modules\mch\extensions\Export;
 use yii\data\Pagination;
 
 class DataGoodsForm extends Model
@@ -29,6 +30,7 @@ class DataGoodsForm extends Model
     public $keyword;
     public $date_begin;
     public $date_end;
+    public $flag;//是否导出
 
     public function rules()
     {
@@ -186,8 +188,18 @@ class DataGoodsForm extends Model
             array_multisort(array_column($list, 'integral'), SORT_DESC, $list);
         }
 
+
+//
+//        var_dump($this->flag);
+//        die;
+        if ($this->flag == "EXPORT") {
+//            Export::user($list);
+        }
+
+
         $p = new Pagination(['totalCount' => $count, 'pageSize' => $this->limit]);
         $list = array_slice($list, $p->offset, $p->limit);
+
 
         return [
             'list' => $list,

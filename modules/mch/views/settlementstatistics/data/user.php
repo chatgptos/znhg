@@ -123,6 +123,15 @@ $this->params['page_navs'] = [
                     </div>
                 </div>
             </div>
+
+
+            <div class="form-group">
+                <button class="btn btn-primary mr-2">筛选</button>
+                <a class="btn btn-secondary"
+                   href="<?= Yii::$app->request->url . "&flag=EXPORT" ?>">批量导出(含条件)</a>
+                <a class="btn btn-secondary"
+                   href="<?= Yii::$app->request->url . "?flag=EXPORT" ?>">批量导出全部</a>
+            </div>
             <div class="float-right">
                 <form method="get">
                     <?php $_s = ['keyword'] ?>
