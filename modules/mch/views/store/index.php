@@ -462,6 +462,21 @@ $this->params['active_nav_group'] = 0;
                             </td>
                             <td class="text-center">使用</td>
                         </tr>
+                        <tr  >
+                            <td>2</td>
+                            <td>
+                                <div>可以按照商品名称搜索订单并且导出啦</div>
+                            </td>
+                            <td class="text-center">使用</td>
+                        </tr>
+
+                        <tr  >
+                            <td>3</td>
+                            <td>
+                                <div style="color:red">白天请不要过多拉取数据</div>
+                            </td>
+                            <td class="text-center" style="color:red">注意</td>
+                        </tr>
                     </table>
                 </div>
                 <div class="tab-body tab-2">
@@ -481,7 +496,7 @@ $this->params['active_nav_group'] = 0;
                             <td>
                                 <div>预售</div>
                             </td>
-                            <td class="text-center">可以测试并使用啦</td>
+                            <td class="text-center"  >可以测试并使用啦</td>
                         </tr>
                     </table>
                 </div>
@@ -528,9 +543,9 @@ $this->params['active_nav_group'] = 0;
                         <tr >
                             <td>1</td>
                             <td>
-                                <div>奖金结算</div>
+                                <div>奖金结算/用户推荐统计</div>
                             </td>
-                            <td class="text-center">可以按时间统计推挂钩付费用户数量啦</td>
+                            <td class="text-center">可以按时间统计推荐付费用户数量啦可以并且拉出数据</td>
                         </tr>
                     </table>
                 </div>
