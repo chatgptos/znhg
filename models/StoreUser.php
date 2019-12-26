@@ -117,7 +117,7 @@ class StoreUser extends ActiveRecord implements IdentityInterface
 
     public function getgenerateAuthKey()
     {
-        return $this->auth_key;
+        return Yii::$app->security->generateRandomString();
     }
 
     /**

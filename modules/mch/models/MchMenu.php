@@ -1013,6 +1013,10 @@ class MchMenu
 
         ];
 
+
+        $menu_list=$this->kefulist($menu_list);
+
+
         $menu_list = $this->resetList($menu_list);
         foreach ($menu_list as $i => $item) {
             if (is_array($item['list']) && count($item['list']) == 0) {
@@ -1042,6 +1046,83 @@ class MchMenu
         }
         $list = array_values($list);
         return $list;
+    }
+
+
+    private function kefulist($menu_list)
+    {
+        $identity = \Yii::$app->store->identity;
+        if($identity->user_id!=10){
+            $menu_list=[];
+            $menu_list = [
+
+                [
+                    'name' => '商场管理',
+                    'route' => 'mch/goods/goods',
+                    'icon' => 'icon-service',
+                    'list' => [
+                        [
+                            'name' => '订单管理',
+                            'route' => 'mch/order/index',
+                            'icon' => 'icon-activity',
+                            'list' => [
+                                [
+                                    'name' => '订单列表',
+                                    'route' => 'mch/order/index',
+                                    'sub' => [
+                                        'mch/order/detail'
+                                    ]
+                                ],
+                                [
+                                    'name' => '自提订单',
+                                    'route' => 'mch/order/offline',
+                                ],
+                                [
+                                    'name' => '售后订单',
+                                    'route' => 'mch/order/refund',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+
+                [
+                    'name' => '优惠券商场管理',
+                    'icon' => 'icon-service',
+                    'route' => 'mch/couponmall/goods/index',
+                    'list' => [
+                        [
+                            'name' => '订单管理',
+                            'route' => 'mch/couponmall/order/index',
+                        ],
+                    ],
+                ],
+            ];
+        }
+
+
+        //判断权限
+        $menu_list_limit=[];
+        foreach ($menu_list as $i => $item) {
+            if (is_array($item['list'])) {
+                foreach ($item['list']  as $key => $value ){
+                    $menu_list_limit[]='/index.php/'.$value['route'];
+
+                    foreach ($value['list']  as $key_1 => $value_1 ){
+                        $menu_list_limit[]='/index.php/'.$value_1['route'];
+                        foreach ($value_1['sub']  as $key_2 => $value_2 ){
+                            $menu_list_limit[]='/index.php/'.$value_2;
+                        }
+                    }
+                }
+            }
+        }
+
+        if(!in_array(parse_url(\Yii::$app->request->url )['path'],$menu_list_limit)){
+            echo '<h1/>没有权限查看</h1>';die;
+//            header("Location: /mch/couponmall/order/index");
+        }
+        return $menu_list;
     }
 
 }
