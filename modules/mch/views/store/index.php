@@ -458,12 +458,19 @@ $this->params['active_nav_group'] = 0;
                         <tr  >
                             <td>1</td>
                             <td>
+                                <div style="color:red">可以创建客服了（右上角）</div>
+                            </td>
+                            <td class="text-center" style="color:red">注意</td>
+                        </tr>
+                        <tr  >
+                            <td>2</td>
+                            <td>
                                 <div>后台可以一键导出订单数据啦</div>
                             </td>
                             <td class="text-center">使用</td>
                         </tr>
                         <tr  >
-                            <td>2</td>
+                            <td>3</td>
                             <td>
                                 <div>可以按照商品名称搜索订单并且导出啦</div>
                             </td>
@@ -471,9 +478,25 @@ $this->params['active_nav_group'] = 0;
                         </tr>
 
                         <tr  >
-                            <td>3</td>
+                            <td>5</td>
                             <td>
                                 <div style="color:red">白天请不要过多拉取数据</div>
+                            </td>
+                            <td class="text-center" style="color:red">注意</td>
+                        </tr>
+
+                        <tr  >
+                            <td>6</td>
+                            <td>
+                                <div style="color:red">客服账号请不要外流，可以使用没有做完整的安全测试</div>
+                            </td>
+                            <td class="text-center" style="color:red">注意</td>
+                        </tr>
+
+                        <tr  >
+                            <td>7</td>
+                            <td>
+                                <div style="color:red">客服不可以拉去数据报表只可以查看和发货</div>
                             </td>
                             <td class="text-center" style="color:red">注意</td>
                         </tr>
@@ -546,6 +569,20 @@ $this->params['active_nav_group'] = 0;
                                 <div>奖金结算/用户推荐统计</div>
                             </td>
                             <td class="text-center">可以按时间统计推荐付费用户数量啦可以并且拉出数据</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>
+                                <div style="color:red">管理员所有的报表均可拉取（订单/商城/兑换/用户推荐统计）</div>
+                            </td>
+                            <td class="text-center" style="color:red">注意</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>
+                                <div style="color:red">券商也可以拉取报表了（每次只能拉去一个用户的所有下级，先搜索再拉取）</div>
+                            </td>
+                            <td class="text-center" style="color:red">注意</td>
                         </tr>
                     </table>
                 </div>
