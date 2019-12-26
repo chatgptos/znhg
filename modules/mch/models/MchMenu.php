@@ -1098,7 +1098,6 @@ class MchMenu
                     ],
                 ],
             ];
-        }
 
 
         //判断权限
@@ -1118,9 +1117,11 @@ class MchMenu
             }
         }
 
-        if(!in_array(parse_url(\Yii::$app->request->url )['path'],$menu_list_limit)){
-            echo '<h1/>没有权限查看</h1>';die;
+            if (!in_array(parse_url(\Yii::$app->request->url)['path'], $menu_list_limit)) {
+                echo '<h1/>没有权限查看</h1>';
+                die;
 //            header("Location: /mch/couponmall/order/index");
+            }
         }
         return $menu_list;
     }

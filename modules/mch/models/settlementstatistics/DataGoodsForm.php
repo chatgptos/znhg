@@ -194,6 +194,10 @@ class DataGoodsForm extends Model
 //        var_dump($this->flag);
 //        die;
         if ($this->flag == "EXPORT") {
+            $identity = \Yii::$app->store->identity;
+            if($identity->user_id!=10){
+                echo '<h1/>没有权限拉取</h1>';die;
+            }
             Export::user($list,$this->date_begin,$this->date_end);
         }
 

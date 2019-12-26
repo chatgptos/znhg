@@ -91,6 +91,54 @@ class Export
         exit();
     }
 
+
+
+    /**
+     * @param $info
+     * 导出订单
+     */
+    public static function orderqs($info)
+    {
+        $title = "序号,订单号,用户,商品名,商品数量,商品现在优惠券,商品现在积分,购买优惠券,购买积分,支付时间,后台确认时间,付款状态,申请状态,发货状态,收货状态,快递单号,快递公司";
+
+        foreach ($info[0]['orderFrom'] as $k => $v) {
+            $title .= ',' . $v->key;
+        }
+        $title .= "\n";
+        $EXCEL_OUT = $title;
+//        $EXCEL_OUT = iconv('UTF-8', 'GB2312', $title);
+        foreach ($info as $index => $value) {
+            $out = array();
+            $out[] = $index + 1;
+            $out[] = $value['order_no'];
+            $out[] = self::Check($value['nickname']);
+            $out[] = self::Check($value['goods_name']);
+            $out[] = "1个";
+            $out[] = $value['goods_coupon'] . "张";
+            $out[] = $value['goods_integral'] . "个";
+            $out[] = $value['coupon'] . "张";
+            $out[] = $value['integral'] . "个";
+            $out[] = date('Y-m-d H:i', $value['pay_time']);
+            $out[] = date('Y-m-d H:i', $value['use_time']);
+            $out[] = ($value['is_pay'] == 1) ? "已付款" : "未付款";
+            $out[] = ($value['apply_delete'] == 1) ? "取消中" : "无";
+            $out[] = ($value['is_use'] == 1) ? "已发货" : "未发货";
+            $out[] = ($value['is_confirm'] == 1) ? "已收货" : "不清楚";
+            $out[] = self::Check($value['express_no']);
+            $out[] = self::Check($value['express']);
+
+            foreach ($value['orderFrom'] as $k => $v) {
+                $out[] = $v->value;
+            }
+
+            $EXCEL_OUT .= implode($out, ',') . "\n";
+//            $EXCEL_OUT .= mb_convert_encoding(implode($out, ',') . "\n", 'GB2312', 'UTF-8');//需要先启用 mbstring 扩展库，在 php.ini里将; extension=php_mbstring.dll 前面的 ; 去掉
+        }
+        $name = "订单导出-" . date('YmdHis', time());//导出文件名称
+        header("Content-Disposition:attachment;filename={$name}.csv"); //“生成文件名称”=自定义
+        self::exportHeader($EXCEL_OUT);
+        exit();
+    }
     /**
      * @param $info
      * 导出订单 2.0

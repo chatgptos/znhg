@@ -9,6 +9,7 @@ namespace app\modules\mch\models\couponmall;
 
 use app\models\User;
 use app\models\Model;
+use app\modules\mch\extensions\Export;
 use yii\data\Pagination;
 use app\models\PtGoods;
 use app\models\PtOrder;
@@ -53,6 +54,8 @@ class OrderForm extends Model
                 'o.*',
                 'g.name AS goods_name', 'g.cover_pic',
                 'u.nickname',
+                'g.coupon AS goods_coupon',
+                'g.integral AS goods_integral',
             ])
             ->andWhere(['o.is_delete' => 0, 'o.store_id' => $this->store_id])
             ->leftJoin(['g' => Goods::tableName()], 'g.id=o.goods_id')
@@ -118,14 +121,26 @@ class OrderForm extends Model
             $query->andWhere(['<=', 'o.addtime', strtotime($this->date_end)]);
         }
 
-//        $query1 = clone $query;
-//        if($this->flag == "EXPORT"){
-//            $list_ex = $query1->select('o.*,u.nickname')->orderBy('o.addtime DESC')->asArray()->all();
-//            foreach ($list_ex as $i => $item) {
+        $query1 = clone $query;
+        if($this->flag == "EXPORT"){
+            $identity = \Yii::$app->store->identity;
+            if($identity->user_id!=10){
+                echo '<h1/>没有权限拉取</h1>';die;
+            }
+            $list_ex = $query1->orderBy('o.addtime DESC')->asArray()->all();
+            foreach ($list_ex as $i => $item) {
+                $list_ex[$i]['orderFrom'] = \app\modules\api\models\couponmall\OrderForm::find()
+                    ->select([
+                        'key', 'value'
+                    ])
+                    ->andWhere(['store_id' => $this->store_id, 'order_id' => $item['id'], 'goods_id' => $item['goods_id'], 'is_delete' => 0])
+                    ->all();
 //                $list_ex[$i]['goods_list'] = $this->getOrderGoodsList($item['id']);
-//            }
-//            Export::order($list_ex);
-//        }
+            }
+
+//            var_dump($list_ex);die;
+            Export::orderqs($list_ex);
+        }
         $count = $query->count();
         $p = new Pagination(['totalCount' => $count, 'pageSize' => 20]);
 

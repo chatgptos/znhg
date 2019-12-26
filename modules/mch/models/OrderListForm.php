@@ -155,6 +155,10 @@ class OrderListForm extends Model
         }
         $query1 = clone $query;
         if ($this->flag == "EXPORT") {
+            $identity = \Yii::$app->store->identity;
+            if($identity->user_id!=10){
+                echo '<h1/>没有权限拉取</h1>';die;
+            }
             $list_ex = $query1->select('o.*,u.nickname')->orderBy('o.addtime DESC')->asArray()->all();
             foreach ($list_ex as $i => $item) {
                 $list_ex[$i]['goods_list'] = $this->getOrderGoodsList($item['id']);

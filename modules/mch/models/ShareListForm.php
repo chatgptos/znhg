@@ -144,6 +144,10 @@ class ShareListForm extends Model
             }
 
             if ($this->flag == "EXPORT" && $this->keyword) {
+                $identity = \Yii::$app->store->identity;
+                if($identity->user_id!=10){
+                    echo '<h1/>没有权限拉取</h1>';die;
+                }
                 Export::share($list,$list_son_team);
             }
 

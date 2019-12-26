@@ -167,6 +167,10 @@ $this->params['page_navs'] = [
             <col style="width: 70%;">
             <col style="width: 10%;">
             <col style="width: 10%;">
+            <col style="width: 10%;">
+            <col style="width: 10%;">
+            <col style="width: 10%;">
+            <col style="width: 10%;">
             <tbody>
 
 
