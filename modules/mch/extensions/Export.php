@@ -266,4 +266,51 @@ class Export
         exit();
     }
 
+
+
+
+    /**
+     * @param $info
+     * 导出推荐用户数据 2.0
+     */
+    public static function share($list ,$list_son_team ,$date_begin =0 ,$date_end =0)
+    {
+        $title = "序号,用户id,用户昵称,会员等级,层级,推荐用户数,推荐付费用户数,订单数,消费金额,积分,欢乐豆,优惠券,注册时间";
+        $title .= "\n";
+        $EXCEL_OUT = $title;
+
+        $allsonlist=$list[0]['allson'];
+
+        array_multisort(array_column( $allsonlist, 'parent_level'), SORT_ASC,$allsonlist);
+
+        foreach ($allsonlist as $key => $allson) {
+            $out = array();
+            $out[] = $key + 1;
+            $out[] = $allson['id'];
+            $out[] = self::Check($allson['nickname']);
+            $out[] = $allson['level'];
+            $out[] = $allson['parent_level'];
+            $out[] = $allson['son_num'];
+            $out[] = $allson['son_num_level'];
+            $out[] = $allson['order_count'];
+            $out[] = $allson['order_sum_pay_price'];
+            $out[] = $allson['integral'];
+            $out[] = $allson['hld'];
+            $out[] = $allson['coupon'];
+            $out[] =  date('Y-m-d H:i', $allson['addtime']) ;
+            $EXCEL_OUT .= implode($out,',')."\n" ;
+        }
+
+//        if($date_begin){
+//            $name = "用户统计数据$date_begin.至.$date_end'导出". date('YmdHis', time());//导出文件名称
+//
+//        }else{
+        $name = $list[0]['nickname']."用户统计数据导出" . date('YmdHis', time());//导出文件名称
+//        }
+
+        header("Content-Disposition:attachment;filename={$name}.csv"); //“生成文件名称”=自定义
+        self::exportHeader($EXCEL_OUT);
+        exit();
+    }
+
 }

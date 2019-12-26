@@ -5,7 +5,9 @@
  * Time: 14:57
  */
 /* @var $pagination yii\data\Pagination */
+
 /* @var $setting \app\models\Setting */
+
 use yii\widgets\LinkPager;
 use leandrogehlen\treegrid\TreeGrid;
 
@@ -18,6 +20,12 @@ if ($status === '' || $status === null || $status == -1)
 ?>
 
 
+<div class="alert alert-info rounded-0">
+    <div>注：搜索前请先点击全部显示全部数据再搜索</div>
+    <div>注：导出数据请每次导出一个用户到所有数据</div>
+    <div>注：付费用户以用户等级大于1，消费满10元计算</div>
+    <div>注：搜索前请先点击全部/确保搜索到所有数据</div>
+</div>
 <div class="panel mb-3" id="app">
     <div class="panel-header"><?= $this->title ?></div>
     <div class="panel-body">
@@ -32,13 +40,26 @@ if ($status === '' || $status === null || $status == -1)
                         <div>
                             <div class="input-group">
                                 <input class="form-control"
-                                       placeholder="姓名/微信昵称"
+                                       placeholder="姓名/微信昵称（先点全部后搜索）"
                                        name="keyword"
                                        autocomplete="off"
                                        value="<?= isset($_GET['keyword']) ? trim($_GET['keyword']) : null ?>">
-                    <span class="input-group-btn">
-                    <button class="btn btn-primary">筛选</button>
-                </span>
+                                <span class="input-group-btn">
+                                     <button class="btn btn-primary">筛选</button>
+                                 </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+
+                    </div>
+                    <div flex="dir:RIGHT">
+                        <div>
+                            <div class="input-group">
+                                <div class="form-group">
+                                    <a class="btn btn-secondary"
+                                       href="<?= Yii::$app->request->url . "&flag=EXPORT" ?>">单个导出(请先搜索单个用户/每次导出一个用户的所有下级)</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -76,7 +97,6 @@ if ($status === '' || $status === null || $status == -1)
                 </td>
                 <td>上级分销商</td>
                 <td>下级分销商</td>
-                <td>下级分销商</td>
                 <td>状态</td>
                 <td>申请时间</td>
                 <td>审核时间</td>
@@ -87,9 +107,9 @@ if ($status === '' || $status === null || $status == -1)
                     <td><?= $value['user_id'] ?></td>
                     <td data-toggle="tooltip" data-placement="top" title="<?= $value['nickname'] ?>">
                         <span
-                            style="width: 150px;display:block;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><img
-                                src="<?= $value['avatar_url'] ?>"
-                                style="width: 30px;height: 30px;margin-right: 10px"><?= $value['nickname'] ?></span>
+                                style="width: 150px;display:block;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><img
+                                    src="<?= $value['avatar_url'] ?>"
+                                    style="width: 30px;height: 30px;margin-right: 10px"><?= $value['nickname'] ?></span>
                     </td>
                     <td>
                         <div><?= $value['name'] ?></div>
@@ -109,16 +129,17 @@ if ($status === '' || $status === null || $status == -1)
                                 <span>0</span>
                             <?php else: ?>
                                 <span>共(<?= $value['allson_num'] ?>)</span>
-                                     <!--循环出不同level的不通过次数-->
+                                <!--循环出不同level的不通过次数-->
 
 
-                              <?php if ($value['level_s_children']): ?>
-                                <?php foreach ($value['level_s_children'] as $level => $levelcount): ?>
-                                    <div><a class="team" data-index="<?= $value['id'] ?>" data-level=<?= $level ?>
-                                            href="javascript:" data-toggle="modal"
-                                            data-target="#exampleModal"><?= $level ?>级
-                                            ：<?= $levelcount ?></a></div>
-                                <?php endforeach; ?>
+                                <?php if ($value['level_s_children']): ?>
+                                    <?php foreach ($value['level_s_children'] as $parent_level => $levelcount): ?>
+                                        <div><a class="team" data-index="<?= $value['id'] ?>"
+                                                data-parent_level=<?= $parent_level ?>
+                                                href="javascript:" data-toggle="modal"
+                                                data-target="#exampleModal"><?= $parent_level ?>级
+                                                ：<?= $levelcount ?></a></div>
+                                    <?php endforeach; ?>
                                 <?php endif; ?>
                             <?php endif; ?>
                         <?php endif; ?>
@@ -181,16 +202,22 @@ if ($status === '' || $status === null || $status == -1)
                             <tr>
                                 <td>序号</td>
                                 <td>分销商</td>
-                                <td>下线等级</td>
+                                <td>下线层级</td>
+                                <td>会员等级</td>
                                 <td>昵称</td>
+                                <td>已支付订单</td>
+                                <td>消费金额</td>
                                 <td>加入时间</td>
                             </tr>
                             <tr v-for="(item,index) in list">
                                 <td>{{index+1}}</td>
                                 <td>{{name}}</td>
-                                <td>{{level}}</td>
+                                <td>{{parent_level}}</td>
+                                <td>{{item.level}}</td>
                                 <td>{{item.nickname}}</td>
-                                <td>{{item.time}}</td>
+                                <td>{{item.order_count}}</td>
+                                <td>{{item.order_sum_pay_price}}</td>
+                                <td>{{item.addtimeDate}}</td>
                             </tr>
                         </table>
                     </div>
@@ -212,28 +239,39 @@ if ($status === '' || $status === null || $status == -1)
             team:<?=$team?>,
             list: [],
             name: "",
-            level: ""
+            parent_level: ""
         }
     });
+    Vue.filter('timestampToTime', function (timestamp) {
+
+        if (timestamp) {
+            return Date(timestamp);
+        } else {
+            return '';
+        }
+    })
+
     $(document).on('click', '.team', function () {
         var index = $(this).data('index');
-        var level = $(this).data('level');
+        var parent_level = $(this).data('parent_level');
         var team = app.team;
         app.list = [];
         app.name = '';
-        app.level = '';
+        app.parent_level = '';
         // console.log(team)
         $.each(team, function (i) {
             if (team[i].id == index) {
                 var applist = team[i].list_son;
                 var levelMax = team[i].levelMax;
-                app.list = applist[level];
+                app.list = applist[parent_level];
                 console.log(applist);
-                app.level = level+'级';
+                app.parent_level = parent_level + '级';
                 app.name = team[i].nickname;
             }
         })
     });
+
+
 </script>
 <script>
     $(function () {

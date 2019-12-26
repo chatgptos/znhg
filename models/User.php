@@ -178,6 +178,28 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return Order::find()->where(['is_delete'=>0,'is_cancel'=>0,'user_id'=>$id])->count();
     }
 
+
+    /**
+     * @return int|string
+     * 获取订单数
+     */
+    public static function getCountPay($id)
+    {
+        return Order::find()->where(['is_delete'=>0,'is_pay'=>1,'is_cancel'=>0,'user_id'=>$id])->count();
+    }
+
+
+    /**
+     * @return int|string
+     * 获取订单数
+     */
+    public static function getSumPay($id)
+    {
+        return Order::find()->where(['is_delete'=>0,'is_pay'=>1,'is_cancel'=>0,'user_id'=>$id])->sum('pay_price');
+    }
+
+
+
     /**
      * @return int|string
      * 获取优惠券数

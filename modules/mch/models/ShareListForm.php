@@ -10,6 +10,7 @@ namespace app\modules\mch\models;
 
 use app\models\Share;
 use app\models\User;
+use app\modules\mch\extensions\Export;
 use yii\data\Pagination;
 use yii\helpers\VarDumper;
 
@@ -21,11 +22,14 @@ class ShareListForm extends Model
     public $limit;
     public $status;
     public $keyword;
+    public $flag;//导出数据
+
+
 
     public function rules()
     {
         return [
-            [['keyword',], 'trim'],
+            [['flag','keyword',], 'trim'],
             [['page','limit','status'],'integer'],
             [['status',], 'default', 'value' => -1],
             [['page'],'default','value'=>1]
@@ -68,6 +72,7 @@ class ShareListForm extends Model
                 ])->asArray()->all();
 
             $result = User::find()->alias('u')->select('*')->asArray()->all();
+            $result_level = User::find()->alias('u')->andWhere(['>', 'level', 0])->select('id,parent_id')->asArray()->all();
 
 
 
@@ -91,23 +96,56 @@ class ShareListForm extends Model
                 $list[$index]['son'] = $son;
 
                 //获取层级和人数
-                $levelMax=$this->searchmax($allson,'level');
+                $levelMax=$this->searchmax($allson,'parent_level');
                 $list[$index]['levelMax']=$levelMax;
-                $list[$index]['level_s_children']=array_count_values(array_column($allson,'level'));
-
-
+                //归并
+                $list[$index]['level_s_children']=array_count_values(array_column($allson,'parent_level'));
+                //id即为子层级用户id
                 $list_son_team[$index]=$list[$index];
 
                 $list_son= array();
                 foreach ($allson as $key => $info) {
-                    $list_son[$info['level']][] = $info;
+                    $info['addtimeDate']=date('Y-m-d', $info['addtime']);
+//                    $info['order_count']=0 ;
+//                    $info['order_sum_pay_price']=0 ;
+                    if($this->keyword){
+                        $info['order_count']=User::getCountPay($info['id']) ;
+                        $info['order_sum_pay_price']=User::getSumPay($info['id']) ;
+                        //数据导出
+                        $allson[$key]['order_count']=User::getCountPay($info['id']) ;
+                        $allson[$key]['order_sum_pay_price']=User::getSumPay($info['id']) ;
+                        $son = $this->getSons($result,$info['id']);
+                        $son_num=count($son);
+                        $allson[$key]['son_num'] = $son_num;
+
+
+                        $son_level = $this->getSons($result_level,$info['id']);
+                        $son_num_level=count($son_level);
+                        $allson[$key]['son_num_level'] = $son_num_level;
+
+                    }else{
+                        $info['order_count']='单独搜索才显示';
+                        $info['order_sum_pay_price']='单独搜索才显示';
+                    }
+                    if($info['level']<0){
+                        $info['level']='非会员';
+
+                        //数据导出
+                        $allson[$key]['level']='非会员';
+                    }
+//                    var_dump($info);die;
+//                    echo '<pre>';
+                    $list_son[$info['parent_level']][] = $info;
+                    unset($info);
                 }
                 $list_son_team[$index]['list_son']=$list_son;
-
+                $list[$index]['allson'] = $allson;
+                unset($list_son,$allson);
             }
 
-
-
+            if ($this->flag == "EXPORT" && $this->keyword) {
+                Export::share($list,$list_son_team);
+            }
 
             return [$list,$pagination,$list_son_team];
 
@@ -195,7 +233,7 @@ class ShareListForm extends Model
         $subs = array();
         foreach ($categorys as $item) {
             if ($item['parent_id'] == $catId) {
-                $item['level'] = $level;
+                $item['parent_level'] = $level;
                 $subs[] = $item;
                 $subs = array_merge($subs,$this->getSubs($categorys, $item['id'], $level + 1));
             }
