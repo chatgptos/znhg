@@ -193,6 +193,8 @@ function getCurrentMenu($menu_list, $route)
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="<?= Url::to(['account/index']) ?>">账户设置</a>
                     <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="<?= Url::to(['account/add']) ?>">新增账户</a>
+                    <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="<?= Url::to(['public/logout']) ?>">注销</a>
                 </div>
             </div>
