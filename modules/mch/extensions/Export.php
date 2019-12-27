@@ -9,6 +9,7 @@ namespace app\modules\mch\extensions;
 
 
 use app\models\OrderForm;
+use app\models\User;
 use yii\helpers\VarDumper;
 
 class Export
@@ -307,6 +308,125 @@ class Export
 
         }else{
             $name = "用户统计数据导出" . date('YmdHis', time());//导出文件名称
+        }
+
+        header("Content-Disposition:attachment;filename={$name}.csv"); //“生成文件名称”=自定义
+        self::exportHeader($EXCEL_OUT);
+        exit();
+    }
+
+
+    /**
+     * @param $info
+     * 导出推荐用户数据 2.0
+     */
+    public static function businessall($people ,$date_begin =0 ,$date_end =0)
+    {
+        $title = "所有交易欢乐豆总数量（已经交易+等待交易）,所有系统收取欢乐豆手续费（已经交易+等待交易）,所有系统奖励优惠券数量（已经交易+等待交易）,所有售卖优惠券数量（已经交易+等待交易）,所有活跃卖家数量（已经交易+等待交易）,所有活跃买家数量（已经交易+等待交易）,系统收欢乐豆总数（已经交易）,系统收取手续费（已经交易）,系统奖励优惠券数量（已经交易）,交易优惠券数量（已经交易）,所有交易欢乐豆总数量（等待交易）,所有系统收取手续费（等待交易）,系统奖励优惠券数量（等待交易）,售卖优惠券数量（等待交易）";
+        $title .= "\n";
+        $EXCEL_OUT = $title;
+
+        $out = array();
+        $out[] = $people['peoplesellcount_huanledou1'];
+        $out[] = $people['peoplesellcount_huanledou_charge1'];
+        $out[] = $people['peoplesellcount_xtjl1'];
+        $out[] = $people['peoplesellcount_num1'];
+        $out[] = $people['peoplesellcount1'];
+        $out[] = $people['peoplebuyercount1'];
+
+
+
+        $out[] = $people['peoplesellcount_huanledou2'];
+        $out[] = $people['peoplesellcount_huanledou_charge2'];
+        $out[] = $people['peoplesellcount_xtjl2'];
+        $out[] = $people['peoplesellcount_num2'];
+//        $out[] = $people['peoplesellcount2'];
+//        $out[] = $people['peoplebuyercount2'];
+
+
+        $out[] = $people['peoplesellcount_huanledou3'];
+        $out[] = $people['peoplesellcount_huanledou_charge3'];
+        $out[] = $people['peoplesellcount_xtjl3'];
+        $out[] = $people['peoplesellcount_num3'];
+//        $out[] = $people['peoplesellcount3'];
+//        $out[] = $people['peoplebuyercount3'];
+
+
+        $EXCEL_OUT .= implode($out,',')."\n" ;
+
+        if($date_begin){
+            $name = "集市统计总交易量数据$date_begin.至.$date_end'导出". date('YmdHis', time());//导出文件名称
+
+        }else{
+            $name = "集市统计总交易量数据导出" . date('YmdHis', time());//导出文件名称
+        }
+
+        header("Content-Disposition:attachment;filename={$name}.csv"); //“生成文件名称”=自定义
+        self::exportHeader($EXCEL_OUT);
+        exit();
+    }
+
+    /**
+     * @param $info
+     * 导出推荐用户数据 2.0
+     */
+    public static function business($info ,$date_begin =0 ,$date_end =0)
+    {
+        $title = "序号,交易id,交易数量,交易标题,是否交易,交易价值欢乐豆,交易系统手续费,系统奖励券张数,发布时间,发布用户id,发布昵称,发布者欢乐豆,发布者优惠券,发布者积分,购买者id,购买者昵称,购买者欢乐豆,购买者优惠券,购买者积分";
+        $title .= "\n";
+        $EXCEL_OUT = $title;
+        foreach ($info as $index => $value) {
+            $out = array();
+            $out[] = $index + 1;
+            $out[] = $value['id'];
+            $out[] = $value['num'];
+            $out[] = $value['title'];
+            if ($value['is_exchange'] == 1) {
+                $out[] = "已经交易";
+            } else {
+                $out[] = "发布交易";
+            }
+            $out[] = $value['huanledou'];
+            $out[] = $value['huanledou_charge'];
+            $out[] = $value['xtjl'];
+            $out[] =  date('Y-m-d H:i', $value['addtime']) ;
+            $out[] = $value['user_id'];
+                $user= User::findOne(['id' => $value['user_id'], 'store_id' => 1]);
+//                $out[] =  $user->avatar_url;
+                $out[] =  $user->nickname;
+//                $out[] =  $user->wechat_open_id;
+                $out[] =  $user->hld;
+                $out[] =  $user->coupon;
+                $out[] =  $user->integral;
+//                $out[] =  $user->id;
+            $out[] = $value['user_id_buyer'] != 0 ? $value['user_id_buyer'] : 0;
+                $user_buyer= User::findOne(['id' => $value['user_id_buyer'], 'store_id' => 1]);
+//                $out[] =  $user_buyer->avatar_url;
+                $out[] =  $user_buyer->nickname;
+//                $out[] =  $user_buyer->wechat_open_id;
+                $out[] =  $user_buyer->hld;
+                $out[] =  $user_buyer->coupon;
+                $out[] =  $user_buyer->integral;
+//                $out[] =  $user_buyer->id;
+//            $peoplesellcount_huanledou= $newquery->sum('huanledou');
+//            $peoplesellcount_huanledou_charge= $newquery->sum('huanledou_charge');
+//            $peoplesellcount_xtjl= $newquery->sum('xtjl');
+//            $peoplesellcount_num= $newquery->sum('num');
+//            $peoplesellcount= $newquery->groupBy('user_id_buyer')->count();
+//            $peoplebuyercount= $newquery->groupBy('user_id')->count();
+
+//            $out[] = trim("\"\t" . $value['nickname'] . "\"");
+//            $out[] = trim("\"\t" . date('Y-m-d H:i', $value['addtime']) . "\"");
+//            $EXCEL_OUT .= iconv('UTF-8', 'GB2312', implode($out,',')."\n");
+//            $EXCEL_OUT .= mb_convert_encoding(implode($out, ',') . "\n", 'GB2312', 'UTF-8');
+            $EXCEL_OUT .= implode($out,',')."\n" ;
+        }
+
+        if($date_begin){
+            $name = "集市统计交易详情数据$date_begin.至.$date_end'导出". date('YmdHis', time());//导出文件名称
+
+        }else{
+            $name = "集市统计交易详情数据导出" . date('YmdHis', time());//导出文件名称
         }
 
         header("Content-Disposition:attachment;filename={$name}.csv"); //“生成文件名称”=自定义
