@@ -208,7 +208,8 @@ class BusinessListForm extends Model
         ])->sum('num');
         $peoplesellcount3= $newquery->where([
             'g.is_exchange' => 1,
-        ])->groupBy('user_id_buyer')->count();
+        ])->groupBy('user_id_buyer')
+            ->count();
         $peoplebuyercount3= $newquery->where([
             'g.is_exchange' => 1,
         ])->groupBy('user_id')->count();
@@ -233,6 +234,39 @@ class BusinessListForm extends Model
             'peoplesellcount3'=>$peoplesellcount3,
             'peoplebuyercount3'=>$peoplebuyercount3,
         );
+        return $people;
+    }
+
+    public function searchforcron()
+    {
+        if (!$this->validate())
+            return $this->getModelError();
+        $query = Business::find()->alias('g')->where([
+            'g.status' => 1,
+//            'g.is_exchange' => 0,
+            'g.is_delete' => 0,
+        ])->orderBy('g.addtime DESC');
+        if ($this->store_id)
+            $query->andWhere(['g.store_id' => $this->store_id]);
+        $this->keyword =\Yii::$app->request->get()['keyword'];
+        if ($this->keyword ==1){
+            $query->andWhere(['g.is_exchange'=>0]);
+        }elseif($this->keyword == 2) {
+            $query->andWhere(['g.is_exchange'=>1]);
+        }elseif($this->keyword == 3) {
+
+        }
+        if($this->date_begin){
+            $query->andWhere(['>', 'g.addtime', strtotime($this->date_begin)]);
+        }
+        if($this->date_end){
+            $query->andWhere(['<', 'g.addtime', strtotime($this->date_end)]);
+        }
+
+//            $query->andWhere(['LIKE', 'g.name', $this->keyword]);
+        $newquery=$query;
+
+        $people = $this->getdatatjBydate($newquery);
         return $people;
     }
 }
