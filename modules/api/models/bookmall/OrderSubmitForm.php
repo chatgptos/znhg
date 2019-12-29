@@ -249,6 +249,8 @@ class OrderSubmitForm extends Model
             $data = $this->getGoodsListByGoodsInfo($this->goods_info);
             $goods_list = empty($data['list']) ? [] : $data['list'];
             $total_price = empty($data['total_price']) ? 0 : $data['total_price'];
+            $seckill_price = empty($data['seckill_price']) ? 0 : $data['seckill_price'];
+            $seckill_coupon = empty($data['seckill_coupon']) ? 0 : $data['seckill_coupon'];
 
             //替代
 //            $total_price = empty($data['advance_integral_buy']) ? 0 : $data['advance_integral_buy'];
@@ -399,6 +401,8 @@ class OrderSubmitForm extends Model
         $order->user_id = $this->user_id;
         $order->order_no = $this->getOrderNo();
         $order->total_price = $total_price_1;
+        $order->seckill_integral = $seckill_price;
+        $order->seckill_coupon = $seckill_coupon;
         $order->pay_price = $total_price_2 < 0.01 ? 0.01 : $total_price_2;
         $order->express_price = $express_price;
         $order->discount = $discount;
@@ -430,7 +434,6 @@ class OrderSubmitForm extends Model
 //        $order->advance_integral_buy = $advance_integral_buy;
         $order->advance_coupon = intval($advance_coupon);
         $order->yukuan_coupon = intval($yukuan_coupon);
-
 //        if($this->offline == 1){
 //            $qrcode_form = new QrcodeForm();
 //            $qrcode_form->order_no = $order->order_no;
@@ -459,6 +462,7 @@ class OrderSubmitForm extends Model
                 $order->user_coupon_id = $this->user_coupon_id;
             }
         }
+
         if ($order->save()) {
 
             foreach ($form_list as $index => $value) {
@@ -808,11 +812,10 @@ class OrderSubmitForm extends Model
 
         //$total_price先保留 1积分等于1元
 //        $total_price += $goods_item->price;
-
-
-
         return [
             'total_price' => intval($total_price),
+            'seckill_price' => intval($temp_price['total_price']),
+            'seckill_coupon' => intval($seckill_data['seckill_coupon']),
             'list' => [$goods_item],
             'advance_coupon' => $advance_coupon,
             'advance_integral_buy' => $advance_integral_buy,

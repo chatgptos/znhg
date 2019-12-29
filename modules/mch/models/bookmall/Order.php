@@ -150,6 +150,10 @@ class Order extends \yii\db\ActiveRecord
             'is_yukuan' => '是否支付余款',
             'is_check_yukuan' => '是否检查余款',
             'check_yukuan_time' => '后台支付设置时间',
+            'seckill_integral' => '后台支付设置时间',
+            'seckill_coupon' => '后台支付设置时间',
+
+
         ];
     }
     public function getOrderDetail()

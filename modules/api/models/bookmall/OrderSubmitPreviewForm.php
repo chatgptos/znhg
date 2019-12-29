@@ -415,7 +415,6 @@ class OrderSubmitPreviewForm extends Model
                 $goods_item->price = $temp_price['total_price'];
                 $goods_item->coupon = $seckill_data['seckill_coupon'];
                 $goods_item->integral_buy = $temp_price['total_price'];
-
                 //先算出首款固定就是价格*
                 //优惠券个数 固定了
                 $advance_coupon = intval($goods_item->coupon) * ($goods_item->advance / 100);
@@ -714,7 +713,7 @@ class OrderSubmitPreviewForm extends Model
      * @param array $attr_id_list eg.[12,34,22]
      * @return array ['attr_list'=>[],'seckill_price'=>'秒杀价格','seckill_num'=>'秒杀数量','sell_num'=>'已秒杀商品数量']
      */
-    private function getSeckillData($goods, $attr_id_list = [])
+    public function getSeckillData($goods, $attr_id_list = [])
     {
         $seckill_goods = SeckillGoods::findOne([
             'goods_id' => $goods->id,

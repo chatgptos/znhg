@@ -63,13 +63,8 @@ use Codeception\PHPUnit\ResultPrinter\HTML;
  * @property string $yukuan_time
  * @property string $is_check_yukuan
  * @property string $check_yukuan_time
- *
- *
- *
- *
- *
- *
- *
+ * @property string $skill_price
+ * @property string $skill_coupon
  */
 class Order extends \yii\db\ActiveRecord
 {
@@ -157,6 +152,8 @@ class Order extends \yii\db\ActiveRecord
             'is_check_yukuan' => '是否检查余款',
             'yukuan_time' => '是否支付余款',
             'check_yukuan_time' => '后台确认时间',
+            'seckill_integral' => '秒杀价格用于确认预售计算的价格',
+            'skill_coupon' => '秒杀价格用于确认预售计算的价格',
         ];
     }
     public function getOrderDetail()
