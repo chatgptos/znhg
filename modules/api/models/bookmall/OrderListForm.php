@@ -51,9 +51,9 @@ class OrderListForm extends Model
                 'is_pay' => 1,
                 'is_send' => 0,
                 'is_confirm' => 0,
-                'is_check_yukuan' => 0,
                 'is_yukuan' => 0,
-            ]);
+            ]) ->andWhere(['<', 'is_check_yukuan', 2])
+            ;
         }
 
 
