@@ -58,8 +58,8 @@ class SeckillGoodsEditForm extends Model
                     'goods_id' => $this->goods_id,
                     'start_time' => intval($time),
                     'open_date' => $date,
-                    'start_date_crowdc' => $this->start_date_bookmall,
-                    'end_date_crowdc' => $this->end_date_bookmall,
+                    'start_date_bookmall' => $this->start_date_bookmall,
+                    'end_date_bookmall' => $this->end_date_bookmall,
                     'is_delete' => 0,
                 ]);
                 \Yii::trace("---->" . ($model == null));
