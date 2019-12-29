@@ -53,6 +53,8 @@ class SeckillGoods extends \yii\db\ActiveRecord
             'attr' => '规格秒杀价数量',
             'is_delete' => 'Is Delete',
             'buy_max' => '限购数量，0=不限购',
+            'start_date_bookmall' => '限购数量，0=不限购',
+            'end_date_bookmall' => '限购数量，0=不限购',
         ];
     }
 }

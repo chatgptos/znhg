@@ -376,6 +376,7 @@ class OrderSubmitPreviewForm extends Model
         ];
         //秒杀价计算
         $seckill_data = $this->getSeckillData($goods, $attr_id_list);
+
         if ($seckill_data) {
             $temp_price = $this->getSeckillPrice($seckill_data, $goods, $attr_id_list, $goods_info->num);
             //查询当前总共订单量
@@ -590,6 +591,11 @@ class OrderSubmitPreviewForm extends Model
             $resIntegral['forehead'] = sprintf("%.2f", ($resIntegral['forehead_integral'] / $store->integral));
         }
 
+
+
+        $seckill_date= $seckill_data['seckill_data'];
+
+
         $goods_card_list = Goods::getGoodsCard($goods->id);
         return [
             'code' => 0,
@@ -609,7 +615,11 @@ class OrderSubmitPreviewForm extends Model
                 'yukuan_integral_buy' => intval($yukuan_integral_buy),
                 'yukuan_coupon' => intval($yukuan_coupon),
                 'advance' => $goods_item->advance,
-                'num' => $num,
+                'seckill_data' =>array(
+                    'num'=>$num,
+                    'end_date_bookmall'=>$seckill_date->end_date_bookmall,
+                    'start_date_bookmall'=>$seckill_date->start_date_bookmall,
+                ),
                 'charge_integral_buy'=>$charge_integral_buy,
                 'chargeprice'=>$this->getChargecontance($num, $goods, $temp_price['total_price'],$seckill_data['seckill_coupon']),
             ],
@@ -728,6 +738,7 @@ class OrderSubmitPreviewForm extends Model
                 break;
             }
         }
+        $seckill_data['seckill_data']=$seckill_goods;
         return $seckill_data;
     }
 
@@ -772,7 +783,7 @@ class OrderSubmitPreviewForm extends Model
                 'res' => '库存不足',
                 'm_data' => $seckill_data,
                 'g_data' => $goost_attr_data,
-                '$attr_id_list' => $attr_id_list,
+                'attr_id_list' => $attr_id_list,
             ]);
             return false;
         }
