@@ -80,15 +80,15 @@ class CouponMerchantController extends Controller
             //经销商
             $team_count_require = $list->agency_team_count_require;
             $card_count_require = $list->agency_card_count_require;
-            if ($user->level==1) {
+            if ($user->level==6) {
                 $buttonClicked = true;
                 $buttonName = '已经拥有';
             }
         } elseif ($id == 1) {
             //渠道商
-            $team_count_require = $list->distributors_card_count_require;
-            $card_count_require = $list->distributors_team_count_require;
-            if ($user->level==2) {
+            $team_count_require = $list->distributors_team_count_require;
+            $card_count_require = $list->distributors_card_count_require;
+            if ($user->level==5) {
                 $buttonName = '已经拥有';
                 $buttonClicked = true;
             }
@@ -98,6 +98,10 @@ class CouponMerchantController extends Controller
             $card_count_require = 0;
             $buttonName = '暂未开放';
             $buttonClicked = true;
+            if ($user->level==7) {
+                $buttonName = '已经拥有';
+                $buttonClicked = true;
+            }
         } elseif ($id == 3) {
             //分红权
             $team_count_require = $list->dividend_sharing_right_team_count_require;
