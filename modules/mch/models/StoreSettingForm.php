@@ -53,13 +53,16 @@ class StoreSettingForm extends Model
     public $integral;
     public $integration;
     public $notice;
+    public $integrationyushou;
+
+
 
     public function rules()
     {
         return [
             [['name', 'app_id', 'app_secret', 'mch_id', 'key', 'order_send_tpl', 'contact_tel', 'copyright', 'copyright_pic_url', 'copyright_url', 'kdniao_mch_id', 'kdniao_api_key', 'address', 'cert_pem', 'key_pem'], 'trim'],
             [['name', 'cat_goods_cols', 'integral',], 'required'],
-            [['order_send_tpl', 'contact_tel', 'kdniao_mch_id', 'kdniao_api_key', 'address', 'service', 'integration', 'notice'], 'string'],
+            [['integrationyushou','order_send_tpl', 'contact_tel', 'kdniao_mch_id', 'kdniao_api_key', 'address', 'service', 'integration', 'notice'], 'string'],
             [['show_customer_service', 'delivery_time', 'after_sale_time', 'cat_style', 'cat_goods_cols', 'over_day', 'is_offline', 'is_coupon', 'cat_goods_count', 'send_type', 'nav_count', 'integral'], 'integer'],
             ['cat_goods_count', 'default', 'value' => 6],
             [['cert_pem', 'key_pem'], 'default', 'value' => '0']
@@ -86,6 +89,7 @@ class StoreSettingForm extends Model
             'service' => '客服图标',
             'integral' => '抵扣积分',
             'integration' => '积分使用规则',
+            'integrationyushou' => '预售须知规则',
             'notice' => '商城公告',
         ];
     }
@@ -117,6 +121,7 @@ class StoreSettingForm extends Model
         $store->nav_count = $this->nav_count;
         $store->integral = $this->integral ?: 10;
         $store->integration = $this->integration;
+        $store->integrationyushou = $this->integrationyushou;
         $store->save();
 
         Option::set('service', $this->service, $this->store_id, 'admin');

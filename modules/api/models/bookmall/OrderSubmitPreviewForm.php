@@ -71,6 +71,7 @@ class OrderSubmitPreviewForm extends Model
         $res['data']['send_type'] = $store->send_type;
         // 获取 店铺积分使用规则
         $res['data']['integral']['integration'] = $store->integration;
+        $res['data']['integral']['integrationyushou'] = $store->integrationyushou;
         // 获取用户当前积分
         $user = User::findOne(['id' => $this->user_id, 'type' => 1, 'is_delete' => 0]);
         if ($user->integral < $res['data']['integral']['forehead_integral']) {
@@ -404,9 +405,35 @@ class OrderSubmitPreviewForm extends Model
                 $charge_coupon = $this->getCharge($num, $goods);
             }
             if ($temp_price !== false) {
+//                $goods_item->price = intval($temp_price['total_price'] * (1 - $charge_coupon / 100));
+//                $goods_item->coupon = intval($seckill_data['seckill_coupon'] * (1 - $charge_coupon / 100));
+//                $goods_item->integral_buy = intval($temp_price['total_price'] * (1 - $charge_integral_buy / 100));
+
+
+                //取出秒杀价格
+                $goods_item->price = $temp_price['total_price'];
+                $goods_item->coupon = $seckill_data['seckill_coupon'];
+                $goods_item->integral_buy = $temp_price['total_price'];
+
+                //先算出首款固定就是价格*
+                //优惠券个数 固定了
+                $advance_coupon = intval($goods_item->coupon) * ($goods_item->advance / 100);
+                $advance_integral_buy = intval($goods_item->integral_buy) * ($goods_item->advance / 100);
+
+
+                $total_price += $goods_item->integral_buy;
+                //计算出余款价格
                 $goods_item->price = intval($temp_price['total_price'] * (1 - $charge_coupon / 100));
                 $goods_item->coupon = intval($seckill_data['seckill_coupon'] * (1 - $charge_coupon / 100));
                 $goods_item->integral_buy = intval($temp_price['total_price'] * (1 - $charge_integral_buy / 100));
+
+
+                //余款
+                $yukuan_coupon = intval($goods_item->coupon) * (1 - $goods_item->advance / 100);
+                $yukuan_integral_buy = intval($goods_item->integral_buy) * (1 - $goods_item->advance / 100);
+
+
+
             } else {
                 return [
                     'code' => 1,
@@ -433,18 +460,18 @@ class OrderSubmitPreviewForm extends Model
          *
          *
          * */
-        $total_price += $goods_item->price;
-        //优惠券个数
-//        $advance_coupon += $goods_item->coupon;
-//        $advance_integral_buy += $goods_item->integral_buy;
-
-
-        //优惠券个数
-        $advance_coupon += ($goods_item->coupon) * ($goods_item->advance / 100);
-        $advance_integral_buy += ($goods_item->integral_buy) * ($goods_item->advance / 100);
-        //余款
-        $yukuan_coupon = ($goods_item->coupon) * (1 - $goods_item->advance / 100);
-        $yukuan_integral_buy = ($goods_item->integral_buy) * (1 - $goods_item->advance / 100);
+//        $total_price += $goods_item->price;
+//        //优惠券个数
+////        $advance_coupon += $goods_item->coupon;
+////        $advance_integral_buy += $goods_item->integral_buy;
+//
+//
+//        //优惠券个数
+//        $advance_coupon += ($goods_item->coupon) * ($goods_item->advance / 100);
+//        $advance_integral_buy += ($goods_item->integral_buy) * ($goods_item->advance / 100);
+//        //余款
+//        $yukuan_coupon = ($goods_item->coupon) * (1 - $goods_item->advance / 100);
+//        $yukuan_integral_buy = ($goods_item->integral_buy) * (1 - $goods_item->advance / 100);
 
 
         $address = Address::find()->select('id,name,mobile,province_id,province,city_id,city,district_id,district,detail,is_default')->where([
@@ -562,6 +589,7 @@ class OrderSubmitPreviewForm extends Model
             }
             $resIntegral['forehead'] = sprintf("%.2f", ($resIntegral['forehead_integral'] / $store->integral));
         }
+
         $goods_card_list = Goods::getGoodsCard($goods->id);
         return [
             'code' => 0,
@@ -581,6 +609,9 @@ class OrderSubmitPreviewForm extends Model
                 'yukuan_integral_buy' => intval($yukuan_integral_buy),
                 'yukuan_coupon' => intval($yukuan_coupon),
                 'advance' => $goods_item->advance,
+                'num' => $num,
+                'charge_integral_buy'=>$charge_integral_buy,
+                'chargeprice'=>$this->getChargecontance($num, $goods, $temp_price['total_price'],$seckill_data['seckill_coupon']),
             ],
         ];
     }
@@ -589,7 +620,6 @@ class OrderSubmitPreviewForm extends Model
     public function getCharge($num, $goods)
     {
         $charge = 0;
-
         if ($num <= $goods->chargeNum && $num > 0) {
             $charge = $goods->charge;  //1张
         } elseif ($num <= $goods->chargeNum1 && $num > $goods->chargeNum) {
@@ -602,6 +632,45 @@ class OrderSubmitPreviewForm extends Model
             $charge = $goods->charge5;  //1张
         }
         return $charge;
+    }
+
+    public function getChargecontance($num, $goods,$integral=0,$seckill_coupon=0)
+    {
+
+        $chargeprice[]=array(
+            'num'=>'0～'.$goods->chargeNum, 'integral'=> intval($integral * (1 - $goods->advance / 100)*(1-$goods->charge/100)),'charge'=>$goods->charge,
+        );
+        $chargeprice[]=array(
+            'num'=>$goods->chargeNum.'~'.$goods->chargeNum1, 'integral'=> intval($integral * (1 - $goods->advance / 100)*(1-$goods->charge1/100)),'charge'=>$goods->charge1,
+        );
+        $chargeprice[]=array(
+            'num'=>$goods->chargeNum1.'~'.$goods->chargeNum2, 'integral'=> intval($integral * (1 - $goods->advance / 100)*(1-$goods->charge2/100)),'charge'=>$goods->charge2,
+        );
+        $chargeprice[]=array(
+            'num'=>$goods->chargeNum2.'~'.$goods->chargeNum3,'integral'=> intval($integral * (1 - $goods->advance / 100)*(1-$goods->charge3/100)),'charge'=>$goods->charge3,
+        );
+        $chargeprice[]=array(
+            'num'=>'超过'.$goods->chargeNum3, 'integral'=> intval($integral * (1 - $goods->advance / 100)*(1-$goods->charge5/100)),'charge'=>$goods->charge5,
+        );
+        $charge = 0;
+        if ($num <= $goods->chargeNum && $num >= 0) {
+            $charge = $goods->charge;  //1张
+            $chargeprice[0]['select']=true;
+        } elseif ($num <= $goods->chargeNum1 && $num > $goods->chargeNum) {
+            $chargeprice[1]['select']=true;
+            $charge = $goods->charge1; //1-6
+        } elseif ($num <= $goods->chargeNum2 && $num > $goods->chargeNum1) {
+            $chargeprice[2]['select']=true;
+            $charge = $goods->charge2;//7-18
+        } elseif ($num <= $goods->chargeNum3 && $num > $goods->chargeNum2) {
+            $chargeprice[3]['select']=true;
+            $charge = $goods->charge3; //18以上
+        } else {
+            $chargeprice[4]['select']=true;
+            $charge = $goods->charge5;  //1张
+        }
+
+        return $chargeprice;
     }
 
     private function getShopList()

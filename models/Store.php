@@ -54,7 +54,7 @@ class Store extends \yii\db\ActiveRecord
         return [
             [['is_delete', 'user_id', 'wechat_app_id', 'show_customer_service', 'delivery_time', 'after_sale_time', 'cat_style', 'cat_goods_cols', 'over_day', 'is_offline', 'is_coupon', 'cat_goods_count', 'send_type', 'nav_count', 'integral'], 'integer'],
             [['user_id', 'name'], 'required'],
-            [['home_page_module', 'address', 'member_content', 'integration'], 'string'],
+            [['integrationyushou','home_page_module', 'address', 'member_content', 'integration'], 'string'],
             [['name', 'order_send_tpl', 'contact_tel', 'copyright', 'kdniao_mch_id', 'kdniao_api_key'], 'string', 'max' => 255],
             [['copyright_pic_url', 'copyright_url'], 'string', 'max' => 1000],
         ];
@@ -94,6 +94,7 @@ class Store extends \yii\db\ActiveRecord
             'nav_count' => '首页导航栏个数 0--4个 1--5个',
             'integral' => '抵扣积分',
             'integration' => '积分使用规则',
+            'integrationyushou' => '预售规则规则',
         ];
     }
 }

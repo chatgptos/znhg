@@ -1,9 +1,9 @@
 {
   "pages": [
+    "pages/index/index",
+    "pages/mall/mall",
     "pages/coupon-merchant/index",
     "pages/coupon-merchant-mall/index",
-    "pages/mall/mall",
-    "pages/index/index",
     "pages/user/user",
     "pages/settlementbonus/index",
     "pages/share/index",

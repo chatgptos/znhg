@@ -755,13 +755,32 @@ class OrderSubmitForm extends Model
                 $charge_coupon = $this->getCharge($num, $goods);
             }
             if ($temp_price !== false) {
+                //取出秒杀价格
+                $goods_item->price = $temp_price['total_price'];
+                $goods_item->coupon = $seckill_data['seckill_coupon'];
+                $goods_item->integral_buy = $temp_price['total_price'];
+
+                //先算出首款固定就是价格*
+                //优惠券个数 固定了
+                $advance_coupon = intval($goods_item->coupon) * ($goods_item->advance / 100);
+                $advance_integral_buy = intval($goods_item->integral_buy) * ($goods_item->advance / 100);
+
+
+                $total_price += $goods_item->integral_buy;
+                //计算出余款价格
                 $goods_item->price = intval($temp_price['total_price'] * (1 - $charge_coupon / 100));
                 $goods_item->coupon = intval($seckill_data['seckill_coupon'] * (1 - $charge_coupon / 100));
                 $goods_item->integral_buy = intval($temp_price['total_price'] * (1 - $charge_integral_buy / 100));
+
+
+                //余款
+                $yukuan_coupon = intval($goods_item->coupon) * (1 - $goods_item->advance / 100);
+                $yukuan_integral_buy = intval($goods_item->integral_buy) * (1 - $goods_item->advance / 100);
+
             } else {
                 return [
                     'code' => 1,
-                    'msg' => '秒杀商品库存不足',
+                    'msg' => '抢购商品库存不足',
                 ];
             }
         } else {
@@ -789,17 +808,8 @@ class OrderSubmitForm extends Model
 
         //$total_price先保留 1积分等于1元
 //        $total_price += $goods_item->price;
-        $total_price += $goods_item->integral_buy;
 
 
-        //优惠券个数
-        $advance_coupon += ($goods_item->coupon) * ($goods_item->advance / 100);
-        $advance_integral_buy += ($goods_item->integral_buy) * ($goods_item->advance / 100);
-
-
-        //余款
-        $yukuan_coupon = ($goods_item->coupon) * (1 - $goods_item->advance / 100);
-        $yukuan_integral_buy = ($goods_item->integral_buy) * (1 - $goods_item->advance / 100);
 
         return [
             'total_price' => intval($total_price),
