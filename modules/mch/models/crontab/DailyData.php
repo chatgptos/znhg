@@ -8,6 +8,7 @@
 namespace app\modules\mch\models\crontab;
 
 use Yii;
+use yii\data\Pagination;
 
 /**
  * This is the model class for table "{{%area}}".
@@ -29,6 +30,19 @@ use Yii;
  */
 class DailyData extends \yii\db\ActiveRecord
 {
+
+    public $store_id;
+    public $keyword;
+    public $cat_id;
+    public $page;
+    public $limit;
+
+    public $sort;
+    public $sort_type;
+    public $flag;
+    public $date_begin;
+    public $date_end;
+
     /**
      * @inheritdoc
      */
@@ -57,14 +71,14 @@ class DailyData extends \yii\db\ActiveRecord
             'store_id' => 'ID',
             'statistics_date' => 'ID',
             'is_delete' => 'ID',
-            'user_count' => 'ID',
-            'order_count' => 'ID',
-            'coupon_count' => 'ID',
-            'integral_count' => 'ID',
-            'hld_count' => 'ID',
-            'jrintegral_count' => 'ID',
-            'jrhld_count' => 'ID',
-            'jrcoupon_count' => 'ID',
+            'user_count' => '用户总数',
+            'order_count' => '订单总数',
+            'coupon_count' => '优惠券总数',
+            'integral_count' => '积分总数',
+            'hld_count' => '欢乐豆总数',
+            'jrintegral_count' => '今日积分总数',
+            'jrhld_count' => '今日欢乐豆总数',
+            'jrcoupon_count' => '今日优惠券总数',
 
             'peoplesellcount_huanledou1'=>'所有交易欢乐豆总数量（已经交易+等待交易）',
             'peoplesellcount_huanledou_charge1'=>'所有系统收取欢乐豆手续费（已经交易+等待交易）',
@@ -130,7 +144,7 @@ class DailyData extends \yii\db\ActiveRecord
     {
 
         $DailyData = new DailyData();
-        $DailyData->store_id = $this->store_id;
+        $DailyData->store_id = 1;
         $DailyData->statistics_date = $this->statistics_date;
         $DailyData->is_delete = $this->is_delete;
         $DailyData->coupon_count = $this->coupon_count;
@@ -165,6 +179,41 @@ class DailyData extends \yii\db\ActiveRecord
         $DailyData->save();
         echo '成功'.$this->statistics_date."\n";
 
+    }
+
+
+
+
+    public function searchHastotal_integral()
+    {
+        $query = DailyData::find()->alias('u')->where([
+//            'u.type' => 1,
+//            'u.store_id' => $this->store_id,
+//            'u.is_delete' => 0
+        ]);
+//        if ($this->keyword)
+//            $query->andWhere(['LIKE', 'u.nickname', $this->keyword]);
+//        if ($this->is_clerk == 1) {
+//            $query->andWhere(['u.is_clerk' => 1]);
+//        }
+//        if($this->level){
+//            $query->andWhere(['l.level'=>$this->level]);
+//        }
+        $count = $query->count();
+        $pagination = new Pagination(['totalCount' => $count, 'page' => $this->page - 1]);
+        $list = $query->select([
+            'u.*',
+        ])  ->limit($pagination->limit)->offset($pagination->offset)
+            ->orderBy('u.addtime DESC')->asArray()->all();
+
+//        echo '<pre>';
+//        var_dump($list);die;
+        return [
+            'row_count' => $count,
+            'page_count' => $pagination->pageCount,
+            'pagination' => $pagination,
+            'list' => $list,
+        ];
     }
 
 }

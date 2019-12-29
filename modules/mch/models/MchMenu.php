@@ -735,7 +735,7 @@ class MchMenu
 //            ],
 
             [
-                'name' => '财务管理',
+                'name' => '财务报表',
                 'route' => 'mch/financial/index',
                 'icon' => 'icon-people',
                 'list' => [
@@ -748,22 +748,43 @@ class MchMenu
                             'mch/financial/rechange-log',
                             'mch/financial/edit',
                         ],
+                        'list' => [
+
+                            [
+                                'name' => '积分提现',
+                                'route' => 'mch/share/cash',
+                            ],
+                            [
+                                'name' => '积分收入',
+                                'route' => 'mch/share/cash',
+                            ],
+                            [
+                                'name' => '提现设置',
+                                'route' => 'mch/financial/clerk',
+                            ],
+                            [
+                                'name' => '收银台',
+                                'route' => 'mch/financial/index',
+                            ],
+                        ]
                     ],
+
                     [
-                        'name' => '积分提现',
-                        'route' => 'mch/share/cash',
-                    ],
-                    [
-                        'name' => '积分收入',
-                        'route' => 'mch/share/cash',
-                    ],
-                    [
-                        'name' => '提现设置',
-                        'route' => 'mch/financial/clerk',
-                    ],
-                    [
-                        'name' => '收银台',
-                        'route' => 'mch/financial/index',
+                        'name' => '报表查询',
+                        'route' => 'mch/financial/report',
+                        'list' => [
+                            [
+                                'name' => '每日营销数据',
+                                'route' => 'mch/financial/report',
+                                'sub' => [
+                                    'mch/share/qrcode'
+                                ]
+                            ],
+                            [
+                                'name' => '每日订单数据',
+                                'route' => 'mch/financial/reportforms'
+                            ]
+                        ]
                     ],
                 ],
             ],

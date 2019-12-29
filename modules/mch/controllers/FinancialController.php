@@ -14,6 +14,7 @@ use app\models\Shop;
 use app\models\Store;
 use app\models\User;
 use app\models\UserCoupon;
+use app\modules\mch\models\crontab\DailyData;
 use app\modules\mch\models\LevelForm;
 use app\modules\mch\models\LevelListForm;
 use app\modules\mch\models\UserCardListForm;
@@ -33,6 +34,22 @@ class FinancialController extends Controller
         $level_list = Level::find()->where(['store_id' => $this->store->id, 'is_delete' => 0, 'status' => 1])
             ->orderBy(['level' => SORT_ASC])->asArray()->all();
         return $this->render('index', [
+            'row_count' => $data['row_count'],
+            'pagination' => $data['pagination'],
+            'list' => $data['list'],
+            'level_list' => $level_list
+        ]);
+    }
+
+    public function actionReport()
+    {
+        $form = new DailyData();
+        $form->attributes = \Yii::$app->request->get();
+        $form->store_id = $this->store->id;
+        $data = $form->searchHastotal_integral();
+        $level_list = Level::find()->where(['store_id' => $this->store->id, 'is_delete' => 0, 'status' => 1])
+            ->orderBy(['level' => SORT_ASC])->asArray()->all();
+        return $this->render('report', [
             'row_count' => $data['row_count'],
             'pagination' => $data['pagination'],
             'list' => $data['list'],
