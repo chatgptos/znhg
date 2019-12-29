@@ -84,6 +84,57 @@ class OrderPreviewFrom extends Model
 
         $this->user = User::findOne(['id' => $this->user_id, 'type' => 1, 'is_delete' => 0]);
 
+
+
+        //当天限制一人
+        //会卡死了
+        //查询当前用户订单
+
+        $query = Order::find()
+            ->alias('o')
+            ->select([
+                'o.id',
+            ])
+            ->where([
+                'o.is_delete' => 0,
+                'o.store_id' => $this->store_id,
+                'o.user_id' => $this->user_id,
+                'o.is_cancel' => 0,
+                'g.id' => $goods->id,
+            ])->leftJoin(['g'=>Goods::tableName()],'o.goods_id=g.id');
+        $query_num_buy_order = $query->count();
+
+        $query_day = Order::find()
+            ->alias('o')
+            ->select([
+                'o.id',
+            ])
+            ->where([
+                'AND',
+                [
+                    'o.is_delete' => 0,
+                    'o.store_id' => $this->store_id,
+                    'o.user_id' => $this->user_id,
+                    'o.is_cancel' => 0,
+                    'g.id' => $goods->id,
+                ],
+                ['>', 'o.addtime', strtotime(date('Y-m-d'))],
+            ])
+            ->leftJoin(['g'=>Goods::tableName()],'o.goods_id=g.id');
+        $query_num_buy_order_day = $query_day->count();
+        //查找是否订单数量
+        if($query_num_buy_order_day > $goods->buy_max_day ){
+            return [
+                'code' => 1,
+                'msg' => "购买数量超过限制！ 商品“" . $goods->name . '”每日最多允许购买' . $goods->buy_max_day . '件，请返回重新下单购买其他商品',
+            ];
+        } elseif ($query_num_buy_order > $goods->buy_max){
+            return [
+                'code' => 1,
+                'msg' => "购买数量超过限制！ 商品“" . $goods->name . '”最多允许购买' . $goods->buy_max . '件，请返回重新下单购买其他商品',
+            ];
+        }
+
         $order = new Order();
         $order->store_id = $this->store_id;
         $order->goods_id = $goods->id;
@@ -206,55 +257,6 @@ class OrderPreviewFrom extends Model
                             'msg'   => '网络问题,请稍后重试',
                         ];
                     }
-                }
-
-                //当天限制一人
-                //会卡死了
-                //查询当前用户订单
-
-                $query = Order::find()
-                    ->alias('o')
-                    ->select([
-                        'o.id',
-                    ])
-                    ->where([
-                        'o.is_delete' => 0,
-                        'o.store_id' => $this->store_id,
-                        'o.user_id' => $this->user_id,
-                        'o.is_cancel' => 0,
-                        'g.id' => $goods->id,
-                    ])->leftJoin(['g'=>Goods::tableName()],'o.goods_id=g.id');
-                $query_num_buy_order = $query->count();
-
-                $query_day = Order::find()
-                    ->alias('o')
-                    ->select([
-                        'o.id',
-                    ])
-                    ->where([
-                        'AND',
-                        [
-                            'o.is_delete' => 0,
-                            'o.store_id' => $this->store_id,
-                            'o.user_id' => $this->user_id,
-                            'o.is_cancel' => 0,
-                            'g.id' => $goods->id,
-                        ],
-                        ['>', 'o.addtime', strtotime(date('Y-m-d'))],
-                    ])
-                    ->leftJoin(['g'=>Goods::tableName()],'o.goods_id=g.id');
-                $query_num_buy_order_day = $query_day->count();
-                //查找是否订单数量
-                if($query_num_buy_order_day > $goods->buy_max_day ){
-                    return [
-                        'code' => 1,
-                        'msg' => "购买数量超过限制！ 商品“" . $goods->name . '”每日最多允许购买' . $goods->buy_max_day . '件，请返回重新下单购买其他商品',
-                    ];
-                } elseif ($query_num_buy_order > $goods->buy_max){
-                    return [
-                        'code' => 1,
-                        'msg' => "购买数量超过限制！ 商品“" . $goods->name . '”最多允许购买' . $goods->buy_max . '件，请返回重新下单购买其他商品',
-                    ];
                 }
 
                 $order->coupon = $goods->coupon;

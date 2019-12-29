@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\mch\models\settlementbonus;
+namespace app\modules\mch\models\agent;
 
 use Yii;
 
@@ -39,7 +39,7 @@ class Goods extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%settlementbonus_goods}}';
+        return '{{%agent_goods}}';
     }
 
     /**
@@ -49,7 +49,7 @@ class Goods extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'price', 'original_price', 'detail', 'service', 'store_id'], 'required'],
-            [['coupon','integral','return_coupon','return_integral','price', 'original_price','stock'], 'number'],
+            [['level','return_coupon','return_integral','price', 'original_price','stock'], 'number'],
             [['detail', 'cover_pic'], 'string'],
             [['cat_id', 'status', 'sort', 'virtual_sales', 'addtime', 'is_delete', 'sales', 'store_id'], 'integer'],
             [['name','shop_id'], 'string', 'max' => 255],
@@ -86,6 +86,7 @@ class Goods extends \yii\db\ActiveRecord
             'buy_max_day' => '每日最多购买',
             'return_coupon' => '欢乐豆',
             'return_integral' => '积分',
+            'level' => '积分',
         ];
     }
 

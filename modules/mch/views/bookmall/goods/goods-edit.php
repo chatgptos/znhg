@@ -473,7 +473,7 @@ if (!$returnUrl)
                             <div class="input-group short-row">
                                 <input type="number" step="0.01" class="form-control"
                                        name="model[price]" min="0.01"
-                                       value="<?= $goods['price'] ? $goods['price'] : 1 ?>">
+                                       value="<?= $goods['price'] ? $goods['price'] : 0 ?>">
                                 <span class="input-group-addon">个</span>
                             </div>
                         </div>
@@ -486,7 +486,7 @@ if (!$returnUrl)
                         <div class="col-9">
                             <input type="number" step="0.01" class="form-control short-row"
                                    name="model[original_price]" min="0"
-                                   value="<?= $goods['original_price'] ? $goods['original_price'] : 1 ?>">
+                                   value="<?= $goods['original_price'] ? $goods['original_price'] : 0 ?>">
                         </div>
                     </div>
 

@@ -1,5 +1,7 @@
 {
   "pages": [
+    "pages/coupon-merchant/index",
+    "pages/coupon-merchant-mall/index",
     "pages/mall/mall",
     "pages/index/index",
     "pages/user/user",
@@ -22,7 +24,6 @@
     "pages/bookmall/order-detail/order-detail",
     "pages/bookmall/order-comment/order-comment", 
     "pages/order-submit/order-submit",
-    "pages/coupon-merchant-mall/index",
     "pages/cheapmarket/index/cheapmarket",
     "pages/cheapmarket/order/order",
     "pages/cheapmarket/shop/shop",
@@ -57,7 +58,6 @@
     "pages/crowdc/order-comment/order-comment",
  
     "pages/fair/fair",
-    "pages/coupon-merchant/index",
     "pages/coupon-merchant-mall-list/index",
     "pages/recharge-integral/index",
     "pages/cat/cat", 

@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\mch\models\settlementbonus;
+namespace app\modules\api\models\agent;
 
 use Yii;
 
@@ -39,7 +39,7 @@ class Goods extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%settlementbonus_goods}}';
+        return '{{%agent_goods}}';
     }
 
     /**
@@ -49,7 +49,7 @@ class Goods extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'price', 'original_price', 'detail', 'service', 'store_id'], 'required'],
-            [['coupon','integral','return_coupon','return_integral','price', 'original_price','stock'], 'number'],
+            [['level','price', 'original_price','stock'], 'number'],
             [['detail', 'cover_pic'], 'string'],
             [['cat_id', 'status', 'sort', 'virtual_sales', 'addtime', 'is_delete', 'sales', 'store_id'], 'integer'],
             [['name','shop_id'], 'string', 'max' => 255],
@@ -64,16 +64,16 @@ class Goods extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => '商品名称',
+            'name' => '身份名称',
             'price' => '预约金额',
             'original_price' => '原价',
-            'detail' => '商品详情，图文',
-            'cat_id' => '商品分类',
+            'detail' => '身份详情，图文',
+            'cat_id' => '身份分类',
             'status' => '上架状态【1=> 上架，2=> 下架】',
             'service' => '服务选项',
-            'sort' => '商品排序 升序',
+            'sort' => '身份排序 升序',
             'virtual_sales' => '虚拟销量',
-            'cover_pic' => '商品缩略图',
+            'cover_pic' => '身份缩略图',
             'addtime' => '添加时间',
             'is_delete' => '是否删除',
             'sales' => '实际销量',
@@ -86,12 +86,13 @@ class Goods extends \yii\db\ActiveRecord
             'buy_max_day' => '每日最多购买',
             'return_coupon' => '欢乐豆',
             'return_integral' => '积分',
+            'level' => '等级',
         ];
     }
 
     /**
      * @return static[]
-     * 商品图集
+     * 身份图集
      */
     public function goodsPicList()
     {

@@ -12,6 +12,7 @@ use app\models\Award;
 use app\models\Cash;
 use app\models\Color;
 use app\models\IntegralLog;
+use app\models\Level;
 use app\models\Option;
 use app\models\Qrcode;
 use app\models\Setting;
@@ -21,6 +22,7 @@ use app\models\UploadConfig;
 use app\models\UploadForm;
 use app\models\User;
 use app\modules\api\behaviors\LoginBehavior;
+use app\modules\api\models\agent\OrderPreviewFrom;
 use app\modules\api\models\BindForm;
 use app\modules\api\models\CashForm;
 use app\modules\api\models\CashListForm;
@@ -67,19 +69,18 @@ class CouponMerchantController extends Controller
         $card_count_require = 0;
         $award = [];
 
-        if ($user->is_agency) {
-            $roleName = '经销商';
-        }
 
-        if ($user->is_distributors) {
-            $roleName = '渠道商';
+
+        $level = Level::findOne(['store_id' => $this->store->id,'id' => $user->level, 'is_delete' => 0]);
+        if($user->level >0){
+            $roleName = $level->name;
         }
 
         if ($id == 0) {
             //经销商
             $team_count_require = $list->agency_team_count_require;
             $card_count_require = $list->agency_card_count_require;
-            if ($user->is_agency) {
+            if ($user->level==1) {
                 $buttonClicked = true;
                 $buttonName = '已经拥有';
             }
@@ -87,7 +88,8 @@ class CouponMerchantController extends Controller
             //渠道商
             $team_count_require = $list->distributors_card_count_require;
             $card_count_require = $list->distributors_team_count_require;
-            if ($user->is_distributors) {
+            if ($user->level==2) {
+                $buttonName = '已经拥有';
                 $buttonClicked = true;
             }
         } elseif ($id == 2) {
@@ -528,6 +530,7 @@ class CouponMerchantController extends Controller
 
 
         if ($id == 0) {
+
             //经销商
             $team_count_require = $list->agency_team_count_require;
             $card_count_require = $list->agency_card_count_require;
@@ -539,8 +542,18 @@ class CouponMerchantController extends Controller
                 ], JSON_UNESCAPED_UNICODE);
 
             }
-            $user->coupon = $user->coupon - $card_count_require;//减去优惠券数量
-            $user->is_agency = 1;
+            $form = new OrderPreviewFrom();
+            $model = \Yii::$app->request->get();
+            $form->attributes = $model;
+            $form->store_id = $this->store->id;
+            $form->user_id = \Yii::$app->user->id;
+            $form->goods_id = 14;//类型到id
+            $form->form_list = json_decode($model['form_list'],true);
+            $form->form_id = $model['form_id'];
+            $res=$form->save();
+            $buttonName=$res['msg'];
+//            $user->coupon = $user->coupon - $card_count_require;//减去优惠券数量
+//            $user->is_agency = 1;
         } elseif ($id == 1) {
             //渠道商
             $team_count_require = $list->distributors_team_count_require;
@@ -553,8 +566,21 @@ class CouponMerchantController extends Controller
                 ], JSON_UNESCAPED_UNICODE);
 
             }
-            $user->coupon = $user->coupon - $card_count_require;//减去优惠券数量
-            $user->is_distributors = 1;
+
+            $form = new OrderPreviewFrom();
+            $model = \Yii::$app->request->get();
+            $form->attributes = $model;
+            $form->store_id = $this->store->id;
+            $form->user_id = \Yii::$app->user->id;
+            $form->goods_id = 15;//类型到id
+            $form->form_list = json_decode($model['form_list'],true);
+            $form->form_id = $model['form_id'];
+            $res=$form->save();
+            $buttonName=$res['msg'];
+
+
+//            $user->coupon = $user->coupon - $card_count_require;//减去优惠券数量
+//            $user->is_distributors = 1;
 
         } elseif ($id == 2) {
             //服务权

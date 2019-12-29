@@ -5,12 +5,12 @@
  * Time: 11:32
  */
 
-namespace app\modules\api\models\settlementbonus;
+namespace app\modules\mch\models\agent;
 
 
 use app\models\IntegralLog;
 use app\models\User;
-use app\modules\api\models\Model;
+use app\modules\mch\models\Model;
 
 class OrderPreviewFrom extends Model
 {
@@ -84,87 +84,6 @@ class OrderPreviewFrom extends Model
 
         $this->user = User::findOne(['id' => $this->user_id, 'type' => 1, 'is_delete' => 0]);
 
-
-//        查找当月有没有申请记录
-
-
-        //当天限制一人
-        //会卡死了
-        //查询当前用户订单
-
-        $query = Order::find()
-            ->alias('o')
-            ->select([
-                'o.id',
-            ])
-            ->where([
-                'o.is_delete' => 0,
-                'o.store_id' => $this->store_id,
-                'o.user_id' => $this->user_id,
-                'o.is_cancel' => 0,
-                'g.id' => $goods->id,
-            ])->leftJoin(['g'=>Goods::tableName()],'o.goods_id=g.id');
-        $query_num_buy_order = $query->count();
-
-        $query_day = Order::find()
-            ->alias('o')
-            ->select([
-                'o.id',
-            ])
-            ->where([
-                'AND',
-                [
-                    'o.is_delete' => 0,
-                    'o.store_id' => $this->store_id,
-                    'o.user_id' => $this->user_id,
-                    'o.is_cancel' => 0,
-                    'g.id' => $goods->id,
-                ],
-                ['>', 'o.addtime', strtotime(date('Y-m-d'))],
-            ])
-            ->leftJoin(['g'=>Goods::tableName()],'o.goods_id=g.id');
-        $query_num_buy_order_day = $query_day->count();
-        //查找是否订单数量
-        if($query_num_buy_order_day > $goods->buy_max_day ){
-            return [
-                'code' => 1,
-                'msg' => "购买数量超过限制！ 商品“" . $goods->name . '”每日最多允许购买' . $goods->buy_max_day . '件，请返回重新下单购买其他商品',
-            ];
-        } elseif ($query_num_buy_order > $goods->buy_max){
-            return [
-                'code' => 1,
-                'msg' => "购买数量超过限制！ 商品“" . $goods->name . '”最多允许购买' . $goods->buy_max . '件，请返回重新下单购买其他商品',
-            ];
-        }
-
-        //查询当月限制
-        $query_month = Order::find()
-            ->alias('o')
-            ->select([
-                'o.id',
-            ])
-            ->where([
-                'AND',
-                [
-                    'o.is_delete' => 0,
-                    'o.store_id' => $this->store_id,
-                    'o.user_id' => $this->user_id,
-                    'o.is_cancel' => 0,
-                ],
-                ['>', 'o.addtime', strtotime(date('Y-m'))],
-            ]);
-
-        if($query_month->count()){
-            return [
-                'code' => 1,
-                'msg' => '或已经在结算中，当月只能申请一次',
-            ];
-        }
-
-
-
-
-
         $order = new Order();
         $order->store_id = $this->store_id;
         $order->goods_id = $goods->id;
@@ -178,8 +97,6 @@ class OrderPreviewFrom extends Model
         $order->addtime = time();
         $order->is_delete = 0;
         $order->form_id = $this->form_id;
-        $order->return_coupon = $goods->return_coupon;
-        $order->return_integral = $goods->return_integral;
         if ($order->save()) {
             $goods->sales ++;
             $goods->stock --;
@@ -240,64 +157,73 @@ class OrderPreviewFrom extends Model
                 if ($goods->coupon > 0 || $goods->integral > 0){
                     $this->user->coupon = $this->user->coupon - $goods->coupon;
                     $this->user->integral  = $this->user->integral - $goods->integral;
-                    //扣除总筹股东券资格
-                    $this->user->settlementbonus --;
-                    //失效股东券资格券
-                    $orderCrowdapply = \app\modules\api\models\crowdapply\Order::findOne(['user_id'=>$order->user_id,'store_id'=>$this->store_id,'is_pay'=>1,'apply_delete'=>0,'is_use'=>0]);
 
-                    if(!$orderCrowdapply){
-                        $p->rollBack();
-                        return [
-                            'code'=>1,
-                            'msg'=>'没有资格券'
-                        ];
-                    }
-                    $orderCrowdapply->is_use=1;
-                    if(!$orderCrowdapply->save()){
-                        $p->rollBack();
-                        return [
-                            'code'=>1,
-                            'msg'=>'没有资格券'
-                        ];
-                    }
-                    if($this->user->integral >=0 && $this->user->coupon >=0 && $this->user->settlementbonus >= 0){
+                    if($this->user->integral >=0 && $this->user->coupon >=0){
                         $this->user->save();
-                    }elseif($this->user->settlementbonus < 0){
-                        $p->rollBack();
-                        return [
-                            'code'  => 1,
-                            'msg'   => '请先获取资格',
-                        ];
-                    }elseif($this->user->integral <0){
-                        $p->rollBack();
-                        return [
-                            'code'  => 1,
-                            'msg'   => '积分不足',
-                        ];
-                    }elseif($this->user->coupon <0){
-                        $p->rollBack();
-                        return [
-                            'code'  => 1,
-                            'msg'   => '优惠券不足',
-                        ];
                     }else{
-                        $p->rollBack();
                         return [
                             'code'  => 2,
-                            'msg'   => '网络问题,请稍后重试',
+                            'msg'   => '积分/优惠券不足，请充值',
                         ];
                     }
                 }
 
+                //当天限制一人
+                //会卡死了
+                //查询当前用户订单
 
+                $query = Order::find()
+                    ->alias('o')
+                    ->select([
+                        'o.id',
+                    ])
+                    ->where([
+                        'o.is_delete' => 0,
+                        'o.store_id' => $this->store_id,
+                        'o.user_id' => $this->user_id,
+                        'o.is_cancel' => 0,
+                        'g.id' => $goods->id,
+                    ])->leftJoin(['g'=>Goods::tableName()],'o.goods_id=g.id');
+                $query_num_buy_order = $query->count();
 
+                $query_day = Order::find()
+                    ->alias('o')
+                    ->select([
+                        'o.id',
+                    ])
+                    ->where([
+                        'AND',
+                        [
+                            'o.is_delete' => 0,
+                            'o.store_id' => $this->store_id,
+                            'o.user_id' => $this->user_id,
+                            'o.is_cancel' => 0,
+                            'g.id' => $goods->id,
+                        ],
+                        ['>', 'o.addtime', strtotime(date('Y-m-d'))],
+                    ])
+                    ->leftJoin(['g'=>Goods::tableName()],'o.goods_id=g.id');
+                $query_num_buy_order_day = $query_day->count();
+                //查找是否订单数量
+                if($query_num_buy_order_day > $goods->buy_max_day ){
+                    return [
+                        'code' => 1,
+                        'msg' => "购买数量超过限制！ 商品“" . $goods->name . '”每日最多允许购买' . $goods->buy_max_day . '件，请返回重新下单购买其他商品',
+                    ];
+                } elseif ($query_num_buy_order > $goods->buy_max){
+                    return [
+                        'code' => 1,
+                        'msg' => "购买数量超过限制！ 商品“" . $goods->name . '”最多允许购买' . $goods->buy_max . '件，请返回重新下单购买其他商品',
+                    ];
+                }
 
-                //这里下单就是支付
                 $order->coupon = $goods->coupon;
                 $order->integral = $goods->integral;
                 $order->is_pay = 1;
                 $order->pay_type = 1;
                 $order->pay_time = time();
+
+
                 //记录日志
                 $hld=0;
                 $coupon=$goods->coupon;
@@ -305,8 +231,8 @@ class OrderPreviewFrom extends Model
 
                 $integralLog = new IntegralLog();
                 $integralLog->user_id = $this->user->id;
-                //购买总筹股权 扣除积分
-                $integralLog->content = "(购买总筹股权)：" . $this->user->nickname . " 欢乐豆".$this->user->hld."已经扣除：" . $hld . " 豆" . " 优惠券".$this->user->coupon."已经扣除：" . $coupon . " 张" . $integral . '个积分）';
+                //卖优惠券
+                $integralLog->content = "管理员（优惠券商城兑换） 后台操作账号：" . $this->user->nickname . " 欢乐豆".$this->user->hld."已经扣除：" . $hld . " 豆" . " 优惠券".$this->user->coupon."已经扣除：" . $coupon . " 张（购买时候时候已经扣除优惠券）,（交易时扣除去积分" . $integral . '个积分）';
 
                 $integralLog->integral = $goods->integral;
                 $integralLog->hld = $hld;
@@ -337,6 +263,7 @@ class OrderPreviewFrom extends Model
                     ];
                 }
             }
+
             $this->order = $order;
             $goods_names = mb_substr($goods->name, 0, 32, 'utf-8');
             $pay_data = [];
@@ -403,7 +330,7 @@ class OrderPreviewFrom extends Model
         $store_id = empty($this->store_id) ? 0 : $this->store_id;
         $order_no = null;
         while (true) {
-            $order_no = 'CSR'.date('YmdHis') . rand(10000, 99999);
+            $order_no = 'Y'.date('YmdHis') . rand(10000, 99999);
             $exist_order_no = Order::find()->where(['order_no' => $order_no])->exists();
             if (!$exist_order_no)
                 break;

@@ -6,7 +6,7 @@
  */
 
 $urlManager = Yii::$app->urlManager;
-$this->title = '报名活动编辑';
+$this->title = '代理商编辑';
 $staticBaseUrl = Yii::$app->request->baseUrl . '/statics';
 $this->params['active_nav_group'] = 10;
 $this->params['is_book'] = 1;
@@ -217,7 +217,7 @@ if (!$returnUrl)
                     <a flex="cross:center" class="head-step" href="#step1">选择分类</a>
                     <a flex="cross:center" class="head-step" href="#step2">基本信息</a>
                     <a flex="cross:center" class="head-step" href="#step3">自定义表单</a>
-                    <a flex="cross:center" class="head-step" href="#step4">报名活动详情</a>
+                    <a flex="cross:center" class="head-step" href="#step4">代理商详情</a>
                 </div>
             </div>
             <div id="app">
@@ -229,7 +229,7 @@ if (!$returnUrl)
                     <div>
                         <div class="form-group row">
                             <div class="col-3 text-right">
-                                <label class=" col-form-label required">报名活动分类</label>
+                                <label class=" col-form-label required">代理商分类</label>
                             </div>
                             <div class="col-9">
                                 <div class="input-group short-row">
@@ -248,13 +248,38 @@ if (!$returnUrl)
 
                 <div class="step-block" flex="dir:left box:first">
                     <div>
+                        <span>选择通过后用户设置爹等级</span>
+                        <span class="step-location" id="step1"></span>
+                    </div>
+                    <div>
+                        <div class="form-group row">
+                            <div class="col-3 text-right">
+                                <label class=" col-form-label required">等级列表</label>
+                            </div>
+                            <div class="col-9">
+                                <div class="input-group short-row">
+                                    <select class="form-control parent" name="model[level]">
+                                        <option value="">请选择等级</option>
+                                        <?php foreach ($level_list as $value): ?>
+                                            <option
+                                                    value="<?= $value['id'] ?>" <?= $value['id'] == $goods['level'] ? 'selected' : '' ?>><?= $value['name'] ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-block" flex="dir:left box:first">
+                    <div>
                         <span>基本信息</span>
                         <span class="step-location" id="step2"></span>
                     </div>
                     <div>
                         <div class="form-group row">
                             <div class="col-3 text-right">
-                                <label class=" col-form-label required">报名活动名称</label>
+                                <label class=" col-form-label required">代理商名称</label>
                             </div>
                             <div class="col-9">
                                 <input class="form-control short-row" type="text" name="model[name]"
@@ -263,7 +288,7 @@ if (!$returnUrl)
                         </div>
                         <div class="form-group row">
                             <div class="col-3 text-right">
-                                <label class=" col-form-label">报名活动排序</label>
+                                <label class=" col-form-label">代理商排序</label>
                             </div>
                             <div class="col-9">
                                 <input class="form-control short-row" type="text" name="model[sort]"
@@ -315,7 +340,7 @@ if (!$returnUrl)
                         </div>
                         <div class="form-group row">
                             <div class="col-3 text-right">
-                                <label class="col-form-label required">报名活动缩略图</label>
+                                <label class="col-form-label required">代理商缩略图</label>
                             </div>
                             <div class="col-9">
                                 <div class="upload-group short-row">
@@ -354,7 +379,7 @@ if (!$returnUrl)
 
                         <div class="form-group row">
                             <div class="col-3 text-right">
-                                <label class="col-form-label required">报名活动图片</label>
+                                <label class="col-form-label required">代理商图片</label>
                             </div>
                             <div class="col-9">
                                 <?php if ($goods->goodsPicList()):foreach ($goods->goodsPicList() as $goods_pic): ?>
@@ -407,7 +432,7 @@ if (!$returnUrl)
 
                         <div class="form-group row">
                             <div class="col-3 text-right">
-                                <label class=" col-form-label required">优惠金额</label>
+                                <label class=" col-form-label required">代理商金额</label>
                             </div>
                             <div class="col-9">
                                 <div class="input-group short-row">
@@ -422,7 +447,7 @@ if (!$returnUrl)
 
                         <div class="form-group row">
                             <div class="col-3 text-right">
-                                <label class=" col-form-label required">优惠券数量</label>
+                                <label class=" col-form-label required">代理商券数量</label>
                             </div>
                             <div class="col-9">
                                 <div class="input-group short-row">
@@ -733,6 +758,55 @@ if (!$returnUrl)
                                     </template>
                                     </tbody>
                                 </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+                <div class="step-block" flex="dir:left box:first">
+                    <div>
+                        <span>代理商扣除</span>
+                        <span class="step-location" id="step2"></span>
+                    </div>
+                    <div>
+
+
+                        <div class="form-group row">
+                            <div class="col-3 text-right">
+                                <label class=" col-form-label required">扣除积分</label>
+                            </div>
+                            <div class="col-9">
+                                <div class="input-group short-row">
+                                    <input type="number" step="1" class="form-control"
+                                           name="model[return_coupon]" min="0.01"
+                                           value="<?= $goods['return_integral'] ? $goods['return_integral'] : 0 ?>">
+                                    <span class="input-group-addon">分</span>
+                                    <div class="fs-sm text-muted">设置0则不扣除</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-3 text-right">
+                                <label class=" col-form-label required">优惠券</label>
+                            </div>
+                            <div class="col-9">
+                                <div class="input-group short-row">
+                                    <input type="number" step="1" class="form-control"
+                                           name="model[return_coupon]" min="0.01"
+                                           value="<?= $goods['return_coupon'] ? $goods['return_coupon'] : 0 ?>">
+                                    <span class="input-group-addon">张</span>
+                                    <div class="fs-sm text-muted">设置0则不扣除</div>
+                                </div>
                             </div>
                         </div>
                     </div>

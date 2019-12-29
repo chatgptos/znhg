@@ -413,7 +413,7 @@ if (!$returnUrl)
                                 <div class="input-group short-row">
                                     <input type="number" step="0.01" class="form-control"
                                            name="model[price]" min="0.01"
-                                           value="<?= $goods['price'] ? $goods['price'] : 1 ?>">
+                                           value="<?= $goods['price'] ? $goods['price'] : 0 ?>">
                                     <span class="input-group-addon">元</span>
                                     <div class="fs-sm text-muted">设置0则小程序端将显示为 免费</div>
                                 </div>
@@ -428,7 +428,7 @@ if (!$returnUrl)
                                 <div class="input-group short-row">
                                     <input type="number" step="1" class="form-control"
                                            name="model[coupon]" min="0.01"
-                                           value="<?= $goods['coupon'] ? $goods['coupon'] : 1 ?>">
+                                           value="<?= $goods['coupon'] ? $goods['coupon'] : 0 ?>">
                                     <span class="input-group-addon">个券</span>
                                     <div class="fs-sm text-muted">设置0则小程序端将显示为 免费</div>
                                 </div>
@@ -443,7 +443,7 @@ if (!$returnUrl)
                                 <div class="input-group short-row">
                                     <input type="number" step="1" class="form-control"
                                            name="model[integral]" min="1"
-                                           value="<?= $goods['integral'] ? $goods['integral'] : 1 ?>">
+                                           value="<?= $goods['integral'] ? $goods['integral'] : 0 ?>">
                                     <span class="input-group-addon">个积分</span>
                                     <div class="fs-sm text-muted">设置0则小程序端将显示为 免费</div>
                                 </div>
@@ -457,7 +457,7 @@ if (!$returnUrl)
                             <div class="col-9">
                                 <input type="number" step="0.01" class="form-control short-row"
                                        name="model[original_price]" min="0"
-                                       value="<?= $goods['original_price'] ? $goods['original_price'] : 1 ?>">
+                                       value="<?= $goods['original_price'] ? $goods['original_price'] : 0 ?>">
                             </div>
                         </div>
 
@@ -762,7 +762,7 @@ if (!$returnUrl)
                             <div class="col-9">
                                 <div class="input-group short-row">
                                     <input type="number" step="1" class="form-control"
-                                           name="model[return_coupon]" min="0.01"
+                                           name="model[return_integral]" min="0.01"
                                            value="<?= $goods['return_integral'] ? $goods['return_integral'] : 0 ?>">
                                     <span class="input-group-addon">分</span>
                                     <div class="fs-sm text-muted">设置0则不奖励</div>
@@ -777,7 +777,7 @@ if (!$returnUrl)
                             <div class="col-9">
                                 <div class="input-group short-row">
                                     <input type="number" step="1" class="form-control"
-                                           name="model[return_integral]" min="0.01"
+                                           name="model[return_coupon]" min="0.01"
                                            value="<?= $goods['return_coupon'] ? $goods['return_coupon'] : 0 ?>">
                                     <span class="input-group-addon">张</span>
                                     <div class="fs-sm text-muted">设置0则不奖励</div>

@@ -532,7 +532,7 @@ class MchMenu
                     ],
 
                     [
-                        'name' => '用户结算管理',
+                        'name' => '统计结算管理',
                         'icon' => 'icon-service',
                         'route' => 'mch/settlementstatistics/data/user',
                         'list' => [
@@ -794,6 +794,7 @@ class MchMenu
                 'route' => 'mch/user/index',
                 'icon' => 'icon-people',
                 'list' => [
+
                     [
                         'name' => '用户列表',
                         'route' => 'mch/user/index',
@@ -803,16 +804,25 @@ class MchMenu
                             'mch/user/rechange-log',
                             'mch/user/edit',
                         ],
-                    ],
-                    [
-                        'name' => '核销员',
-                        'route' => 'mch/user/clerk',
-                    ],
-                    [
-                        'name' => '会员等级',
-                        'route' => 'mch/user/level',
-                        'sub' => [
-                            'mch/user/level-edit',
+                        'list' => [
+                            [
+                                'name' => '用户列表',
+                                'route' => 'mch/user/index',
+                                'sub' => [
+                                    'mch/user/index'
+                                ]
+                            ],
+                            [
+                                'name' => '核销员',
+                                'route' => 'mch/user/clerk'
+                            ],
+                            [
+                                'name' => '会员等级',
+                                'route' => 'mch/user/level',
+                                'sub' => [
+                                    'mch/user/level-edit',
+                                ]
+                            ]
                         ]
                     ],
                 ],
@@ -847,6 +857,44 @@ class MchMenu
                                 'route' => 'mch/share/setting'
                             ]
                         ]
+                    ],
+
+                    [
+                        'name' => '代理商管理',
+                        'icon' => 'icon-service',
+                        'route' => 'mch/crowdstockright/goods/index',
+                        'list' => [
+                            [
+                                'name' => '代理商管理',
+                                'route' => 'mch/agent/goods/index',
+                                'sub' => [
+                                    'mch/agent/goods/goods-edit'
+                                ]
+                            ],
+                            [
+                                'name' => '代理商分类',
+                                'route' => 'mch/agent/goods/cat',
+                                'sub' => [
+                                    'mch/agent/goods/cat-edit'
+                                ]
+                            ],
+                            [
+                                'name' => '代理商记录管理',
+                                'route' => 'mch/agent/order/index',
+                            ],
+                            [
+                                'name' => '基础设置',
+                                'route' => 'mch/agent/index/setting',
+                            ],
+                            [
+                                'name' => '模板消息',
+                                'route' => 'mch/agent/notice/setting',
+                            ],
+                            [
+                                'name' => '评论管理',
+                                'route' => 'mch/agent/comment/index',
+                            ],
+                        ],
                     ],
                 ],
             ],
