@@ -458,6 +458,43 @@ $this->params['active_nav_group'] = 0;
                         <tr  >
                             <td>1</td>
                             <td>
+                                <div style="color:red">预售1新增须知2.阶段价格显示3.达到人数下降余款4.后台一键计算尾款5.预售增加整体时间</div>
+                            </td>
+                            <td class="text-center" style="color:red">注意</td>
+                        </tr>
+                        <tr  >
+                            <td>2</td>
+                            <td>
+                                <div style="color:red">新增7等级会员</div>
+                            </td>
+                            <td class="text-center" style="color:red">注意</td>
+                        </tr>
+                        <tr  >
+                            <td>2</td>
+                            <td>
+                                <div style="color:red">用户申请前端一键申请经销后台审核（代理商设置优惠券门槛和推广人数/代理商类目设置扣除的优惠券或者积分）</div>
+                            </td>
+                            <td class="text-center" style="color:red">注意</td>
+                        </tr>
+
+                    </table>
+                </div>
+                <div class="tab-body tab-2">
+                    <table class="table">
+                        <col style="width: 10%">
+                        <col style="width: 75%">
+                        <col style="width: 15%">
+                        <thead>
+                        <tr>
+                            <th>排名</th>
+                            <th>功能名称</th>
+                            <th class="text-center">信息</th>
+                        </tr>
+                        </thead>
+
+                        <tr  >
+                            <td>1</td>
+                            <td>
                                 <div style="color:red">可以创建客服了（右上角）</div>
                             </td>
                             <td class="text-center" style="color:red">注意</td>
@@ -502,7 +539,7 @@ $this->params['active_nav_group'] = 0;
                         </tr>
                     </table>
                 </div>
-                <div class="tab-body tab-2">
+                <div class="tab-body tab-3">
                     <table class="table">
                         <col style="width: 10%">
                         <col style="width: 75%">
@@ -521,20 +558,6 @@ $this->params['active_nav_group'] = 0;
                             </td>
                             <td class="text-center"  >可以测试并使用啦</td>
                         </tr>
-                    </table>
-                </div>
-                <div class="tab-body tab-3">
-                    <table class="table">
-                        <col style="width: 10%">
-                        <col style="width: 75%">
-                        <col style="width: 15%">
-                        <thead>
-                        <tr>
-                            <th>排名</th>
-                            <th>功能名称</th>
-                            <th class="text-center">信息</th>
-                        </tr>
-                        </thead>
                         <tr >
                             <td>1</td>
                             <td>
@@ -563,6 +586,13 @@ $this->params['active_nav_group'] = 0;
                             <th class="text-center">信息</th>
                         </tr>
                         </thead>
+                        <tr>
+                            <td>8</td>
+                            <td>
+                                <div style="color:red">报表功能逐步移到财务报表模块</div>
+                            </td>
+                            <td class="text-center" style="color:red">注意</td>
+                        </tr>
                         <tr >
                             <td>1</td>
                             <td>
