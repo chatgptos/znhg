@@ -647,7 +647,7 @@ class OrderSubmitPreviewForm extends Model
     {
 
         $chargeprice[]=array(
-            'num'=>'0～'.$goods->chargeNum, 'integral'=> intval($integral * (1 - $goods->advance / 100)*(1-$goods->charge/100)),'charge'=>$goods->charge,
+            'num'=>'1～'.$goods->chargeNum, 'integral'=> intval($integral * (1 - $goods->advance / 100)*(1-$goods->charge/100)),'charge'=>$goods->charge,
         );
         $chargeprice[]=array(
             'num'=>$goods->chargeNum.'~'.$goods->chargeNum1, 'integral'=> intval($integral * (1 - $goods->advance / 100)*(1-$goods->charge1/100)),'charge'=>$goods->charge1,
