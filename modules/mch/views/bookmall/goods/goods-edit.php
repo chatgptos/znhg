@@ -1001,13 +1001,38 @@ if (!$returnUrl)
             </div>
 
 
+
+
+            <div class="step-block" flex="dir:left box:first">
+                <div>
+                    <span>购买限制会员等级(最低等级)</span>
+                    <span class="step-location" id="step1"></span>
+                </div>
+                <div>
+                    <div class="form-group row">
+                        <div class="col-3 text-right">
+                            <label class=" col-form-label required">等级列表</label>
+                        </div>
+                        <div class="col-9">
+                            <div class="input-group short-row">
+                                <select class="form-control parent" name="model[level]">
+                                    <option value="">请选择等级</option>
+                                    <?php foreach ($level_list as $value): ?>
+                                        <option
+                                                value="<?= $value['id'] ?>" <?= $value['id'] == $goods['level'] ? 'selected' : '' ?>><?= $value['name'] ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="step-block" flex="dir:left box:first">
                 <div>
                     <span>预售比例配置</span>
                     <span class="step-location" id="step6"></span>
                 </div>
                 <div>
-
                     <div class="form-group row">
                         <div class="col-3 text-right">
                             <label class=" col-form-label required">支付金额比例（预售款+余款）</label>

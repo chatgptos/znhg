@@ -248,7 +248,7 @@ if (!$returnUrl)
 
                 <div class="step-block" flex="dir:left box:first">
                     <div>
-                        <span>选择通过后用户设置爹等级</span>
+                        <span>选择通过后用户设置的等级</span>
                         <span class="step-location" id="step1"></span>
                     </div>
                     <div>

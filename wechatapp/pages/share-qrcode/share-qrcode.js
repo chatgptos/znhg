@@ -21,7 +21,7 @@ Page({
             qrcode: setting.qrcode_bg
         });
         wx.showLoading({
-            title: "正在加载",
+            title: "正在排队获取数据",
             mask: true,
         });
         app.request({

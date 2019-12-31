@@ -59,7 +59,7 @@ class Goods extends \yii\db\ActiveRecord
         return [
             [['store_id', 'name', 'detail', 'attr'], 'required'],
             [['store_id', 'cat_id', 'status', 'addtime', 'is_delete', 'sort', 'virtual_sales', 'individual_share', 'freight', 'use_attr', 'share_type'], 'integer'],
-            [['charge','chargeNum','charge1','chargeNum1','charge2','chargeNum2','charge3','chargeNum3','chargeNum5','charge5'
+            [['level','charge','chargeNum','charge1','chargeNum1','charge2','chargeNum2','charge3','chargeNum3','chargeNum5','charge5'
                 ,'is_buy_integral_down','is_coupon_down','advance','price', 'original_price', 'share_commission_first', 'share_commission_second', 'share_commission_third', 'weight','integral_give_num'], 'number'],
             [['detail', 'attr', 'cover_pic', 'video_url', 'full_cut', 'integral'], 'string'],
             [['name', 'unit'], 'string', 'max' => 255],
@@ -115,6 +115,7 @@ class Goods extends \yii\db\ActiveRecord
             'chargeNum5' => '其他手续费',
             'is_buy_integral_down' => '欢乐豆对优惠券是否打开 买优惠券',
             'is_coupon_down' => '优惠券对欢乐豆是否打开 卖优惠券',
+            'level'=>'level',
         ];
     }
 

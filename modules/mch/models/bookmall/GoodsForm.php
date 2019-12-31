@@ -74,6 +74,8 @@ class GoodsForm extends Model
 
     public $advance;
 
+    public $level;
+
 
 
 
@@ -88,7 +90,7 @@ class GoodsForm extends Model
             [['name', 'service', 'unit'], 'trim'],
             [['store_id', 'name', 'price', 'cat_id', 'detail', 'goods_pic_list', 'cover_pic'], 'required'],
             [['store_id', 'sort', 'virtual_sales', 'freight', 'share_type'], 'integer'],
-            [['charge','chargeNum','charge1','chargeNum1','charge2','chargeNum2','charge3','charge5','chargeNum3','chargeNum5'
+            [['level','charge','chargeNum','charge1','chargeNum1','charge2','chargeNum2','charge3','charge5','chargeNum3','chargeNum5'
                ,'advance' ,'is_buy_integral_down','is_coupon_down','price', 'original_price', 'weight','integral_give_num','coupon','integral_buy'], 'number'],
             [['price',], 'number', 'min' => 0.01,],
             [['detail', 'service', 'cover_pic', 'video_url',], 'string'],
@@ -147,6 +149,9 @@ class GoodsForm extends Model
             'is_buy_integral_down' => '欢乐豆对优惠券是否打开 买优惠券',
             'is_coupon_down' => '优惠券对欢乐豆是否打开 卖优惠券',
             'advance' => '优惠券对欢乐豆是否打开 卖优惠券',
+            'level' => 'level',
+
+
         ];
     }
 
