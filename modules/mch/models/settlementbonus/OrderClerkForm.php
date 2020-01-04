@@ -11,6 +11,7 @@ namespace app\modules\mch\models\settlementbonus;
 use app\models\IntegralLog;
 use app\models\OrderDetail;
 use app\models\User;
+use app\models\UserShareMoney;
 use app\modules\mch\models\Model;
 use app\modules\mch\models\settlementstatistics\Award;
 
@@ -83,8 +84,34 @@ class OrderClerkForm extends Model
 
         $integralLog = new IntegralLog();
         $integralLog->user_id = $user->id;
+
+
+
+
+
+        if ($order->goods_id ==17){
+            //正在结算的状态的订单 当申请当时候全部改为申请中 查询时候就计算申请中的订单
+            //把上个月的
+            $UserShareMoney =UserShareMoney::updateAll(['status' => 2], [
+                'AND',
+                ['user_id' => $order->user_id,],
+                ['status' => 1,],
+                ['is_delete' => 0,],
+            ]);
+
+        if(!$UserShareMoney){
+            $t->rollBack();
+            return [
+                'code'  => 1,
+                'msg'   => '暂时无奖励',
+            ];
+        }
+        }
+
+
+
         //卖优惠券
-        $integralLog->content = "（业绩等奖励）：" . $user->nickname . " 欢乐豆" . $user->hld . "：奖励" . $hld . " 豆" . " 优惠券" . $user->coupon . "：奖励" . $coupon . " 张，积分".$user->integral  . '奖励'.$integral;
+        $integralLog->content = "（业绩/点奖等奖励）：" . $user->nickname . " 欢乐豆" . $user->hld . "：奖励" . $hld . " 豆" . " 优惠券" . $user->coupon . "：奖励" . $coupon . " 张，积分".$user->integral  . '奖励'.$integral;
         $integralLog->integral = $integral;
         $integralLog->hld = $hld;
         $integralLog->coupon = $coupon;
@@ -136,6 +163,8 @@ class OrderClerkForm extends Model
         // 获取用户当前积分
         $user = User::findOne(['id' => $order->user_id, 'type' => 1, 'is_delete' => 0]);
 
+
+
         if($order->is_settlementbonus){
             $settlementbonus =array(
             'all_son_sum_price' =>intval($order->all_son_sum_price), //所有到消费金额
@@ -148,7 +177,7 @@ class OrderClerkForm extends Model
            );
 
         } else{
-            $settlementbonus=$this->getsettlementbonusByUserId($order->user_id);
+            $settlementbonus=$this->getsettlementbonusByUserId($order);
             $order->all_son_sum_price = $settlementbonus['all_son_sum_price'];
             $order->all_son_sum_price_level = $settlementbonus['all_son_sum_price_level'];;
             $order->all_son_sum_price_bookmall = $settlementbonus['all_son_sum_price_bookmall'];;
@@ -156,7 +185,7 @@ class OrderClerkForm extends Model
             $order->all_son_sum_price_crowdc = $settlementbonus['all_son_sum_price_crowdc'];;
             $order->all_son_sum_price_level_crowdc = $settlementbonus['all_son_sum_price_level_crowdc'];
             $order->settlementbonus_time = time(date(ym));
-            $order->is_settlementbonus=1;
+//            $order->is_settlementbonus=1;//结算默认系统自动计算 在申请的里面自动计算
             $order->return_integral = $settlementbonus['all'];
             $order->settlementbonus_time = time(date(ym));
         }
@@ -186,12 +215,55 @@ class OrderClerkForm extends Model
 
 
 
+    /**
+     * $status //1--消费金额排序  2--订单数排序
+     */
+    public function getsettlementbonusByUserId($order)
+    {
+        $all_son_sum_price = 0;
+        $all_son_sum_price_level = 0;
+        $all_son_sum_price_bookmall = 0;
+        $all_son_sum_price_level_bookmall = 0;
+        $all_son_sum_price_crowdc = 0;
+        $all_son_sum_price_level_crowdc = 0;
+
+
+        if ($order->goods_id ==17){
+            $money = UserShareMoney::find()->alias('usm')
+                ->where([
+                    'user_id' => $order->user_id,
+                    'status' => 1,//已经申请的
+                ])
+                ->asArray()
+                ->sum('money');
+
+            $all_son_sum_price_level=$money;
+        }
+
+
+        $list['all_son_sum_price'] = intval($all_son_sum_price); //所有到消费金额
+        $list['all_son_sum_price_level'] = intval($all_son_sum_price_level); //所有到奖励金额
+
+        $list['all_son_sum_price_bookmall'] = intval($all_son_sum_price_bookmall); //所有到奖励金额
+        $list['all_son_sum_price_level_bookmall'] = intval($all_son_sum_price_level_bookmall); //所有到奖励金额
+
+        $list['all_son_sum_price_crowdc'] = intval($all_son_sum_price_crowdc); //所有到奖励金额
+        $list['all_son_sum_price_level_crowdc'] = intval($all_son_sum_price_level_crowdc); //所有到奖励金额
+        $list['all'] =  intval($all_son_sum_price)+
+            intval($all_son_sum_price_level)+
+            intval($all_son_sum_price_bookmall)+
+            intval($all_son_sum_price_level_bookmall)+
+            intval($all_son_sum_price_crowdc)+
+            intval($all_son_sum_price_level_crowdc);
+
+        return $list;
+    }
 
 
     /**
      * $status //1--消费金额排序  2--订单数排序
      */
-    public function getsettlementbonusByUserId($user_id)
+    public function getsettlementbonusByUserIdOld($user_id)
     {
         $query = User::find()->alias('u')->where(['u.store_id' => $this->store_id, 'u.is_delete' => 0])
             ->where( [
@@ -312,7 +384,6 @@ class OrderClerkForm extends Model
             ->select('g.name,o.pay_price,cat_id,g.id as goods_id')
             ->asArray()
             ->all();
-
         //统计支付奖励积分
 
         //根据level获取到层级比例
@@ -475,13 +546,15 @@ class OrderClerkForm extends Model
 
     //获取某个分类的所有父分类
     //方法一，递归
-    public function getParents($categorys, $catId)
+    public function getParents($categorys, $catId, $level = 0)
     {
         $tree = array();
         foreach ($categorys as $item) {
             if ($item['id'] == $catId) {
-                if ($item['parent_id'] > 0)
-                    $tree = array_merge($tree, $this->getParents($categorys, $item['parentId']));
+                $item['level'] = $level;
+                if ($item['parent_id'] > 0){
+                    $tree = array_merge($tree, $this->getParents($categorys, $item['parent_id'] ,$level + 1));
+                }
                 $tree[] = $item;
                 break;
             }

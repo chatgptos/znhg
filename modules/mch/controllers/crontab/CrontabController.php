@@ -18,6 +18,7 @@ use app\models\UserShareMoney;
 use app\modules\mch\models\BusinessListForm;
 use app\modules\mch\models\crontab\DailyData;
 use app\modules\mch\models\crontab\Stock;
+use app\modules\mch\models\settlementstatistics\Award;
 use app\modules\mch\models\StoreDataForm;
 use Yii;
 use app\modules\mch\models\StoreUserForm;
@@ -422,6 +423,7 @@ class CrontabController extends Controller
             Order::updateAll(['is_sale' => 1], ['id' => $value['id']]);
             $this->share_money($value['id']);
             $this->give_integral($value['id']);
+            $this->share_money_new($value['id']);
         }
 
         \Yii::warning('==>' .'end-order5');
@@ -474,6 +476,51 @@ class CrontabController extends Controller
 
 
     /**
+     * 账户设置
+     * @return array|bool|string
+     * @throws \yii\base\Exception 积分商品
+     */
+    public function actionOrder7()
+    {
+        $this->store_id = 1;
+        if (!$this->store_id) {
+            return true;
+        }
+        $this->store = Store::findOne($this->store_id);
+        $this->share_setting = Setting::findOne(['store_id' => $this->store_id]);
+        \Yii::warning('==>' .'begin-order7');
+        $time = time();
+        $delivery_time = $time - ($this->store->delivery_time * 86400);
+        $sale_time = $time - ($this->store->after_sale_time * 86400);
+
+        //超过设置的售后时间且没有在售后的订单
+        $order_list = Order::find()->alias('o')
+            ->where([
+                'and',
+                ['o.is_delete' => 0, 'o.is_send' => 1, 'o.is_confirm' => 1, 'o.store_id' => $this->store_id, 'o.is_sale' => 0],
+                ['<=', 'o.confirm_time', $sale_time],
+            ])
+            ->leftJoin(OrderRefund::tableName() . ' r', "r.order_id = o.id and r.is_delete = 0")
+            ->select(['o.*'])->groupBy('o.id')
+            ->andWhere([
+                'or',
+                'isnull(r.id)',
+                ['r.type' => 2],
+                ['in', 'r.status', [2, 3]]
+            ])
+            ->offset(0)->limit(20)->asArray()->all();
+
+        foreach ($order_list as $index => $value) {
+            \Yii::warning('==>' . $value['id']);
+            Order::updateAll(['is_sale' => 1], ['id' => $value['id']]);
+            $this->share_money_new($value['id']);
+        }
+
+        \Yii::warning('==>' .'end-order7');
+    }
+
+
+    /**
      * @param $parent_id
      * @param $money
      * @return array
@@ -502,6 +549,172 @@ class CrontabController extends Controller
             ];
         }
     }
+
+
+
+    //获取某个分类的所有子分类
+    private function getSubs($categorys, $catId = 0, $level = 1)
+    {
+        $subs = array();
+        foreach ($categorys as $item) {
+            if ($item['parent_id'] == $catId) {
+                $item['level'] = $level;
+                $subs[] = $item;
+                $subs = array_merge($subs, $this->getSubs($categorys, $item['id'], $level + 1));
+            }
+
+        }
+        return $subs;
+    }
+
+
+    public function getCharge($level, $goods_id ,$type=1)
+    {
+        $charge = 0;
+        $levelinfo = Award::findOne([
+            'level' => $level,
+            'quan' => $type,
+            'chance' => $goods_id,
+            'status' => 1,
+            'is_delete' => 0,
+            'store_id' => $this->store_id]);
+
+        if (!$levelinfo) {
+//            $levelinfo = Award::findOne(['level' => $level,'quan' => $type, 'is_delete' => 0, 'store_id' => $this->store_id]);
+            $charge = $levelinfo->discount;
+        }
+        return $charge;
+    }
+
+
+    //获取某个分类的所有父分类
+    //方法一，递归
+    private function getParents($id, $order_id,$order_first_price,$level = 0)
+    {
+        $user = User::findOne($id);
+        if($user['parent_id']){
+            $level= $level+1;
+            //获取该订单该层级应获得的金额
+            $order_detail_list = OrderDetail::find()->alias('od')->leftJoin(['g' => Goods::tableName()], 'od.goods_id=g.id')
+                ->where(['od.is_delete' => 0, 'od.order_id' => $order_id])
+                ->asArray()
+                ->select('od.goods_id as goods_id,od.total_price')
+                ->all();
+            $share_commission_money=0;
+            //根据层级计算出应得的佣金
+            foreach ($order_detail_list as $item) {
+                $item_price = doubleval($item['total_price']);
+                $charge_get = $this->getCharge($level, $item['goods_id']);
+                $share_commission_money += $item_price * $charge_get / 100;
+            }
+            $money = $share_commission_money < 0.01 ? 0 : $share_commission_money;
+            //分钱 暂时不分
+//            $res = self::money($user->parent_id, $money);
+//            echo $user->id .'|'.$level.'|</br>';
+            //增加明细
+            UserShareMoney::set($money, $user->parent_id, $order_id, 0, $level, $this->store_id);
+            $this->getParents($user['parent_id'],$order_id,$order_first_price,$level);
+        }
+    }
+
+
+
+    /**
+     * @param $id
+     * 佣金发放
+     */
+    private function share_money_new($id)
+    {
+        $order = Order::findOne($id);
+//        if ($order->is_price != 0) {
+//            return;
+//        }
+        $user_1 = User::findOne($order->parent_id);
+        if (!$user_1) {
+            return;
+        }
+        //这个订单下的某个用户
+        $this->getParents($order->user_id,$order->id,$order->first_price);
+    }
+
+
+
+
+    /**
+     * 设置佣金
+     * @param Order $order
+     */
+    private function setReturnData($order)
+    {
+        $setting = Setting::findOne(['store_id' => $order->store_id]);
+        if (!$setting || $setting->level == 0)
+            return;
+        $user = User::findOne($order->user_id);//订单本人
+        if (!$user)
+            return;
+        $order->parent_id = $user->parent_id;
+        $parent = User::findOne($user->parent_id);//上级
+        if (!empty($parent) && $parent->parent_id) {
+            $order->parent_id_1 = $parent->parent_id;
+            $parent_1 = User::findOne($parent->parent_id);//上上级
+            if ($parent_1->parent_id) {
+                $order->parent_id_2 = $parent_1->parent_id;
+            } else {
+                $order->parent_id_2 = -1;
+            }
+        } else {
+            $order->parent_id_1 = -1;
+            $order->parent_id_2 = -1;
+        }
+        $order_total = doubleval($order->total_price - $order->express_price);
+        $pay_price = doubleval($order->pay_price - $order->express_price);
+
+        $order_detail_list = OrderDetail::find()->alias('od')->leftJoin(['g' => Goods::tableName()], 'od.goods_id=g.id')
+            ->where(['od.is_delete' => 0, 'od.order_id' => $order->id])
+            ->asArray()
+            ->select('g.individual_share,g.share_commission_first,g.share_commission_second,g.share_commission_third,od.total_price,od.num,g.share_type')
+            ->all();
+        $share_commission_money_first = 0;//一级分销总佣金
+        $share_commission_money_second = 0;//二级分销总佣金
+        $share_commission_money_third = 0;//三级分销总佣金
+        foreach ($order_detail_list as $item) {
+            $item_price = doubleval($item['total_price']);
+            if ($item['individual_share'] == 1) {
+                $rate_first = doubleval($item['share_commission_first']);
+                $rate_second = doubleval($item['share_commission_second']);
+                $rate_third = doubleval($item['share_commission_third']);
+                if ($item['share_type'] == 1) {
+                    $share_commission_money_first += $rate_first * $item['num'];
+                    $share_commission_money_second += $rate_second * $item['num'];
+                    $share_commission_money_third += $rate_third * $item['num'];
+                } else {
+                    $share_commission_money_first += $item_price * $rate_first / 100;
+                    $share_commission_money_second += $item_price * $rate_second / 100;
+                    $share_commission_money_third += $item_price * $rate_third / 100;
+                }
+            } else {
+                $rate_first = doubleval($setting->first);
+                $rate_second = doubleval($setting->second);
+                $rate_third = doubleval($setting->third);
+                if ($setting->price_type == 1) {
+                    $share_commission_money_first += $rate_first * $item['num'];
+                    $share_commission_money_second += $rate_second * $item['num'];
+                    $share_commission_money_third += $rate_third * $item['num'];
+                } else {
+                    $share_commission_money_first += $item_price * $rate_first / 100;
+                    $share_commission_money_second += $item_price * $rate_second / 100;
+                    $share_commission_money_third += $item_price * $rate_third / 100;
+                }
+            }
+        }
+
+
+        $order->first_price = $share_commission_money_first < 0.01 ? 0 : $share_commission_money_first;
+        $order->second_price = $share_commission_money_second < 0.01 ? 0 : $share_commission_money_second;
+        $order->third_price = $share_commission_money_third < 0.01 ? 0 : $share_commission_money_third;
+        $order->save();
+    }
+
 
     /**
      * @param $id

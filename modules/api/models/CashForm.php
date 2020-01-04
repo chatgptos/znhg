@@ -122,7 +122,9 @@ class CashForm extends Model
                     'send_count'=>0,
                     'user_id'=>$user->id
                 ]);
+                //提现减少积分
                 $user->price -= $this->cash;
+                $user->integral -= $this->cash;
                 if (!$user->save()) {
                     $t->rollBack();
                     return [

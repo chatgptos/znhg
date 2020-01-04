@@ -53,7 +53,7 @@ class Award extends \yii\db\ActiveRecord
             'name' => '等级名称',
             'money' => '花费券抽取',
             'discount' => '提成比例',
-            'quan' => '券',
+            'quan' => '类型 1 2 3',
             'chance' => '商品id',
             'status' => '状态 0--禁用 1--启用',
             'is_delete' => 'Is Delete',

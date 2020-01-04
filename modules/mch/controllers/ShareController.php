@@ -264,6 +264,8 @@ class ShareController extends Controller
         if ($status == 3) {
             $user = User::findOne(['id' => $cash->user_id]);
             $user->price += $cash->price;
+            //驳回增加积分
+            $user->integral += $cash->price;
             if (!$user->save()) {
                 return json_encode([
                     'code' => 1,

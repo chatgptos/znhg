@@ -10,6 +10,7 @@ namespace app\modules\api\models\settlementbonus;
 
 use app\models\IntegralLog;
 use app\models\User;
+use app\models\UserShareMoney;
 use app\modules\api\models\Model;
 
 class OrderPreviewFrom extends Model
@@ -76,7 +77,7 @@ class OrderPreviewFrom extends Model
         if (!$goods){
             return [
               'code'    => 1,
-              'msg'     => '商品不存在',
+              'msg'     => '奖励不存在',
             ];
         }
 
@@ -128,12 +129,12 @@ class OrderPreviewFrom extends Model
         if($query_num_buy_order_day > $goods->buy_max_day ){
             return [
                 'code' => 1,
-                'msg' => "购买数量超过限制！ 商品“" . $goods->name . '”每日最多允许购买' . $goods->buy_max_day . '件，请返回重新下单购买其他商品',
+                'msg' => "申请数量超过限制！ 奖励“" . $goods->name . '”每日最多允许申请' . $goods->buy_max_day . '件，请返回重新下单申请其他奖励',
             ];
         } elseif ($query_num_buy_order > $goods->buy_max){
             return [
                 'code' => 1,
-                'msg' => "购买数量超过限制！ 商品“" . $goods->name . '”最多允许购买' . $goods->buy_max . '件，请返回重新下单购买其他商品',
+                'msg' => "申请数量超过限制！ 奖励“" . $goods->name . '”最多允许申请' . $goods->buy_max . '件，请返回重新下单申请其他奖励',
             ];
         }
 
@@ -180,6 +181,41 @@ class OrderPreviewFrom extends Model
         $order->form_id = $this->form_id;
         $order->return_coupon = $goods->return_coupon;
         $order->return_integral = $goods->return_integral;
+
+
+        
+        
+        if ($order->goods_id ==17){
+            //正在结算的状态的订单 当申请当时候全部改为申请中 查询时候就计算申请中的订单
+            //把上个月的
+            $UserShareMoney =UserShareMoney::updateAll(['status' => 1], [
+                'AND',
+                ['user_id' => $order->user_id,],
+                ['status' => 0,],
+                ['is_delete' => 0,],
+                ['>=', 'addtime', strtotime(date('Y-m-01', strtotime('-1 month')))],
+                ['<=', 'addtime', strtotime(date('Y-m-t', strtotime('-1 month')))],
+            ]);
+
+            if(!$UserShareMoney){
+                $p->rollBack();
+                return [
+                    'code'  => 1,
+                    'msg'   => '暂时无奖励',
+                ];
+            }
+            $money = UserShareMoney::find()->alias('usm')
+                ->where([
+                    'user_id' => $order->user_id,
+                    'status' => 1,//已经申请的
+                ])
+                ->asArray()
+                ->sum('money');
+            $order->return_integral = $money;
+        }
+
+ 
+
         if ($order->save()) {
             $goods->sales ++;
             $goods->stock --;
@@ -235,40 +271,45 @@ class OrderPreviewFrom extends Model
             }
 
             if ($order->pay_price <= 0){
-                //暂时不做退款支付的操作 所有 商品只有付钱和积分两种分开
+                //暂时不做退款支付的操作 所有 奖励只有付钱和积分两种分开
                 //扣除积分
                 if ($goods->coupon > 0 || $goods->integral > 0){
                     $this->user->coupon = $this->user->coupon - $goods->coupon;
                     $this->user->integral  = $this->user->integral - $goods->integral;
-                    //扣除总筹股东券资格
-                    $this->user->settlementbonus --;
-                    //失效股东券资格券
-                    $orderCrowdapply = \app\modules\api\models\crowdapply\Order::findOne(['user_id'=>$order->user_id,'store_id'=>$this->store_id,'is_pay'=>1,'apply_delete'=>0,'is_use'=>0]);
 
-                    if(!$orderCrowdapply){
-                        $p->rollBack();
-                        return [
-                            'code'=>1,
-                            'msg'=>'没有资格券'
-                        ];
-                    }
-                    $orderCrowdapply->is_use=1;
-                    if(!$orderCrowdapply->save()){
-                        $p->rollBack();
-                        return [
-                            'code'=>1,
-                            'msg'=>'没有资格券'
-                        ];
-                    }
-                    if($this->user->integral >=0 && $this->user->coupon >=0 && $this->user->settlementbonus >= 0){
+
+                    //扣除总筹股东券资格
+//                    $this->user->settlementbonus --;
+//                    //失效股东券资格券
+//                    $orderCrowdapply = \app\modules\api\models\crowdapply\Order::findOne(['user_id'=>$order->user_id,'store_id'=>$this->store_id,'is_pay'=>1,'apply_delete'=>0,'is_use'=>0]);
+
+//                    if(!$orderCrowdapply){
+//                        $p->rollBack();
+//                        return [
+//                            'code'=>1,
+//                            'msg'=>'没有资格券'
+//                        ];
+//                    }
+//                    $orderCrowdapply->is_use=1;
+//                    if(!$orderCrowdapply->save()){
+//                        $p->rollBack();
+//                        return [
+//                            'code'=>1,
+//                            'msg'=>'没有资格券'
+//                        ];
+//                    }
+                    if($this->user->integral >=0 && $this->user->coupon >=0)
+                    {
                         $this->user->save();
-                    }elseif($this->user->settlementbonus < 0){
-                        $p->rollBack();
-                        return [
-                            'code'  => 1,
-                            'msg'   => '请先获取资格',
-                        ];
-                    }elseif($this->user->integral <0){
+                    }
+//                  elseif($this->user->settlementbonus < 0){
+//                        $p->rollBack();
+//                        return [
+//                            'code'  => 1,
+//                            'msg'   => '请先获取资格',
+//                        ];
+//                    }
+                    elseif($this->user->integral <0){
                         $p->rollBack();
                         return [
                             'code'  => 1,
@@ -305,8 +346,8 @@ class OrderPreviewFrom extends Model
 
                 $integralLog = new IntegralLog();
                 $integralLog->user_id = $this->user->id;
-                //购买总筹股权 扣除积分
-                $integralLog->content = "(购买总筹股权)：" . $this->user->nickname . " 欢乐豆".$this->user->hld."已经扣除：" . $hld . " 豆" . " 优惠券".$this->user->coupon."已经扣除：" . $coupon . " 张" . $integral . '个积分）';
+                //申请奖励 扣除积分
+                $integralLog->content = "(申请奖励)：" . $this->user->nickname . " 欢乐豆".$this->user->hld."已经扣除：" . $hld . " 豆" . " 优惠券".$this->user->coupon."已经扣除：" . $coupon . " 张" . $integral . '个积分）';
 
                 $integralLog->integral = $goods->integral;
                 $integralLog->hld = $hld;
@@ -319,7 +360,10 @@ class OrderPreviewFrom extends Model
                 $integralLog->save();
 
 
-                if ($order->save()){
+
+
+
+                if ($order->save() && $UserShareMoney){
                     $wechat_tpl_meg_sender = new WechatTplMsgSender($order->store_id, $order->id, $this->wechat);
                     $wechat_tpl_meg_sender->payMsg();
 

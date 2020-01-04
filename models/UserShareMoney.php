@@ -16,6 +16,9 @@ use Yii;
  * @property string $money
  * @property integer $is_delete
  * @property integer $addtime
+ * @property integer $status
+ *
+ *
  */
 class UserShareMoney extends \yii\db\ActiveRecord
 {
@@ -33,7 +36,7 @@ class UserShareMoney extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['store_id', 'order_id', 'user_id', 'type', 'source', 'is_delete', 'addtime'], 'integer'],
+            [['status','store_id', 'order_id', 'user_id', 'type', 'source', 'is_delete', 'addtime'], 'integer'],
             [['money'], 'number'],
         ];
     }
@@ -52,6 +55,7 @@ class UserShareMoney extends \yii\db\ActiveRecord
             'source' => '佣金来源 1--一级分销 2--二级分销 3--三级分销',
             'money' => '金额',
             'is_delete' => 'Is Delete',
+            'status' => '佣金状态 0--已经计算 1--已经申请 2--发放 3--驳回',
             'addtime' => 'Addtime',
         ];
     }
@@ -76,6 +80,7 @@ class UserShareMoney extends \yii\db\ActiveRecord
         $model->source = $source;
         $model->money = $money;
         $model->is_delete = 0;
+        $model->status = 0;
         $model->addtime = time();
         return $model->save();
     }

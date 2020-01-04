@@ -72,7 +72,7 @@ $this->params['active_nav_group'] = 4;
                                         <input class="form-control" name="money" type="number"
                                                value="<?= $level->money ?>">
                                     </div>
-                                    <div class="text-muted fs-sm">（以最小返点为主）</div>
+                                    <div class="text-muted fs-sm">（最小多少钱计算，低于该值不计入）</div>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -96,7 +96,7 @@ $this->params['active_nav_group'] = 4;
                                 <div class="col-5">
                                     <div class="input-group">
                                         <input class="form-control" name="chance" value="<?= $level->chance ?>">
-                                        <span class="input-group-addon bg-white">概率</span>
+                                        <span class="input-group-addon bg-white">商品id</span>
                                     </div>
                                     <div class="text-muted fs-sm">请输入1~100之间的数字</div>
                                 </div>

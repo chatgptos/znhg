@@ -9,9 +9,10 @@ $this->title = '返点等级';
 $this->params['active_nav_group'] = 4;
 ?>
 
-    <iframe style="height:1000px;width:1200px"  src="https://mta.qq.com/wechat_mini/base/ctr_realtime_data?app_id=500706424">
-    </iframe>>
+<!--    <iframe style="height:1000px;width:1200px"  src="https://mta.qq.com/wechat_mini/base/ctr_realtime_data?app_id=500706424">-->
+<!--    </iframe>>-->
         <div class="alert alert-info rounded-0">
+    <div>注：确认超过设置的售后时间且没有在售后的订单 系统自动按最新设置的匹配等级计算</div>
     <div>注：设置层级返点      未设置0 （所有统计返点不包含自身，自身消费请单独统计）</div>
     <div>注：返点商品 分别结算栏目可以看到 分别计算出的 商城/预售/众筹 兑换暂未统计</div>
     <div>注：返点设置启用（未启用为0） 商品id 层级名称 返点比例 返点购买类型（1商城2预售3众筹）自动启用
@@ -49,10 +50,9 @@ $this->params['active_nav_group'] = 4;
             <tr>
                 <td>等级</td>
                 <td>返点名称</td>
-                <td>返点奖励张数</td>
-                <td>返点花费 </td>
-                <td>返点比例 </td>
-                <td>返点商品 </td>
+                <td>返点比例</td>
+                <td>返点商品id </td>
+                <td>返点途径 </td>
                 <td>状态</td>
                 <td>操作</td>
             </tr>
@@ -61,7 +61,6 @@ $this->params['active_nav_group'] = 4;
                     <td class="nowrap"><?= $value['level'] ?></td>
                     <td class="nowrap"><?= $value['name'] ?></td>
                     <td class="nowrap"><?= $value['discount'] ?></td>
-                    <td class="nowrap"><?= $value['money'] ?></td>
                     <td class="nowrap"><?= $value['chance'] ?></td>
                     <td class="nowrap"><?= $value['quan'] ?></td>
                     <td class="nowrap">
