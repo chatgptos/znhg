@@ -430,7 +430,7 @@ class OrderSubmitForm extends Model
         $order->integral = json_encode($resIntegral, JSON_UNESCAPED_UNICODE);
         $order->version = $this->version;
         $order->advance_integral_buy = intval($total_price_2 * $advance / 100);
-        $order->yukuan_integral_buy = intval($total_price_2 * (1 - $advance / 100));
+        $order->yukuan_integral_buy = intval($yukuan_integral_buy);
 //        $order->advance_integral_buy = $advance_integral_buy;
         $order->advance_coupon = intval($advance_coupon);
         $order->yukuan_coupon = intval($yukuan_coupon);
@@ -778,8 +778,14 @@ class OrderSubmitForm extends Model
 
 
                 //余款
-                $yukuan_coupon = intval($goods_item->coupon) * (1 - $goods_item->advance / 100);
-                $yukuan_integral_buy = intval($goods_item->integral_buy) * (1 - $goods_item->advance / 100);
+//                $yukuan_coupon = intval($goods_item->coupon) * (1 - $goods_item->advance / 100);
+//                $yukuan_integral_buy = intval($goods_item->integral_buy) * (1 - $goods_item->advance / 100);
+
+                //总款*（1-预售款%-优惠%）
+                $yukuan_coupon = intval($seckill_data['seckill_coupon']) * (1 - $goods_item->advance / 100-$charge_coupon / 100);
+                $yukuan_integral_buy = intval($temp_price['total_price']) * (1 - $goods_item->advance / 100-$charge_integral_buy / 100);
+
+
 
             } else {
                 return [

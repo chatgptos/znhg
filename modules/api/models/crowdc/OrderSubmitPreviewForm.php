@@ -590,7 +590,7 @@ class OrderSubmitPreviewForm extends Model
     {
         $charge = 0;
 
-        if ($num <= $goods->chargeNum && $num > 0) {
+        if ($num <= $goods->chargeNum && $num >= 0) {
             $charge = $goods->charge;  //1张
         } elseif ($num <= $goods->chargeNum1 && $num > $goods->chargeNum) {
             $charge = $goods->charge1; //1-6

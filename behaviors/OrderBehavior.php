@@ -33,10 +33,10 @@ use yii\web\Controller;
 class OrderBehavior extends Behavior
 {
     public $only_routes = [
-        'mch/order/*',
-        'mch/share/*',
-        'api/order/*',
-        'api/share/*',
+//        'mch/order/*',
+//        'mch/share/*',
+//        'api/order/*',
+//        'api/share/*',
     ];
 
     public $store_id;

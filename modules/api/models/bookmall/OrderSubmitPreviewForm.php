@@ -422,16 +422,20 @@ class OrderSubmitPreviewForm extends Model
 
 
                 $total_price += $goods_item->integral_buy;
-                //计算出余款价格
+                //计算出余款价格 优惠的
                 $goods_item->price = intval($temp_price['total_price'] * (1 - $charge_coupon / 100));
                 $goods_item->coupon = intval($seckill_data['seckill_coupon'] * (1 - $charge_coupon / 100));
                 $goods_item->integral_buy = intval($temp_price['total_price'] * (1 - $charge_integral_buy / 100));
 
+//                //余款
+//                $yukuan_coupon = intval($goods_item->coupon) * (1 - $goods_item->advance / 100);
+//                $yukuan_integral_buy = intval($goods_item->integral_buy) * (1 - $goods_item->advance / 100);
 
-                //余款
-                $yukuan_coupon = intval($goods_item->coupon) * (1 - $goods_item->advance / 100);
-                $yukuan_integral_buy = intval($goods_item->integral_buy) * (1 - $goods_item->advance / 100);
 
+
+                //总款*（1-预售款%-优惠%）
+                $yukuan_coupon = intval($seckill_data['seckill_coupon']) * (1 - $goods_item->advance / 100-$charge_coupon / 100);
+                $yukuan_integral_buy = intval($temp_price['total_price']) * (1 - $goods_item->advance / 100-$charge_integral_buy / 100);
 
 
             } else {
@@ -629,7 +633,7 @@ class OrderSubmitPreviewForm extends Model
     public function getCharge($num, $goods)
     {
         $charge = 0;
-        if ($num <= $goods->chargeNum && $num > 0) {
+        if ($num <= $goods->chargeNum && $num >= 0) {
             $charge = $goods->charge;  //1张
         } elseif ($num <= $goods->chargeNum1 && $num > $goods->chargeNum) {
             $charge = $goods->charge1; //1-6
@@ -647,19 +651,19 @@ class OrderSubmitPreviewForm extends Model
     {
 
         $chargeprice[]=array(
-            'num'=>'1～'.$goods->chargeNum, 'integral'=> intval($integral * (1 - $goods->advance / 100)*(1-$goods->charge/100)),'charge'=>$goods->charge,
+            'num'=>'1～'.$goods->chargeNum, 'integral'=> intval($integral * (1 - $goods->advance/ 100 -$goods->charge/100)),'charge'=>$goods->charge,
         );
         $chargeprice[]=array(
-            'num'=>$goods->chargeNum.'~'.$goods->chargeNum1, 'integral'=> intval($integral * (1 - $goods->advance / 100)*(1-$goods->charge1/100)),'charge'=>$goods->charge1,
+            'num'=>$goods->chargeNum.'~'.$goods->chargeNum1, 'integral'=> intval($integral * (1 - $goods->advance / 100-$goods->charge1/100)),'charge'=>$goods->charge1,
         );
         $chargeprice[]=array(
-            'num'=>$goods->chargeNum1.'~'.$goods->chargeNum2, 'integral'=> intval($integral * (1 - $goods->advance / 100)*(1-$goods->charge2/100)),'charge'=>$goods->charge2,
+            'num'=>$goods->chargeNum1.'~'.$goods->chargeNum2, 'integral'=> intval($integral * (1 - $goods->advance / 100-$goods->charge2/100)),'charge'=>$goods->charge2,
         );
         $chargeprice[]=array(
-            'num'=>$goods->chargeNum2.'~'.$goods->chargeNum3,'integral'=> intval($integral * (1 - $goods->advance / 100)*(1-$goods->charge3/100)),'charge'=>$goods->charge3,
+            'num'=>$goods->chargeNum2.'~'.$goods->chargeNum3,'integral'=> intval($integral * (1 - $goods->advance / 100-$goods->charge3/100)),'charge'=>$goods->charge3,
         );
         $chargeprice[]=array(
-            'num'=>'超过'.$goods->chargeNum3, 'integral'=> intval($integral * (1 - $goods->advance / 100)*(1-$goods->charge5/100)),'charge'=>$goods->charge5,
+            'num'=>'超过'.$goods->chargeNum3, 'integral'=> intval($integral * (1 - $goods->advance / 100-$goods->charge5/100)),'charge'=>$goods->charge5,
         );
         $charge = 0;
         if ($num <= $goods->chargeNum && $num >= 0) {

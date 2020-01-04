@@ -184,7 +184,7 @@ class GoodsForm extends Model
         $charge = 0;
         $nextnum=0;
 
-        if ($num <= $goods->chargeNum && $num > 0) {
+        if ($num <= $goods->chargeNum && $num >= 0) {
             $charge = $goods->charge;  //1张
             $nextnum=$goods->chargeNum1;
         } elseif ($num <= $goods->chargeNum1 && $num > $goods->chargeNum) {

@@ -125,7 +125,7 @@ class UserCenterMenu extends Model
                 'name' => '我的预售',
                 'icon' => '/images/icon-about-us.png',
                 'open_type' => 'navigator',
-                'url' => '/pages/bookmall/order/order',
+                'url' => '/pages/bookmall/order/order?status=5',
                 'tel' => '',
             ],
             [
