@@ -26,6 +26,12 @@ class Controller extends \app\controllers\Controller
         'public/login',
         'public/logout',
         'crontab/crontab/add',//跑脚本的页面
+        'crontab/crontab/order',//跑脚本的页面
+        'crontab/crontab/order1',//跑脚本的页面
+        'crontab/crontab/order2',//跑脚本的页面
+        'crontab/crontab/order3',//跑脚本的页面
+        'crontab/crontab/order5',//跑脚本的页面
+        'crontab/crontab/order6',//跑脚本的页面
         'crontab/*',//跑脚本的页面
     ];
 
