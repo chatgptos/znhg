@@ -65,9 +65,6 @@ class GoodsForm extends Model
 
 
         $seckill_data = $this->getSeckillData($goods->id);
-
-//        var_dump($seckill_data);
-//        die;
         $num = $seckill_data['sell_num'];
         $charge_coupon = 1;
         $charge_integral_buy = 1;
@@ -99,7 +96,7 @@ class GoodsForm extends Model
             'has_people_num' => floatval($goods->getSalesVolume()),//拥有的用户
             'all_limit_num' => $goods->getNum(),//总份数
             'remaining' => $goods->getNum()-$goods->getSalesVolume(),//余份数
-            'returnback_integral' => $goods->getNum()-$goods->getSalesVolume(),//余份数
+            'returnback_integral' => $goods->getNum()-$goods->getSalesVolume(),//奖励积分
         );
         $seckill_data['crowdctime']=array(
             'start_date_crowdc'=>$seckill_data['start_date_crowdc'],
