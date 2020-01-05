@@ -36,7 +36,7 @@ class UserShareMoney extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['status','store_id', 'order_id', 'user_id', 'type', 'source', 'is_delete', 'addtime'], 'integer'],
+            [['addtime','status','store_id', 'order_id', 'user_id', 'type', 'source', 'is_delete', 'addtime'], 'integer'],
             [['money'], 'number'],
         ];
     }
@@ -51,7 +51,7 @@ class UserShareMoney extends \yii\db\ActiveRecord
             'store_id' => 'Store ID',
             'order_id' => '订单ID',
             'user_id' => '用户ID',
-            'type' => '类型 0--佣金 1--提现',
+            'type' => '类型 0--佣金 1--提现',//1商城2预售3众筹
             'source' => '佣金来源 1--一级分销 2--二级分销 3--三级分销',
             'money' => '金额',
             'is_delete' => 'Is Delete',

@@ -615,7 +615,10 @@ class CrontabController extends Controller
 //            $res = self::money($user->parent_id, $money);
 //            echo $user->id .'|'.$level.'|</br>';
             //增加明细
-            UserShareMoney::set($money, $user->parent_id, $order_id, 0, $level, $this->store_id);
+            if($money){
+                \Yii::warning('==>' . $order_id .'—'.$money);
+                UserShareMoney::set($money, $user->parent_id, $order_id, 1, $level, $this->store_id);
+            }
             $this->getParents($user['parent_id'],$order_id,$order_first_price,$level);
         }
     }

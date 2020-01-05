@@ -558,6 +558,13 @@ class MchMenu
                                     'mch/settlementstatistics/choujiang/level-edit'
                                 ]
                             ],
+                            [
+                                'name' => '返点佣金',
+                                'route' => 'mch/settlementstatistics/choujiang/sharemoney',
+                                'sub' => [
+                                    'mch/settlementstatistics/data/goods',
+                                ]
+                            ],
 
 
 //

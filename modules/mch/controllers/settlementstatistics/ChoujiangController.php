@@ -10,9 +10,11 @@ namespace app\modules\mch\controllers\settlementstatistics;
 
 use app\models\Store;
 use app\models\User;
+use app\models\UserShareMoney;
 use app\modules\mch\models\settlementstatistics\Award;
 use app\modules\mch\models\settlementstatistics\AwardForm;
 use app\modules\mch\models\settlementstatistics\AwardListForm;
+use app\modules\mch\models\settlementstatistics\ShareMoneyListForm;
 use app\modules\mch\models\UserForm;
 
 class ChoujiangController extends Controller
@@ -29,6 +31,24 @@ class ChoujiangController extends Controller
         $form->attributes = \Yii::$app->request->get();
         $arr = $form->search();
         return $this->render('level', [
+            'list' => $arr['list'],
+            'pagination' => $arr['p'],
+            'row_count' => $arr['row_count']
+        ]);
+    }
+
+
+
+    /**
+     * 奖品等级
+     */
+    public function actionSharemoney()
+    {
+        $form = new ShareMoneyListForm();
+        $form->store_id = $this->store->id;
+        $form->attributes = \Yii::$app->request->get();
+        $arr = $form->search();
+        return $this->render('sharemoney', [
             'list' => $arr['list'],
             'pagination' => $arr['p'],
             'row_count' => $arr['row_count']
