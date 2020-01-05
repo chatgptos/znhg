@@ -1,7 +1,7 @@
 {
   "pages": [
-    "pages/mall/mall",
     "pages/index/index",
+    "pages/mall/mall",
     "pages/coupon-merchant/index",
     "pages/coupon-merchant-mall/index",
     "pages/user/user",

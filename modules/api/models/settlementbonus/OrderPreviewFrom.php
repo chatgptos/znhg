@@ -213,7 +213,6 @@ class OrderPreviewFrom extends Model
                 ->sum('money');
             $order->return_integral = $money;
         }
-
  
 
         if ($order->save()) {

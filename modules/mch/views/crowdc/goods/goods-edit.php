@@ -493,6 +493,62 @@ if (!$returnUrl)
 
                     <div class="form-group row">
                         <div class="col-3 text-right">
+                            <label class=" col-form-label required">总筹成功需要总积分</label>
+                        </div>
+                        <div class="col-9">
+                            <input type="number"  class="form-control short-row"
+                                   name="model[integral_all_crowdc]" min="0"
+                                   value="<?= $goods['integral_all_crowdc'] ? $goods['integral_all_crowdc'] : 0 ?>">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-3 text-right">
+                            <label class=" col-form-label required">总筹成功后发货需要的天数</label>
+                        </div>
+                        <div class="col-9">
+                            <input type="number"   class="form-control short-row"
+                                   name="model[send_date_num]" min="0"
+                                   value="<?= $goods['send_date_num'] ? $goods['send_date_num'] : 0 ?>">
+                        </div>
+                    </div>
+                    <!--                    <div class="form-group row">-->
+                    <!--                        <div class="col-3 text-right">-->
+                    <!--                            <label class=" col-form-label required">已经筹集到的积分</label>-->
+                    <!--                        </div>-->
+                    <!--                        <div class="col-9">-->
+                    <!--                            <input type="number"  class="form-control short-row"-->
+                    <!--                                   name="model[integral_has_crowdc]" min="0"-->
+                    <!--                                   value="--><?//= $goods['integral_has_crowdc'] ? $goods['integral_has_crowdc'] : 0 ?><!--">-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="form-group row">-->
+                    <!--                        <div class="col-3 text-right">-->
+                    <!--                            <label class=" col-form-label required">天数剩余</label>-->
+                    <!--                        </div>-->
+                    <!--                        <div class="col-9">-->
+                    <!--                            <input type="number"   class="form-control short-row"-->
+                    <!--                                   name="model[date_num_has_crowdc]" min="0"-->
+                    <!--                                   value="--><?//= $goods['date_num_has_crowdc'] ? $goods['date_num_has_crowdc'] : 0 ?><!--">-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+
+
+
+
+<!--                    <div class="form-group row">-->
+<!--                        <div class="col-3 text-right">-->
+<!--                            <label class=" col-form-label required">快递方式</label>-->
+<!--                        </div>-->
+<!--                        <div class="col-9">-->
+<!--                            <input type="number" class="form-control short-row"-->
+<!--                                   name="model[send_way]" min="0"-->
+<!--                                   value="--><?//= $goods['send_way'] ? $goods['send_way'] : 0 ?><!--">-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+                    <div class="form-group row">
+                        <div class="col-3 text-right">
                             <label class=" col-form-label">服务内容</label>
                         </div>
                         <div class="col-9">

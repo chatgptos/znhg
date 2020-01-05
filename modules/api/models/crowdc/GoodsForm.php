@@ -86,17 +86,25 @@ class GoodsForm extends Model
         'next_integral_buy'=>$next_integral_buy,
         'next_num'=>$next_integral_buy,
          );
+//       $alladvance_integral_buy= Order::find()->where(['is_delete'=>0,'is_pay'=>1,'is_cancel'=>0])
+//            ->andWhere(
+//                ['>=', 'addtime', strtotime($seckill_data['start_date_crowdc'])]
+//            )
+//           ->andWhere(
+//               ['<=', 'addtime', strtotime($seckill_data['end_date_crowdc'])]
+//           )
+//            ->sum('advance_integral_buy');
         $seckill_data['crowdc']=array(
+            'integral_all_crowdc' => floatval($goods->integral_all_crowdc),//需要的积分
+            'send_date_num' => $goods->send_date_num,//发货需要的的天数
+            'send_way' => '快递/自提',//发货的天数
+            'returnback_integral' => $goods->returnback_integral,//预计奖励积分
             'end_date_crowdc' => $seckill_data['end_date_crowdc'],
-            'integral_all_crowdc' => floatval($goods->price),//需要的积分
-            'integral_has_crowdc' => floatval($goods->price),//已经筹集到的积分
-            'date_num_has_crowdc' => floatval($goods->price),//天数剩余
-            'send_date_num' => floatval($goods->price),//发货的天数
-            'send_way' => '自提/快递',//发货的天数
-            'has_people_num' => floatval($goods->getSalesVolume()),//拥有的用户
+            'integral_has_crowdc' => ($goods->getSalesVolume() + $goods->virtual_sales)*$seckill_data['seckill_integral_buy'],//已经筹集到的积分
+            'date_num_has_crowdc' => round(($seckill_data['end_date_crowdc']-$seckill_data['start_date_crowdc'])/3600/24) ,//天数剩余
+            'has_people_num' => $goods->getSalesVolume() + $goods->virtual_sales,//拥有的用户
             'all_limit_num' => $goods->getNum(),//总份数
-            'remaining' => $goods->getNum()-$goods->getSalesVolume(),//余份数
-            'returnback_integral' => $goods->getNum()-$goods->getSalesVolume(),//奖励积分
+            'remaining' => $goods->getNum()-$goods->getSalesVolume()- $goods->virtual_sales,//余份数
         );
         $seckill_data['crowdctime']=array(
             'start_date_crowdc'=>$seckill_data['start_date_crowdc'],
