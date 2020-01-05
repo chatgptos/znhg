@@ -518,7 +518,6 @@ class CrontabController extends Controller
             $this->share_money_new($value['id']);
             Order::updateAll(['is_price' => 1], ['id' => $value['id']]);
         }
-
         \Yii::warning('==>' .'end-order7');
     }
 
@@ -582,7 +581,7 @@ class CrontabController extends Controller
             'is_delete' => 0,
             'store_id' => $this->store_id]);
 
-        if (!$levelinfo) {
+        if ($levelinfo) {
 //            $levelinfo = Award::findOne(['level' => $level,'quan' => $type, 'is_delete' => 0, 'store_id' => $this->store_id]);
             $charge = $levelinfo->discount;
         }
@@ -614,7 +613,9 @@ class CrontabController extends Controller
             //分钱 暂时不分
 //            $res = self::money($user->parent_id, $money);
 //            echo $user->id .'|'.$level.'|</br>';
+//            echo $order_id .'|'.$money.'|</br>';
             //增加明细
+            \Yii::warning('==>' . $order_id .'—'.$money);
             if($money){
                 \Yii::warning('==>' . $order_id .'—'.$money);
                 UserShareMoney::set($money, $user->parent_id, $order_id, 1, $level, $this->store_id);

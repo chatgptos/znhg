@@ -68,15 +68,15 @@ class AwardForm extends Model
             $this->model->is_delete = 0;
             $this->model->addtime = time();
         }
-        if($this->level != $this->model->level){
-            $exit = Award::find()->where(['level'=>$this->level,'store_id'=>$this->store_id,'is_delete'=>0])->exists();
-            if($exit){
-                return [
-                    'code'=>1,
-                    'msg'=>'会员等级已存在'
-                ];
-            }
-        }
+//        if($this->level != $this->model->level){
+//            $exit = Award::find()->where(['level'=>$this->level,'store_id'=>$this->store_id,'is_delete'=>0])->exists();
+//            if($exit){
+//                return [
+//                    'code'=>1,
+//                    'msg'=>'会员等级已存在'
+//                ];
+//            }
+//        }
         if($this->name != $this->model->name){
             $exit_0 = Award::find()->where(['name'=>$this->name,'store_id'=>$this->store_id,'is_delete'=>0])->exists();
             if($exit_0){
