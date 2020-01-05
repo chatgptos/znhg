@@ -101,8 +101,8 @@ $this->params['active_nav_group'] = 4;
                     </div>
 
                     <div class="form-group row">
-                        <div class="form-group-label col-3 text-right">
-                            <label class="">发放对象</label>
+                        <div class="form-group-label col-sm-2 text-right">
+                            <label class="col-form-label">修改为</label>
                         </div>
                         <div class="col-9">
                             <div class="input-group mb-3" style="max-width: 250px">
@@ -127,7 +127,6 @@ $this->params['active_nav_group'] = 4;
                                 <div v-else style="color: #ddd;">请输入昵称查找用户</div>
                             </div>
                         </div>
-                    </div>
                     <div class="form-group row">
                         <div class="form-group-label col-2 text-right">
                         </div>
