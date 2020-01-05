@@ -77,6 +77,8 @@ $this->params['active_nav_group'] = 4;
                     </td>
                     <td class="nowrap"><?= date('Y-m-d H:i:s', $value['addtime']) ?></td>
                     <td class="nowrap">
+                        <a class="btn btn-sm"
+                           href="<?= $urlManager->createUrl(['mch/order/detail', 'order_id' => $value['order_id']]) ?>">详情</a>
                         <a class="btn btn-sm btn-primary"
                            href="<?= $urlManager->createUrl(['mch/settlementstatistics/choujiang/sharemoney-edit', 'id' => $value['id']]) ?>">编辑</a>
                         <a class="btn btn-sm btn-danger del" href="javascript:" data-content="是否删除？"

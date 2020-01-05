@@ -123,6 +123,10 @@ class DataGoodsForm extends Model
 //        var_dump(strtotime($this->date_begin));
 //        die;
 
+        if (!$this->date_begin){
+            $this->date_begin =date('Y-m-d H:i:s',strtotime('-7 day')) ;
+        }
+
         if($this->date_begin){
             $query->andWhere(['>', 'u.addtime', strtotime($this->date_begin)]);
         }

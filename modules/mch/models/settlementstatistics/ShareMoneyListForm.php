@@ -40,7 +40,8 @@ class ShareMoneyListForm extends Model
         $query = UserShareMoney::find()->where(['store_id'=>$this->store_id,'is_delete'=>0]);
 
         if($this->keyword){
-            $query->andWhere(['like','user_id',$this->keyword]);
+            $query->where(['user_id'=>$this->keyword]);
+//                ->andWhere(['like','user_id',$this->keyword]);
         }
 
         $count = $query->count();

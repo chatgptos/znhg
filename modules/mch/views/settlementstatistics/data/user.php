@@ -93,7 +93,7 @@ $this->params['page_navs'] = [
             <form method="get" class="input-group mb-3" style="max-width: 30rem;">
                 <input type="hidden" name="status" value="<?= Yii::$app->request->get('status') ?>">
                 <span class="input-group-addon">日期查找</span>
-                <input class="form-control" id="date_begin" value="<?= Yii::$app->request->get('date_begin') ?>" name="date_begin">
+                <input class="form-control" id="date_begin" value="<?= Yii::$app->request->get('date_begin')?Yii::$app->request->get('date_begin'):date('Y-m-d H:i:s',strtotime('-7 day')) ?>" name="date_begin">
                 <span class="input-group-addon">~</span>
                 <input class="form-control" id="date_end" value="<?= Yii::$app->request->get('date_end') ?>" name="date_end">
                 <span class="input-group-btn">
