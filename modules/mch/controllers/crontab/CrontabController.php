@@ -421,9 +421,9 @@ class CrontabController extends Controller
         foreach ($order_list as $index => $value) {
             \Yii::warning('==>' . $value['id']);
             Order::updateAll(['is_sale' => 1], ['id' => $value['id']]);
-            $this->share_money($value['id']);
+//            $this->share_money($value['id']);
             $this->give_integral($value['id']);
-            $this->share_money_new($value['id']);
+//            $this->share_money_new($value['id']);
         }
 
         \Yii::warning('==>' .'end-order5');
@@ -497,7 +497,9 @@ class CrontabController extends Controller
         $order_list = Order::find()->alias('o')
             ->where([
                 'and',
-                ['o.is_delete' => 0, 'o.is_send' => 1, 'o.is_confirm' => 1, 'o.store_id' => $this->store_id, 'o.is_sale' => 0],
+                ['o.is_delete' => 0, 'o.is_send' => 1, 'o.is_confirm' => 1, 'o.store_id' => $this->store_id,
+                    'o.is_price' => 0
+                ],
                 ['<=', 'o.confirm_time', $sale_time],
             ])
             ->leftJoin(OrderRefund::tableName() . ' r', "r.order_id = o.id and r.is_delete = 0")
@@ -508,12 +510,13 @@ class CrontabController extends Controller
                 ['r.type' => 2],
                 ['in', 'r.status', [2, 3]]
             ])
-            ->offset(0)->limit(20)->asArray()->all();
-
+            ->offset(0)
+            ->limit(20)
+            ->asArray()->all();
         foreach ($order_list as $index => $value) {
             \Yii::warning('==>' . $value['id']);
-            Order::updateAll(['is_sale' => 1], ['id' => $value['id']]);
             $this->share_money_new($value['id']);
+            Order::updateAll(['is_price' => 1], ['id' => $value['id']]);
         }
 
         \Yii::warning('==>' .'end-order7');
@@ -626,9 +629,9 @@ class CrontabController extends Controller
     private function share_money_new($id)
     {
         $order = Order::findOne($id);
-//        if ($order->is_price != 0) {
-//            return;
-//        }
+        if ($order->is_price != 0) {
+            return;
+        }
         $user_1 = User::findOne($order->parent_id);
         if (!$user_1) {
             return;
