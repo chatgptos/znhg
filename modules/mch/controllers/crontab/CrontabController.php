@@ -305,7 +305,7 @@ class CrontabController extends Controller
             if ($type['confirm'] && $type['confirm'] == 1) {
                 $printer_order = new PinterOrder($this->store_id, $v['id']);
                 \Yii::warning('==>>' . '打印');
-                $res = $printer_order->print_order();
+//                $res = $printer_order->print_order();
             }
         }
 
