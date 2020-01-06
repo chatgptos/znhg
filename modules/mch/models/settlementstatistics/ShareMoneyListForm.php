@@ -8,6 +8,12 @@
 namespace app\modules\mch\models\settlementstatistics;
 
 
+use app\models\Goods;
+use app\models\Order;
+use app\models\OrderDetail;
+use app\models\OrderRefund;
+use app\models\Shop;
+use app\models\User;
 use app\models\UserShareMoney;
 use app\modules\mch\models\Model;
 use yii\data\Pagination;
@@ -37,16 +43,38 @@ class ShareMoneyListForm extends Model
             return $this->getModelError();
         }
 
-        $query = UserShareMoney::find()->where(['store_id'=>$this->store_id,'is_delete'=>0]);
+        $query = UserShareMoney::find() ->alias('usm')
+            ->select('usm.id,o.order_no,o.order_no,o.order_no,o.order_no,u.nickname,us.nickname as us_nickname,o.order_no,usm.user_id,usm.money,usm.order_id,usm.type,usm.status,usm.source,usm.is_delete,usm.addtime as addtime')
+            ->leftJoin(['o' => Order::tableName()], 'o.id=usm.order_id')
+            ->leftJoin(['u' => User::tableName()], 'u.id=o.user_id')
+            ->leftJoin(['us' => User::tableName()], 'us.id=usm.user_id')
+            ->where(['usm.store_id'=>$this->store_id,'usm.is_delete'=>0]);
 
         if($this->keyword){
-            $query->where(['user_id'=>$this->keyword]);
+            $query->where(['usm.user_id'=>$this->keyword]);
 //                ->andWhere(['like','user_id',$this->keyword]);
         }
 
         $count = $query->count();
         $p = new Pagination(['totalCount'=>$count,'pageSize'=>$this->limit]);
         $list = $query->offset($p->offset)->limit($p->limit)->orderBy(['addtime'=>SORT_ASC])->asArray()->all();
+        foreach ($list as $i => $item) {
+            $list[$i]['goods_list'] = $this->getOrderGoodsList($item['order_id']);
+            if ($item['is_offline'] == 1 && $item['is_send'] == 1) {
+                $user = User::findOne(['id' => $item['clerk_id'], 'store_id' => $this->store_id]);
+                $list[$i]['clerk_name'] = $user->nickname;
+            }
+            if ($item['shop_id'] && $item['shop_id'] != 0) {
+                $shop = Shop::find()->where(['store_id' => $this->store_id, 'id' => $item['shop_id']])->asArray()->one();
+                $list[$i]['shop'] = $shop;
+            }
+            $order_refund = OrderRefund::findOne(['store_id' => $this->store_id, 'order_id' => $item['id'], 'is_delete' => 0]);
+            $list[$i]['refund'] = "";
+            if ($order_refund) {
+                $list[$i]['refund'] = $order_refund->status;
+            }
+            $list[$i]['integral'] = json_decode($item['integral'], true);
+        }
         return [
             'list'=>$list,
             'p'=>$p,
@@ -54,6 +82,22 @@ class ShareMoneyListForm extends Model
         ];
     }
 
+    public function getOrderGoodsList($order_id)
+    {
+        $order_detail_list = OrderDetail::find()->alias('od')
+            ->leftJoin(['g' => Goods::tableName()], 'od.goods_id=g.id')
+            ->where([
+                'od.is_delete' => 0,
+                'od.order_id' => $order_id,
+            ])->select('od.*,g.name,g.unit')->asArray()->all();
+        foreach ($order_detail_list as $i => $order_detail) {
+            $goods = new Goods();
+            $goods->id = $order_detail['goods_id'];
+            $order_detail_list[$i]['goods_pic'] = $goods->getGoodsPic(0)->pic_url;
+            $order_detail_list[$i]['attr_list'] = json_decode($order_detail['attr']);
+        }
+        return $order_detail_list;
+    }
 
     public function searchName()
     {

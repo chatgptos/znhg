@@ -47,9 +47,9 @@ $this->params['active_nav_group'] = 4;
             </form>
         </div>
         <table class="table table-bordered bg-white">
-            <tr><td>id</td>
-                <td>订单id</td>
-                <td>用户id</td>
+            <tr>
+                <td>id</td>
+                <td>商品信息</td>
                 <td>类别</td>
                 <td>等级 </td>
                 <td>金额 </td>
@@ -59,9 +59,45 @@ $this->params['active_nav_group'] = 4;
             </tr>
             <?php foreach ($list as $index => $value): ?>
                 <tr>
-                    <td class="nowrap"><?= $value['id'] ?></td>
-                    <td class="nowrap"><?= $value['order_id'] ?></td>
-                    <td class="nowrap"><?= $value['user_id'] ?></td>
+                    <td class="nowrap">  <span class="mr-5"><?= $value['id'] ?></span>  </td>
+
+                    <td class="order-tab-1">
+                        <span class="mr-5"><?= date('Y-m-d H:i:s', $value['addtime']) ?></span>
+                        <span class="mr-5">订单id：<?= $value['order_id'] ?></span>
+                        <span class="mr-5">订单号：<?= $value['order_no'] ?></span>
+                        <span>下单用户：<?= $value['nickname'] ?></span>
+                        <?php foreach ($value['goods_list'] as $goods_item): ?>
+                            <div class="goods-item" flex="dir:left box:first">
+                                <div class="fs-0">
+                                    <div class="goods-pic"
+                                         style="background-image: url('<?= $goods_item['goods_pic'] ?>')"></div>
+                                </div>
+                                <div class="goods-info">
+                                    <div class="goods-name"><?= $goods_item['name'] ?></div>
+                                    <div class="fs-sm">
+                                        规格：
+                                        <span class="text-danger">
+                                            <?php $attr_list = json_decode($goods_item['attr']); ?>
+                                            <?php if (is_array($attr_list)):foreach ($attr_list as $attr): ?>
+                                                <span class="mr-3"><?= $attr->attr_group_name ?>
+                                                    :<?= $attr->attr_name ?></span>
+                                            <?php endforeach;;endif; ?>
+                                        </span>
+                                    </div>
+                                    <div class="fs-sm">数量：
+                                        <span
+                                                class="text-danger"><?= $goods_item['num'] . $goods_item['unit'] ?></span>
+                                    </div>
+                                    <div class="fs-sm">小计：
+                                        <span class="text-danger"><?= $goods_item['total_price'] ?>元</span></div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </td>
+
+
+                    <td class="nowrap">id<?= $value['user_id'] ?>
+                        <span>昵称：<?= $value['us_nickname'] ?></span></td>
                     <td class="nowrap">
                         <?php if ($value['type'] == 3): ?>众筹<?php endif; ?>
                         <?php if ($value['type'] == 2): ?>预售<?php endif; ?>
@@ -76,13 +112,18 @@ $this->params['active_nav_group'] = 4;
                         <?php if ($value['status'] == 0): ?>系统成功计算<?php endif; ?>
                     </td>
                     <td class="nowrap"><?= date('Y-m-d H:i:s', $value['addtime']) ?></td>
+
+
                     <td class="nowrap">
+                        <a class="btn btn-sm update" href="javascript:" data-toggle="modal"
+                           data-target="#price" data-id="<?= $value['order_id'] ?>">查看</a>
                         <a class="btn btn-sm"
-                           href="<?= $urlManager->createUrl(['mch/order/detail', 'order_id' => $value['order_id']]) ?>">详情</a>
+                           href="<?= $urlManager->createUrl(['mch/order/detail', 'order_id' => $value['order_id']]) ?>">订单</a>
                         <a class="btn btn-sm btn-primary"
                            href="<?= $urlManager->createUrl(['mch/settlementstatistics/choujiang/sharemoney-edit', 'id' => $value['id']]) ?>">编辑</a>
                         <a class="btn btn-sm btn-danger del" href="javascript:" data-content="是否删除？"
                            data-url="<?= $urlManager->createUrl(['mch/settlementstatistics/choujiang/sharemoney-del', 'id' => $value['id']]) ?>">删除</a>
+
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -93,7 +134,70 @@ $this->params['active_nav_group'] = 4;
         </div>
     </div>
 </div>
+
+
+<!--新加入的-->
+<!-- 修改价格 -->
+<div class="modal fade" data-backdrop="static" id="price">
+    <div class="modal-dialog modal-sm" role="document" style="max-width: 400px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <b class="modal-title">确认发放</b>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input class="order-id" type="hidden">
+                商城业绩:<input class="all_son_sum_price" ><br/>
+                商城点奖:<input class="all_son_sum_price_level" ><br/>
+                预售业绩:<input class="all_son_sum_price_bookmall" ><br/>
+                预售点奖:<input class="all_son_sum_price_level_bookmall" ><br/>
+                众筹业绩:<input class="all_son_sum_price_crowdc" ><br/>
+                众筹点奖:<input class="all_son_sum_price_level_crowdc" ><br/>
+                预计发放:<input class="all" ><br/>
+                <input class=" form-control money" type="number" placeholder="请填写增加或减少的积分">
+                <div class="text-danger form-error mb-3" style="display: none">错误信息</div>
+            </div>
+            <div class="modal-footer">
+                <!--                <a href="javascript:" class="btn btn-primary add-price" data-type="1">确认</a>-->
+                <!--                <a href="javascript:" class="btn btn-primary add-price" data-type="2">奖金</a>-->
+                <a href="javascript:" class="btn btn-primary add-price" data-type="1">加价</a>
+                <a href="javascript:" class="btn btn-danger add-price" data-type="2">优惠</a>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
+    $(document).on('click', '.update', function () {
+        var order_id = $(this).data('id');
+        $('.order-id').val(order_id);
+
+        $.loading();
+        $.ajax({
+            url: "<?=$urlManager->createUrl(['mch/settlementbonus/order/getsettlementbonus'])?>",
+            type: 'get',
+            dataType: 'json',
+            data: {
+                order_id: order_id,
+            },
+            success: function (res) {
+                if (res.code == 0) {
+                    $('.all_son_sum_price').val(res.data.all_son_sum_price);
+                    $('.all_son_sum_price_level').val(res.data.all_son_sum_price_level);
+                    $('.all_son_sum_price_bookmall').val(res.data.all_son_sum_price_bookmall);
+                    $('.all_son_sum_price_level_bookmall').val(res.data.all_son_sum_price_level_bookmall);
+                    $('.all_son_sum_price_crowdc').val(res.data.all_son_sum_price_crowdc);
+                    $('.all_son_sum_price_level_crowdc').val(res.data.all_son_sum_price_level_crowdc);
+                    $('.all').val(res.data.all);
+
+                    $.loadingHide();
+                } else {
+                    $('.send-price').val(res.msg);
+                }
+            }
+        });
+    });
     $(document).on('click', '.status', function () {
         var type = $(this).data('type');
         var id = $(this).data('id');
@@ -155,4 +259,5 @@ $this->params['active_nav_group'] = 4;
             }
         });
     });
+
 </script>

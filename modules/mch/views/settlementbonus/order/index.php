@@ -786,11 +786,6 @@ $page_navs_list=[];
                 }
             }
         });
-
-
-
-
-
     });
     $(document).on('click', '.add-price', function () {
         var order_id = $('.order-id').val();
