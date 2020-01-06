@@ -5,7 +5,7 @@
  * Time: 9:17
  */
 $urlManager = Yii::$app->urlManager;
-$this->title = '返点佣金明细';
+$this->title = '返点每个等级总佣金明细';
 $this->params['active_nav_group'] = 4;
 ?>
 

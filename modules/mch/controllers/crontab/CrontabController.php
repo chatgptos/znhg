@@ -522,6 +522,54 @@ class CrontabController extends Controller
     }
 
 
+
+    /**
+     * 账户设置
+     * @return array|bool|string
+     * @throws \yii\base\Exception 积分商品
+     */
+    public function actionOrder8()
+    {
+        $this->store_id = 1;
+        if (!$this->store_id) {
+            return true;
+        }
+        $this->store = Store::findOne($this->store_id);
+        $this->share_setting = Setting::findOne(['store_id' => $this->store_id]);
+        \Yii::warning('==>' .'begin-order7');
+        $time = time();
+        $delivery_time = $time - ($this->store->delivery_time * 86400);
+        $sale_time = $time - ($this->store->after_sale_time * 86400);
+
+        //超过设置的售后时间且没有在售后的订单
+        $order_list = Order::find()->alias('o')
+            ->where([
+                'and',
+                ['o.is_delete' => 0, 'o.is_send' => 1, 'o.is_confirm' => 1, 'o.store_id' => $this->store_id,
+                    'o.is_price' => 0
+                ],
+                ['<=', 'o.confirm_time', $sale_time],
+            ])
+            ->leftJoin(OrderRefund::tableName() . ' r', "r.order_id = o.id and r.is_delete = 0")
+            ->select(['o.*'])->groupBy('o.id')
+            ->andWhere([
+                'or',
+                'isnull(r.id)',
+                ['r.type' => 2],
+                ['in', 'r.status', [2, 3]]
+            ])
+            ->offset(0)
+            ->limit(20)
+            ->asArray()->all();
+        foreach ($order_list as $index => $value) {
+            \Yii::warning('==>' . $value['id']);
+            $this->share_money_new($value['id']);
+            Order::updateAll(['is_price' => 1], ['id' => $value['id']]);
+        }
+        \Yii::warning('==>' .'end-order7');
+    }
+
+
     /**
      * @param $parent_id
      * @param $money
