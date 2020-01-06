@@ -51,8 +51,14 @@ class ShareMoneyListForm extends Model
             ->where(['usm.store_id'=>$this->store_id,'usm.is_delete'=>0]);
 
         if($this->keyword){
-            $query->where(['usm.user_id'=>$this->keyword]);
+//            $query->where(['usm.user_id'=>$this->keyword]);
 //                ->andWhere(['like','user_id',$this->keyword]);
+
+            $query->andWhere([
+                'or',
+                ['usm.user_id'=>$this->keyword],
+                ['o.order_no'=>$this->keyword],
+            ]);
         }
 
         $count = $query->count();

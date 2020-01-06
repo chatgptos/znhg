@@ -51,8 +51,8 @@ $this->params['active_nav_group'] = 4;
                 <td>id</td>
                 <td>商品信息</td>
                 <td>类别</td>
-                <td>等级 </td>
                 <td>金额 </td>
+                <td>等级 </td>
                 <td>佣金状态</td>
                 <td>创建时间</td>
                 <td>操作</td>

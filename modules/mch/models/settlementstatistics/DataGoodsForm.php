@@ -588,12 +588,7 @@ class DataGoodsForm extends Model
             'is_delete' => 0,
             'store_id' => $this->store_id]);
 
-        if (!$levelinfo) {
-            $levelinfo = Award::findOne(['level' => $level,'quan' => $type, 'is_delete' => 0, 'store_id' => $this->store_id]);
-            if ($levelinfo) {
-                $charge = $levelinfo->discount;
-            }
-        } else {
+        if ($levelinfo) {
             $charge = $levelinfo->discount;
         }
         return $charge;
