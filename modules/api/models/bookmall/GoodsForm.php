@@ -74,7 +74,26 @@ class GoodsForm extends Model
         }
 
 
-        $num = $seckill_data['sell_num'];
+        //查询当前总共订单量
+        $query_num_buy_order = Order::find()->alias('o')
+            ->where(
+                [
+                    'od.goods_id' => $goods->id,
+                    'o.is_delete' => 0,
+                    'o.store_id' => $this->store_id])
+            ->leftJoin(['od' => OrderDetail::tableName()], 'od.order_id=o.id')
+            ->andWhere([
+                'AND',
+                [
+                    'od.is_delete' => 0,
+                    'o.is_delete' => 0,
+                    'o.is_pay' => 1,
+//                        'o.is_check_yukuan' => 0,//还未审核到
+                    'o.is_yukuan' => 0//未支付余款的
+                ],
+            ])->count();
+//            $num = $seckill_data['sell_num'];
+        $num = $query_num_buy_order;
         $charge_coupon = 1;
         $charge_integral_buy = 1;
 
@@ -95,6 +114,8 @@ class GoodsForm extends Model
              'next_integral_buy'=>$next_integral_buy,
              'next_num'=>$next_num,
         );
+        $seckill_data['sell_num']=$num;
+
 
         return [
             'code' => 0,

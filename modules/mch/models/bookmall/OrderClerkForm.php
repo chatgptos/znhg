@@ -61,7 +61,7 @@ class OrderClerkForm extends Model
                     'od.is_delete' => 0,
                     'o.is_delete' => 0,
                     'o.is_pay' => 1,
-                    'o.is_check_yukuan' => 0,//还未审核到
+//                    'o.is_check_yukuan' => 0,//还未审核到
                     'o.is_yukuan' => 0//未支付余款的
                 ],
             ])->count();

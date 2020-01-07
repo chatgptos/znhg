@@ -380,21 +380,25 @@ class OrderSubmitPreviewForm extends Model
         if ($seckill_data) {
             $temp_price = $this->getSeckillPrice($seckill_data, $goods, $attr_id_list, $goods_info->num);
             //查询当前总共订单量
-//            $query_num_buy_order = Goods::find()->alias('g')->where(['g.id' => $goods->id, 'g.is_delete' => 0, 'g.store_id' => $this->store_id])
-//                ->leftJoin(['od' => OrderDetail::tableName()], 'od.goods_id=g.id')
-//                ->leftJoin(['o' => Order::tableName()], 'o.id=od.order_id')
-//                ->andWhere([
-//                    'or',
-//                    [
-//                        'od.is_delete' => 0,
-//                        'o.is_delete' => 0,
-//                        'o.is_pay' => 1,
-//                        'o.pay_time' => date('Y-m-d'),
-//                    ],
-//                    'isnull(o.id)'
-//                ])->count();
-
-            $num = $seckill_data['sell_num'];
+            $query_num_buy_order = Order::find()->alias('o')
+                ->where(
+                    [
+                        'od.goods_id' => $goods->id,
+                        'o.is_delete' => 0,
+                        'o.store_id' => $this->store_id])
+                ->leftJoin(['od' => OrderDetail::tableName()], 'od.order_id=o.id')
+                ->andWhere([
+                    'AND',
+                    [
+                        'od.is_delete' => 0,
+                        'o.is_delete' => 0,
+                        'o.is_pay' => 1,
+//                        'o.is_check_yukuan' => 0,//还未审核到
+                        'o.is_yukuan' => 0//未支付余款的
+                    ],
+                ])->count();
+//            $num = $seckill_data['sell_num'];
+            $num = $query_num_buy_order;
             $charge_coupon = 1;
             $charge_integral_buy = 1;
 
