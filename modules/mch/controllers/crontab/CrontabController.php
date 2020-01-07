@@ -541,7 +541,7 @@ class CrontabController extends Controller
         $list = $query->orderBy(['addtime'=>SORT_ASC])
             ->select("max_level,id,source as level,max_user_id,order_id,user_id,money")
 //            ->groupBy('order_id')
-            ->limit(20)
+            ->limit(10)
             ->asArray()->all();
         //总付费人数
         //总人数
@@ -559,6 +559,7 @@ class CrontabController extends Controller
             $all_share_level_users=$allson_group[$amuser_user['level']]; //层级分佣金的层级
             $all_share_level_users_num=count($all_share_level_users);//这个层级的数量分享佣金
             $money =round($amuser_user['money']/$all_share_level_users_num, 2);
+            $money = $money < 0.01 ? 0 : $money;
             $order_id=$amuser_user['order_id'];
             $user_id=$amuser_user['user_id'];
             $level=$amuser_user['level'];
@@ -583,6 +584,7 @@ class CrontabController extends Controller
                     $all_share_level_users=$allson_group[$level_user['level']]; //层级分佣金的层级
                     $all_share_level_users_num=count($all_share_level_users);//这个层级的数量分享佣金
                     $money =round($amuser_user['money']/$all_share_level_users_num, 2);
+                    $money = $money < 0.01 ? 0 : $money;
                     UserShareMoneyDetail::set($money, $level_user['id'], $order_id, 1, $amuser_user['level'], $this->store_id);
                 }
             }

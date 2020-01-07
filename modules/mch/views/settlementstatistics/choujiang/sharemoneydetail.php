@@ -51,11 +51,12 @@ $this->params['active_nav_group'] = 4;
                 <td>id</td>
                 <td>商品信息</td>
                 <td>上级信息 </td>
-                <td>金额 </td>
                 <td>类别</td>
                 <td>等级 </td>
+                <td>金额 </td>
                 <td>佣金状态</td>
                 <td>创建时间</td>
+                <td>计算时间</td>
                 <td>操作</td>
             </tr>
             <?php foreach ($list as $index => $value): ?>
@@ -113,6 +114,7 @@ $this->params['active_nav_group'] = 4;
                         <?php if ($value['status'] == 0): ?>系统成功计算<?php endif; ?>
                     </td>
                     <td class="nowrap"><?= date('Y-m-d H:i:s', $value['addtime']) ?></td>
+                    <td class="nowrap"><?= date('Y-m-d H:i:s', $value['usm_addtime']) ?></td>
 
 
                     <td class="nowrap">
