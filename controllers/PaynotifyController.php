@@ -12,8 +12,11 @@ use app\extensions\printerPtOrder;
 use app\extensions\SendMail;
 use app\extensions\Sms;
 use app\models\CardSendForm;
+use app\models\Goods;
+use app\models\IntegralLog;
 use app\models\Option;
 use app\models\Order;
+use app\models\OrderDetail;
 use app\models\OrderMessage;
 use app\models\PtGoods;
 use app\models\PtNoticeSender;
@@ -35,6 +38,10 @@ use app\extensions\PinterOrder;
 
 class PaynotifyController extends Controller
 {
+
+
+    public $store;
+    public $store_id = 1;
     public $enableCsrfValidation = false;
 
     public function actionIndex()
@@ -92,6 +99,7 @@ class PaynotifyController extends Controller
         $order->pay_type = 1;
         if ($order->save()) {
             //$this->setReturnData($order);
+            $this->payCheckGoods($order);
             $this->paySendCoupon($order->store_id, $order->user_id);
             $this->autoBecomeShare($order->user_id, $order->store_id);
 
@@ -302,6 +310,78 @@ class PaynotifyController extends Controller
         $order->save();
     }
 
+
+    /**
+     * 积分发放
+     */
+    private function give_integral($id)
+    {
+        $give = Order::findOne($id);
+        if ($give['give_integral'] != 0) {
+            return;
+        }
+        $integral = OrderDetail::find()
+            ->andWhere(['order_id' => $give['id'], 'is_delete' => 0])
+            ->select([
+                'sum(integral)'
+            ])->scalar();
+        $giveUser = User::findOne(['id' => $give['user_id']]);
+        $giveUser->integral += $integral;
+        $giveUser->total_integral += $integral;
+        $giveUser->save();
+        $give->give_integral = 1;
+        $give->save();
+
+
+        //积分日志增加
+        $integralLog = new IntegralLog();
+        $integralLog->user_id = $giveUser->id;
+        $integralLog->content = "管理员 后台操作账号：" . $giveUser->nickname . " 积分充值：" . $integral . " 积分";
+        $integralLog->integral = $integral;
+        $integralLog->addtime = time();
+        $integralLog->username = $giveUser->nickname;
+        $integralLog->operator = 'admin';
+        $integralLog->store_id = $this->store_id;
+        $integralLog->operator_id = 0;
+        $integralLog->save();
+
+    }
+    /**
+     * 支付成功送优惠券
+     */
+    private function payCheckGoods($order)
+    {
+        $auto_checkout_integral_order_list = Order::find()->alias('o')
+            ->leftJoin(['od' => OrderDetail::tableName()], 'od.order_id=o.id')
+            ->leftJoin(['g' => Goods::tableName()], 'od.goods_id=g.id')
+            ->orWhere([
+                'or',
+                [
+                    'g.name' => '平台积分',
+                    'o.id' => $order->id,
+                ],
+            ])
+            ->orWhere([
+                'or',
+                [
+                    'g.name' => '高效洗衣液',
+                    'o.id' => $order->id,
+                ],
+            ])
+            ->select(['o.id','g.name'])->groupBy('o.id')->asArray()->one();
+        if ($auto_checkout_integral_order_list){
+            \Yii::warning('==>' .'begin-order-integral');
+            $time = time();
+            $this->store = Store::findOne($order->store_id);
+            $sale_time = $time - ($this->store->after_sale_time * 86400);
+            Order::updateAll(
+                ['pay_type' => 1,'is_send' => 1,'is_confirm' => 1,'is_sale' => 1,'confirm_time' => $sale_time],
+                ['id' => $auto_checkout_integral_order_list['id']]
+            );
+            $this->give_integral($order->id);
+            \Yii::warning('==>' .'end-order-integral');
+        }
+    }
     /**
      * 支付成功送优惠券
      */
