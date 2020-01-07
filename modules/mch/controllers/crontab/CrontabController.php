@@ -15,6 +15,7 @@ use app\models\Store;
 use app\models\StoreUser;
 use app\models\User;
 use app\models\UserShareMoney;
+use app\models\UserShareMoneyDetail;
 use app\modules\mch\models\BusinessListForm;
 use app\modules\mch\models\crontab\DailyData;
 use app\modules\mch\models\crontab\Stock;
@@ -534,39 +535,60 @@ class CrontabController extends Controller
         if (!$this->store_id) {
             return true;
         }
-        $this->store = Store::findOne($this->store_id);
-        $this->share_setting = Setting::findOne(['store_id' => $this->store_id]);
-        \Yii::warning('==>' .'begin-order7');
-        $time = time();
-        $delivery_time = $time - ($this->store->delivery_time * 86400);
-        $sale_time = $time - ($this->store->after_sale_time * 86400);
-
-        //超过设置的售后时间且没有在售后的订单
-        $order_list = Order::find()->alias('o')
-            ->where([
-                'and',
-                ['o.is_delete' => 0, 'o.is_send' => 1, 'o.is_confirm' => 1, 'o.store_id' => $this->store_id,
-                    'o.is_price' => 0
-                ],
-                ['<=', 'o.confirm_time', $sale_time],
-            ])
-            ->leftJoin(OrderRefund::tableName() . ' r', "r.order_id = o.id and r.is_delete = 0")
-            ->select(['o.*'])->groupBy('o.id')
-            ->andWhere([
-                'or',
-                'isnull(r.id)',
-                ['r.type' => 2],
-                ['in', 'r.status', [2, 3]]
-            ])
-            ->offset(0)
+        \Yii::warning('==>' .'begin-order8');
+        $query = UserShareMoney::find() ->alias('usm')
+            ->where(['usm.store_id'=>$this->store_id,'usm.is_delete'=>0,'usm.status'=>0]);
+        $list = $query->orderBy(['addtime'=>SORT_ASC])
+            ->select("max_level,id,source as level,max_user_id,order_id,user_id,money")
+//            ->groupBy('order_id')
             ->limit(20)
             ->asArray()->all();
-        foreach ($order_list as $index => $value) {
-            \Yii::warning('==>' . $value['id']);
-            $this->share_money_new($value['id']);
-            Order::updateAll(['is_price' => 1], ['id' => $value['id']]);
+        //总付费人数
+        //总人数
+
+//        var_dump($list);die;
+        $list_user_haslevel = User::find()->select('id,parent_id')
+            ->andWhere(['>', 'level', 0])
+            ->asArray()->all();
+
+        foreach ($list as $i => $amuser_user) {
+            $allson = $this->getSubs($list_user_haslevel, $amuser_user['max_user_id']);
+            //获取层级和人数
+            //需要分享该层级的奖金的用户
+            $allson_group=$this->array_group_by($allson,'level');
+            $all_share_level_users=$allson_group[$amuser_user['level']]; //层级分佣金的层级
+            $all_share_level_users_num=count($all_share_level_users);//这个层级的数量分享佣金
+            $money =round($amuser_user['money']/$all_share_level_users_num, 2);
+            $order_id=$amuser_user['order_id'];
+            $user_id=$amuser_user['user_id'];
+            $level=$amuser_user['level'];
+            $max_level=$amuser_user['max_level'];
+            \Yii::warning('==>' . $order_id .'—'.$level.'—'.$money);
+            //发给顶级用户 拿这个层级总的
+            if($user_id==$amuser_user['max_user_id']){
+                UserShareMoneyDetail::set($amuser_user['money'], $user_id, $order_id, 1, $level, $this->store_id);
+            }
+            foreach ($allson as $j => $level_user) {
+                //最大层级-自身层级=分佣金层级
+//当层级相等时候这个层级有奖金 说明这个层级有奖金  因为数据库取出的所以一定有奖
+//      佣金层级  其他自身层级（遍历对象）  配置奖项层级
+//a         四级  0  最大层级-自身层级    发放 取出最大层级奖金发给自己
+//b b1      三级  1    二级                  取出 这个层级奖金 发给 自身层级等于这个的用户（佣金层级应该 =最大层级-自身层级）
+//c c2 c3   二级  2    一级
+//d d2 c3   一级  3    消费的层级 不计算
+//e e1 e2   0     4
+                $levelnew =  $max_level - $level_user['level'] ;
+                if($levelnew>0 && $level_user['level']==$level){
+                    \Yii::warning('==>' . $order_id .'—'.$level.'—'.$money.'-'.$level_user['level'].'-'.$levelnew);
+                    $all_share_level_users=$allson_group[$level_user['level']]; //层级分佣金的层级
+                    $all_share_level_users_num=count($all_share_level_users);//这个层级的数量分享佣金
+                    $money =round($amuser_user['money']/$all_share_level_users_num, 2);
+                    UserShareMoneyDetail::set($money, $level_user['id'], $order_id, 1, $amuser_user['level'], $this->store_id);
+                }
+            }
+            UserShareMoney::updateAll(['status' => 1], ['id' => $amuser_user['id']]);
         }
-        \Yii::warning('==>' .'end-order7');
+        \Yii::warning('==>' .'end-order8');
     }
 
 
@@ -600,6 +622,25 @@ class CrontabController extends Controller
         }
     }
 
+
+
+    public  function array_group_by($arr, $key)
+    {
+        $grouped = [];
+        foreach ($arr as $value) {
+            $grouped[$value[$key]][] = $value;
+        }
+        // Recursively build a nested grouping if more parameters are supplied
+        // Each grouped array value is grouped according to the next sequential key
+        if (func_num_args() > 2) {
+            $args = func_get_args();
+            foreach ($grouped as $key => $value) {
+                $parms = array_merge([$value], array_slice($args, 2, func_num_args()));
+                $grouped[$key] = call_user_func_array('array_group_by', $parms);
+            }
+        }
+        return $grouped;
+    }
 
 
     //获取某个分类的所有子分类
@@ -642,33 +683,53 @@ class CrontabController extends Controller
     private function getParents($id, $order_id,$order_first_price,$level = 0)
     {
         $user = User::findOne($id);
+
+        //计算佣金
+        $level= $level+1;
+        //获取该订单该层级应获得的金额
+        $order_detail_list = OrderDetail::find()->alias('od')->leftJoin(['g' => Goods::tableName()], 'od.goods_id=g.id')
+            ->where(['od.is_delete' => 0, 'od.order_id' => $order_id])
+            ->asArray()
+            ->select('od.goods_id as goods_id,od.total_price')
+            ->all();
+        $share_commission_money=0;
+        //根据层级计算出应得的佣金
+        foreach ($order_detail_list as $item) {
+            $item_price = doubleval($item['total_price']);
+            $charge_get = $this->getCharge($level, $item['goods_id']);
+            $share_commission_money += $item_price * $charge_get / 100;
+        }
+        $money = $share_commission_money < 0.01 ? 0 : $share_commission_money;
         if($user['parent_id']){
-            $level= $level+1;
-            //获取该订单该层级应获得的金额
-            $order_detail_list = OrderDetail::find()->alias('od')->leftJoin(['g' => Goods::tableName()], 'od.goods_id=g.id')
-                ->where(['od.is_delete' => 0, 'od.order_id' => $order_id])
-                ->asArray()
-                ->select('od.goods_id as goods_id,od.total_price')
-                ->all();
-            $share_commission_money=0;
-            //根据层级计算出应得的佣金
-            foreach ($order_detail_list as $item) {
-                $item_price = doubleval($item['total_price']);
-                $charge_get = $this->getCharge($level, $item['goods_id']);
-                $share_commission_money += $item_price * $charge_get / 100;
-            }
-            $money = $share_commission_money < 0.01 ? 0 : $share_commission_money;
-            //分钱 暂时不分
-//            $res = self::money($user->parent_id, $money);
-//            echo $user->id .'|'.$level.'|</br>';
-//            echo $order_id .'|'.$money.'|</br>';
-            //增加明细
             if($money){
+                //有钱时候记录 并且有分享者
                 \Yii::warning('==>' . $order_id .'—'.$level.'—'.$item_price.'—'.$charge_get.'—'.$money);
                 UserShareMoney::set($money, $user->parent_id, $order_id, 1, $level, $this->store_id);
             }
             $this->getParents($user['parent_id'],$order_id,$order_first_price,$level);
+        }else{
+            //最高级就没有parent_id 修改记录最大的用户 用作计算层级
+            UserShareMoney::updateAll(['max_user_id' => $user->id,'max_level'=>$level-1], ['order_id' =>$order_id]);
         }
+//        if($user['parent_id']){  //当层级为20级时候记录
+//            if($money && $level==20){
+//                \Yii::warning('==>' . $order_id .'—'.$level.'—'.$item_price.'—'.$charge_get.'—'.$money);
+//                UserShareMoney::set($money, $user->parent_id, $order_id, 1, $level, $this->store_id);
+//            }else{
+//                $this->getParents($user['parent_id'],$order_id,$order_first_price,$level);
+//            }
+//        }else{
+//            //获取到最大的顶级用户 并且层级级小于21级
+//            //分钱 暂时不分
+////            $res = self::money($user->parent_id, $money);
+////            echo $user->id .'|'.$level.'|</br>';
+////            echo $order_id .'|'.$money.'|</br>';
+//            //增加明细
+//            if($money && $level<20){
+//                \Yii::warning('==>' . $order_id .'—'.$level.'—'.$item_price.'—'.$charge_get.'—'.$money);
+//                UserShareMoney::set($money, $user->id, $order_id, 1, $level, $this->store_id);
+//            }
+//        }
     }
 
 

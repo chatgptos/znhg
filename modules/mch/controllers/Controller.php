@@ -33,6 +33,7 @@ class Controller extends \app\controllers\Controller
         'crontab/crontab/order5',//跑脚本的页面
         'crontab/crontab/order6',//跑脚本的页面
         'crontab/crontab/order7',//跑脚本的页面
+        'crontab/crontab/order8',//跑脚本的页面
         'crontab/*',//跑脚本的页面
     ];
 

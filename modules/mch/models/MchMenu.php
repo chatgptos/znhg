@@ -565,6 +565,13 @@ class MchMenu
                                     'mch/settlementstatistics/data/goods',
                                 ]
                             ],
+                            [
+                                'name' => '返点佣金明细',
+                                'route' => 'mch/settlementstatistics/choujiang/sharemoneydetail',
+                                'sub' => [
+                                    'mch/settlementstatistics/data/goods',
+                                ]
+                            ],
 
 
 //

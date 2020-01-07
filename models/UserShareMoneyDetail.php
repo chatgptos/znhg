@@ -20,14 +20,14 @@ use Yii;
  *
  *
  */
-class UserShareMoney extends \yii\db\ActiveRecord
+class UserShareMoneyDetail extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%user_share_money}}';
+        return '{{%user_share_money_detail}}';
     }
 
     /**
@@ -57,13 +57,12 @@ class UserShareMoney extends \yii\db\ActiveRecord
             'is_delete' => 'Is Delete',
             'status' => '佣金状态 0--已经计算 1--已经申请 2--发放 3--驳回',
             'addtime' => 'Addtime',
-            'max_user_id' => '顶级拿钱的用户id',
         ];
     }
 
-    public static function set($money,$user_id,$order_id,$type,$source=1,$store_id = 0,$max_user_id=0)
+    public static function set($money,$user_id,$order_id,$type,$source=1,$store_id = 0)
     {
-        $model = UserShareMoney::findOne([
+        $model = UserShareMoneyDetail::findOne([
             'store_id'=>$store_id,
             'user_id'=>$user_id,
             'order_id'=>$order_id,
@@ -73,7 +72,7 @@ class UserShareMoney extends \yii\db\ActiveRecord
         if($model){
             return false;
         }
-        $model = new UserShareMoney();
+        $model = new UserShareMoneyDetail();
         $model->store_id = $store_id;
         $model->order_id = $order_id;
         $model->user_id = $user_id;
@@ -83,7 +82,6 @@ class UserShareMoney extends \yii\db\ActiveRecord
         $model->is_delete = 0;
         $model->status = 0;
         $model->addtime = time();
-        $model->max_user_id = $max_user_id;
         return $model->save();
     }
 }

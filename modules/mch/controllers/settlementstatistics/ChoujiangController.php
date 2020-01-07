@@ -57,6 +57,24 @@ class ChoujiangController extends Controller
 
 
     /**
+     * 奖品等级
+     */
+    public function actionSharemoneydetail()
+    {
+        $form = new ShareMoneyListForm();
+        $form->store_id = $this->store->id;
+        $form->attributes = \Yii::$app->request->get();
+        $arr = $form->search1();
+        return $this->render('sharemoneydetail', [
+            'list' => $arr['list'],
+            'pagination' => $arr['p'],
+            'row_count' => $arr['row_count']
+        ]);
+    }
+
+
+
+    /**
      * 奖品等级编辑
      */
     public function actionLevelEdit($id = null)

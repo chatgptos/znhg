@@ -49,26 +49,56 @@ $this->params['active_nav_group'] = 4;
         <table class="table table-bordered bg-white">
             <tr>
                 <td>id</td>
-                <td>订单号</td>
-                <td>结算最后用户</td>
-                <td>maxuser_id</td>
+                <td>商品信息</td>
+                <td>上级信息 </td>
+                <td>金额 </td>
                 <td>类别</td>
                 <td>等级 </td>
-                <td>金额 </td>
                 <td>佣金状态</td>
-                <td>下单时间</td>
                 <td>创建时间</td>
                 <td>操作</td>
             </tr>
             <?php foreach ($list as $index => $value): ?>
                 <tr>
-                    <td class="nowrap">  <?= $value['id'] ?> </td>
+                    <td class="nowrap">  <span class="mr-5"><?= $value['id'] ?></span>  </td>
+
                     <td class="order-tab-1">
-                        <span class="mr-5"><?= $value['order_no'] ?></span>
+                        <span class="mr-5"><?= date('Y-m-d H:i:s', $value['addtime']) ?></span>
+                        <span class="mr-5">订单id：<?= $value['order_id'] ?></span>
+                        <span class="mr-5">订单号：<?= $value['order_no'] ?></span>
+                        <span>下单用户：<?= $value['nickname'] ?></span>
+                        <?php foreach ($value['goods_list'] as $goods_item): ?>
+                            <div class="goods-item" flex="dir:left box:first">
+                                <div class="fs-0">
+                                    <div class="goods-pic"
+                                         style="background-image: url('<?= $goods_item['goods_pic'] ?>')"></div>
+                                </div>
+                                <div class="goods-info">
+                                    <div class="goods-name"><?= $goods_item['name'] ?></div>
+                                    <div class="fs-sm">
+                                        规格：
+                                        <span class="text-danger">
+                                            <?php $attr_list = json_decode($goods_item['attr']); ?>
+                                            <?php if (is_array($attr_list)):foreach ($attr_list as $attr): ?>
+                                                <span class="mr-3"><?= $attr->attr_group_name ?>
+                                                    :<?= $attr->attr_name ?></span>
+                                            <?php endforeach;;endif; ?>
+                                        </span>
+                                    </div>
+                                    <div class="fs-sm">数量：
+                                        <span
+                                                class="text-danger"><?= $goods_item['num'] . $goods_item['unit'] ?></span>
+                                    </div>
+                                    <div class="fs-sm">小计：
+                                        <span class="text-danger"><?= $goods_item['total_price'] ?>元</span></div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
                     </td>
+
+
                     <td class="nowrap">id<?= $value['user_id'] ?>
                         <span>昵称：<?= $value['us_nickname'] ?></span></td>
-                    <td class="nowrap">id<?= $value['max_user_id'] ?> </td>
                     <td class="nowrap">
                         <?php if ($value['type'] == 3): ?>众筹<?php endif; ?>
                         <?php if ($value['type'] == 2): ?>预售<?php endif; ?>
@@ -82,11 +112,8 @@ $this->params['active_nav_group'] = 4;
                         <?php if ($value['status'] == 1): ?>用户申请中<?php endif; ?>
                         <?php if ($value['status'] == 0): ?>系统成功计算<?php endif; ?>
                     </td>
+                    <td class="nowrap"><?= date('Y-m-d H:i:s', $value['addtime']) ?></td>
 
-                    <td class="order-tab-1">
-                        <span class="mr-5"><?= date('Y-m-d', $value['addtime']) ?></span>
-                    </td>
-                    <td class="nowrap"><?= date('Y-m-d H:i:s', $value['usm_addtime']) ?></td>
 
                     <td class="nowrap">
                         <a class="btn btn-sm update" href="javascript:" data-toggle="modal"
