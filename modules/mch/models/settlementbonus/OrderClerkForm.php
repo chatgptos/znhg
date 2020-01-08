@@ -100,12 +100,12 @@ class OrderClerkForm extends Model
                 ['is_delete' => 0,],
             ]);
 
-            $UserShareMoney =UserShareMoney::updateAll(['status' => 2], [
-                'AND',
-                ['user_id' => $order->user_id,],
-                ['status' => 1,],
-                ['is_delete' => 0,],
-            ]);
+//            $UserShareMoney =UserShareMoney::updateAll(['status' => 2], [
+//                'AND',
+//                ['user_id' => $order->user_id,],
+//                ['status' => 1,],
+//                ['is_delete' => 0,],
+//            ]);
 
         if(!$UserShareMoney){
             $t->rollBack();

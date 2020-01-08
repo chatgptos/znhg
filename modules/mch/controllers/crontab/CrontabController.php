@@ -566,7 +566,7 @@ class CrontabController extends Controller
             $max_level=$amuser_user['max_level'];
             \Yii::warning('==>' . $order_id .'—'.$level.'—'.$money);
             //发给顶级用户 拿这个层级总的
-            if($user_id==$amuser_user['max_user_id']){
+            if($user_id==$amuser_user['max_user_id'] && $money){
                 UserShareMoneyDetail::set($amuser_user['money'], $user_id, $order_id, 1, $level, $this->store_id);
             }
             foreach ($allson as $j => $level_user) {
@@ -585,7 +585,9 @@ class CrontabController extends Controller
                     $all_share_level_users_num=count($all_share_level_users);//这个层级的数量分享佣金
                     $money =round($amuser_user['money']/$all_share_level_users_num, 2);
                     $money = $money < 0.01 ? 0 : $money;
-                    UserShareMoneyDetail::set($money, $level_user['id'], $order_id, 1, $amuser_user['level'], $this->store_id);
+                    if($money){
+                        UserShareMoneyDetail::set($money, $level_user['id'], $order_id, 1, $amuser_user['level'], $this->store_id);
+                    }
                 }
             }
             UserShareMoney::updateAll(['status' => 1], ['id' => $amuser_user['id']]);
