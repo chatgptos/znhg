@@ -189,7 +189,7 @@ class OrderPreviewFrom extends Model
         if ($order->goods_id ==17){
             //正在结算的状态的订单 当申请当时候全部改为申请中 查询时候就计算申请中的订单
             //把上个月的
-            $UserShareMoney =UserShareMoneyDetail::updateAll(['status' => 1], [
+            $UserShareMoney =UserShareMoney::updateAll(['status' => 1], [
                 'AND',
                 ['user_id' => $order->user_id,],
                 ['status' => 0,],
@@ -205,7 +205,7 @@ class OrderPreviewFrom extends Model
                     'msg'   => '暂时无奖励',
                 ];
             }
-            $money = UserShareMoneyDetail::find()->alias('usm')
+            $money = UserShareMoney::find()->alias('usm')
                 ->where([
                     'user_id' => $order->user_id,
                     'status' => 1,//已经申请的
