@@ -81,7 +81,7 @@ class OrderClerkForm extends Model
         //记录日志
         $hld = 0;
         $coupon = $order->return_coupon;
-        $integral = $order->return_integral;
+        $integral = intval($order->return_integral);
 
         $integralLog = new IntegralLog();
         $integralLog->user_id = $user->id;
