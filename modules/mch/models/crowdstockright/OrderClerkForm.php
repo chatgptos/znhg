@@ -52,7 +52,7 @@ class OrderClerkForm extends Model
         $order->is_use = 1;
         $order->use_time = time();
         $user->integral += $order->return_integral;
-        $user->coupon += $order->return_integral;
+        $user->coupon += $order->return_coupon;
         //记录日志
         $hld = 0;
         $coupon = $order->return_integral;
