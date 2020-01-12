@@ -637,7 +637,7 @@ class OrderSubmitPreviewForm extends Model
     public function getCharge($num, $goods)
     {
         $charge = 0;
-        if ($num <= $goods->chargeNum && $num >= 0) {
+        if ($num <= $goods->chargeNum && $num > 0) {
             $charge = $goods->charge;  //1张
         } elseif ($num <= $goods->chargeNum1 && $num > $goods->chargeNum) {
             $charge = $goods->charge1; //1-6
@@ -645,6 +645,8 @@ class OrderSubmitPreviewForm extends Model
             $charge = $goods->charge2;//7-18
         } elseif ($num <= $goods->chargeNum3 && $num > $goods->chargeNum2) {
             $charge = $goods->charge3; //18以上
+        }elseif($num == 0) {
+            $charge = 0;  //1张
         } else {
             $charge = $goods->charge5;  //1张
         }
@@ -670,7 +672,7 @@ class OrderSubmitPreviewForm extends Model
             'num'=>'超过'.$goods->chargeNum3, 'integral'=> intval($integral * (1 - $goods->advance / 100-$goods->charge5/100)),'charge'=>$goods->charge5,
         );
         $charge = 0;
-        if ($num <= $goods->chargeNum && $num >= 0) {
+        if ($num <= $goods->chargeNum && $num > 0) {
             $charge = $goods->charge;  //1张
             $chargeprice[0]['select']=true;
         } elseif ($num <= $goods->chargeNum1 && $num > $goods->chargeNum) {
@@ -682,7 +684,9 @@ class OrderSubmitPreviewForm extends Model
         } elseif ($num <= $goods->chargeNum3 && $num > $goods->chargeNum2) {
             $chargeprice[3]['select']=true;
             $charge = $goods->charge3; //18以上
-        } else {
+        }elseif($num == 0) {
+            $charge = 0;  //1张
+        }  else {
             $chargeprice[4]['select']=true;
             $charge = $goods->charge5;  //1张
         }

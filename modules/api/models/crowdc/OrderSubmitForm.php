@@ -817,7 +817,7 @@ class OrderSubmitForm extends Model
     {
         $charge = 0;
 
-        if ($num <= $goods->chargeNum && $num >= 0) {
+        if ($num <= $goods->chargeNum && $num > 0) {
             $charge = $goods->charge;  //1张
         } elseif ($num <= $goods->chargeNum1 && $num > $goods->chargeNum) {
             $charge = $goods->charge1; //1-6
@@ -825,6 +825,8 @@ class OrderSubmitForm extends Model
             $charge = $goods->charge2;//7-18
         } elseif ($num <= $goods->chargeNum3 && $num > $goods->chargeNum2) {
             $charge = $goods->charge3; //18以上
+        }elseif($num == 0) {
+            $charge = 0;  //1张
         } else {
             $charge = $goods->charge5;  //1张
         }

@@ -201,6 +201,9 @@ class GoodsForm extends Model
         } elseif ($num <= $goods->chargeNum3 && $num > $goods->chargeNum2) {
             $charge = $goods->charge3; //18以上
             $nextnum=$goods->chargeNum3;
+        }elseif($num == 0) {
+            $charge = 0;  //1张
+            $nextnum=$goods->chargeNum1;
         } else {
             $charge = $goods->charge5;  //1张
             $nextnum=$goods->chargeNum3;
