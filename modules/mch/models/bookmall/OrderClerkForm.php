@@ -91,14 +91,17 @@ class OrderClerkForm extends Model
         $charge_integral_buy = $form->getCharge($query_num_buy_order, $goods);
         $charge_coupon = $form->getCharge($query_num_buy_order, $goods);
         //余款
-        $yukuan_coupon = intval($order->seckill_coupon) * (1 - $goods->advance / 100);
-        $yukuan_integral_buy = intval($order->seckill_integral) * (1 - $goods->advance / 100);
+        $yukuan_coupon = intval($order->seckill_coupon) * (1 - $goods->advance / 100- $charge_coupon / 100);
+        $yukuan_integral_buy = intval($order->seckill_integral) * (1 - $goods->advance / 100- $charge_integral_buy / 100);
         //计算出余款价格
 //        $charge_coupon = intval($yukuan_integral_buy * (1 - $charge_coupon / 100));
-        $yukuan_coupon = intval($yukuan_coupon* (1 - $charge_coupon / 100));
-        $yukuan_integral_buy= intval($yukuan_integral_buy* (1 - $charge_integral_buy / 100));
+//        $yukuan_coupon = intval($yukuan_coupon* (1 - $charge_coupon / 100));
+//        $yukuan_integral_buy= intval($yukuan_integral_buy* (1 - $charge_integral_buy / 100));
 
 
+        //总款*（1-预售款%-优惠%）
+//        $yukuan_coupon = intval($seckill_data['seckill_coupon']) * (1 - $goods_item->advance / 100-$charge_coupon / 100);
+//        $yukuan_integral_buy = intval($temp_price['total_price']) * (1 - $goods_item->advance / 100-$charge_integral_buy / 100);
 
         $order->clerk_id = 9999;//后台核销
         $order->shop_id = 9999;//后台核销
