@@ -199,7 +199,7 @@ class IndexForm extends Model
         $goods = $yyGoods->getList();
         $catShow = \app\modules\api\models\crowdstockright\Setting::findOne(['store_id' => $this->store_id]);
         if (!$catShow->cat) {
-            $cat[0]['name'] = '众筹股东权益';
+            $cat[0]['name'] = '众筹权益';
         }
         return [
             'cat' => $cat[0],
