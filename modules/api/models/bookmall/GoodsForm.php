@@ -202,7 +202,7 @@ class GoodsForm extends Model
             $nextnum=$goods->chargeNum3;
         }elseif($num == 0) {
             $charge = 0;  //1张
-            $nextnum=$goods->chargeNum1;
+            $nextnum=$goods->chargeNum;
         } else {
             $charge = $goods->charge5;  //1张
             $nextnum=$goods->chargeNum3;

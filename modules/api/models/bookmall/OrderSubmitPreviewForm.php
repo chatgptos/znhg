@@ -660,16 +660,16 @@ class OrderSubmitPreviewForm extends Model
             'num'=>'1～'.$goods->chargeNum, 'integral'=> intval($integral * (1 - $goods->advance/ 100 -$goods->charge/100)),'charge'=>$goods->charge,
         );
         $chargeprice[]=array(
-            'num'=>$goods->chargeNum.'~'.$goods->chargeNum1, 'integral'=> intval($integral * (1 - $goods->advance / 100-$goods->charge1/100)),'charge'=>$goods->charge1,
+            'num'=>($goods->chargeNum+1).'~'.$goods->chargeNum1, 'integral'=> intval($integral * (1 - $goods->advance / 100-$goods->charge1/100)),'charge'=>$goods->charge1,
         );
         $chargeprice[]=array(
-            'num'=>$goods->chargeNum1.'~'.$goods->chargeNum2, 'integral'=> intval($integral * (1 - $goods->advance / 100-$goods->charge2/100)),'charge'=>$goods->charge2,
+            'num'=>($goods->chargeNum1+1).'~'.$goods->chargeNum2, 'integral'=> intval($integral * (1 - $goods->advance / 100-$goods->charge2/100)),'charge'=>$goods->charge2,
         );
         $chargeprice[]=array(
-            'num'=>$goods->chargeNum2.'~'.$goods->chargeNum3,'integral'=> intval($integral * (1 - $goods->advance / 100-$goods->charge3/100)),'charge'=>$goods->charge3,
+            'num'=>($goods->chargeNum2+1).'~'.$goods->chargeNum3,'integral'=> intval($integral * (1 - $goods->advance / 100-$goods->charge3/100)),'charge'=>$goods->charge3,
         );
         $chargeprice[]=array(
-            'num'=>'超过'.$goods->chargeNum3, 'integral'=> intval($integral * (1 - $goods->advance / 100-$goods->charge5/100)),'charge'=>$goods->charge5,
+            'num'=>'超过'.($goods->chargeNum3+1), 'integral'=> intval($integral * (1 - $goods->advance / 100-$goods->charge5/100)),'charge'=>$goods->charge5,
         );
         $charge = 0;
         if ($num <= $goods->chargeNum && $num > 0) {
