@@ -112,8 +112,8 @@ class PaynotifyController extends Controller
             $printer_setting = PrinterSetting::findOne(['store_id'=>$order->store_id,'is_delete'=>0]);
             $type = json_decode($printer_setting->type,true);
             if($type['pay'] && $type['pay'] == 1){
-                $printer_order = new PinterOrder($order->store_id,$order->id);
-                $res = $printer_order->print_order();
+//                $printer_order = new PinterOrder($order->store_id,$order->id);
+//                $res = $printer_order->print_order();
             }
             $mail = new SendMail($order->store_id,$order->id,0);
             $mail->send();

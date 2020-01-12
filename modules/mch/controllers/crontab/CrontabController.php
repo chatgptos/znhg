@@ -448,28 +448,37 @@ class CrontabController extends Controller
         $time = time();
         $sale_time = $time - ($this->store->after_sale_time * 86400);
         //查询有当天订单的用户
-        $user_id_arr = Order::find()->select('user_id','confirm_time')->where(['is_delete' => 0, 'store_id' => $this->store_id, 'is_confirm' => 1, 'is_send' => 1])
+        $user_id_arr = Order::find()->select('user_id,confirm_time,id')->where(['is_level' => 0,'is_pay' => 1,'is_delete' => 0, 'store_id' => $this->store_id, 'is_confirm' => 1, 'is_send' => 1])
             ->andWhere(['<=', 'confirm_time', $sale_time])
-            ->andWhere(['>=', 'addtime', strtotime(date("Y-m-d"),time())]) //当天订单
-            ->groupBy('user_id')->asArray()->all();
+//            ->andWhere(['>=', 'addtime', strtotime(date("Y-m"),time())]) //当天订单
+            ->groupBy('user_id')
+            ->limit(20)
+            ->asArray()->all();
+
+
         foreach ($user_id_arr as $index => $value) {
             $user = User::findOne(['id' => $value, 'store_id' => $this->store_id]);
             $order_money = Order::find()->where(['store_id' => $this->store_id, 'user_id' => $user->id, 'is_delete' => 0])
-                ->andWhere(['is_pay' => 1, 'is_confirm' => 1, 'is_send' => 1])->andWhere(['<=', 'confirm_time', $sale_time])->select([
+                ->andWhere(['is_pay' => 1, 'is_confirm' => 1, 'is_send' => 1])
+                ->andWhere(['<=', 'confirm_time', $sale_time])
+                ->select([
                     'sum(pay_price)'
                 ])->scalar();
+            \Yii::warning('==>' .$order_money.'user_id-'.$user->id);
             if (!$order_money) {
                 $order_money = 0;
             }
             $next_level = Level::find()->where(['store_id' => $this->store_id, 'is_delete' => 0, 'status' => 1])
                 ->andWhere(['<=', 'money', $order_money])->orderBy(['level' => SORT_DESC, 'id' => SORT_DESC])->asArray()->one();
-
+            \Yii::warning('==>' .$user->id.'level-'.$user->level.'nextlevel-'.$next_level['level']);
             if($user){
                 if ($user->level < $next_level['level']) {
+                    \Yii::warning('==>change' .$user->id.'level-'.$user->level.'nextlevel-'.$next_level['level']);
                     $user->level = $next_level['level'];
                     $user->save();
                 }
             }
+            Order::updateAll(['is_level' => 1], ['id' => $value['id']]);
         }
 
         \Yii::warning('==>' .'end-order6');
