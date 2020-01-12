@@ -22,6 +22,7 @@ use app\modules\mch\models\OrderRefundForm;
 use app\modules\mch\models\OrderRefundListForm;
 use app\modules\mch\models\OrderSendForm;
 use app\modules\mch\models\PrintForm;
+use app\modules\mch\models\ShopForm;
 use app\modules\mch\models\StoreDataForm;
 
 class OrderController extends Controller
@@ -53,6 +54,12 @@ class OrderController extends Controller
         if ($shop_id) {
             $shop = Shop::findOne(['store_id' => $this->store->id, 'id' => $shop_id]);
         }
+        $form = new ShopForm();
+        $form->store_id = $this->store->id;
+        $form->limit = 20;
+        $shoplist = $form->getList();
+
+
         return $this->render('index', [
             'row_count' => $data['row_count'],
             'pagination' => $data['pagination'],
@@ -63,6 +70,7 @@ class OrderController extends Controller
             'user' => isset($user) ? $user : null,
             'clerk' => isset($clerk) ? $clerk : null,
             'shop' => isset($shop) ? $shop : null,
+            'shoplist' => $shoplist['list'],
         ]);
     }
 

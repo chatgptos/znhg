@@ -9,7 +9,6 @@
 use yii\widgets\LinkPager;
 
 /* @var \app\models\User $user */
-
 $urlManager = Yii::$app->urlManager;
 $statics = Yii::$app->request->baseUrl . '/statics';
 $this->title = '订单管理';
@@ -21,7 +20,7 @@ $status = isset($Gets['status']) ? (int)$Gets['status'] : -1;
 $condition = [];
 isset($Gets['user_id']) && $condition['user_id'] = $Gets['user_id'];
 isset($Gets['clerk_id']) && $condition['clerk_id'] = $Gets['clerk_id'];
-isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
+isset($Gets['shop_id']) && $condition['shop_id'] = $Gets['shop_id'];
 ?>
 <style>
     .order-item {
@@ -164,17 +163,7 @@ isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
                             </div>
                         </div>
                     </div>
-                    <div flex="dir:left">
-                        <div class="mr-4">
-                            <div class="form-group">
-                                <button class="btn btn-primary mr-2">筛选</button>
-                                <a class="btn btn-secondary"
-                                   href="<?= Yii::$app->request->url . "&flag=EXPORT" ?>">批量导出(含条件)</a>
-                                <a class="btn btn-secondary"
-                                   href="<?= Yii::$app->request->url . "?flag=EXPORT" ?>">批量导出全部</a>
-                            </div>
-                        </div>
-                    </div>
+
                     <div flex="dir:left">
                         <div class="mr-4">
                             <?php if ($user): ?>
@@ -187,7 +176,31 @@ isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
                                 <span class="status-item mr-3">货柜：<?= $shop->name ?>的订单</span>
                             <?php endif; ?>
                         </div>
+                        <div class="col-3">
+                            <div class="input-group short-row">
+                                <select class="form-control parent" name="shop_id">
+                                    <option value="">请选择货柜</option>
+                                    <?php  foreach ($shoplist as $value): ?>
+                                        <option value="<?= $value['id'] ?>" <?= $value['id'] == $Gets['shop_id'] ? 'selected' : '' ?>><?= $value['name'] ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
                     </div>
+                    <div flex="dir:left">
+                        <div class="mr-4">
+                            <div class="form-group">
+                                <button class="btn btn-primary mr-2">筛选</button>
+                                <a class="btn btn-secondary"
+                                   href="<?= Yii::$app->request->url . "&flag=EXPORT" ?>">批量导出(含条件)</a>
+                                <a class="btn btn-secondary"
+                                   href="<?= Yii::$app->request->url . "?flag=EXPORT" ?>">批量导出全部</a>
+                            </div>
+                        </div>
+                    </div>
+
+
+
                 </form>
             </div>
         </div>
@@ -195,7 +208,7 @@ isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
             <ul class="nav nav-tabs status">
                 <li class="nav-item">
                     <a class="status-item nav-link <?= $status == -1 ? 'active' : null ?>"
-                       href="<?= yii\helpers\Url::to(['order/index']) ?>">全部</a>
+                       href="<?= yii\helpers\Url::to(array_merge(['order/index'], $condition, ['status' => -1])) ?>">全部</a>
                 </li>
 
                 <li class="nav-item">
