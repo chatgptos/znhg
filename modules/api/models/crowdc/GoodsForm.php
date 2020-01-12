@@ -66,8 +66,8 @@ class GoodsForm extends Model
 
         $seckill_data = $this->getSeckillData($goods->id);
         $num = $seckill_data['sell_num'];
-        $charge_coupon = 1;
-        $charge_integral_buy = 1;
+        $charge_coupon = 0;
+        $charge_integral_buy = 0;
 
         if ($goods->is_buy_integral_down) {
             $charge_integral_buy = $this->getCharge($num, $goods)['charge'];

@@ -399,8 +399,8 @@ class OrderSubmitPreviewForm extends Model
                 ])->count();
 //            $num = $seckill_data['sell_num'];
             $num = $query_num_buy_order;
-            $charge_coupon = 1;
-            $charge_integral_buy = 1;
+            $charge_coupon = 0;
+            $charge_integral_buy = 0;
 
             if ($goods->is_buy_integral_down) {
                 $charge_integral_buy = $this->getCharge($num, $goods);
