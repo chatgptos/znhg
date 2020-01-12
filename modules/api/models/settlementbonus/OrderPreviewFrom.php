@@ -13,6 +13,7 @@ use app\models\User;
 use app\models\UserShareMoney;
 use app\models\UserShareMoneyDetail;
 use app\modules\api\models\Model;
+use app\modules\mch\models\settlementstatistics\AwardFuli;
 
 class OrderPreviewFrom extends Model
 {
@@ -144,7 +145,7 @@ class OrderPreviewFrom extends Model
             ->alias('o')
             ->select([
                 'o.id',
-            ])
+            ])->leftJoin(['g'=>Goods::tableName()],'o.goods_id=g.id')
             ->where([
                 'AND',
                 [
@@ -152,6 +153,7 @@ class OrderPreviewFrom extends Model
                     'o.store_id' => $this->store_id,
                     'o.user_id' => $this->user_id,
                     'o.is_cancel' => 0,
+                    'g.id' => $goods->id,
                 ],
                 ['>', 'o.addtime', strtotime(date('Y-m'))],
             ]);
@@ -162,8 +164,6 @@ class OrderPreviewFrom extends Model
                 'msg' => '或已经在结算中，当月只能申请一次',
             ];
         }
-
-
 
 
 
@@ -184,8 +184,10 @@ class OrderPreviewFrom extends Model
         $order->return_integral = $goods->return_integral;
 
 
-        
-        
+
+
+        $UserShareMoney=0;
+        $fuliquan_num=0;
         if ($order->goods_id ==17){
             //正在结算的状态的订单 当申请当时候全部改为申请中 查询时候就计算申请中的订单
             //把上个月的
@@ -213,8 +215,47 @@ class OrderPreviewFrom extends Model
                 ->asArray()
                 ->sum('money');
             $order->return_integral = $money;
+        }elseif($order->goods_id ==18){
+            //福利分红
+            $awardFuli = AwardFuli::findOne([ 'is_delete' => 0, 'store_id' => $this->store_id, 'status' => 1]);
+            if(time()<($awardFuli->end_fulichi_time)){
+                return [
+                    'code'  => 1,
+                    'msg'   => '未到结束时间'.date('Y-m-d',$awardFuli->end_fulichi_time),
+                ];
+            }
+            $fulichi_all_money =  $awardFuli->all_money;;//总价值
+            $fulichi_money =  $awardFuli->money;//每份奖励
+            $fulichiTime = date('Y-m-d', $awardFuli->end_fulichi_time);//截止时间
+            $fulichiNum =  $awardFuli->num;;//份数
+            $fuliquan_num = User::find()->where(['store_id' => $this->store_id, 'id' => $order->user_id, 'is_delete' => 0])
+                ->select([
+                    'sum(fuliquan)'
+                ])->scalar();
+            $fuliquan_num_all = User::find()->where(['store_id' => $this->store_id, 'is_delete' => 0])
+                ->select([
+                    'sum(fuliquan)'
+                ])->scalar();
+            if($fulichi_money){
+                $UserShareMoney=intval($fulichi_money*$fuliquan_num);
+            }else{
+                $UserShareMoney=intval($fulichi_all_money/$fuliquan_num_all*$fuliquan_num);
+            }
+            if($UserShareMoney && $fuliquan_num){
+                $this->user->fuliquan = 0;
+                $order->return_integral =$UserShareMoney;
+                if(!$this->user->save()){
+                    $p->rollBack();
+                    return [
+                        'code'  => 1,
+                        'msg'   => '申请失败',
+                    ];
+                }
+            }
+
         }
- 
+
+
 
         if ($order->save()) {
             $goods->sales ++;
@@ -277,38 +318,10 @@ class OrderPreviewFrom extends Model
                     $this->user->coupon = $this->user->coupon - $goods->coupon;
                     $this->user->integral  = $this->user->integral - $goods->integral;
 
-
-                    //扣除总筹股东券资格
-//                    $this->user->settlementbonus --;
-//                    //失效股东券资格券
-//                    $orderCrowdapply = \app\modules\api\models\crowdapply\Order::findOne(['user_id'=>$order->user_id,'store_id'=>$this->store_id,'is_pay'=>1,'apply_delete'=>0,'is_use'=>0]);
-
-//                    if(!$orderCrowdapply){
-//                        $p->rollBack();
-//                        return [
-//                            'code'=>1,
-//                            'msg'=>'没有资格券'
-//                        ];
-//                    }
-//                    $orderCrowdapply->is_use=1;
-//                    if(!$orderCrowdapply->save()){
-//                        $p->rollBack();
-//                        return [
-//                            'code'=>1,
-//                            'msg'=>'没有资格券'
-//                        ];
-//                    }
                     if($this->user->integral >=0 && $this->user->coupon >=0)
                     {
                         $this->user->save();
                     }
-//                  elseif($this->user->settlementbonus < 0){
-//                        $p->rollBack();
-//                        return [
-//                            'code'  => 1,
-//                            'msg'   => '请先获取资格',
-//                        ];
-//                    }
                     elseif($this->user->integral <0){
                         $p->rollBack();
                         return [
@@ -331,8 +344,6 @@ class OrderPreviewFrom extends Model
                 }
 
 
-
-
                 //这里下单就是支付
                 $order->coupon = $goods->coupon;
                 $order->integral = $goods->integral;
@@ -341,13 +352,14 @@ class OrderPreviewFrom extends Model
                 $order->pay_time = time();
                 //记录日志
                 $hld=0;
+                $fuliquan=$fuliquan_num ;
                 $coupon=$goods->coupon;
                 $integral=$goods->integral;
 
                 $integralLog = new IntegralLog();
                 $integralLog->user_id = $this->user->id;
                 //申请奖励 扣除积分
-                $integralLog->content = "(申请奖励)：" . $this->user->nickname . " 欢乐豆".$this->user->hld."已经扣除：" . $hld . " 豆" . " 优惠券".$this->user->coupon."已经扣除：" . $coupon . " 张" . $integral . '个积分）';
+                $integralLog->content = "(申请奖励)：" . $this->user->nickname . " 欢乐豆".$this->user->hld."已经扣除：" . $hld . " 豆" . " 优惠券".$this->user->coupon."已经扣除：" . $coupon . " 张" . $integral . '个积分）扣除福利券份数'.$fuliquan_num;
 
                 $integralLog->integral = $goods->integral;
                 $integralLog->hld = $hld;

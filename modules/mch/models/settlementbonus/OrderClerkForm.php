@@ -69,7 +69,6 @@ class OrderClerkForm extends Model
                 $order->return_integral = round($order->return_integral - $this->price, 2);
             }
         }
-
         if($order->return_integral < 0){
             return [
                 'code'=>1,
@@ -234,6 +233,7 @@ class OrderClerkForm extends Model
         $all_son_sum_price_level_bookmall = 0;
         $all_son_sum_price_crowdc = 0;
         $all_son_sum_price_level_crowdc = 0;
+        $other=0;
 
 
         if ($order->goods_id ==17){
@@ -246,6 +246,10 @@ class OrderClerkForm extends Model
                 ->sum('money');
 
             $all_son_sum_price_level=$money;
+        }
+
+        if ($order->goods_id ==18){
+            $other=$order->return_integral;
         }
 
 
@@ -262,7 +266,7 @@ class OrderClerkForm extends Model
             intval($all_son_sum_price_bookmall)+
             intval($all_son_sum_price_level_bookmall)+
             intval($all_son_sum_price_crowdc)+
-            intval($all_son_sum_price_level_crowdc);
+            intval($all_son_sum_price_level_crowdc)+intval($other);
 
         return $list;
     }

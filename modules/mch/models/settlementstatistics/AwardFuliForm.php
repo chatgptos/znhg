@@ -12,9 +12,9 @@ use app\models\Store;
 use app\modules\mch\models\Model;
 
 /**
- * @property app\modules\mch\models\settlementstatistics\AwardFuli $model;
+ * @property AwardFuli $model;
  */
-class AwardForm extends Model
+class AwardFuliForm extends Model
 {
     public $store_id;
     public $model;
@@ -22,26 +22,25 @@ class AwardForm extends Model
     public $level;
     public $name;
     public $money;
+    public $all_money;
     public $status;
-    public $discount;
-    public $content;
-    public $chance;
-    public $quan;
+    public $num;
+    public $coupon_require;
+    public $end_fulichi_time;
+    public $require_level;
+
+
 
 
     public function rules()
-    {
+    { 
+        
         return [
-            [['name','money'],'trim'],
-            [['name'],'string'],
-            [['level','name','money','status','discount'],'required','on'=>'edit'],
-            [['status'],'in','range'=>[0,1]],
-            [['discount'],'number','min'=>1,'max'=>1000],
-//            [['money'],'number','min'=>0],
-            [['chance'],'number','min'=>0],
-            [['quan'],'number','min'=>0],
-            [['level'],'integer','min'=>0,'max'=>100],
-            [['content'],'required','on'=>'content']
+            [['num','coupon_require','all_money','name','money'],'trim'],
+            [['end_fulichi_time','name'],'string'],
+            [['require_level','level','name','money','status'],'required','on'=>'edit'],
+            [['status'],'in','range'=>[0,1]],   
+            [['level'],'integer','min'=>0,'max'=>100], 
         ];
     }
 
@@ -50,12 +49,14 @@ class AwardForm extends Model
         return [
             'level'=>'奖品等级',
             'name'=>'奖品名称',
-//            'money'=>'奖品花费多少抽',
+            'money'=>'奖励',
             'status'=>'状态',
-            'discount'=>'奖品发放个数券张数',
-            'chance'=>'gailv',
-            'quan'=>'quan',
-            'content'=>'会员等级说明'
+            'num'=>'奖品发放个数券张数',
+            'coupon_require'=>'gailv',
+            'all_money'=>'总奖励',
+            'end_fulichi_time'=>'时间',
+            'require_level'=>'require_level'
+
         ];
     }
     public function save()
@@ -69,7 +70,7 @@ class AwardForm extends Model
             $this->model->addtime = time();
         }
 //        if($this->level != $this->model->level){
-//            $exit = Award::find()->where(['level'=>$this->level,'store_id'=>$this->store_id,'is_delete'=>0])->exists();
+//            $exit = AwardFuli::find()->where(['level'=>$this->level,'store_id'=>$this->store_id,'is_delete'=>0])->exists();
 //            if($exit){
 //                return [
 //                    'code'=>1,
@@ -78,7 +79,7 @@ class AwardForm extends Model
 //            }
 //        }
         if($this->name != $this->model->name){
-            $exit_0 = Award::find()->where(['name'=>$this->name,'store_id'=>$this->store_id,'is_delete'=>0])->exists();
+            $exit_0 = AwardFuli::find()->where(['name'=>$this->name,'store_id'=>$this->store_id,'is_delete'=>0])->exists();
             if($exit_0){
                 return [
                     'code'=>1,
@@ -126,9 +127,11 @@ class AwardForm extends Model
         $this->model->name  = $this->name;
         $this->model->money = $this->money;
         $this->model->status = $this->status;
-        $this->model->discount = $this->discount;
-        $this->model->quan = $this->quan;
-        $this->model->chance = $this->chance;
+        $this->model->num = $this->num;
+        $this->model->coupon_require = $this->coupon_require;
+        $this->model->all_money = $this->all_money;
+        $this->model->end_fulichi_time =strtotime($this->end_fulichi_time);
+        $this->model->require_level = $this->require_level;
         if($this->model->save()){
             return [
                 'code'=>0,
@@ -138,6 +141,8 @@ class AwardForm extends Model
             return $this->getModelError($this->model);
         }
     }
+
+
 
     public function saveContent()
     {

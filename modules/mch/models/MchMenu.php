@@ -700,9 +700,10 @@ class MchMenu
                     ],
                     [
                         'name' => '福利分红兑换列表',
-                        'route' => 'mch/fair/level',
+                        'route' => 'mch/settlementstatistics/fuli/level',
                         'sub' => [
                             'mch/fair/level-edit',
+                            'mch/settlementstatistics/fuli/level-edit',
                         ]
                     ],
                     [
