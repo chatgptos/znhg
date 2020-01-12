@@ -173,7 +173,7 @@ class IndexForm extends Model
         $goods = $yyGoods->getList();
         $catShow = \app\modules\api\models\crowdapply\Setting::findOne(['store_id' => $this->store_id]);
         if (!$catShow->cat) {
-            $cat[0]['name'] = '报名活动';
+            $cat[0]['name'] = '众筹报名';
         }
         return [
             'cat' => $cat[0],
