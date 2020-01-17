@@ -78,6 +78,20 @@ $this->params['active_nav_group'] = 4;
                             </div>
                             <div class="form-group row">
                                 <div class="col-2 text-right">
+                                    <label class="col-form-label required">福利券数量限制</label>
+                                </div>
+                                <div class="col-5">
+                                    <div class="input-group">
+                                        <span class="input-group-addon bg-white">每期数量限制</span>
+                                        <input class="form-control" name="fuliquan_max" type="number"
+                                               value="<?= $level->fuliquan_max ?>">
+                                        <span class="input-group-addon bg-white">张</span>
+                                    </div>
+                                    <div class="text-muted fs-sm">该等级福利券数量限制</div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-2 text-right">
                                     <label class="col-form-label required">折扣</label>
                                 </div>
                                 <div class="col-5">

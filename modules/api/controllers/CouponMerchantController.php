@@ -548,6 +548,8 @@ class CouponMerchantController extends Controller
         $buttonClicked = true;
 
 
+
+        $level = Level::findOne(['store_id' => $this->store->id,'id' => $user->level, 'is_delete' => 0]);
         if ($id == 0) {
 
             //经销商
@@ -650,7 +652,21 @@ class CouponMerchantController extends Controller
             $card_count_require = $awardFuli->coupon_require;//每份优惠券兑换
             $user->coupon = $user->coupon - $card_count_require;//减去优惠券数量
 
-            $fuliquan_num = User::find()->where(['store_id' => $this->store_id, 'id' =>$user->id, 'is_delete' => 0])
+            $fuliquan_num_my = User::find()->where(['store_id' => $this->store_id,
+                'id' =>$user->id,
+                'is_delete' => 0])
+                ->select([
+                    'sum(fuliquan)'
+                ])->scalar();
+
+            if($level->fuliquan_max<=$fuliquan_num_my){
+                return json_encode([
+                    'code' => 1,
+                    'msg' => $level->name.'超过数量限制'
+                ], JSON_UNESCAPED_UNICODE);
+            }
+            $fuliquan_num = User::find()->where(['store_id' => $this->store_id,
+                'is_delete' => 0])
                 ->select([
                     'sum(fuliquan)'
                 ])->scalar();
@@ -672,6 +688,7 @@ class CouponMerchantController extends Controller
                 ], JSON_UNESCAPED_UNICODE);
 
             }
+
         } elseif ($id == 5) {
             //抽奖
 
