@@ -58,7 +58,7 @@ class UserListForm extends Model
             'u.*', 's.name shop_name','l.name l_name'
         ])->limit($pagination->limit)->offset($pagination->offset)->orderBy('u.addtime DESC')->asArray()->all();
 
-
+        $all_fuliquan=0;
         if($this->fuliquan){
             $list = $query->select([
                 'u.*', 's.name shop_name','l.name l_name'
@@ -66,6 +66,13 @@ class UserListForm extends Model
 
             $count = count($list);
             $pagination = new Pagination(['totalCount' => $count, 'page' => $this->page - 1]);
+            $all_fuliquan=User::find()->alias('u')->where([
+                'u.type' => 1,
+                'u.store_id' => $this->store_id,
+                'u.is_delete' => 0
+            ])->select([
+                'sum(fuliquan)'
+            ])->andWhere(['AND',['>', 'fuliquan', 0]])->orderBy('u.fuliquan DESC')->scalar();
         }
         $store = Store::findOne(['id' => $this->store_id]);
         foreach ($list as $index => $value) {
@@ -82,6 +89,7 @@ class UserListForm extends Model
             'page_count' => $pagination->pageCount,
             'pagination' => $pagination,
             'list' => $list,
+            'all_fuliquan'=>$all_fuliquan,
         ];
     }
 
