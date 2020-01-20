@@ -167,9 +167,11 @@ class CouponMerchantController extends Controller
                 $buttonName = '立刻申请';
                 $youHas = '你有'. $user->fuliquan.'份';
             }else{
-                $fulichi =  $awardFuli->all_money;;//总价值
+//                $fulichi =  $awardFuli->all_money;;//总价值
+                $fulichi =  '积分';//总价值
                 $fulichiTime = date('Y-m-d', $awardFuli->end_fulichi_time);//截止时间
-                $fulichiNum =  $awardFuli->num;;//份数
+//                $fulichiNum =  $awardFuli->num;;//份数
+                $fulichiNum =  '会员'.$level->name.'可以购买'.$level->fuliquan_max;//份数
                 $perOneCoupon = $awardFuli->coupon_require;//每份优惠券兑换
                 $title =  $awardFuli->name;;
                 $buttonName = '立刻申请';
@@ -721,44 +723,38 @@ class CouponMerchantController extends Controller
         );
 
 
+        if ($user->save()) {
+            //记录日志
+            $hld=0;
+            $coupon=$card_count_require;
+            $integral=0;
 
+            $integralLog = new IntegralLog();
+            $integralLog->user_id = $user->id;
+            //卖优惠券
+            $integralLog->content = "申请（福利分红） 后台操作账号：" . $user->nickname . " 欢乐豆".$user->hld."已经扣除：" . $hld . " 豆" . " 优惠券".$user->coupon."已经扣除：" . $coupon . " 张（申请时扣除）,（交易时扣除去积分" . $integral . '个积分）';
 
-        //记录日志
-        $hld=0;
-        $coupon=$card_count_require;
-        $integral=0;
-
-        $integralLog = new IntegralLog();
-        $integralLog->user_id = $user->id;
-        //卖优惠券
-        $integralLog->content = "申请（福利分红） 后台操作账号：" . $user->nickname . " 欢乐豆".$user->hld."已经扣除：" . $hld . " 豆" . " 优惠券".$user->coupon."已经扣除：" . $coupon . " 张（申请时扣除）,（交易时扣除去积分" . $integral . '个积分）';
-
-        $integralLog->integral = $integral;
-        $integralLog->hld = $hld;
-        $integralLog->coupon = $coupon;
-        $integralLog->addtime = time();
-        $integralLog->username = $user->nickname;
-        $integralLog->operator = 'admin';
-        $integralLog->store_id = $this->store_id;
-        $integralLog->operator_id = 0;
-        $integralLog->save();
-
-
-
-        if (!$user->save()) {
-            return json_encode([
-                'code' => 1,
-                'msg' => '申请失败！请重试'
-            ], JSON_UNESCAPED_UNICODE);
-        } else {
+            $integralLog->integral = $integral;
+            $integralLog->hld = $hld;
+            $integralLog->coupon = $coupon;
+            $integralLog->addtime = time();
+            $integralLog->username = $user->nickname;
+            $integralLog->operator = 'admin';
+            $integralLog->store_id = $this->store_id;
+            $integralLog->operator_id = 0;
+            $integralLog->save();
             return json_encode([
                 'data' => $data,
                 'code' => 0,
                 'msg' => '申请成功'
             ], JSON_UNESCAPED_UNICODE);
+        } else {
+            return json_encode([
+                'code' => 1,
+                'msg' => '申请失败！请重试'
+            ], JSON_UNESCAPED_UNICODE);
+
         }
-
-
     }
 
     /**
