@@ -22,6 +22,8 @@ $this->params['active_nav_group'] = 4;
         <div>截止时间：不可购买（已经购买的用户只可以申请福利奖励发放） <?php echo  date('Y-m-d', $awardFuli->end_fulichi_time) ?></div>
         <div>每份需要优惠券： <?php echo  $awardFuli->coupon_require ?>张</div>
         <div>本期抢购用户数： <?php echo  $row_count ?>人</div>
+        <div>本期用户已经购买消耗优惠券总数： <?php echo  $all_fuliquan*$awardFuli->coupon_require ?>份</div>
+        <div>本期用户预计最大消耗优惠券总数： <?php echo  $awardFuli->num*$awardFuli->coupon_require ?>份</div>
         <div style="color:yellowgreen">请通知所有用户点击申请福利奖励结算后再开始下一期，每次只有一期奖励上线</div>
     <?php else: ?>
     <?php endif; ?>
