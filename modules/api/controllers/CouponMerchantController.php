@@ -171,7 +171,7 @@ class CouponMerchantController extends Controller
                 $fulichi =  '积分';//总价值
                 $fulichiTime = date('Y-m-d', $awardFuli->end_fulichi_time);//截止时间
 //                $fulichiNum =  $awardFuli->num;;//份数
-                $fulichiNum =  '会员'.$level->name.'可以购买'.$level->fuliquan_max;//份数
+                $fulichiNum =  $level->name.'可购'.$level->fuliquan_max;//份数
                 $perOneCoupon = $awardFuli->coupon_require;//每份优惠券兑换
                 $title =  $awardFuli->name;;
                 $buttonName = '立刻申请';
