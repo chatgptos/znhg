@@ -36,6 +36,32 @@ $this->params['active_nav_group'] = 4;
                 <?php endforeach; ?>
             </div>
         </div>
+
+
+        <div class="dropdown float-left">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                全部类型
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"
+                 style="max-height: 200px;overflow-y: auto"> 
+                <a class="dropdown-item"
+                   href="<?= $urlManager->createUrl(array_merge(['mch/user/index'], $_GET, ['fuliquan' => 1, 'page' => 1])) ?>">福利券用户</a>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
         <div class="float-right mb-4">
             <form method="get">
 
@@ -64,6 +90,7 @@ $this->params['active_nav_group'] = 4;
                 <th>昵称</th>
                 <th>加入时间</th>
                 <th>身份</th>
+                <th>福利券</th>
                 <th>订单数</th>
                 <th>营销券</th>
                 <th>卡券数量</th>
@@ -85,6 +112,7 @@ $this->params['active_nav_group'] = 4;
                         <?= $u['l_name'] ? $u['l_name'] : '普通用户' ?>
                         <?= $u['is_clerk'] == 1 ? "（核销员）" : "" ?>
                     </td>
+                    <td><?= $u['fuliquan'] ?></td>
                     <td>
                         <a class="btn btn-sm btn-link"
                            href="<?= $urlManager->createUrl(['mch/order/index', 'user_id' => $u['id']]) ?>"><?= User::getCount($u['id']) ?></a>
