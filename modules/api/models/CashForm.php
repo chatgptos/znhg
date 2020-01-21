@@ -10,6 +10,7 @@ namespace app\modules\api\models;
 
 use app\models\Cash;
 use app\models\FormId;
+use app\models\IntegralLog;
 use app\models\Option;
 use app\models\Setting;
 use app\models\User;
@@ -87,9 +88,15 @@ class CashForm extends Model
                 ];
             }
             if ($user->price < $this->cash) {
+//                return [
+//                    'code' => 1,
+//                    'msg' => '提现金额不能超过剩余金额'
+//                ];
+            }
+            if ($user->integral < $this->cash) {
                 return [
                     'code' => 1,
-                    'msg' => '提现金额不能超过剩余金额'
+                    'msg' => '提现积分不能超过剩余积分'
                 ];
             }
             $exit = Cash::find()->andWhere(['=', 'status', 0])->andWhere(['user_id' => $this->user_id, 'store_id' => $this->store_id])->exists();
@@ -125,6 +132,25 @@ class CashForm extends Model
                 //提现减少积分
                 $user->price -= $this->cash;
                 $user->integral -= $this->cash;
+                //提现记录
+                //记录日志
+                $hld=0;
+                $coupon=0;
+                $integral=$this->cash;
+                $integralLog = new IntegralLog();
+                $integralLog->user_id = $user->id;
+                //申请奖励 扣除积分
+                $integralLog->content = "(提现申请)：" . $user->nickname . " 欢乐豆".$user->hld."已经扣除：" . $hld . " 豆" . " 优惠券".$user->coupon."已经扣除：" . $coupon . " 张，积分：" . $user->integral . '已扣积分'.$integral;
+                $integralLog->integral = $integral;
+                $integralLog->hld = $hld;
+                $integralLog->coupon = $coupon;
+                $integralLog->addtime = time();
+                $integralLog->username = $user->nickname;
+                $integralLog->operator = 'admin';
+                $integralLog->store_id = $this->store_id;
+                $integralLog->operator_id = 0;
+                $integralLog->save();
+
                 if (!$user->save()) {
                     $t->rollBack();
                     return [

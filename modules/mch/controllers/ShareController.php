@@ -12,6 +12,7 @@ use app\extensions\Sms;
 use app\models\Cash;
 use app\models\CashWechatTplSender;
 use app\models\Color;
+use app\models\IntegralLog;
 use app\models\Option;
 use app\models\Qrcode;
 use app\models\Setting;
@@ -265,7 +266,25 @@ class ShareController extends Controller
             $user = User::findOne(['id' => $cash->user_id]);
             $user->price += $cash->price;
             //驳回增加积分
-            $user->integral += $cash->price;
+            $user->integral +=intval($cash->price);
+            //提现记录
+            //记录日志
+            $hld=0;
+            $coupon=0;
+            $integral=intval($cash->price);
+            $integralLog = new IntegralLog();
+            $integralLog->user_id = $user->id;
+            //申请奖励 扣除积分
+            $integralLog->content = "(提现申请驳回)：" . $user->nickname . " 欢乐豆".$user->hld."已经扣除：" . $hld . " 豆" . " 优惠券".$user->coupon."已经扣除：" . $coupon . " 张，积分：" . $user->integral . '已返回积分'.$integral;
+            $integralLog->integral = $integral;
+            $integralLog->hld = $hld;
+            $integralLog->coupon = $coupon;
+            $integralLog->addtime = time();
+            $integralLog->username = $user->nickname;
+            $integralLog->operator = 'admin';
+            $integralLog->store_id = $this->store_id;
+            $integralLog->operator_id = 0;
+            $integralLog->save();
             if (!$user->save()) {
                 return json_encode([
                     'code' => 1,
