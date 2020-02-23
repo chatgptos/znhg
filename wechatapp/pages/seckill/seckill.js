@@ -41,7 +41,7 @@ Page({
         this.loadData(options);
     },
 
-    //加载秒杀时间段
+    //加载预售时间段
     loadData: function (options) {
         var page = this;
         app.request({
@@ -51,7 +51,7 @@ Page({
 
                     if (res.data.list.length == 0) {
                         wx.showModal({
-                            content: "暂无秒杀活动",
+                            content: "暂无预售活动",
                             showCancel: false,
                             confirmText: "返回首页",
                             success: function (e) {
@@ -117,7 +117,7 @@ Page({
         });
     },
 
-    //顶部秒杀时间段点击
+    //顶部预售时间段点击
     topBarItemClick: function (e) {
         var page = this;
         var index = e.currentTarget.dataset.index;

@@ -610,7 +610,7 @@
                                         <view class="x-title">{{goods.name}}</view>
                                         <view class="price">
                                             <view class="new-p">
-                                                <text>秒杀积分{{goods.seckill_price}}</text>
+                                                <text>积分{{goods.seckill_price}}</text>
                                             </view>
                                             <view class="old-p">积分:{{goods.price}}
                                             </view>
@@ -630,7 +630,7 @@
                                         <view class="x-title">{{goods.name}}</view>
                                         <view class="price">
                                             <view class="new-p">
-                                                <text>秒杀积分{{goods.seckill_price}}</text>
+                                                <text>积分{{goods.seckill_price}}</text>
                                             </view>
                                             <view class="old-p">积分:{{goods.price}}
                                             </view>
@@ -648,7 +648,7 @@
             <!--</block>-->
         </view>
 
-        <!-- 秒杀板块 开始 -->
+        <!-- 预售板块 开始 -->
         <view wx:elif="{{item.name=='bookmall_seckill'}}" style="margin-bottom:30px;margin-top:30px;">
             <!--<block wx:for="{{bookmall_seckill.goods_list}}" wx:for-index="cat_index" wx:for-item="cat">-->
             <view wx:if="{{bookmall_seckill.goods_list.length>0}}">
@@ -675,7 +675,7 @@
                                         <view class="x-title">{{goods.name}}</view>
                                         <view class="price">
                                             <view class="new-p">
-                                                <text>秒杀积分{{goods.seckill_price}}</text>
+                                                <text>预售积分{{goods.seckill_price}}</text>
                                             </view>
                                             <view class="old-p">积分:{{goods.price}}
                                             </view>
@@ -695,7 +695,7 @@
                                         <view class="x-title">{{goods.name}}</view>
                                         <view class="price">
                                             <view class="new-p">
-                                                <text>秒杀积分{{goods.seckill_price}}</text>
+                                                <text>积分{{goods.seckill_price}}</text>
                                             </view>
                                             <view class="old-p">积分:{{goods.price}}
                                             </view>
@@ -771,7 +771,7 @@
                 </scroll-view>
             </view>
         </block>
-        <!-- 秒杀板块 结束 -->
+        <!-- 预售板块 结束 -->
 
         <!-- 自定义板块 开始 -->
         <view wx:else>
@@ -1209,7 +1209,7 @@
     <!--&lt;!&ndash; 拆分的分类 结束 &ndash;&gt;-->
 
 
-    <!--&lt;!&ndash; 秒杀板块 开始 &ndash;&gt;-->
+    <!--&lt;!&ndash; 预售板块 开始 &ndash;&gt;-->
     <!--<block wx:elif="{{item.name=='seckill'}}">-->
     <!--<view class="user-block">-->
     <!--<view class="flex-row seckill-header"-->
@@ -1217,7 +1217,7 @@
     <!--<view class="flex-grow-1 flex-row flex-y-center">-->
     <!--<image src="/images/icon-seckill.png"-->
     <!--style="width: 34rpx;height: 34rpx;margin-right: 12rpx"></image>-->
-    <!--<view style="font-size: 12pt;color: #ff8b57;margin-right: 16rpx">整点秒杀</view>-->
+    <!--<view style="font-size: 12pt;color: #ff8b57;margin-right: 16rpx">整点预售</view>-->
     <!--<view style="margin-right: 24rpx">{{seckill.name}}</view>-->
 
     <!--<view class="flex-y-center seckill-time-item" style="width: 32rpx;height: 34rpx">-->
@@ -1268,7 +1268,7 @@
     <!--</scroll-view>-->
     <!--</view>-->
     <!--</block>-->
-    <!--&lt;!&ndash; 秒杀板块 结束 &ndash;&gt;-->
+    <!--&lt;!&ndash; 预售板块 结束 &ndash;&gt;-->
 
     <!--&lt;!&ndash; 拼团板块 开始 &ndash;&gt;-->
     <!--<view class="user-block pintuan-block" wx:elif="{{item.name=='pintuan'}}" style="background: #fff7f5;">-->
