@@ -140,30 +140,6 @@ class OrderPreviewFrom extends Model
             ];
         }
 
-        //查询当月限制
-        $query_month = Order::find()
-            ->alias('o')
-            ->select([
-                'o.id',
-            ])->leftJoin(['g'=>Goods::tableName()],'o.goods_id=g.id')
-            ->where([
-                'AND',
-                [
-                    'o.is_delete' => 0,
-                    'o.store_id' => $this->store_id,
-                    'o.user_id' => $this->user_id,
-                    'o.is_cancel' => 0,
-                    'g.id' => $goods->id,
-                ],
-                ['>', 'o.addtime', strtotime(date('Y-m'))],
-            ]);
-
-        if($query_month->count()){
-            return [
-                'code' => 1,
-                'msg' => '或已经在结算中，当月只能申请一次',
-            ];
-        }
 
 
 
@@ -189,6 +165,32 @@ class OrderPreviewFrom extends Model
         $UserShareMoney=0;
         $fuliquan_num=0;
         if ($order->goods_id ==17){
+
+            //查询当月限制
+            $query_month = Order::find()
+                ->alias('o')
+                ->select([
+                    'o.id',
+                ])->leftJoin(['g'=>Goods::tableName()],'o.goods_id=g.id')
+                ->where([
+                    'AND',
+                    [
+                        'o.is_delete' => 0,
+                        'o.store_id' => $this->store_id,
+                        'o.user_id' => $this->user_id,
+                        'o.is_cancel' => 0,
+                        'g.id' => $goods->id,
+                    ],
+                    ['>', 'o.addtime', strtotime(date('Y-m'))],
+                ]);
+
+            if($query_month->count()){
+                return [
+                    'code' => 1,
+                    'msg' => '或已经在结算中，当月只能申请一次',
+                ];
+            }
+
             //正在结算的状态的订单 当申请当时候全部改为申请中 查询时候就计算申请中的订单
             //把上个月的
             $UserShareMoney =UserShareMoney::updateAll(['status' => 1], [
@@ -251,6 +253,11 @@ class OrderPreviewFrom extends Model
                         'msg'   => '申请失败',
                     ];
                 }
+            }else{
+                return [
+                    'code'  => 1,
+                    'msg'   => '暂未查询到结算奖励',
+                ];
             }
 
         }
@@ -306,7 +313,7 @@ class OrderPreviewFrom extends Model
                     $p->rollBack();
                     return [
                         'code'  => 1,
-                        'msg'   => '订单提交失败，请稍后重试',
+                        'msg'   => '申请提交失败，请稍后重试',
                     ];
                 }
             }
@@ -389,7 +396,7 @@ class OrderPreviewFrom extends Model
                     $p->rollBack();
                     return [
                         'code'  => 1,
-                        'msg'   => '订单提交失败，请稍后重试',
+                        'msg'   => '申请提交失败，请稍后重试',
                     ];
                 }
             }
