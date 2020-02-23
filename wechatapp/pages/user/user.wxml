@@ -96,11 +96,11 @@
             </view>
             <text class="user-motto">关注店铺</text>
         </navigator>
-        <navigator class='my-info'>
+        <navigator class='my-info' url="/pages/message-list/message-list">
             <view>
                 <image class="money-icon" src="../../Img/shoucangjia.png" mode="cover"></image>
             </view>
-            <text class="user-motto">兑换记录</text>
+            <text class="user-motto">系统消息</text>
         </navigator>
     </view>
 

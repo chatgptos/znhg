@@ -22,6 +22,7 @@ use app\modules\api\behaviors\LoginBehavior;
 use app\modules\api\models\BindForm;
 use app\modules\api\models\CashForm;
 use app\modules\api\models\CashListForm;
+use app\modules\api\models\MessageListForm;
 use app\modules\api\models\QrcodeForm;
 use app\modules\api\models\ShareForm;
 use app\modules\api\models\TeamForm;
@@ -211,6 +212,21 @@ class ShareController extends Controller
     public function actionCashDetail()
     {
         $form = new CashListForm();
+        $get = \Yii::$app->request->get();
+//        $form->scenario = $get['scene'];
+        $form->attributes = $get;
+        $form->store_id = $this->store->id;
+        $form->user_id = \Yii::$app->user->id;
+        $this->renderJson($form->getList());
+    }
+
+
+    /**
+     * 提现明细列表
+     */
+    public function actionMessageDetail()
+    {
+        $form = new MessageListForm();
         $get = \Yii::$app->request->get();
 //        $form->scenario = $get['scene'];
         $form->attributes = $get;
