@@ -84,7 +84,7 @@ class OrderPayDataForm extends Model
                 'package' => 'prepay_id=' . $res['prepay_id'],
                 'signType' => 'MD5',
             ];
-            $pay_data['sign'] = $this->makeSign($pay_data);
+            $pay_data['paySign'] = $this->wechat->pay->makeSign($pay_data);
             $this->setReturnData($this->order);
             return [
                 'code' => 0,
