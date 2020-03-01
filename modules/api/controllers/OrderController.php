@@ -73,8 +73,7 @@ class OrderController extends Controller
         $form->attributes = \Yii::$app->request->get();
         $form->store_id = $this->store->id;
         $form->user = \Yii::$app->user->identity;
-//        $this->renderJson($form->search());
-        $this->renderJson($form->search1());
+        $this->renderJson($form->search());
     }
 
     //订单列表

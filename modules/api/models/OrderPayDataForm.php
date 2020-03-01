@@ -77,128 +77,14 @@ class OrderPayDataForm extends Model
                 'order_no' => $this->order->order_no,
             ]);
 
-//            $pay_data = [
-//                'appId' => $this->wechat->appId,
-//                'timeStamp' => '' . time(),
-//                'nonceStr' => md5(uniqid()),
-//                'package' => 'prepay_id=' . $res['prepay_id'],
-//                'signType' => 'MD5',
-//            ];
-
-
-
-//            {
-//                            "appId":"201923265",
-//                "timestamp":"2014-07-24 03:07:50",
-//                "sign":"5666666",
-//                "biz_content":{
-//                            "deviceId":10000,
-//                }
-//            }
-
-
-
-
-//            $pay_data = [
-//                'appid' => "wxd930ea5d5a258f4f",
-//                'device_info' => "1000",
-//                'body' => "test",
-//                'nonce_str' => "ibuaiVcKdpRxkhJA",
-//                'mch_id' => "10000100",
-//            ];
-//     {
-//                "appId":"2019082351351",
-//    "timestamp":"2014-07-24 03:07:50",
-//    "sign":"DE448FA75DAB07D141343D590BBE679D",
-//    "biz_content":{
-//                "nickName":"1353817847",
-//        "phone":"1353817847",
-//        "unionid":"test",
-//        "gender":"1",
-//        "avatar":"httt://demo.png"
-//    }
-//}
-//            var_dump($pay_data);
-
-
-//            $pay_data = array(
-//                'appId' => "2019082351351",
-//                "timestamp"=>"2014-07-24 03:07:50",
-//                'biz_content' => array(
-////                    "deviceId"=>10000,
-//                    "nickName"=>"1353817842",
-//                    "phone"=>"1353817842",
-//                    "unionid"=>"1353817842",
-//                    "gender"=>"1",
-//                    "avatar"=>"httt://demo.png"
-//                )
-//
-//            );
-
-            $pay_data = array(
-                'appId' => "2019082351351",
-                "timestamp"=>"2014-07-24 03:07:50",
-                'biz_content' => array(
-                    "deviceId"=>100023,//必须要有设备
-                    "unionid"=>"1353817842",
-                    "opendoorRecordId"=>"9516",
-                )
-
-            );
-            $pay_data['sign'] = $this->makeSign($pay_data['biz_content']);
-
-//            var_dump($this->wechat);
-//            var_dump(json_encode($pay_data));
-//            die;
-
-            $url="https://api.voidiot.com/open-api/syncUserInfo";//同步用户数据可以开门
-            $url="https://api.voidiot.com/open-api/getDeviceList";//获取货柜列表
-            $url="https://api.voidiot.com/open-api/getDeviceById";//获取货柜详情
-            $url="https://api.voidiot.com/open-api/completeOrder";//完结订单传入开门id记录
-            $url="https://api.voidiot.com/open-api/openDoor";//取货开门
-            $url="https://api.voidiot.com/open-api/getSelectGoods";//实时购买商品数据 判断门是否关闭
-            $url="https://api.voidiot.com/open-api/getOrdersByOpenDoorId";//获取货柜商品详情
-//            $url="https://api.voidiot.com/open-api/getDeviceGoods";//获取货柜商品详情
-//            $url="https://api.voidiot.com/open-api/replenish";//补货开门
-//            $url="https://api.voidiot.com/open-api/getDeviceRealTimeGoods";//获取补货实时货品
-
-
-
-
-
-
-
-
-
-
-
-            $pay_data['biz_content'] = json_encode($pay_data['biz_content'],true);
-            $data  = json_encode($pay_data,true);
-
-            $headerArray =array("Content-type:application/json;charset='utf-8'","Accept:application/json");
-            $curl = curl_init();
-            curl_setopt($curl, CURLOPT_URL, $url);
-            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST,FALSE);
-            curl_setopt($curl, CURLOPT_POST, 1);
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-            curl_setopt($curl,CURLOPT_HTTPHEADER,$headerArray);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-            $output = curl_exec($curl);
-            curl_close($curl);
-
-            echo '<pre>';
-            var_dump($output);
-            var_dump(json_decode($output,true));
-            die;
-
-
-
-
-
-
-//            var_dump($pay_data['sign']);
-//            die;
+            $pay_data = [
+                'appId' => $this->wechat->appId,
+                'timeStamp' => '' . time(),
+                'nonceStr' => md5(uniqid()),
+                'package' => 'prepay_id=' . $res['prepay_id'],
+                'signType' => 'MD5',
+            ];
+            $pay_data['sign'] = $this->makeSign($pay_data);
             $this->setReturnData($this->order);
             return [
                 'code' => 0,
@@ -258,7 +144,6 @@ class OrderPayDataForm extends Model
         var_dump(json_decode($output,true));
         die;
     }
-
     /**
      * MD5签名
      */
@@ -275,31 +160,6 @@ class OrderPayDataForm extends Model
         $string = $string . "&key=DE448FA75DAB07D141343D590BBE679D";
         $string = md5($string);
         $result = strtoupper($string);
-//        $string = $string . "&key=192006250b4c09247ec02edce69f6a2d";
-        //string(227) "appId=2019082351351&biz_content[nickName]=1353817847&
-        //biz_content[phone]=1353817847&biz_content[unionid]=test&
-        //biz_content[gender]=1&biz_content[avatar]=demo.png&×tamp=2014-07-24 03:07:50&key=DE448FA75DAB07D141343D590BBE679D"
-//        var_dump($string);
-//        die;
-//        var_dump($string);
-//        $string1='gender=1&nickName=1353817847&phone=1353817847&unionid=test&key=DE448FA75DAB07D141343D590BBE679D';
-//        $string1='deviceId=10000&key=DE448FA75DAB07D141343D590BBE679D';
-//       var_dump($string1);
-//       die;
-
-//        $string1=$string;
-//        $string='timestamp=2019082351351&appId=2019082351351&key=DE448FA75DAB07D141343D590BBE679D';
-
-//
-//        var_dump($string);
-//
-//        var_dump(md5($string));
-//        var_dump( md5($string1));
-
-
-
-//        var_dump($result);
-//        die;
         return $result;
     }
 
