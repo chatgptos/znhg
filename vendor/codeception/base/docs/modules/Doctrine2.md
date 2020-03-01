@@ -43,7 +43,6 @@ tests will run much faster and will be isolated from each other.
 
 * `em` - Entity Manager
 
-
 ## Actions
 
 ### dontSeeInRepository
@@ -75,7 +74,7 @@ $users = $I->grabEntitiesFromRepository('AppBundle:User', array('name' => 'daver
 
  * `Available since` 1.1
  * `param` $entity
- * `param array` $params
+ * `param array` $params. For `IS NULL`, use `array('field'=>null)`
  * `return` array
 
 
@@ -95,7 +94,7 @@ $user = $I->grabEntityFromRepository('User', array('id' => '1234'));
 
  * `Available since` 1.1
  * `param` $entity
- * `param array` $params
+ * `param array` $params. For `IS NULL`, use `array('field'=>null)`
  * `return` object
 
 
@@ -146,13 +145,18 @@ which will always return the NULL value.
 ### haveInRepository
  
 Persists record into repository.
-This method crates an entity, and sets its properties directly (via reflection).
+This method creates an entity, and sets its properties directly (via reflection).
 Setters of entity won't be executed, but you can create almost any entity and save it to database.
 Returns id using `getId` of newly created entity.
 
 ```php
 $I->haveInRepository('Entity\User', array('name' => 'davert'));
 ```
+
+
+### onReconfigure
+ 
+@throws ModuleConfigException
 
 
 ### persistEntity
@@ -191,4 +195,4 @@ Fails if record for given criteria can\'t be found,
  * `param` $entity
  * `param array` $params
 
-<p>&nbsp;</p><div class="alert alert-warning">Module reference is taken from the source code. <a href="https://github.com/Codeception/Codeception/tree/2.3/src/Codeception/Module/Doctrine2.php">Help us to improve documentation. Edit module reference</a></div>
+<p>&nbsp;</p><div class="alert alert-warning">Module reference is taken from the source code. <a href="https://github.com/Codeception/Codeception/tree/2.5/src/Codeception/Module/Doctrine2.php">Help us to improve documentation. Edit module reference</a></div>

@@ -4,7 +4,7 @@
  * Class TestLoaderTest
  * @group load
  */
-class TestLoaderTest extends \PHPUnit_Framework_TestCase
+class TestLoaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Codeception\Test\Loader
@@ -22,25 +22,25 @@ class TestLoaderTest extends \PHPUnit_Framework_TestCase
     public function testAddCept()
     {
         $this->testLoader->loadTest('SimpleCept.php');
-        $this->assertEquals(1, count($this->testLoader->getTests()));
+        $this->assertCount(1, $this->testLoader->getTests());
     }
 
     public function testAddTest()
     {
         $this->testLoader->loadTest('SimpleTest.php');
-        $this->assertEquals(1, count($this->testLoader->getTests()));
+        $this->assertCount(1, $this->testLoader->getTests());
     }
 
     public function testAddCeptAbsolutePath()
     {
         $this->testLoader->loadTest(codecept_data_dir('SimpleCept.php'));
-        $this->assertEquals(1, count($this->testLoader->getTests()));
+        $this->assertCount(1, $this->testLoader->getTests());
     }
 
     public function testAddCeptWithoutExtension()
     {
         $this->testLoader->loadTest('SimpleCept');
-        $this->assertEquals(1, count($this->testLoader->getTests()));
+        $this->assertCount(1, $this->testLoader->getTests());
     }
 
     /**
@@ -49,7 +49,7 @@ class TestLoaderTest extends \PHPUnit_Framework_TestCase
     public function testLoadFileWithFewCases()
     {
         $this->testLoader->loadTest('SimpleNamespacedTest.php');
-        $this->assertEquals(3, count($this->testLoader->getTests()));
+        $this->assertCount(3, $this->testLoader->getTests());
     }
 
     /**
@@ -87,6 +87,26 @@ class TestLoaderTest extends \PHPUnit_Framework_TestCase
 
     protected function assertContainsTestName($name, $testNames)
     {
-        $this->assertNotSame(false, array_search($name, $testNames), "$name not found in tests");
+        $this->assertContains($name, $testNames, "$name not found in tests");
+    }
+
+    public function testDataProviderReturningArray()
+    {
+        $this->testLoader->loadTest('SimpleWithDataProviderArrayCest.php');
+        $tests = $this->testLoader->getTests();
+        /** @var \PHPUnit\Framework\DataProviderTestSuite $firstTest */
+        $firstTest = $tests[0];
+
+        $this->assertEquals(5, $firstTest->count());
+    }
+
+    public function testDataProviderReturningGenerator()
+    {
+        $this->testLoader->loadTest('SimpleWithDataProviderYieldGeneratorCest.php');
+        $tests = $this->testLoader->getTests();
+        /** @var \PHPUnit\Framework\DataProviderTestSuite $firstTest */
+        $firstTest = $tests[0];
+
+        $this->assertEquals(5, $firstTest->count());
     }
 }

@@ -9,7 +9,7 @@ namespace yii\web;
 
 use Yii;
 use yii\base\InvalidConfigException;
-use yii\base\BaseObject;
+use yii\base\Object;
 
 /**
  * UrlRule represents a rule used by [[UrlManager]] for parsing and generating URLs.
@@ -30,7 +30,7 @@ use yii\base\BaseObject;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class UrlRule extends BaseObject implements UrlRuleInterface
+class UrlRule extends Object implements UrlRuleInterface
 {
     /**
      * Set [[mode]] with this value to mark that this rule is for URL parsing only

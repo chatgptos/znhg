@@ -21,12 +21,10 @@ The following dependencies are needed for the listed queue servers:
 
 ## Status
 
-* Maintainer: **nathanmac**
 * Stability:
     - Iron.io:    **stable**
     - Beanstalkd: **stable**
     - Amazon SQS: **stable**
-* Contact: nathan.macnamara@outlook.com
 
 ## Config
 
@@ -41,6 +39,8 @@ service.
 * token - Iron.io access token.
 * project - Iron.io project ID.
 * key - AWS access key ID.
+* version - AWS version (e.g. latest)
+* endpoint - The full URI of the webservice. This is only required when connecting to a custom endpoint (e.g., a local version of SQS).
 * secret - AWS secret access key.
      Warning:
          Hard-coding your credentials can be dangerous, because it is easy to accidentally commit your credentials
@@ -78,10 +78,10 @@ service.
        enabled: [Queue]
        config:
           Queue:
-             'type' => 'iron',
-             'host' => 'mq-aws-us-east-1.iron.io',
-             'token' => 'your-token',
-             'project' => 'your-project-id'
+             'type': 'iron',
+             'host': 'mq-aws-us-east-1.iron.io',
+             'token': 'your-token',
+             'project': 'your-project-id'
 
 #### Example (AWS SQS)
 
@@ -89,10 +89,10 @@ service.
        enabled: [Queue]
        config:
           Queue:
-             'type' => 'aws',
-             'key' => 'your-public-key',
-             'secret' => 'your-secret-key',
-             'region' => 'us-west-2'
+             'type': 'aws',
+             'key': 'your-public-key',
+             'secret': 'your-secret-key',
+             'region': 'us-west-2'
 
 #### Example AWS SQS using profile credentials
 
@@ -100,19 +100,18 @@ service.
        enabled: [Queue]
        config:
           Queue:
-             'type' => 'aws',
-             'profile' => 'project1', //see documentation
-             'region' => 'us-west-2'
+             'type': 'aws',
+             'profile': 'project1', //see documentation
+             'region': 'us-west-2'
 
-#### Example AWS SQS running on Anazon EC2 instance
+#### Example AWS SQS running on Amazon EC2 instance
 
     modules:
        enabled: [Queue]
        config:
           Queue:
-             'type' => 'aws',
-             'region' => 'us-west-2'
-
+             'type': 'aws',
+             'region': 'us-west-2'
 
 
 ## Actions
@@ -293,4 +292,4 @@ $I->seeQueueHasTotalCount('default', 10);
  * `param string` $queue Queue Name
  * `param int` $expected Number of messages expected
 
-<p>&nbsp;</p><div class="alert alert-warning">Module reference is taken from the source code. <a href="https://github.com/Codeception/Codeception/tree/2.3/src/Codeception/Module/Queue.php">Help us to improve documentation. Edit module reference</a></div>
+<p>&nbsp;</p><div class="alert alert-warning">Module reference is taken from the source code. <a href="https://github.com/Codeception/Codeception/tree/2.5/src/Codeception/Module/Queue.php">Help us to improve documentation. Edit module reference</a></div>

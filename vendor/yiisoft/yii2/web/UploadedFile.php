@@ -7,7 +7,7 @@
 
 namespace yii\web;
 
-use yii\base\BaseObject;
+use yii\base\Object;
 use yii\helpers\Html;
 
 /**
@@ -28,7 +28,7 @@ use yii\helpers\Html;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class UploadedFile extends BaseObject
+class UploadedFile extends Object
 {
     /**
      * @var string the original name of the file being uploaded

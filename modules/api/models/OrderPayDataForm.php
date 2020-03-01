@@ -14,6 +14,9 @@ use app\models\Order;
 use app\models\OrderDetail;
 use app\models\Setting;
 use app\models\User;
+use GuzzleHttp\HandlerStack;
+use WechatPay\GuzzleMiddleware\Util\PemUtil;
+use WechatPay\GuzzleMiddleware\WechatPayMiddleware;
 use yii\helpers\VarDumper;
 
 /**
@@ -111,7 +114,7 @@ class OrderPayDataForm extends Model
             )
 
         );
-        $pay_data['sign'] = $this->makeSign($pay_data['biz_content']);
+        $pay_data['sign'] = $this->makeSignHG($pay_data['biz_content']);
 
         $url="https://api.voidiot.com/open-api/syncUserInfo";//同步用户数据可以开门
         $url="https://api.voidiot.com/open-api/getDeviceList";//获取货柜列表
@@ -144,10 +147,329 @@ class OrderPayDataForm extends Model
         var_dump(json_decode($output,true));
         die;
     }
+
+
+
+    public function search2()
+    {
+        $this->wechat = $this->getWechat();
+//// 商户配置
+        $merchantId = $this->wechat->mchId;
+        $merchantSerialNumber = '6B7B443DD20BAFEEF9B1583A456FE84F708F8E58';//证书序列号
+//        $merchantPrivateKey = PemUtil::loadPrivateKey('/path/to/mch/private/key.pem');
+//        $wechatpayCertificate = PemUtil::loadCertificate('/path/to/wechatpay/cert.pem');
+
+        $merchantPrivateKey = PemUtil::loadPrivateKey($this->wechat->keyPem);
+        $wechatpayCertificate = PemUtil::loadCertificate($this->wechat->certPem);
+//
+////
+//////// 构造一个WechatPayMiddleware
+        $wechatpayMiddleware = WechatPayMiddleware::builder()
+            ->withMerchant($merchantId, $merchantSerialNumber, $merchantPrivateKey)
+            ->withWechatPay([ $wechatpayCertificate ]) // 可传入多个微信支付平台证书，参数类型为array
+            ->build();
+
+//
+//////
+//////// 将WechatPayMiddleware添加到Guzzle的HandlerStack中
+        $stack = HandlerStack::create();
+        $stack->push($wechatpayMiddleware, 'wechatpay');
+//
+////
+//// 创建Guzzle HTTP Client时，将HandlerStack传入
+        $client =  new \GuzzleHttp\Client([
+            'handler' => $stack,
+            'base_uri' => 'https://api.mch.weixin.qq.com',
+            'http_errors' => false,//#设置成 false 来禁用HTTP协议抛出的异常(如 4xx 和 5xx 响应)，默认情况下HTPP协议出错时会抛出异常。
+        ]);
+
+        $starttime=date('YmdHis', time()+10);;
+        $endtime=date('YmdHis', time()+61);;
+//
+        $out_order_no="234323JKHDFE1243252B";
+////        //查询订单
+        $url =  '/v3/payscore/serviceorder';
+        $res = $client->request('GET', $url, [
+                'headers' => [
+                    'Accept' => 'application/json' ,
+                    'Content-Type' => 'application/json' ,
+                ],
+                'query' => [
+                    'appid'=>$this->wechat->appId,
+                    'service_id'=>'00004000000000158195309791355586',
+                    'out_order_no'=>$out_order_no
+                ],
+            ]
+        );
+////
+////
+        echo '<pre>查询订单';
+        var_dump(json_decode($res->getBody()->getContents(), true));
+//        var_dump($res);
+//        die;
+
+//        //取消订单
+        $url =   '/v3/payscore/serviceorder/'.$out_order_no.'/cancel';
+        $res = $client->request('POST', $url, [
+                'headers' => [
+                    'Accept' => 'application/json' ,
+                    'Content-Type' => 'application/json' ,
+                ],
+                'query' => [
+                    'appid'=>$this->wechat->appId,
+                    'service_id'=>'00004000000000158195309791355586',
+                    'reason'=>'不想买了',
+                ],
+            ]
+        );
+////
+////
+        echo '<pre>取消订单';
+        var_dump(json_decode($res->getBody()->getContents(), true));
+//        var_dump($res);
+        die;
+
+
+//        //完结订单
+//        $url =  '/v3/payscore/serviceorder/'.$out_order_no.'/complete';
+//
+//        $res = $client->request('POST', $url, [
+//                'headers' => [
+//                    'Accept' => 'application/json' ,
+//                    'Content-Type' => 'application/json' ,
+//                ],
+//                'query' => [
+//                    'appid'=>$this->wechat->appId,
+//                    'service_id'=>'00004000000000158195309791355586',
+//                    'service_introduction'=>'货柜可乐',
+//                    "notify_url"=> "https://app.aijiehun.com/paynotify/wechatscorepay",
+//                    'risk_fund'=>json_encode([
+//                        'name'=>"ESTIMATE_ORDER_COST",
+//                        'amount'=>10000,
+//                        'description'=>"可乐的预估费用",
+//                    ]),
+//                    'post_payments'=>json_encode([
+//                        'name'=>"可乐",
+//                        'amount'=>1,
+//                        'description'=>"可乐的预估费用",
+//                        'count'=>2,
+//                    ]),
+////                    'post_discounts'=>json_encode([
+////                         'name'=>"满2减1元",
+////                        'amount'=>1,
+////                        'description'=>"不与其他优惠叠加",
+////                    ]),
+//                    "location"=>json_encode([
+//                        'start_location'=>"深圳货柜",
+//                        'end_location'=>"深圳货柜",
+//                    ]),
+//                    "total_amount"=> 1,
+//                    'profit_sharing'=>false,
+//
+//                ],
+//            ]
+//        );
+//
+//
+//        echo '<pre>完结订单';
+//        var_dump(json_decode($res->getBody()->getContents(), true));
+//        die;
+
+
+
+//        //收款订单
+//        $url =  '/v3/payscore/serviceorder/'.$out_order_no.'/pay';
+//
+//        $res = $client->request('POST', $url, [
+//                'headers' => [
+//                    'Accept' => 'application/json' ,
+//                    'Content-Type' => 'application/json' ,
+//                ],
+//                'query' => [
+//                    'appid'=>$this->wechat->appId,
+//                    'service_id'=>'00004000000000158195309791355586',
+//                ],
+//            ]
+//        );
+//
+//
+//        echo '<pre>收款订单';
+//
+//        var_dump($url);
+////        die;
+//        var_dump(json_decode($res->getBody()->getContents(), true));
+//        die;
+
+
+
+//        //修改订单
+//        $url =  '/v3/payscore/serviceorder/'.$out_order_no.'/modify';
+//
+//        $res = $client->request('POST', $url, [
+//                'headers' => [
+//                    'Accept' => 'application/json' ,
+//                    'Content-Type' => 'application/json' ,
+//                ],
+//                'query' => [
+//                    'appid'=>$this->wechat->appId,
+//                    'service_id'=>'00004000000000158195309791355586',
+//                    'service_introduction'=>'货柜可乐',
+//                    "notify_url"=> "https://app.aijiehun.com/paynotify/wechatscorepay",
+//                    'risk_fund'=>json_encode([
+//                        'name'=>"ESTIMATE_ORDER_COST",
+//                        'amount'=>10000,
+//                        'description'=>"可乐的预估费用",
+//                    ]),
+//                    'post_payments'=>json_encode([
+//                        'name'=>"可乐",
+//                        'amount'=>100,
+//                        'description'=>"可乐的预估费用",
+//                        'count'=>1,
+//                    ]),
+////                    'post_discounts'=>json_encode([
+////                         'name'=>"满2减1元",
+////                        'amount'=>1,
+////                        'description'=>"不与其他优惠叠加",
+////                    ]),
+//                    "location"=>json_encode([
+//                        'start_location'=>"深圳货柜",
+//                        'end_location'=>"深圳货柜",
+//                    ]),
+//                    "total_amount"=> 100,
+//                    'profit_sharing'=>false,
+//                    'reason'=>'买多了',
+//                ],
+//            ]
+//        );
+//
+//
+//        echo '<pre>修改订单';
+//        var_dump(json_decode($res->getBody()->getContents(), true));
+//        die;
+
+
+        //查询授权
+//
+//        $url =  '/v3/payscore/user-service-state';
+//        $res = $client->request('GET', $url, [
+//                'headers' => [
+//                    'Accept' => 'application/json' ,
+//                    'Content-Type' => 'application/json' ,
+//                ],
+//                'query' => [
+//                    'appid'=>$this->wechat->appId,
+//                    'service_id'=>'00004000000000158195309791355586',
+//                    'openid'=>'ogZOL5XwAe-PVnKuJnAAiSXP5fA0',
+//                ],
+//            ]
+//        );
+//
+//
+//        echo '<pre>';
+////        var_dump($client);
+////        var_dump($this->wechat->appId);
+//        var_dump(json_decode($res->getBody()->getContents(), true));
+//        die;
+//        die;
+
+
+        //创建订单
+//        $url =  '/v3/payscore/serviceorder';
+//        $res = $client->request('POST', $url, [
+//            'headers' => [
+//                'Accept' => 'application/json' ,
+//                'Content-Type' => 'application/json' ,
+//            ],
+//                'query' => [
+//                    'out_order_no'=>$out_order_no,
+//                    'appid'=>$this->wechat->appId,
+//                    'service_id'=>'00004000000000158195309791355586',
+//                    'service_introduction'=>'货柜可乐',
+//                    "notify_url"=> "https://app.aijiehun.com/paynotify/wechatscorepay",
+//                    'time_range'=>json_encode([
+//                        'start_time'=>$starttime,
+//                        'end_time'=>$endtime,
+//                    ]),
+//                    'risk_fund'=>json_encode([
+//                        'name'=>"ESTIMATE_ORDER_COST",
+//                        'amount'=>10000,
+//                        'description'=>"可乐的预估费用",
+//                    ]),
+//                    'openid'=>'ogZOL5XwAe-PVnKuJnAAiSXP5fA0',
+//                    'post_payments'=>json_encode([
+//                        'name'=>"可乐",
+//                        'amount'=>100,
+//                        'description'=>"可乐的预估费用",
+//                        'count'=>2,
+//                    ]),
+//                    'post_discounts'=>json_encode([
+//                        'name'=>"满2减1元",
+//                        'amount'=>1,
+//                        'description'=>"不与其他优惠叠加",
+//                    ]),
+//                    "location"=>json_encode([
+//                        'start_location'=>"深圳货柜",
+//                        'end_location'=>"深圳货柜",
+//                    ]),
+//                    'openid'=>'ogZOL5XwAe-PVnKuJnAAiSXP5fA0',
+//                    'need_user_confirm'=>false,//提示服务无权限 是因为这个参数
+//                ],
+//             ]
+//        );
+//        //返回状态码
+//        echo '<pre>创建订单';
+//        var_dump(json_decode($res->getBody()->getContents(), true));
+//        die;
+    }
+
+
+
+
+    public function search3()
+    {
+        $this->wechat = $this->getWechat();
+        $out_order_no="234323JKHDFE1243252B";
+        $pay_data = array(
+            'mch_id' => "1555897421",
+            'service_id' => "00004000000000158195309791355586",
+            'out_order_no' => $out_order_no,
+            'timestamp' => '1583037425',
+            'nonce_str' => $this->getNonce(),
+            'sign_type' => "HMAC-SHA256",
+        );
+
+        $pay_data = array(
+            'mch_id' => "1555897421",
+            'service_id' => "00004000000000158195309791355586",
+            'out_request_no' => $out_order_no,
+            'timestamp' => '1583037425',
+            'nonce_str' => $this->getNonce(),
+            'sign_type' => "HMAC-SHA256",
+        );
+        $pay_data['sign'] = $this->makeSign($pay_data,$this->wechat->apiKey);
+        return([
+            'code' => 0,
+            'msg' => 'success',
+            'data' => $pay_data,
+        ]);
+    }
+
+
+    protected function getNonce()
+    {
+        static $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < 32; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
     /**
      * MD5签名
      */
-    public function makeSign($args)
+    public function makeSignHG($args)
     {
         if (isset($args['sign']))
             unset($args['sign']);
@@ -163,6 +485,27 @@ class OrderPayDataForm extends Model
         return $result;
     }
 
+
+
+
+    /**
+     * MD5签名
+     */
+    public function makeSign($args,$merchantPrivateKey='qwertyuiopyang111111111111111111')
+    {
+        if (isset($args['sign']))
+            unset($args['sign']);
+        ksort($args);
+        foreach ($args as $i => $arg) {
+            if ($args === null || $arg === '')
+                unset($args[$i]);
+        }
+        $string = $this->arrayToUrlParam($args, false);
+        $string = $string . "&key=".$merchantPrivateKey;
+        $raw_sign =  hash_hmac('sha256', $string, $merchantPrivateKey);
+        $result = strtoupper($raw_sign);
+        return $result;
+    }
 
 
     public static function arrayToUrlParam($array, $url_encode = true)

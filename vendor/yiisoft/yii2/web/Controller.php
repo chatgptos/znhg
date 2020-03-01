@@ -7,11 +7,9 @@
 
 namespace yii\web;
 
-use Curl\Curl;
 use Yii;
 use yii\base\InlineAction;
 use yii\helpers\Url;
-use yii\helpers\VarDumper;
 
 /**
  * Controller is the base class of web controllers.
@@ -131,7 +129,7 @@ class Controller extends \yii\base\Controller
             $name = $param->getName();
             if (array_key_exists($name, $params)) {
                 if ($param->isArray()) {
-                    $args[] = $actionParams[$name] = (array)$params[$name];
+                    $args[] = $actionParams[$name] = (array) $params[$name];
                 } elseif (!is_array($params[$name])) {
                     $args[] = $actionParams[$name] = $params[$name];
                 } else {
@@ -263,10 +261,4 @@ class Controller extends \yii\base\Controller
     {
         return Yii::$app->getResponse()->redirect(Yii::$app->getRequest()->getUrl() . $anchor);
     }
-
-    public function init()
-    {
-        parent::init();
-    }
-
 }

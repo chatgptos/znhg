@@ -2,6 +2,8 @@
 
 use Codeception\Step;
 use Codeception\Util\Stub;
+use Facebook\WebDriver\Cookie;
+use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverKeys;
@@ -91,12 +93,34 @@ class WebDriverTest extends TestsForBrowsers
     {
         $this->notForPhantomJS();
         $this->setExpectedException(
-            'PHPUnit_Framework_AssertionFailedError',
+            '\PHPUnit\Framework\AssertionFailedError',
             'Failed asserting that \'Really?\' contains "Different text"'
         );
         $this->module->amOnPage('/form/popup');
         $this->module->click('Alert');
         $this->module->seeInPopup('Different text');
+        $this->module->cancelPopup();
+    }
+
+    public function testDontSeeInPopup()
+    {
+        $this->notForPhantomJS();
+        $this->module->amOnPage('/form/popup');
+        $this->module->click('Alert');
+        $this->module->dontSeeInPopup('Different text');
+        $this->module->cancelPopup();
+    }
+
+    public function testFailedDontSeeInPopup()
+    {
+        $this->notForPhantomJS();
+        $this->setExpectedException(
+            '\PHPUnit\Framework\AssertionFailedError',
+            'Failed asserting that \'Really?\' does not contain "Really?"'
+        );
+        $this->module->amOnPage('/form/popup');
+        $this->module->click('Alert');
+        $this->module->dontSeeInPopup('Really?');
         $this->module->cancelPopup();
     }
 
@@ -485,7 +509,7 @@ class WebDriverTest extends TestsForBrowsers
         ]);
         $module = Stub::make(self::MODULE_CLASS, ['webDriver' => $fakeWd]);
             $cept = (new \Codeception\Test\Cept('loginCept', 'loginCept.php'));
-        $module->_failed($cept, new PHPUnit_Framework_AssertionFailedError());
+        $module->_failed($cept, new \PHPUnit\Framework\AssertionFailedError());
     }
 
     public function testCreateCestScreenshotOnFail()
@@ -504,7 +528,7 @@ class WebDriverTest extends TestsForBrowsers
         ]);
         $module = Stub::make(self::MODULE_CLASS, ['webDriver' => $fakeWd]);
         $cest = new \Codeception\Test\Cest(new stdClass(), 'login', 'someCest.php');
-        $module->_failed($cest, new PHPUnit_Framework_AssertionFailedError());
+        $module->_failed($cest, new \PHPUnit\Framework\AssertionFailedError());
     }
 
     public function testCreateTestScreenshotOnFail()
@@ -526,12 +550,12 @@ class WebDriverTest extends TestsForBrowsers
             ]),
         ]);
         $module = Stub::make(self::MODULE_CLASS, ['webDriver' => $fakeWd]);
-        $module->_failed($test, new PHPUnit_Framework_AssertionFailedError());
+        $module->_failed($test, new \PHPUnit\Framework\AssertionFailedError());
     }
 
     public function testWebDriverWaits()
     {
-        $fakeWd = Stub::make(self::WEBDRIVER_CLASS, ['wait' => Stub::exactly(12, function () {
+        $fakeWd = Stub::make(self::WEBDRIVER_CLASS, ['wait' => Stub::exactly(16, function () {
             return new \Codeception\Util\Maybe();
         })]);
         $module = Stub::make(self::MODULE_CLASS, ['webDriver' => $fakeWd]);
@@ -549,7 +573,29 @@ class WebDriverTest extends TestsForBrowsers
         $module->waitForElementNotVisible(['id' => 'user']);
         $module->waitForElementNotVisible(['css' => '.user']);
         $module->waitForElementNotVisible('//xpath');
+
+        $module->waitForElementClickable(WebDriverBy::partialLinkText('yeah'));
+        $module->waitForElementClickable(['id' => 'user']);
+        $module->waitForElementClickable(['css' => '.user']);
+        $module->waitForElementClickable('//xpath');
     }
+
+    public function testWaitForElement()
+    {
+        $this->module->amOnPage('/form/timeout');
+        $this->module->waitForElement('#btn');
+        $this->module->click('Click');
+        $this->module->see('Hello');
+    }
+
+    public function testImplicitWait()
+    {
+        $this->module->_reconfigure(['wait' => 5]);
+        $this->module->amOnPage('/form/timeout');
+        $this->module->click('#btn');
+        $this->module->see('Hello');
+    }
+
 
     public function testBug1467()
     {
@@ -612,6 +658,18 @@ class WebDriverTest extends TestsForBrowsers
         $this->module->seeCookie('PHPSESSID');
     }
 
+    public function testSessionSnapshotsAreDeleted() 
+    {
+        $this->notForPhantomJS();
+        $this->module->amOnPage('/');
+        $this->module->setCookie('PHPSESSID', '123456', ['path' => '/']);
+        $this->module->saveSessionSnapshot('login');
+        $this->webDriver->manage()->deleteAllCookies();
+        $this->module->deleteSessionSnapshot('login');
+        $this->assertFalse($this->module->loadSessionSnapshot('login'));
+        $this->module->dontSeeCookie('PHPSESSID');
+    }
+
     public function testSaveSessionSnapshotsExcludeInvalidCookieDomains()
     {
         $this->notForPhantomJS();
@@ -628,7 +686,7 @@ class WebDriverTest extends TestsForBrowsers
                         'value' => '_value_',
                         'path' => '/',
                         'domain' => '.3rd-party.net',
-                    ]
+                    ],
                 ];
             }),
         ]);
@@ -763,6 +821,17 @@ class WebDriverTest extends TestsForBrowsers
         $this->module->seeInField('foo', 'bar baz');
     }
 
+    /**
+    * @Issue 4726
+    */
+    public function testClearField()
+    {
+        $this->module->amOnPage('/form/textarea');
+        $this->module->fillField('#description', 'description');
+        $this->module->clearField('#description');
+        $this->module->dontSeeInField('#description', 'description');
+    }
+
     public function testClickHashLink()
     {
         $this->module->amOnPage('/form/anchor');
@@ -791,6 +860,20 @@ class WebDriverTest extends TestsForBrowsers
     {
         $this->module->amOnPage('/form/anchor');
         $this->module->click('Hash Form');
+        $this->module->seeCurrentUrlEquals('/form/anchor#a');
+    }
+
+    public function testSubmitHashFormTitle()
+    {
+        $this->module->amOnPage('/form/anchor');
+        $this->module->click('Hash Form Title');
+        $this->module->seeCurrentUrlEquals('/form/anchor#a');
+    }
+
+    public function testSubmitHashButtonForm()
+    {
+        $this->module->amOnPage('/form/anchor');
+        $this->module->click('Hash Button Form');
         $this->module->seeCurrentUrlEquals('/form/anchor#a');
     }
 
@@ -830,7 +913,7 @@ class WebDriverTest extends TestsForBrowsers
         // assert
         /* @var $steps Step[]  */
         $steps = $cept->getScenario()->getSteps();
-        $this->assertEquals(0, count($steps));
+        $this->assertCount(0, $steps);
     }
 
     public function testMoveMouseOver()
@@ -1033,5 +1116,38 @@ HTML
         // `Selenium` adds the `xmlns` attribute while `PhantomJS` does not do that.
         $sourceActual = str_replace('xmlns="http://www.w3.org/1999/xhtml"', '', $sourceActualRaw);
         $this->assertXmlStringEqualsXmlString($sourceExpected, $sourceActual);
+    }
+
+    public function testChangingCapabilities()
+    {
+        $this->notForPhantomJS();
+        $this->assertNotTrue($this->module->webDriver->getCapabilities()->getCapability('acceptInsecureCerts'));
+        $this->module->_closeSession();
+        $this->module->_capabilities(function($current) {
+            $current['acceptInsecureCerts'] = true;
+            return new DesiredCapabilities($current);
+        });
+        $this->assertNotTrue($this->module->webDriver->getCapabilities()->getCapability('acceptInsecureCerts'));
+        $this->module->_initializeSession();
+        $this->assertTrue($this->module->webDriver->getCapabilities()->getCapability('acceptInsecureCerts'));
+    }
+
+    /**
+     * @dataProvider strictBug4846Provider
+    **/
+    public function testBug4846($selector)
+    {
+        $this->module->amOnPage('/');
+        $this->module->see('Welcome to test app!', $selector);
+        $this->module->dontSee('You cannot see that', $selector);
+    }
+
+    public function strictBug4846Provider()
+    {
+        return [
+            'by id' => ['h1'],
+            'by css' => [['css' => 'body h1']],
+            'by xpath' => ['//body/h1'],
+        ];
     }
 }

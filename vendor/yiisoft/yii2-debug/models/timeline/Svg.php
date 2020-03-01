@@ -7,8 +7,9 @@
 
 namespace yii\debug\models\timeline;
 
-use yii\base\BaseObject;
+use yii\base\Object;
 use yii\debug\panels\TimelinePanel;
+use yii\helpers\StringHelper;
 
 /**
  * Svg is used to draw a graph using SVG
@@ -16,7 +17,7 @@ use yii\debug\panels\TimelinePanel;
  * @author Dmitriy Bashkarev <dmitriy@bashkarev.com>
  * @since 2.0.8
  */
-class Svg extends BaseObject
+class Svg extends Object
 {
     /**
      * @var int Max X coordinate
@@ -87,8 +88,8 @@ class Svg extends BaseObject
         }
 
         return strtr($this->template, [
-            '{x}' => $this->x,
-            '{y}' => $this->y,
+            '{x}' => StringHelper::normalizeNumber($this->x),
+            '{y}' =>  StringHelper::normalizeNumber($this->y),
             '{stroke}' => $this->stroke,
             '{polygon}' => $this->polygon(),
             '{polyline}' => $this->polyline(),
@@ -141,13 +142,13 @@ class Svg extends BaseObject
      */
     protected function polygon()
     {
-        $str = "0,$this->y ";
+        $str = "0 $this->y ";
         foreach ($this->points as $point) {
             list($x, $y) = $point;
-            $str .= "{$x},{$y} ";
+            $str .= "{$x} {$y} ";
         }
-        $str .= $this->x - 0.001 . ",{$y} {$this->x},{$this->y}";
-        return $str;
+        $str .= $this->x - 0.001 . " {$y} {$this->x} {$this->y}";
+        return StringHelper::normalizeNumber($str);
     }
 
     /**
@@ -155,13 +156,13 @@ class Svg extends BaseObject
      */
     protected function polyline()
     {
-        $str = "0,$this->y ";
+        $str = "0 $this->y ";
         foreach ($this->points as $point) {
             list($x, $y) = $point;
-            $str .= "{$x},{$y} ";
+            $str .= "{$x} {$y} ";
         }
-        $str .= "$this->x,{$y}";
-        return $str;
+        $str .= "$this->x {$y}";
+        return StringHelper::normalizeNumber($str);
     }
 
     /**
@@ -171,7 +172,7 @@ class Svg extends BaseObject
     {
         $gradient = '<linearGradient id="gradient" x1="0" x2="0" y1="1" y2="0">';
         foreach ($this->gradient as $percent => $color) {
-            $gradient .= '<stop offset="' . $percent . '%" stop-color="' . $color . '"></stop>';
+            $gradient .= '<stop offset="' . StringHelper::normalizeNumber($percent) . '%" stop-color="' . $color . '"></stop>';
         }
         return $gradient . '</linearGradient>';
     }

@@ -3,8 +3,8 @@ namespace Codeception\Module;
 
 use Codeception\Lib\Framework;
 use Codeception\TestInterface;
-use Codeception\Configuration;
 use Codeception\Lib\Connector\ZendExpressive as ZendExpressiveConnector;
+use Codeception\Lib\Interfaces\DoctrineProvider;
 
 /**
  * This module allows you to run tests inside Zend Expressive.
@@ -18,19 +18,23 @@ use Codeception\Lib\Connector\ZendExpressive as ZendExpressiveConnector;
  *
  * ## Config
  *
- * * container: relative path to file which returns Container (default: `config/container.php`)
+ * * `container` - (default: `config/container.php`) relative path to file which returns Container
+ * * `recreateApplicationBetweenTests` - (default: false) whether to recreate the whole application before each test
+ * * `recreateApplicationBetweenRequests` - (default: false) whether to recreate the whole application before each request
  *
- * ## API
+ * ## Public properties
  *
  * * application -  instance of `\Zend\Expressive\Application`
  * * container - instance of `\Interop\Container\ContainerInterface`
  * * client - BrowserKit client
  *
  */
-class ZendExpressive extends Framework
+class ZendExpressive extends Framework implements DoctrineProvider
 {
     protected $config = [
-        'container' => 'config/container.php',
+        'container'                          => 'config/container.php',
+        'recreateApplicationBetweenTests'    => false,
+        'recreateApplicationBetweenRequests' => false,
     ];
 
     /**
@@ -40,43 +44,38 @@ class ZendExpressive extends Framework
 
     /**
      * @var \Interop\Container\ContainerInterface
+     * @deprecated Doesn't work as expected if Application is recreated between requests
      */
     public $container;
 
     /**
      * @var \Zend\Expressive\Application
+     * @deprecated Doesn't work as expected if Application is recreated between requests
      */
     public $application;
 
-    protected $responseCollector;
-
     public function _initialize()
     {
-        $cwd = getcwd();
-        $projectDir = Configuration::projectDir();
-        chdir($projectDir);
-        $this->container = require $projectDir . $this->config['container'];
-        $app = $this->container->get('Zend\Expressive\Application');
+        $this->client = new ZendExpressiveConnector();
+        $this->client->setConfig($this->config);
 
-        $pipelineFile = $projectDir . 'config/pipeline.php';
-        if (file_exists($pipelineFile)) {
-            require $pipelineFile;
+        if ($this->config['recreateApplicationBetweenTests'] == false && $this->config['recreateApplicationBetweenRequests'] == false) {
+            $this->application = $this->client->initApplication();
+            $this->container   = $this->client->getContainer();
         }
-        $routesFile = $projectDir . 'config/routes.php';
-        if (file_exists($routesFile)) {
-            require $routesFile;
-        }
-        chdir($cwd);
-
-        $this->application = $app;
-        $this->initResponseCollector();
     }
 
     public function _before(TestInterface $test)
     {
         $this->client = new ZendExpressiveConnector();
-        $this->client->setApplication($this->application);
-        $this->client->setResponseCollector($this->responseCollector);
+        $this->client->setConfig($this->config);
+
+        if ($this->config['recreateApplicationBetweenTests'] != false && $this->config['recreateApplicationBetweenRequests'] == false) {
+            $this->application = $this->client->initApplication();
+            $this->container   = $this->client->getContainer();
+        } elseif (isset($this->application)) {
+            $this->client->setApplication($this->application);
+        }
     }
 
     public function _after(TestInterface $test)
@@ -89,17 +88,13 @@ class ZendExpressive extends Framework
         parent::_after($test);
     }
 
-    private function initResponseCollector()
+    public function _getEntityManager()
     {
-        /**
-         * @var Zend\Expressive\Emitter\EmitterStack
-         */
-        $emitterStack = $this->application->getEmitter();
-        while (!$emitterStack->isEmpty()) {
-            $emitterStack->pop();
+        $service = 'Doctrine\ORM\EntityManager';
+        if (!$this->container->has($service)) {
+            throw new \PHPUnit\Framework\AssertionFailedError("Service $service is not available in container");
         }
 
-        $this->responseCollector = new ZendExpressiveConnector\ResponseCollector;
-        $emitterStack->unshift($this->responseCollector);
+        return $this->container->get('Doctrine\ORM\EntityManager');
     }
 }

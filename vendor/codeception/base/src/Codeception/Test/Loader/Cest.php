@@ -63,9 +63,10 @@ class Cest implements LoaderInterface
                 if (!empty($dataMethod)) {
                     try {
                         $data = ReflectionHelper::invokePrivateMethod($unit, $dataMethod);
-                        // allow to mix example and dataprovider annotations
-                        $examples = array_merge($examples, $data);
-                    } catch (\Exception $e) {
+                        foreach ($data as $example) {
+                            $examples[] = $example;
+                        }
+                    } catch (\ReflectionException $e) {
                         throw new TestParseException(
                             $file,
                             "DataProvider '$dataMethod' for $testClass->$method is invalid or not callable.\n" .
@@ -75,7 +76,8 @@ class Cest implements LoaderInterface
                 }
 
                 if (count($examples)) {
-                    $dataProvider = new \PHPUnit_Framework_TestSuite_DataProvider();
+                    $dataProvider = new \PHPUnit\Framework\DataProviderTestSuite();
+                    $index = 0;
                     foreach ($examples as $k => $example) {
                         if ($example === null) {
                             throw new TestParseException(
@@ -87,7 +89,9 @@ class Cest implements LoaderInterface
                         }
                         $test = new CestFormat($unit, $method, $file);
                         $test->getMetadata()->setCurrent(['example' => $example]);
+                        $test->getMetadata()->setIndex($index);
                         $dataProvider->addTest($test);
+                        $index++;
                     }
                     $this->tests[] = $dataProvider;
                     continue;

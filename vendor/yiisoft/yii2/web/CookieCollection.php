@@ -10,7 +10,7 @@ namespace yii\web;
 use Yii;
 use ArrayIterator;
 use yii\base\InvalidCallException;
-use yii\base\BaseObject;
+use yii\base\Object;
 
 /**
  * CookieCollection maintains the cookies available in the current request.
@@ -24,7 +24,7 @@ use yii\base\BaseObject;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class CookieCollection extends BaseObject implements \IteratorAggregate, \ArrayAccess, \Countable
+class CookieCollection extends Object implements \IteratorAggregate, \ArrayAccess, \Countable
 {
     /**
      * @var bool whether this collection is read only.

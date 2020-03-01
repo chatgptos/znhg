@@ -109,7 +109,7 @@ class RestTest extends Unit
 
     public function testInvalidJson()
     {
-        $this->setExpectedException('PHPUnit_Framework_ExpectationFailedException');
+        $this->setExpectedException('PHPUnit\Framework\ExpectationFailedException');
         $this->setStubResponse('{xxx = yyy}');
         $this->module->seeResponseIsJson();
     }
@@ -122,9 +122,16 @@ class RestTest extends Unit
         $this->module->seeResponseEquals('<xml><name>John</name></xml>');
     }
 
+    public function testXmlResponseEquals()
+    {
+        $this->setStubResponse('<xml></xml>');
+        $this->module->seeResponseIsXml();
+        $this->module->seeXmlResponseEquals('<xml></xml>');
+    }
+
     public function testInvalidXml()
     {
-        $this->setExpectedException('PHPUnit_Framework_ExpectationFailedException');
+        $this->setExpectedException('PHPUnit\Framework\ExpectationFailedException');
         $this->setStubResponse('<xml><name>John</surname></xml>');
         $this->module->seeResponseIsXml();
     }
@@ -366,7 +373,7 @@ class RestTest extends Unit
         try {
             $this->module->seeResponseMatchesJsonType(['zzz' => 'string']);
             $this->fail('it had to throw exception');
-        } catch (PHPUnit_Framework_AssertionFailedError $e) {
+        } catch (PHPUnit\Framework\AssertionFailedError $e) {
             $this->assertEquals('Key `zzz` doesn\'t exist in {"xxx":"yyy","user_id":1}', $e->getMessage());
         }
     }
@@ -377,7 +384,7 @@ class RestTest extends Unit
         try {
             $this->module->dontSeeResponseMatchesJsonType(['xxx' => 'string']);
             $this->fail('it had to throw exception');
-        } catch (PHPUnit_Framework_AssertionFailedError $e) {
+        } catch (PHPUnit\Framework\AssertionFailedError $e) {
             $this->assertEquals('Unexpectedly response matched: {"xxx":"yyy","user_id":1}', $e->getMessage());
         }
     }
@@ -428,9 +435,15 @@ class RestTest extends Unit
         $this->module->dontSeeBinaryResponseEquals('024f615102cdb3c8c7cf75cdc5a83d15');
     }
 
+    public function testAmDigestAuthenticatedThrowsExceptionWithFunctionalModules()
+    {
+        $this->setExpectedException('\Codeception\Exception\ModuleException', 'Not supported by functional modules');
+        $this->module->amDigestAuthenticated('username', 'password');
+    }
+
     protected function shouldFail()
     {
-        $this->setExpectedException('PHPUnit_Framework_AssertionFailedError');
+        $this->setExpectedException('PHPUnit\Framework\AssertionFailedError');
     }
 }
 

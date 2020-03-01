@@ -4,20 +4,20 @@ platform: 'x86'
 branches:
   except:
     - gh-pages
-    
+
 cache:
-  - c:\tools\php -> appveyor.yml    
+  - c:\tools\php71 -> appveyor.yml
 
 services:
   - mysql
   - postgresql93
   - mongodb
-  
+
 init:
-  - SET PATH=C:\Program Files\OpenSSL;c:\tools\php;%PATH%
+  - SET PATH=C:\Program Files\OpenSSL;c:\tools\php71;%PATH%
   - SET COMPOSER_NO_INTERACTION=1
   - SET PHP=1
-  - SET ANSICON=121x90 (121x90)  
+  - SET ANSICON=121x90 (121x90)
 
 install:
   # databases setup
@@ -26,17 +26,15 @@ install:
   - SET PGPASSWORD=Password12!
   - SET PATH=C:\Program Files\PostgreSQL\9.3\bin\;%PATH%
   # php setup
-  - IF EXIST c:\tools\php (SET PHP=0)
+  - IF EXIST c:\tools\php71 (SET PHP=0)
+  - ps: Set-Service wuauserv -StartupType Manual
   - IF %PHP%==1 cinst -y OpenSSL.Light
   - SET PATH=C:\Program Files\OpenSSL;%PATH%
   - cinst -y curl
   - SET PATH=C:\Program Files\curl;%PATH%
-  - IF %PHP%==1 cinst -y php
-  - IF %PHP%==1 cd c:\tools\php
-  - IF %PHP%==1 cd ext
-  - IF %PHP%==1 appveyor DownloadFile http://windows.php.net/downloads/pecl/releases/mongodb/1.1.6/php_mongodb-1.1.6-7.0-nts-vc14-x64.zip
-  - IF %PHP%==1 7z x php_mongodb-1.1.6-7.0-nts-vc14-x64.zip -y >nul
-  - IF %PHP%==1 cd ..
+  - sc config wuauserv start= auto
+  - IF %PHP%==1 cinst -y php --version 7.1.14
+  - IF %PHP%==1 cd c:\tools\php71
   - IF %PHP%==1 copy php.ini-production php.ini
   - IF %PHP%==1 echo extension_dir=ext >> php.ini
   - IF %PHP%==1 echo extension=php_openssl.dll >> php.ini
@@ -47,8 +45,7 @@ install:
   - IF %PHP%==1 echo extension=php_pdo_pgsql.dll >> php.ini
   - IF %PHP%==1 echo extension=php_pdo_sqlite.dll >> php.ini
   - IF %PHP%==1 echo extension=php_pgsql.dll >> php.ini
-  - IF %PHP%==1 echo extension=php_mongodb.dll >> php.ini
-  - SET PATH=C:\tools\php;%PATH%
+  - SET PATH=C:\tools\php71;%PATH%
   - cd %APPVEYOR_BUILD_FOLDER%
   - appveyor DownloadFile https://getcomposer.org/composer.phar
   - php composer.phar install --prefer-dist -n --no-ansi
@@ -58,5 +55,5 @@ before_test:
   - mysql -uroot -pPassword12! -e "CREATE DATABASE codeception_test"
 
 test_script:
-  - php codecept run cli --no-colors -n --skip-group coverage
-  - php codecept run unit -g core -g appveyor --no-colors -n
+  - codecept run cli --no-colors -n --skip-group coverage
+  - codecept run unit -g core -g appveyor --no-colors -n

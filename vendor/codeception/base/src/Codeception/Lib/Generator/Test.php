@@ -11,16 +11,10 @@ class Test
     use Shared\Classname;
 
     protected $template = <<<EOF
-<?php
-{{namespace}}
-
+<?php {{namespace}}
 class {{name}}Test extends \Codeception\Test\Unit
 {
-    /**
-     * @var \{{actorClass}}
-     */
-    protected \${{actor}};
-
+{{tester}}
     protected function _before()
     {
     }
@@ -36,6 +30,15 @@ class {{name}}Test extends \Codeception\Test\Unit
     }
 }
 EOF;
+
+    protected $testerTemplate = <<<EOF
+    /**
+     * @var \{{actorClass}}
+     */
+    protected \${{actor}};
+    
+EOF;
+
 
     protected $settings;
     protected $name;
@@ -55,11 +58,18 @@ EOF;
 
         $ns = $this->getNamespaceHeader($this->settings['namespace'] . '\\' . $this->name);
 
+        $tester = '';
+        if ($this->settings['actor']) {
+            $tester = (new Template($this->testerTemplate))
+            ->place('actorClass', $actor)
+            ->place('actor', lcfirst(Configuration::config()['actor_suffix']))
+            ->produce();
+        }
+
         return (new Template($this->template))
             ->place('namespace', $ns)
             ->place('name', $this->getShortClassName($this->name))
-            ->place('actorClass', $actor)
-            ->place('actor', lcfirst(Configuration::config()['actor_suffix']))
+            ->place('tester', $tester)
             ->produce();
     }
 }

@@ -8,7 +8,7 @@
 namespace yii\grid;
 
 use Closure;
-use yii\base\BaseObject;
+use yii\base\Object;
 use yii\helpers\Html;
 
 /**
@@ -19,7 +19,7 @@ use yii\helpers\Html;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class Column extends BaseObject
+class Column extends Object
 {
     /**
      * @var GridView the grid view object that owns this column.

@@ -23,6 +23,7 @@ $app->add(new Codeception\Command\GenerateScenarios('generate:scenarios'));
 $app->add(new Codeception\Command\Clean('clean'));
 $app->add(new Codeception\Command\GenerateGroup('generate:groupobject'));
 $app->add(new Codeception\Command\GeneratePageObject('generate:pageobject'));
+$app->add(new Codeception\Command\GenerateSnapshot('generate:snapshot'));
 $app->add(new Codeception\Command\GenerateStepObject('generate:stepobject'));
 $app->add(new Codeception\Command\GenerateEnvironment('generate:environment'));
 $app->add(new Codeception\Command\GenerateFeature('generate:feature'));
@@ -30,7 +31,13 @@ $app->add(new Codeception\Command\GherkinSnippets('gherkin:snippets'));
 $app->add(new Codeception\Command\GherkinSteps('gherkin:steps'));
 $app->add(new Codeception\Command\DryRun('dry-run'));
 $app->add(new Codeception\Command\ConfigValidate('config:validate'));
-$app->add(new Codeception\Command\Completion());
+
+// Suggests package
+if (class_exists('Stecman\Component\Symfony\Console\BashCompletion\CompletionCommand')) {
+    $app->add(new Codeception\Command\Completion());
+} else {
+    $app->add(new Codeception\Command\CompletionFallback());
+}
 
 $app->registerCustomCommands();
 $app->run();
