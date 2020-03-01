@@ -7,20 +7,13 @@
 
 namespace app\modules\mch\models\couponmall;
 
-
-use app\models\Goods;
+use app\models\User;
+use app\models\Model;
+use app\modules\mch\extensions\Export;
+use yii\data\Pagination;
 use app\models\PtGoods;
 use app\models\PtOrder;
 use app\models\PtOrderDetail;
-use app\models\QsCmGoods;
-use app\models\QsCmOrder;
-use app\models\QsCmOrderForm;
-use app\models\User;
-use app\models\YyGoods;
-use app\models\YyOrder;
-use app\models\YyOrderForm;
-use app\models\Model;
-use yii\data\Pagination;
 
 class OrderForm extends Model
 {
@@ -55,15 +48,17 @@ class OrderForm extends Model
         if (!$this->validate())
             return $this->getModelError();
 
-        $query = QsCmOrder::find()
+        $query = Order::find()
             ->alias('o')
             ->select([
                 'o.*',
                 'g.name AS goods_name', 'g.cover_pic',
                 'u.nickname',
+                'g.coupon AS goods_coupon',
+                'g.integral AS goods_integral',
             ])
             ->andWhere(['o.is_delete' => 0, 'o.store_id' => $this->store_id])
-            ->leftJoin(['g' => QsCmGoods::tableName()], 'g.id=o.goods_id')
+            ->leftJoin(['g' => Goods::tableName()], 'g.id=o.goods_id')
             ->leftJoin(['u' => User::tableName()], 'u.id=o.user_id');
         if ($this->status == 0) {//未付款
             $query->andWhere([
@@ -126,14 +121,26 @@ class OrderForm extends Model
             $query->andWhere(['<=', 'o.addtime', strtotime($this->date_end)]);
         }
 
-//        $query1 = clone $query;
-//        if($this->flag == "EXPORT"){
-//            $list_ex = $query1->select('o.*,u.nickname')->orderBy('o.addtime DESC')->asArray()->all();
-//            foreach ($list_ex as $i => $item) {
+        $query1 = clone $query;
+        if($this->flag == "EXPORT"){
+            $identity = \Yii::$app->store->identity;
+            if($identity->user_id!=10){
+                echo '<h1/>没有权限拉取</h1>';die;
+            }
+            $list_ex = $query1->orderBy('o.addtime DESC')->asArray()->all();
+            foreach ($list_ex as $i => $item) {
+                $list_ex[$i]['orderFrom'] = \app\modules\api\models\couponmall\OrderForm::find()
+                    ->select([
+                        'key', 'value'
+                    ])
+                    ->andWhere(['store_id' => $this->store_id, 'order_id' => $item['id'], 'goods_id' => $item['goods_id'], 'is_delete' => 0])
+                    ->all();
 //                $list_ex[$i]['goods_list'] = $this->getOrderGoodsList($item['id']);
-//            }
-//            Export::order($list_ex);
-//        }
+            }
+
+//            var_dump($list_ex);die;
+            Export::orderqs($list_ex);
+        }
         $count = $query->count();
         $p = new Pagination(['totalCount' => $count, 'pageSize' => 20]);
 
@@ -145,7 +152,7 @@ class OrderForm extends Model
             ->all();
 
         foreach ($list AS $k => $v) {
-            $list[$k]['orderFrom'] = QsCmOrderForm::find()
+            $list[$k]['orderFrom'] = \app\modules\api\models\couponmall\OrderForm::find()
                 ->select([
                     'key', 'value'
                 ])

@@ -12,6 +12,7 @@ use app\models\Award;
 use app\models\Cash;
 use app\models\Color;
 use app\models\IntegralLog;
+use app\models\Level;
 use app\models\Option;
 use app\models\Qrcode;
 use app\models\Setting;
@@ -21,6 +22,7 @@ use app\models\UploadConfig;
 use app\models\UploadForm;
 use app\models\User;
 use app\modules\api\behaviors\LoginBehavior;
+use app\modules\api\models\agent\OrderPreviewFrom;
 use app\modules\api\models\BindForm;
 use app\modules\api\models\CashForm;
 use app\modules\api\models\CashListForm;
@@ -28,6 +30,7 @@ use app\modules\api\models\QrcodeForm;
 use app\modules\api\models\ShareForm;
 use app\modules\api\models\TeamForm;
 use app\modules\mch\models\AwardListForm;
+use app\modules\mch\models\settlementstatistics\AwardFuli;
 use yii\helpers\VarDumper;
 
 class CouponMerchantController extends Controller
@@ -67,27 +70,27 @@ class CouponMerchantController extends Controller
         $card_count_require = 0;
         $award = [];
 
-        if ($user->is_agency) {
-            $roleName = '经销商';
-        }
 
-        if ($user->is_distributors) {
-            $roleName = '渠道商';
+
+        $level = Level::findOne(['store_id' => $this->store->id,'id' => $user->level, 'is_delete' => 0]);
+        if($user->level >0){
+            $roleName = $level->name;
         }
 
         if ($id == 0) {
             //经销商
             $team_count_require = $list->agency_team_count_require;
             $card_count_require = $list->agency_card_count_require;
-            if ($user->is_agency) {
+            if ($user->level==6) {
                 $buttonClicked = true;
                 $buttonName = '已经拥有';
             }
         } elseif ($id == 1) {
             //渠道商
-            $team_count_require = $list->distributors_card_count_require;
-            $card_count_require = $list->distributors_team_count_require;
-            if ($user->is_distributors) {
+            $team_count_require = $list->distributors_team_count_require;
+            $card_count_require = $list->distributors_card_count_require;
+            if ($user->level==5) {
+                $buttonName = '已经拥有';
                 $buttonClicked = true;
             }
         } elseif ($id == 2) {
@@ -96,6 +99,10 @@ class CouponMerchantController extends Controller
             $card_count_require = 0;
             $buttonName = '暂未开放';
             $buttonClicked = true;
+            if ($user->level==7) {
+                $buttonName = '已经拥有';
+                $buttonClicked = true;
+            }
         } elseif ($id == 3) {
             //分红权
             $team_count_require = $list->dividend_sharing_right_team_count_require;
@@ -146,15 +153,31 @@ class CouponMerchantController extends Controller
         } elseif ($id == 4) {
             //福利
 //            $team_count_require = $list->fuliquan_card_count_require;
-            $card_count_require = $list->fuliquan_card_count_require;
-            $fulichi = '303839.00';//总价值
-            $fulichiTime = '2019/11/11';//截止时间
-            $fulichiNum = '10000';//份数
-            $perOneCoupon = $card_count_require;//每份优惠券兑换
-            $title = '第一期';
-            $buttonName = '立刻申请';
-            $youHas = '你有'. $user->fuliquan.'份';
-            $buttonClicked = false;
+            $awardFuli = AwardFuli::findOne([ 'is_delete' => 0, 'store_id' => $this->store->id, 'status' => 1]);
+
+            if(!$awardFuli){
+                //赠送
+                $buttonClicked = true;
+                $buttonName = '暂未开放';
+                $fulichi =  '上期结算中';//总价值
+                $fulichiTime = '已经结算';//截止时间
+                $fulichiNum = '已经结算';;//份数
+                $perOneCoupon = '已经结算';//每份优惠券兑换
+                $title =  '即将开放';;
+                $buttonName = '立刻申请';
+                $youHas = '你有'. $user->fuliquan.'份';
+            }else{
+//                $fulichi =  $awardFuli->all_money;;//总价值
+                $fulichi =  '积分';//总价值
+                $fulichiTime = date('Y-m-d', $awardFuli->end_fulichi_time);//截止时间
+//                $fulichiNum =  $awardFuli->num;;//份数
+                $fulichiNum =  $level->name.'可购'.$level->fuliquan_max;//份数
+                $perOneCoupon = $awardFuli->coupon_require;//每份优惠券兑换
+                $title =  $awardFuli->name;;
+                $buttonName = '立刻申请';
+                $youHas = '你有'. $user->fuliquan.'份';
+                $buttonClicked = false;
+            }
 
 
             $userlist = array(
@@ -527,7 +550,10 @@ class CouponMerchantController extends Controller
         $buttonClicked = true;
 
 
+
+        $level = Level::findOne(['store_id' => $this->store->id,'id' => $user->level, 'is_delete' => 0]);
         if ($id == 0) {
+
             //经销商
             $team_count_require = $list->agency_team_count_require;
             $card_count_require = $list->agency_card_count_require;
@@ -539,8 +565,18 @@ class CouponMerchantController extends Controller
                 ], JSON_UNESCAPED_UNICODE);
 
             }
-            $user->coupon = $user->coupon - $card_count_require;//减去优惠券数量
-            $user->is_agency = 1;
+            $form = new OrderPreviewFrom();
+            $model = \Yii::$app->request->get();
+            $form->attributes = $model;
+            $form->store_id = $this->store->id;
+            $form->user_id = \Yii::$app->user->id;
+            $form->goods_id = 14;//类型到id
+            $form->form_list = json_decode($model['form_list'],true);
+            $form->form_id = $model['form_id'];
+            $res=$form->save();
+            $buttonName=$res['msg'];
+//            $user->coupon = $user->coupon - $card_count_require;//减去优惠券数量
+//            $user->is_agency = 1;
         } elseif ($id == 1) {
             //渠道商
             $team_count_require = $list->distributors_team_count_require;
@@ -553,8 +589,21 @@ class CouponMerchantController extends Controller
                 ], JSON_UNESCAPED_UNICODE);
 
             }
-            $user->coupon = $user->coupon - $card_count_require;//减去优惠券数量
-            $user->is_distributors = 1;
+
+            $form = new OrderPreviewFrom();
+            $model = \Yii::$app->request->get();
+            $form->attributes = $model;
+            $form->store_id = $this->store->id;
+            $form->user_id = \Yii::$app->user->id;
+            $form->goods_id = 15;//类型到id
+            $form->form_list = json_decode($model['form_list'],true);
+            $form->form_id = $model['form_id'];
+            $res=$form->save();
+            $buttonName=$res['msg'];
+
+
+//            $user->coupon = $user->coupon - $card_count_require;//减去优惠券数量
+//            $user->is_distributors = 1;
 
         } elseif ($id == 2) {
             //服务权
@@ -585,14 +634,62 @@ class CouponMerchantController extends Controller
             );
 
         } elseif ($id == 4) {
-            //福利权
-            $card_count_require = $list->fuliquan_card_count_require;
+            //福利分红
+            $awardFuli = AwardFuli::findOne([ 'is_delete' => 0, 'store_id' => $this->store->id, 'status' => 1]);
+            //福利分红
+            if(!$awardFuli){
+                return json_encode([
+                    'code'  => 1,
+                    'msg'   => '已经结束',
+                ], JSON_UNESCAPED_UNICODE);
+            }
 
+
+            if(time()>($awardFuli->end_fulichi_time)){
+                return json_encode([
+                    'code'  => 1,
+                    'msg'   => '福利时间已过'.date('Y-m-d',$awardFuli->end_fulichi_time),
+                ], JSON_UNESCAPED_UNICODE);
+            }
+            $card_count_require = $awardFuli->coupon_require;//每份优惠券兑换
             $user->coupon = $user->coupon - $card_count_require;//减去优惠券数量
+
+            $fuliquan_num_my = User::find()->where(['store_id' => $this->store_id,
+                'id' =>$user->id,
+                'is_delete' => 0])
+                ->select([
+                    'sum(fuliquan)'
+                ])->scalar();
+
+            if($level->fuliquan_max<=$fuliquan_num_my){
+                return json_encode([
+                    'code' => 1,
+                    'msg' => $level->name.'超过数量限制'
+                ], JSON_UNESCAPED_UNICODE);
+            }
+            $fuliquan_num = User::find()->where(['store_id' => $this->store_id,
+                'is_delete' => 0])
+                ->select([
+                    'sum(fuliquan)'
+                ])->scalar();
             $user->fuliquan = $user->fuliquan + 1;
             $youHas = '你有' . $user->fuliquan . '份';
             $buttonClicked = true;
             $buttonName = '已经申请';
+            if(($awardFuli->num-$fuliquan_num)<=0 ){
+                return json_encode([
+                    'code' => 1,
+                    'msg' => '已经抢完了'
+                ], JSON_UNESCAPED_UNICODE);
+
+            }
+            if($user->level<$awardFuli->require_level){
+                return json_encode([
+                    'code' => 1,
+                    'msg' => '等级不够'
+                ], JSON_UNESCAPED_UNICODE);
+
+            }
 
         } elseif ($id == 5) {
             //抽奖
@@ -626,20 +723,38 @@ class CouponMerchantController extends Controller
         );
 
 
-        if (!$user->save()) {
-            return json_encode([
-                'code' => 1,
-                'msg' => '申请失败！请重试'
-            ], JSON_UNESCAPED_UNICODE);
-        } else {
+        if ($user->save()) {
+            //记录日志
+            $hld=0;
+            $coupon=$card_count_require;
+            $integral=0;
+
+            $integralLog = new IntegralLog();
+            $integralLog->user_id = $user->id;
+            //卖优惠券
+            $integralLog->content = "申请（福利分红） 后台操作账号：" . $user->nickname . " 欢乐豆".$user->hld."已经扣除：" . $hld . " 豆" . " 优惠券".$user->coupon."已经扣除：" . $coupon . " 张（申请时扣除）,（交易时扣除去积分" . $integral . '个积分）';
+
+            $integralLog->integral = $integral;
+            $integralLog->hld = $hld;
+            $integralLog->coupon = $coupon;
+            $integralLog->addtime = time();
+            $integralLog->username = $user->nickname;
+            $integralLog->operator = 'admin';
+            $integralLog->store_id = $this->store_id;
+            $integralLog->operator_id = 0;
+            $integralLog->save();
             return json_encode([
                 'data' => $data,
                 'code' => 0,
                 'msg' => '申请成功'
             ], JSON_UNESCAPED_UNICODE);
+        } else {
+            return json_encode([
+                'code' => 1,
+                'msg' => '申请失败！请重试'
+            ], JSON_UNESCAPED_UNICODE);
+
         }
-
-
     }
 
     /**

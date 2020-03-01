@@ -11,6 +11,27 @@ $this->title = '用户管理';
 $this->params['active_nav_group'] = 4;
 ?>
 
+
+<div class="alert alert-info rounded-0">
+    <?php if ($_GET['fuliquan'] == 1): ?>
+        <div>福利池名称： <?php echo  $awardFuli->name ?>份</div>
+        <div>所有福利券已经销售数量： <?php echo  $all_fuliquan ?>份</div>
+        <div>所有福利池总奖励（前端不显示）： <?php echo  $awardFuli->all_money ?>积分</div>
+        <div>所有福利池总份数（前端不显示）： <?php echo  $awardFuli->num ?>份</div>
+        <div>开始时间： 上线即为开始/启用</div>
+        <div>截止时间：不可购买（已经购买的用户只可以申请福利奖励发放） <?php echo  date('Y-m-d', $awardFuli->end_fulichi_time) ?></div>
+        <div>每份需要优惠券： <?php echo  $awardFuli->coupon_require ?>张</div>
+        <div>本期抢购用户数： <?php echo  $row_count ?>人</div>
+        <div>本期用户已经购买消耗优惠券总数： <?php echo  $all_fuliquan*$awardFuli->coupon_require ?>份</div>
+        <div>本期用户预计最大消耗优惠券总数： <?php echo  $awardFuli->num*$awardFuli->coupon_require ?>份</div>
+        <div style="color:yellowgreen">请通知所有用户点击申请福利奖励结算后再开始下一期，每次只有一期奖励上线</div>
+    <?php else: ?>
+    <?php endif; ?>
+
+
+</div>
+</div>
+
 <div class="panel mb-3">
     <div class="panel-header"><?= $this->title ?></div>
     <div class="panel-body">
@@ -36,6 +57,32 @@ $this->params['active_nav_group'] = 4;
                 <?php endforeach; ?>
             </div>
         </div>
+
+
+        <div class="dropdown float-left">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                全部类型
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"
+                 style="max-height: 200px;overflow-y: auto">
+                <a class="dropdown-item"
+                   href="<?= $urlManager->createUrl(array_merge(['mch/user/index'], $_GET, ['fuliquan' => 1, 'page' => 1])) ?>">福利券用户</a>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
         <div class="float-right mb-4">
             <form method="get">
 
@@ -64,6 +111,7 @@ $this->params['active_nav_group'] = 4;
                 <th>昵称</th>
                 <th>加入时间</th>
                 <th>身份</th>
+                <th>福利券</th>
                 <th>订单数</th>
                 <th>营销券</th>
                 <th>卡券数量</th>
@@ -85,6 +133,7 @@ $this->params['active_nav_group'] = 4;
                         <?= $u['l_name'] ? $u['l_name'] : '普通用户' ?>
                         <?= $u['is_clerk'] == 1 ? "（核销员）" : "" ?>
                     </td>
+                    <td><?= $u['fuliquan'] ?></td>
                     <td>
                         <a class="btn btn-sm btn-link"
                            href="<?= $urlManager->createUrl(['mch/order/index', 'user_id' => $u['id']]) ?>"><?= User::getCount($u['id']) ?></a>

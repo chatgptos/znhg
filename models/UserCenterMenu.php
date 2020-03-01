@@ -125,9 +125,55 @@ class UserCenterMenu extends Model
                 'name' => '我的预售',
                 'icon' => '/images/icon-about-us.png',
                 'open_type' => 'navigator',
-                'url' => '/pages/bookmall/order/order',
+                'url' => '/pages/bookmall/order/order?status=5',
                 'tel' => '',
             ],
+            [
+                'is_show' => 1,
+                'name' => '股权资格',
+                'icon' => '/images/icon-about-us.png',
+                'open_type' => 'navigator',
+                'url' => '/pages/crowdstockright/order/order',
+                'tel' => '',
+            ],
+            [
+                'is_show' => 1,
+                'name' => '报名',
+                'icon' => '/images/icon-about-us.png',
+                'open_type' => 'navigator',
+                'url' => '/pages/crowdapply/order/order',
+                'tel' => '',
+            ],
+            [
+                'is_show' => 1,
+                'name' => '众筹订单',
+                'icon' => '/images/icon-about-us.png',
+                'open_type' => 'navigator',
+                'url' => '/pages/crowdc/order/order',
+                'tel' => '',
+            ],
+
+            [
+                'is_show' => 1,
+                'name' => '经销商',
+                'icon' => '/images/icon-about-us.png',
+                'open_type' => 'navigator',
+                'url' => '/pages/settlementbonus/index',
+                'tel' => '',
+            ],
+
+
+            [
+                'is_show' => 1,
+                'name' => '我的奖励',
+                'icon' => '/images/icon-about-us.png',
+                'open_type' => 'navigator',
+                'url' => '/pages/settlementbonus/order/order',
+                'tel' => '',
+            ],
+
+
+
         ];
         return $default_menu_list;
     }

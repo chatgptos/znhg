@@ -23,6 +23,18 @@ $this->params['active_nav_group'] = 4;
 <div class="panel mb-3">
     <div class="panel-header"><?= $this->title ?></div>
     <div class="panel-body">
+
+        <form method="get" class="input-group mb-3" style="max-width: 30rem;">
+            <input type="hidden" name="status" value="<?= Yii::$app->request->get('status') ?>">
+            <span class="input-group-addon">日期查找</span>
+            <input class="form-control" id="date_begin" value="<?= Yii::$app->request->get('date_begin') ?>" name="date_begin">
+            <span class="input-group-addon">~</span>
+            <input class="form-control" id="date_end" value="<?= Yii::$app->request->get('date_end') ?>" name="date_end">
+            <span class="input-group-btn">
+                    <button class="btn btn-secondary">查找</button>
+                </span>
+        </form>
+
         <div class="dropdown float-left">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -36,6 +48,12 @@ $this->params['active_nav_group'] = 4;
                     全部类型
                 <?php endif; ?>
             </button>
+
+            <a class="btn btn-secondary"
+               href="<?= Yii::$app->request->url . "&flag=EXPORT" ?>">导出所有交易详情(含条件)</a>
+            <a class="btn btn-secondary"
+               href="<?= Yii::$app->request->url . "?flag=EXPORT" ?>">导出所有交易详情全部</a>
+
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"
                  style="max-height: 200px;overflow-y: auto">
                 <a class="dropdown-item" href="<?= $urlManager->createUrl(['mch/fair/index']) ?>">全部会员</a>
@@ -44,6 +62,11 @@ $this->params['active_nav_group'] = 4;
                        href="<?= $urlManager->createUrl(array_merge(['mch/fair/index'], $_GET, ['level' => $value['level'], 'page' => 1])) ?>"><?= $value['name'] ?></a>
                 <?php endforeach; ?>
             </div>
+
+            <a class="btn btn-secondary"
+               href="<?= Yii::$app->request->url . "&flag=EXPORTall" ?>">导出交易总数量额(含条件)</a>
+            <a class="btn btn-secondary"
+               href="<?= Yii::$app->request->url . "?flag=EXPORTall" ?>">导出交易总数量额全部</a>
         </div>
         <div class="float-right mb-4">
             <form method="get">
@@ -256,6 +279,31 @@ $this->params['active_nav_group'] = 4;
                     $('.rechange-error').text(res.msg);
                 }
             }
+        });
+    });
+
+
+
+    $.datetimepicker.setLocale('zh');
+
+    $(function () {
+        $('#date_begin').datetimepicker({
+            format: 'Y-m-d',
+            onShow: function (ct) {
+                this.setOptions({
+                    maxDate: $('#date_end').val() ? $('#date_end').val() : false
+                })
+            },
+            timepicker: false
+        });
+        $('#date_end').datetimepicker({
+            format: 'Y-m-d',
+            onShow: function (ct) {
+                this.setOptions({
+                    minDate: $('#date_begin').val() ? $('#date_begin').val() : false
+                })
+            },
+            timepicker: false
         });
     });
 

@@ -35,6 +35,9 @@ use yii\web\IdentityInterface;
  * @property integer $hld
  * @property integer $coupon
  * @property integer $coupon_total
+ * @property integer $crowdstockright
+ *
+ *
  *
  *
  *
@@ -97,6 +100,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             'coupon' => '用户优惠券',
             'coupon_total' => '用户总优惠券',
             'fuliquan' => '福利权份数',
+            'crowdstockright' => '福利权份数',
         ];
     }
 
@@ -174,6 +178,28 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return Order::find()->where(['is_delete'=>0,'is_cancel'=>0,'user_id'=>$id])->count();
     }
 
+
+    /**
+     * @return int|string
+     * 获取订单数
+     */
+    public static function getCountPay($id)
+    {
+        return Order::find()->where(['is_delete'=>0,'is_pay'=>1,'is_cancel'=>0,'user_id'=>$id])->count();
+    }
+
+
+    /**
+     * @return int|string
+     * 获取订单数
+     */
+    public static function getSumPay($id)
+    {
+        return Order::find()->where(['is_delete'=>0,'is_pay'=>1,'is_cancel'=>0,'user_id'=>$id])->sum('pay_price');
+    }
+
+
+
     /**
      * @return int|string
      * 获取优惠券数
@@ -188,4 +214,57 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public static function getCardCount($id){
         return UserCard::find()->where(['is_delete'=>0,'user_id'=>$id])->count();
     }
+
+
+    public function getChildrenList()
+    {
+        return $this->hasMany(User::className(), ['parent_id' => 'id'])->where(['is_delete' => 0])->orderBy('addtime DESC');
+    }
+
+
+    //获取某分类的直接子分类
+    public function getSons($categorys, $catId = 0)
+    {
+        $sons = array();
+        foreach ($categorys as $item) {
+            if ($item['parentId'] == $catId)
+                $sons[] = $item;
+        }
+        return $sons;
+    }
+
+    //获取某个分类的所有子分类
+    public function getSubs($categorys, $catId = 0, $level = 1)
+    {
+        $subs = array();
+        foreach ($categorys as $item) {
+            if ($item['parentId'] == $catId) {
+                $item['level'] = $level;
+                $subs[] = $item;
+                $subs = array_merge($subs,$this->getSubs($categorys, $item['id'], $level + 1));
+            }
+
+        }
+        return $subs;
+    }
+
+    //获取某个分类的所有父分类
+    //方法一，递归
+    public function getParents($categorys, $catId)
+    {
+        $tree = array();
+        foreach ($categorys as $item) {
+            if ($item['id'] == $catId) {
+                if ($item['parentId'] > 0)
+                    $tree = array_merge($tree, $this->getParents($categorys, $item['parentId']));
+                $tree[] = $item;
+                break;
+            }
+        }
+        return $tree;
+    }
+
+
+
+
 }

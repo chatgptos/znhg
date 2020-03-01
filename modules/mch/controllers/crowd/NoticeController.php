@@ -8,9 +8,7 @@
 namespace app\modules\mch\controllers\crowd;
 
 
-use app\models\YySetting;
-use app\models\ZcSetting;
-use app\modules\mch\models\book\NoticeForm;
+use app\modules\mch\models\crowd\ZcSetting;
 
 class NoticeController extends Controller
 {

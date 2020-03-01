@@ -52,7 +52,8 @@ class OrderListForm extends Model
                 'is_send' => 0,
                 'is_confirm' => 0,
                 'is_yukuan' => 0,
-            ]);
+            ]) ->andWhere(['<', 'is_check_yukuan', 2])
+            ;
         }
 
 
@@ -135,6 +136,10 @@ class OrderListForm extends Model
 //                'qrcode'=>$qrcode,
                 'offline_qrcode'=>$order->offline_qrcode,
                 'express'=>$order->express,
+                'advance_coupon' => $order->advance_coupon,
+                'advance_integral_buy' =>$order->advance_integral_buy,
+                'yukuan_coupon' => $order->yukuan_coupon,
+                'yukuan_integral_buy' => $order->yukuan_integral_buy,
             ];
         }
         return [

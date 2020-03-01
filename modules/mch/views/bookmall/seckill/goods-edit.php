@@ -5,7 +5,7 @@
  * Time: 16:52
  */
 $urlManager = Yii::$app->urlManager;
-$this->title = '整点预售商品编辑';
+$this->title = '预售商品编辑';
 $this->params['active_nav_group'] = 10;
 ?>
 <style>
@@ -29,7 +29,33 @@ $this->params['active_nav_group'] = 10;
         text-decoration: none;
     }
 
-    .open-date-delete:active {
+    .open-date-delete-bookmall:active {
+        background: #da3b3a;
+        text-decoration: none;
+    }
+
+
+    .open-date-delete-bookmall {
+        display: inline-block;
+        color: #fff;
+        font-weight: bolder;
+        background: #ff6461;
+        width: 12px;
+        text-align: center;
+        height: 12px;
+        line-height: 12px;
+        padding: 0;
+        border-radius: .15rem;
+
+    }
+
+    .open-date-delete-bookmall:hover {
+        background: #ff4544;
+        color: #fff;
+        text-decoration: none;
+    }
+
+    .open-date-delete-bookmall:active {
         background: #da3b3a;
         text-decoration: none;
     }
@@ -40,7 +66,7 @@ $this->params['active_nav_group'] = 10;
         <form class="auto-form" method="post">
             <div class="form-group row">
                 <div class="form-group-label col-sm-2 text-right">
-                    <label class="col-form-label required">整点预售商品</label>
+                    <label class="col-form-label required">预售商品</label>
                 </div>
                 <div class="col-sm-6">
                     <div class="input-group">
@@ -67,10 +93,10 @@ $this->params['active_nav_group'] = 10;
                             <tr>
                                 <th v-bind:colspan="goods.attr[0].attr_list.length">规格</th>
                                 <th>积分</th>
-                                <th>整点预售积分</th>
+                                <th>预售积分</th>
                                 <th>优惠券</th>
                                 <th>库存</th>
-                                <th>整点预售数量</th>
+                                <th>预售数量</th>
                             </tr>
                             </thead>
                             <tr v-for="attr_row in goods.attr">
@@ -118,7 +144,7 @@ $this->params['active_nav_group'] = 10;
                                 :00~<?= $i < 10 ? '0' . $i : $i ?>:59</span>
                         </label>
                     <?php endforeach; else: ?>
-                        <div class="text-muted">商城未设置整点预售开放时间，请<a
+                        <div class="text-muted">商城未设置预售开放时间，请<a
                                     href="<?= $urlManager->createUrl(['mch/bookmall/seckill/index']) ?>">前往设置</a></div>
                     <?php endif; ?>
                 </div>
@@ -157,6 +183,22 @@ $this->params['active_nav_group'] = 10;
                     <a class="badge badge-primary" href="javascript:" id="quickAddDate">+&nbsp;添加</a>
                     <a class="badge badge-primary" href="javascript:" data-toggle="modal"
                        data-target="#addDateModal">+&nbsp;批量添加</a>
+                    <div class="text-muted fs-sm mt-1">只可选择今日起一个月内的时间</div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="form-group-label col-sm-2 text-right">
+                    <label class="col-form-label required">预售开始日期</label>
+                </div>
+                <div class="col-sm-6">
+                    <span v-for="(item,index) in begin_data" class="mr-3 badge badge-default">
+                        <span>{{item}}</span>
+                        <a href="javascript:" class="open-date-delete-bookmall" v-bind:index="index">×</a>
+                    </span>
+<!--                    <a class="badge badge-primary" href="javascript:" id="quickAddDatebegin">+&nbsp;添加</a>-->
+                    <a class="badge badge-primary" href="javascript:" data-toggle="modal"
+                       data-target="#addDateModal-bookmall">+&nbsp;开始结束日期添加</a>
                     <div class="text-muted fs-sm mt-1">只可选择今日起一个月内的时间</div>
                 </div>
             </div>
@@ -249,6 +291,43 @@ $this->params['active_nav_group'] = 10;
         </div>
 
 
+        <!-- Modal -->
+        <div class="modal fade" data-backdrop="static" id="addDateModal-bookmall" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">添加预售日期</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-6 mb-2">
+                                开始日期
+                            </div>
+                            <div class="col-6 mb-2">
+                                结束日期
+                            </div>
+                            <div class="col-6 mb-2">
+                                <input value="<?= date('Y-m-d') ?>" id="date_timepicker_start-bookmall" class="form-control">
+                            </div>
+                            <div class="col-6 mb-2">
+                                <input id="date_timepicker_end-bookmall" class="form-control">
+                            </div>
+                        </div>
+                        <div class="text-muted fs-sm mt-1">只可选择今日起一个月内的时间</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary add-date-confirm-bookmall">确认</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </div>
 </div>
 
@@ -260,6 +339,7 @@ $this->params['active_nav_group'] = 10;
             goods: null,
             open_time: [],
             open_date: [],
+            begin_data: [],
         },
     });
 
@@ -360,6 +440,32 @@ $this->params['active_nav_group'] = 10;
         },
     });
 
+    $('#quickAddDatebegin').datetimepicker({
+        format: "Y-m-d",
+        minDate: "<?=date('Y-m-d')?>",
+        maxDate: "<?=date('Y-m-d', strtotime('+1 month'))?>",
+        timepicker: false,
+        onSelectDate: function (ct, $i) {
+            var y = ct.getFullYear();
+            var m = ct.getMonth() + 1;
+            var d = ct.getDate();
+            var date = y + "-" + (m < 10 ? "0" + m : m) + "-" + (d < 10 ? "0" + d : d);
+            var in_array = false;
+            for (var i in app.begin_data) {
+                if (app.begin_data[i] == date) {
+                    in_array = true;
+                    break;
+                }
+            }
+            if (!in_array) {
+                app.begin_data.push(date);
+                app.begin_data.sort();
+            } else {
+                $.myToast({title: "日期" + date + "已存在", timeout: 1000});
+            }
+        },
+    });
+
     $('#date_timepicker_start').datetimepicker({
         format: 'Y-m-d',
         minDate: "<?=date('Y-m-d')?>",
@@ -383,6 +489,28 @@ $this->params['active_nav_group'] = 10;
         timepicker: false
     });
 
+    $('#date_timepicker_start-bookmall').datetimepicker({
+        format: 'Y-m-d',
+        minDate: "<?=date('Y-m-d')?>",
+        maxDate: "<?=date('Y-m-d', strtotime('+1 month'))?>",
+        onShow: function (ct) {
+            this.setOptions({
+                maxDate: $('#date_timepicker_end-bookmall').val() ? $('#date_timepicker_end-bookmall').val() : "<?=date('Y-m-d', strtotime('+1 month'))?>"
+            })
+        },
+        timepicker: false
+    });
+    $('#date_timepicker_end-bookmall').datetimepicker({
+        format: 'Y-m-d',
+        minDate: "<?=date('Y-m-d')?>",
+        maxDate: "<?=date('Y-m-d', strtotime('+1 month'))?>",
+        onShow: function (ct) {
+            this.setOptions({
+                minDate: $('#date_timepicker_start-bookmall').val() ? $('#date_timepicker_start-bookmall').val() : false
+            })
+        },
+        timepicker: false
+    });
 
     $(document).on("click", ".add-date-confirm", function () {
         var start_date = $("#date_timepicker_start").val();
@@ -425,6 +553,53 @@ $this->params['active_nav_group'] = 10;
         }
     });
 
+    $(document).on("click", ".add-date-confirm-bookmall", function () {
+        var start_date = $("#date_timepicker_start-bookmall").val();
+        var end_date = $("#date_timepicker_end-bookmall").val();
+        var list = getDateList(start_date, end_date);
+        for (var i in list) {
+            var date = list[i];
+            var in_array = false;
+            for (var j in app.begin_data) {
+                if (app.begin_data[j] == date) {
+                    in_array = true;
+                    break;
+                }
+            }
+            if (!in_array) {
+                app.begin_data.push(date);
+            }
+        }
+        app.begin_data.sort();
+        $("#addDateModal-bookmall").modal("hide");
+
+        function getDateList(start_date_str, end_date_str) {
+            start_date_str = start_date_str.split("-");
+            end_date_str = end_date_str.split("-");
+            if (start_date_str.length != 3 || end_date_str.length != 3)
+                return;
+            var start_date = new Date(start_date_str[0], start_date_str[1] - 1, start_date_str[2]);
+            var end_date = new Date(end_date_str[0], end_date_str[1] - 1, end_date_str[2]);
+            var i = 0;
+            var list = [];
+            while (start_date <= end_date) {
+                var y = start_date.getFullYear();
+                var m = start_date.getMonth() + 1;
+                var d = start_date.getDate();
+                var date = y + "-" + (m < 10 ? "0" + m : m) + "-" + (d < 10 ? "0" + d : d);
+                list.push(date);
+                start_date.setDate(start_date.getDate() + 1);
+            }
+            return list;
+        }
+    });
+
+
+    $(document).on("click", ".open-date-delete-bookmall", function () {
+        var index = $(this).attr("index");
+        app.begin_data.splice(index, 1);
+    });
+
     $(document).on("click", ".open-date-delete", function () {
         var index = $(this).attr("index");
         app.open_date.splice(index, 1);
@@ -433,7 +608,7 @@ $this->params['active_nav_group'] = 10;
     $(document).on("click", ".seckill-submit-btn", function () {
         if (!app.goods || app.open_time.length == 0 || app.open_date.length == 0) {
             $.myToast({
-                content: "请完善整点预售商品信息",
+                content: "请完善预售商品信息",
             });
             return;
         }
@@ -450,6 +625,8 @@ $this->params['active_nav_group'] = 10;
                 open_time: JSON.stringify(app.open_time),
                 open_date: JSON.stringify(app.open_date),
                 buy_max: $('input[name=buy_max]').val(),
+                start_date_bookmall: $("#date_timepicker_start-bookmall").val(),
+                end_date_bookmall: $("#date_timepicker_end-bookmall").val(),
             },
             success: function (res) {
                 if (res.code == 0) {

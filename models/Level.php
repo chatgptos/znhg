@@ -16,6 +16,9 @@ use Yii;
  * @property integer $status
  * @property integer $is_delete
  * @property integer $addtime
+ * @property integer $fuliquan_max
+ *
+ *
  */
 class Level extends \yii\db\ActiveRecord
 {
@@ -34,7 +37,7 @@ class Level extends \yii\db\ActiveRecord
     {
         return [
             [['store_id', 'level', 'status', 'is_delete', 'addtime'], 'integer'],
-            [['money', 'discount'], 'number'],
+            [['fuliquan_max','money', 'discount'], 'number'],
             [['name'], 'string', 'max' => 255],
         ];
     }
@@ -54,6 +57,7 @@ class Level extends \yii\db\ActiveRecord
             'status' => '状态 0--禁用 1--启用',
             'is_delete' => 'Is Delete',
             'addtime' => 'Addtime',
+            'fuliquan_max' => 'fuliquan_max',
         ];
     }
 }

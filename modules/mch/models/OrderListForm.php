@@ -8,6 +8,7 @@
 namespace app\modules\mch\models;
 
 
+use app\models\Cat;
 use app\models\Goods;
 use app\models\Order;
 use app\models\OrderDetail;
@@ -127,23 +128,37 @@ class OrderListForm extends Model
             if($this->keyword_1 == 3){
                 $query->andWhere(['like', 'o.name', $this->keyword]);
             }
-//            $query->andWhere([
-//                'OR',
-//                ['LIKE', 'o.id', $this->keyword],
-//                ['LIKE', 'o.order_no', $this->keyword],
-//                ['LIKE', 'o.name', $this->keyword],
-//                ['LIKE', 'o.mobile', $this->keyword],
-//                ['LIKE', 'o.address', $this->keyword],
-//                ['LIKE', 'o.remark', $this->keyword],
-//                ['LIKE', 'o.express_no', $this->keyword],
-//                ['LIKE', 'u.nickname', $this->keyword],
-//            ]);
+
+            if($this->keyword_1 == 5){
+
+//                var_dump($this->keyword);die;
+                $query = $query->leftJoin(['od' => OrderDetail::tableName()], 'o.id=od.order_id');
+                $query = $query->leftJoin(['g' => Goods::tableName()], 'od.goods_id=g.id');
+                $query = $query->leftJoin(['c' => Cat::tableName()], 'c.id=g.cat_id');
+                $query->andWhere([
+                    'OR',
+//                    ['LIKE', 'o.id', $this->keyword],
+//                    ['LIKE', 'o.order_no', $this->keyword],
+//                    ['LIKE', 'o.name', $this->keyword],
+                    ['LIKE', 'o.mobile', $this->keyword],
+                    ['LIKE', 'o.address', $this->keyword],
+//                    ['LIKE', 'o.remark', $this->keyword],
+                    ['LIKE', 'o.express_no', $this->keyword],
+                    ['LIKE', 'u.nickname', $this->keyword],
+                    ['LIKE', 'g.name', $this->keyword],
+                ]);
+            }
+
         }
         if ($this->is_offline) {
             $query->andWhere(['o.is_offline' => $this->is_offline]);
         }
         $query1 = clone $query;
         if ($this->flag == "EXPORT") {
+            $identity = \Yii::$app->store->identity;
+            if($identity->user_id!=10){
+                echo '<h1/>没有权限拉取</h1>';die;
+            }
             $list_ex = $query1->select('o.*,u.nickname')->orderBy('o.addtime DESC')->asArray()->all();
             foreach ($list_ex as $i => $item) {
                 $list_ex[$i]['goods_list'] = $this->getOrderGoodsList($item['id']);

@@ -266,6 +266,7 @@ class OrderController extends Controller
     {
         $form = new OrderClerkForm();
         $form->order_id = \Yii::$app->request->get('order_id');
+        $form->is_check_yukuan = \Yii::$app->request->get('status');
         $form->store_id = $this->store->id;
         $this->renderJson($form->save());
     }

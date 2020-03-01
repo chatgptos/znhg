@@ -23,7 +23,7 @@ class LevelForm extends Model
     public $status;
     public $discount;
     public $content;
-
+    public $fuliquan_max;
 
     public function rules()
     {
@@ -33,7 +33,7 @@ class LevelForm extends Model
             [['level','name','money','status','discount'],'required','on'=>'edit'],
             [['status'],'in','range'=>[0,1]],
             [['discount'],'number','min'=>0.1,'max'=>10],
-            [['money'],'number','min'=>0],
+            [['fuliquan_max','money'],'number','min'=>0],
             [['level'],'integer','min'=>0,'max'=>100],
             [['content'],'required','on'=>'content']
         ];
@@ -47,7 +47,8 @@ class LevelForm extends Model
             'money'=>'升级条件',
             'status'=>'状态',
             'discount'=>'折扣',
-            'content'=>'会员等级说明'
+            'content'=>'会员等级说明',
+            'fuliquan_max'=>'会员等级说明' ,
         ];
     }
     public function save()
@@ -119,6 +120,7 @@ class LevelForm extends Model
         $this->model->money = $this->money;
         $this->model->status = $this->status;
         $this->model->discount = $this->discount;
+        $this->model->fuliquan_max = $this->fuliquan_max;
 
         if($this->model->save()){
             return [

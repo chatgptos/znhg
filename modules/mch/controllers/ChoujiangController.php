@@ -89,7 +89,7 @@ class ChoujiangController extends Controller
         }
         $level->status = $type;
         if ($type == 0) {
-            $exit = User::find()->where(['store_id' => $this->store->id, 'level' => $level->level])->exists();
+            $exit = Award::find()->where(['store_id' => $this->store->id, 'level' => $level->level])->exists();
             if ($exit) {
                 $this->renderJson([
                     'code' => 1,
@@ -122,7 +122,7 @@ class ChoujiangController extends Controller
                 'msg' => '奖品等级不存在'
             ]);
         }
-        $exit = User::find()->where(['store_id' => $this->store->id, 'level' => $level->level])->exists();
+        $exit = Award::find()->where(['store_id' => $this->store->id, 'level' => $level->level])->exists();
         if ($exit) {
             $this->renderJson([
                 'code' => 1,
@@ -149,7 +149,7 @@ class ChoujiangController extends Controller
      */
     public function actionEdit($id = null)
     {
-        $user = User::findOne(['id' => $id, 'store_id' => $this->store->id]);
+        $user = Award::findOne(['id' => $id, 'store_id' => $this->store->id]);
         if (!$user) {
             $this->redirect(\Yii::$app->urlManager->createUrl(['mch/user/index']))->send();
         }
@@ -162,7 +162,7 @@ class ChoujiangController extends Controller
         }
         $level = Award::findAll(['store_id' => $this->store->id, 'status' => 1, 'is_delete' => 0]);
 
-        $user_list = User::findAll(['store_id' => $this->store->id,'is_distributor' => 1]);
+//        $user_list = User::findAll(['store_id' => $this->store->id,'is_distributor' => 1]);
 
 
 //        $user_list = User::find(['store_id' => $this->store->id,'is_distributor' => 1])->asArray()->all();;
@@ -174,7 +174,7 @@ class ChoujiangController extends Controller
 //        }
         return $this->render('edit', [
             'user' => $user,
-            'parent_list' => $user_list,
+//            'parent_list' => $user_list,
             'level' => $level
         ]);
     }

@@ -29,4 +29,23 @@ class AccountController extends Controller
             return $this->render('index', ['model' => $identity]);
         }
     }
+
+
+    /**
+     * 账户设置
+     * @return array|bool|string
+     * @throws \yii\base\Exception
+     */
+    public function actionAdd()
+    {
+        $identity = Yii::$app->store->identity;
+        if (Yii::$app->request->isPost) {
+            $form = new StoreUserForm;
+            $form->user_id = $identity->user_id;
+            $form->store_id = $this->store->id;
+            return $this->renderJson($form->add(Yii::$app->request->post()));
+        } else {
+            return $this->render('add', ['model' => $identity]);
+        }
+    }
 }

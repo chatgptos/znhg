@@ -23,12 +23,15 @@ class UserListForm extends Model
     public $keyword;
     public $is_clerk;
     public $level;
+    public $fuliquan;
+
+
 
     public function rules()
     {
         return [
             [['keyword','level'], 'trim'],
-            [['page', 'is_clerk'], 'integer'],
+            [['fuliquan','page', 'is_clerk'], 'integer'],
             [['page'], 'default', 'value' => 1],
         ];
     }
@@ -54,6 +57,23 @@ class UserListForm extends Model
         $list = $query->select([
             'u.*', 's.name shop_name','l.name l_name'
         ])->limit($pagination->limit)->offset($pagination->offset)->orderBy('u.addtime DESC')->asArray()->all();
+
+        $all_fuliquan=0;
+        if($this->fuliquan){
+            $list = $query->select([
+                'u.*', 's.name shop_name','l.name l_name'
+            ])->andWhere(['AND',['>', 'fuliquan', 0]])->limit($pagination->limit)->offset($pagination->offset)->orderBy('u.fuliquan DESC')->asArray()->all();
+
+            $count = count($list);
+            $pagination = new Pagination(['totalCount' => $count, 'page' => $this->page - 1]);
+            $all_fuliquan=User::find()->alias('u')->where([
+                'u.type' => 1,
+                'u.store_id' => $this->store_id,
+                'u.is_delete' => 0
+            ])->select([
+                'sum(fuliquan)'
+            ])->andWhere(['AND',['>', 'fuliquan', 0]])->orderBy('u.fuliquan DESC')->scalar();
+        }
         $store = Store::findOne(['id' => $this->store_id]);
         foreach ($list as $index => $value) {
 //            $time = time() - $store->after_sale_time * 86400;
@@ -69,6 +89,7 @@ class UserListForm extends Model
             'page_count' => $pagination->pageCount,
             'pagination' => $pagination,
             'list' => $list,
+            'all_fuliquan'=>$all_fuliquan,
         ];
     }
 
@@ -94,7 +115,7 @@ class UserListForm extends Model
         $pagination = new Pagination(['totalCount' => $count, 'page' => $this->page - 1]);
         $list = $query->select([
             'u.*', 's.name shop_name','l.name l_name'
-        ])->andWhere(['AND',['>', 'total_integral', 0]])->limit($pagination->limit)->offset($pagination->offset)->orderBy('u.addtime DESC')->asArray()->all();
+        ])->andWhere(['AND',['>', 'fuliquan', 0]])->limit($pagination->limit)->offset($pagination->offset)->orderBy('u.fuliquan DESC')->asArray()->all();
         $store = Store::findOne(['id' => $this->store_id]);
         foreach ($list as $index => $value) {
 //            $time = time() - $store->after_sale_time * 86400;

@@ -12,10 +12,12 @@ use app\extensions\Sms;
 use app\models\Cash;
 use app\models\CashWechatTplSender;
 use app\models\Color;
+use app\models\IntegralLog;
 use app\models\Option;
 use app\models\Qrcode;
 use app\models\Setting;
 use app\models\Share;
+use app\models\TreeGrid;
 use app\models\User;
 use app\models\WechatTemplateMessage;
 use app\models\WechatTplMsgSender;
@@ -27,7 +29,10 @@ use app\modules\mch\models\ShareListForm;
 use app\modules\mch\models\ShareOrderForm;
 use app\modules\mch\models\ShareSettingForm;
 use app\modules\mch\models\StoreDataForm;
+use yii\data\ActiveDataProvider;
 use yii\helpers\VarDumper;
+
+
 
 class ShareController extends Controller
 {
@@ -40,19 +45,96 @@ class ShareController extends Controller
         $form = new ShareListForm();
         $form->attributes = \Yii::$app->request->get();
         $form->store_id = $this->store->id;
-        $form->limit = 10;
+        $form->limit = 20;
         $arr = $form->getList();
-        $list = $form->getTeam();
-        $count = $form->getCount();
+
+
         $setting = Setting::findOne(['store_id' => $this->store->id]);
+//        $list = $form->getTeam();
+        $count = $form->getCount();
+
         return $this->render('index', [
             'list' => $arr[0],
             'pagination' => $arr[1],
             'setting' => $setting,
-            'team' => json_encode($list, JSON_UNESCAPED_UNICODE),
+//            'team' => json_encode($list, JSON_UNESCAPED_UNICODE),
+            'team' => json_encode($arr[2], JSON_UNESCAPED_UNICODE),
             'count' => $count
         ]);
     }
+
+
+
+
+
+
+
+
+
+
+
+    //获取某分类的直接子分类
+    public function getSons($categorys, $catId = 0)
+    {
+        $sons = array();
+        foreach ($categorys as $item) {
+            if ($item['parent_id'] == $catId)
+                $sons[] = $item;
+        }
+        return $sons;
+    }
+
+    //获取某个分类的所有子分类
+    public function getSubs($categorys, $catId = 0, $level = 1)
+    {
+        $subs = array();
+        foreach ($categorys as $item) {
+            if ($item['parent_id'] == $catId) {
+                $item['level'] = $level;
+                $subs[] = $item;
+                $subs = array_merge($subs,$this->getSubs($categorys, $item['id'], $level + 1));
+            }
+
+        }
+        return $subs;
+    }
+
+    //获取某个分类的所有父分类
+    //方法一，递归
+    public function getParents($categorys, $catId)
+    {
+        $tree = array();
+        foreach ($categorys as $item) {
+            if ($item['id'] == $catId) {
+                if ($item['parent_id'] > 0)
+                    $tree = array_merge($tree, $this->getParents($categorys, $item['parentId']));
+                $tree[] = $item;
+                break;
+            }
+        }
+        return $tree;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * @return mixed|string
@@ -183,6 +265,26 @@ class ShareController extends Controller
         if ($status == 3) {
             $user = User::findOne(['id' => $cash->user_id]);
             $user->price += $cash->price;
+            //驳回增加积分
+            $user->integral +=intval($cash->price);
+            //提现记录
+            //记录日志
+            $hld=0;
+            $coupon=0;
+            $integral=intval($cash->price);
+            $integralLog = new IntegralLog();
+            $integralLog->user_id = $user->id;
+            //申请奖励 扣除积分
+            $integralLog->content = "(提现申请驳回)：" . $user->nickname . " 欢乐豆".$user->hld."已经扣除：" . $hld . " 豆" . " 优惠券".$user->coupon."已经扣除：" . $coupon . " 张，积分：" . $user->integral . '已返回积分'.$integral;
+            $integralLog->integral = $integral;
+            $integralLog->hld = $hld;
+            $integralLog->coupon = $coupon;
+            $integralLog->addtime = time();
+            $integralLog->username = $user->nickname;
+            $integralLog->operator = 'admin';
+            $integralLog->store_id = $this->store_id;
+            $integralLog->operator_id = 0;
+            $integralLog->save();
             if (!$user->save()) {
                 return json_encode([
                     'code' => 1,

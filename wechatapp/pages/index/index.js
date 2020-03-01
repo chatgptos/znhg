@@ -1,3 +1,4 @@
+var mta= require('../../analysis/mta_analysis.js')
 var api = require('../../api.js');
 var app = getApp();
 var share_count = 0;
@@ -41,6 +42,7 @@ Page({
         console.log('console.log(parent_id)------------------'+parent_id+'user_id'+user_id)
         app.loginBindParent({ parent_id: parent_id });
         console.log('console.log(loginBindParent)------------------')
+
     },
 
     /**
@@ -61,6 +63,7 @@ Page({
                     wx.setStorageSync('store', res.data.store);
                     page.seckillTimer();
                     page.bookmall_seckillTimer();
+                    page.crowdc_seckillTimer();
                 }
             },
             complete: function () {
@@ -277,6 +280,26 @@ Page({
 
     },
 
+    crowdc_seckillTimer: function () {
+        var page = this;
+        console.log(page.data.crowdc_seckill);
+        if (!page.data.crowdc_seckill || !page.data.crowdc_seckill.rest_time)
+            return;
+        var timer = setInterval(function () {
+            if (page.data.crowdc_seckill.rest_time > 0) {
+                page.data.crowdc_seckill.rest_time = page.data.crowdc_seckill.rest_time - 1;
+            } else {
+                clearInterval(timer);
+                return;
+            }
+            page.data.crowdc_seckill.times = page.getTimesBySecond(page.data.crowdc_seckill.rest_time);
+            page.setData({
+                crowdc_seckill: page.data.crowdc_seckill,
+            });
+        }, 1000);
+
+    },
+
     onHide: function () {
         app.pageOnHide(this);
         clearInterval(int);
@@ -285,7 +308,9 @@ Page({
         app.pageOnUnload(this);
         clearInterval(int);
     },
-    showNotice: function () {
+    showNotice: function (e) {
+        console.log(e)
+        mta.Event.stat('buy',{'price':'true'})
         this.setData({
             show_notice: true
         });

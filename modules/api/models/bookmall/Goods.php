@@ -40,6 +40,9 @@ use yii\helpers\VarDumper;
  * @property integer $integral_give_num
  * @property integer $integral_buy
  * @property integer $coupon
+ * @property integer $advance
+ *
+ *
  *
  *
  */
@@ -62,7 +65,7 @@ class Goods extends \yii\db\ActiveRecord
             [['store_id', 'name', 'detail', 'attr'], 'required'],
             [['store_id', 'cat_id', 'status', 'addtime', 'is_delete', 'sort', 'virtual_sales', 'individual_share', 'freight', 'use_attr', 'share_type'], 'integer'],
             [['price', 'original_price', 'share_commission_first', 'share_commission_second', 'share_commission_third', 'weight','integral_give_num','integral_buy','coupon'], 'number'],
-            [['detail', 'attr', 'cover_pic', 'video_url', 'full_cut', 'integral'], 'string'],
+            [['detail', 'attr', 'cover_pic', 'video_url', 'full_cut', 'integral','advance'], 'string'],
             [['name', 'unit'], 'string', 'max' => 255],
             [['service'], 'string', 'max' => 2000],
         ];
@@ -102,8 +105,9 @@ class Goods extends \yii\db\ActiveRecord
             'use_attr' => '是否使用规格：0=不使用，1=使用',
             'share_type' => '佣金配比 0--百分比 1--固定金额',
             'integral_give_num' => '第几个获得积分',
-            'integral_buy' =>'购买积分',
-            'coupon' =>'优惠券',
+            'integral_buy' =>'购买积分',//总的
+            'coupon' =>'优惠券',//总的
+            'advance' =>'预付比例',
         ];
     }
 

@@ -8,10 +8,7 @@
 namespace app\modules\api\models\couponmall;
 
 
-use app\models\Goods;
-use app\models\QsCmGoods;
 use app\models\Store;
-use app\models\YyGoods;
 use app\modules\api\models\Model;
 use Curl\Curl;
 use Grafika\Color;
@@ -33,7 +30,7 @@ class GoodsQrcodeForm extends Model
 
     public function search()
     {
-        $goods = QsCmGoods::findOne($this->goods_id);
+        $goods = Goods::findOne($this->goods_id);
         if (!$goods)
             return [
                 'code' => 1,

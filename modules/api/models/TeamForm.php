@@ -16,7 +16,6 @@ use app\models\OrderRefund;
 use app\models\Setting;
 use app\models\Share;
 use app\models\User;
-use app\models\UserShareMoney;
 use yii\data\Pagination;
 use yii\helpers\VarDumper;
 

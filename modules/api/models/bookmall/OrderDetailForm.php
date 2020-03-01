@@ -130,6 +130,10 @@ class OrderDetailForm extends Model
                 'discount'=>$order->discount,
                 'user_coupon_id'=>$order->user_coupon_id,
                 'words'=>$order->words,
+                'advance_coupon' => $order->advance_coupon,
+                'advance_integral_buy' =>$order->advance_integral_buy,
+                'yukuan_coupon' => $order->yukuan_coupon,
+                'yukuan_integral_buy' => $order->yukuan_integral_buy,
             ],
         ];
     }

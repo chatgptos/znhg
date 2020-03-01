@@ -7,11 +7,6 @@
 
 namespace app\modules\api\models\couponmall;
 
-
-use app\models\QsCmGoods;
-use app\models\QsCmOrder;
-use app\models\YyGoods;
-use app\models\YyOrder;
 use app\modules\api\models\Model;
 use yii\data\Pagination;
 
@@ -38,7 +33,7 @@ class OrderListForm extends Model
         if (!$this->validate())
             return $this->getModelError();
 
-        $query = QsCmOrder::find()
+        $query = Order::find()
             ->alias('o')
             ->select([
                 'o.*',
@@ -52,7 +47,7 @@ class OrderListForm extends Model
             'o.user_id' => $this->user_id,
             'o.is_cancel' => 0,
         ]);
-        $query->leftJoin(['g'=>QsCmGoods::tableName()],'o.goods_id=g.id');
+        $query->leftJoin(['g'=>Goods::tableName()],'o.goods_id=g.id');
         if ($this->status == 0) {//待付款
             $query->andWhere([
                 'o.is_pay' => 0,

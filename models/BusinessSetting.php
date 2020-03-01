@@ -56,6 +56,7 @@ class BusinessSetting extends \yii\db\ActiveRecord
             'charge3' => '百分比手续费级',
             'chargeNum3' => '百分比手续费',
             'chargeNum5' => '其他手续费',
+            'charge5' => '其他手续费',
             'is_hldtoyhq' => '欢乐豆对优惠券是否打开 买优惠券',
             'is_yhqtohld' => '优惠券对欢乐豆是否打开 卖优惠券',
             'is_jftohld' => '积分对欢乐豆是否打开',

@@ -7,14 +7,11 @@
 
 namespace app\modules\mch\controllers\couponmall;
 
-
-use app\models\QsCmOrder;
-use app\models\QsCmWechatTplMsgSender;
-use app\models\YyOrder;
-use app\models\YyWechatTplMsgSender;
+use app\modules\mch\models\couponmall\Order;
 use app\modules\mch\models\couponmall\OrderClerkForm;
 use app\modules\mch\models\couponmall\OrderForm;
 use app\modules\mch\models\couponmall\OrderSendForm;
+use app\modules\mch\models\crowdstockright\WechatTplMsgSender;
 
 class OrderController extends Controller
 {
@@ -39,7 +36,7 @@ class OrderController extends Controller
     public function actionRefund()
     {
         $order_id = \Yii::$app->request->get('order_id');
-        $order = QsCmOrder::find()
+        $order = Order::find()
             ->andWhere([
                 'id'            => $order_id,
                 'is_delete'     => 0,
@@ -94,7 +91,7 @@ class OrderController extends Controller
         }
         $order->is_refund = 1;
         if ($order->save()) {
-            $msg_sender = new QsCmWechatTplMsgSender($this->store_id, $order->id, $wechat);
+            $msg_sender = new WechatTplMsgSender($this->store_id, $order->id, $wechat);
             if ($order->is_pay) {
                 $remark = '订单已退款，退款金额：' . $order->pay_price;
                 $refund_reason = '用户取消';

@@ -76,7 +76,7 @@ class GoodsController extends Controller
     {
         $query = Goods::find()->alias('g')->where(['g.store_id' => $this->store->id, 'g.is_delete' => 0]);
         $query->leftJoin(['c' => Cat::tableName()], 'c.id=g.cat_id');
-        $query->select('g.id,g.name,g.price,g.original_price,g.status,g.cover_pic,g.sort,g.attr,g.cat_id,g.virtual_sales');
+        $query->select('g.is_best,g.is_hot,g.id,g.name,g.price,g.original_price,g.status,g.cover_pic,g.sort,g.attr,g.cat_id,g.virtual_sales');
         $cat_query = clone $query;
         if (trim($keyword)) {
             $query->andWhere([
@@ -203,7 +203,7 @@ class GoodsController extends Controller
                 ]);
             }
             if (!$goods->getNum()) {
-                $return_url = \Yii::$app->urlManager->createUrl(['mch/goods/goods-attr', 'id' => $goods->id]);
+                $return_url = \Yii::$app->urlManager->createUrl(['mch/goods/goods-edit', 'id' => $goods->id]);
                 if (!$goods->use_attr)
                     $return_url = \Yii::$app->urlManager->createUrl(['mch/goods/goods-edit', 'id' => $goods->id]) . '#step3';
                 $this->renderJson([
@@ -213,7 +213,63 @@ class GoodsController extends Controller
                 ]);
             }
             $goods->status = 1;
-        } else {
+        } elseif ($type == 'hot') {// 设置热销
+            $goods = Goods::findOne(['id' => $id, 'is_delete' => 0,
+                'store_id' => $this->store->id]);
+            if (!$goods) {
+                $this->renderJson([
+                    'code' => 1,
+                    'msg' => '商品已删除或已设为热销'
+                ]);
+            }
+            if (!Goods::getNum($goods->id)) {
+                $this->renderJson([
+                    'code' => 1,
+                    'msg' => '商品库存不足，请先完善商品库存',
+                    'return_url' => \Yii::$app->urlManager->createUrl(['mch/goods/goods-edit', 'id' => $goods->id]),
+                ]);
+            }
+            $goods->is_hot = 1;
+        } elseif ($type == 'nohot') {
+            // 取消热销
+            $goods = Goods::findOne(['id' => $id, 'is_delete' => 0,
+                'store_id' => $this->store->id]);
+            if (!$goods) {
+                $this->renderJson([
+                    'code' => 1,
+                    'msg' => '商品已删除或已取消热销'
+                ]);
+            }
+            $goods->is_hot = 0;
+        } elseif ($type == 'best') {// 设置热销
+            $goods = Goods::findOne(['id' => $id, 'is_delete' => 0,
+                'store_id' => $this->store->id]);
+            if (!$goods) {
+                $this->renderJson([
+                    'code' => 1,
+                    'msg' => '商品已删除或已设为精选'
+                ]);
+            }
+            if (!Goods::getNum($goods->id)) {
+                $this->renderJson([
+                    'code' => 1,
+                    'msg' => '商品库存不足，请先完善商品库存',
+                    'return_url' => \Yii::$app->urlManager->createUrl(['mch/goods/goods-edit', 'id' => $goods->id]),
+                ]);
+            }
+            $goods->is_best = 1;
+        } elseif ($type == 'nobest') {
+            // 取消热销
+            $goods = Goods::findOne(['id' => $id, 'is_delete' => 0,
+                'store_id' => $this->store->id]);
+            if (!$goods) {
+                $this->renderJson([
+                    'code' => 1,
+                    'msg' => '商品已删除或已取消精选'
+                ]);
+            }
+            $goods->is_best = 0;
+        }  else {
             $this->renderJson([
                 'code' => 1,
                 'msg' => '参数错误'

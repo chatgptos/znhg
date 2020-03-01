@@ -539,7 +539,7 @@ class BusinessCommentForm extends Model
     {
         $charge = 0;
 
-        if ($num <= $this->chargeNum && $num > 0) {
+        if ($num <= $this->chargeNum && $num >= 0) {
 //            $this->charge = 100 / 7;
             $charge = $this->charge;  //1张
         } elseif ($num <= $this->chargeNum1 && $num > $this->chargeNum) {

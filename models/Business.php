@@ -90,7 +90,7 @@ class Business extends \yii\db\ActiveRecord
             'huanledou_charge' => '手续费价值欢乐豆',
             'xtjl' => '系统奖励',
             'user_id_buyer' => '想要人数量',
-            'is_exchange'=>'已交易',
+            'is_exchange'=>'已交易 0/1',
         ];
     }
 

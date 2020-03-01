@@ -58,6 +58,29 @@ class GoodsForm extends Model
 
 
 
+    public $charge;
+    public $chargeNum;
+    public $charge1;
+    public $chargeNum1;
+    public $charge2;
+    public $chargeNum2;
+    public $charge3;
+    public $chargeNum3;
+    public $chargeNum5;
+    public $charge5;
+    public $is_coupon_down;
+    public $is_buy_integral_down;
+
+
+    public $advance;
+
+    public $level;
+
+
+
+
+
+
     /**
      * @return array
      */
@@ -67,7 +90,8 @@ class GoodsForm extends Model
             [['name', 'service', 'unit'], 'trim'],
             [['store_id', 'name', 'price', 'cat_id', 'detail', 'goods_pic_list', 'cover_pic'], 'required'],
             [['store_id', 'sort', 'virtual_sales', 'freight', 'share_type'], 'integer'],
-            [['price', 'original_price', 'weight','integral_give_num','coupon','integral_buy'], 'number'],
+            [['level','charge','chargeNum','charge1','chargeNum1','charge2','chargeNum2','charge3','charge5','chargeNum3','chargeNum5'
+               ,'advance' ,'is_buy_integral_down','is_coupon_down','price', 'original_price', 'weight','integral_give_num','coupon','integral_buy'], 'number'],
             [['price',], 'number', 'min' => 0.01,],
             [['detail', 'service', 'cover_pic', 'video_url',], 'string'],
             [['name'], 'string', 'max' => 255],
@@ -110,6 +134,24 @@ class GoodsForm extends Model
             'integral_give_num' => '前几个获得积分',
             'coupon' => '优惠券购买',
             'integral_buy' => '积分购买',
+
+
+            'charge' => '百分比手续费',
+            'chargeNum' => '百分比手续费',
+            'charge1' => '百分比手续费2级',
+            'chargeNum1' => '百分比手续费',
+            'charge2' => '百分比手续费3级',
+            'chargeNum2' => '百分比手续费',
+            'charge3' => '百分比手续费级',
+            'charge5' => '百分比手续费级',
+            'chargeNum3' => '百分比手续费',
+            'chargeNum5' => '其他手续费',
+            'is_buy_integral_down' => '欢乐豆对优惠券是否打开 买优惠券',
+            'is_coupon_down' => '优惠券对欢乐豆是否打开 卖优惠券',
+            'advance' => '优惠券对欢乐豆是否打开 卖优惠券',
+            'level' => 'level',
+
+
         ];
     }
 
@@ -175,6 +217,7 @@ class GoodsForm extends Model
             unset($_this_attributes['attr']);
             $goods->attributes = $_this_attributes;
             $goods->use_attr = $this->use_attr ? 1 : 0;
+
 
             if ($goods->save()) {
                 GoodsPic::updateAll(['is_delete' => 1], ['goods_id' => $goods->id]);

@@ -8,10 +8,7 @@
 namespace app\modules\api\models\couponmall;
 
 
-use app\models\OrderComment;
-use app\models\QsCmOrderComment;
 use app\models\User;
-use app\models\YyOrderComment;
 use app\modules\api\models\Model;
 use yii\data\Pagination;
 
@@ -38,7 +35,7 @@ class CommentListForm extends Model
     {
         if (!$this->validate())
             return $this->getModelError();
-        $query = QsCmOrderComment::find()
+        $query = OrderComment::find()
             ->alias('oc')
             ->leftJoin(['u' => User::tableName()], 'oc.user_id=u.id')
             ->where(['oc.goods_id' => $this->goods_id, 'oc.is_delete' => 0, 'oc.is_hide' => 0]);
@@ -74,13 +71,13 @@ class CommentListForm extends Model
     {
         if (!$this->validate())
             return $this->getModelError();
-        $score_all = QsCmOrderComment::find()->alias('oc')
+        $score_all = OrderComment::find()->alias('oc')
             ->where(['oc.goods_id' => $this->goods_id, 'oc.is_delete' => 0, 'oc.is_hide' => 0,])->count();
-        $score_3 = QsCmOrderComment::find()->alias('oc')
+        $score_3 = OrderComment::find()->alias('oc')
             ->where(['oc.goods_id' => $this->goods_id, 'oc.is_delete' => 0, 'oc.is_hide' => 0, 'oc.score' => 3])->count();
-        $score_2 = QsCmOrderComment::find()->alias('oc')
+        $score_2 = OrderComment::find()->alias('oc')
             ->where(['oc.goods_id' => $this->goods_id, 'oc.is_delete' => 0, 'oc.is_hide' => 0, 'oc.score' => 2])->count();
-        $score_1 = QsCmOrderComment::find()->alias('oc')
+        $score_1 = OrderComment::find()->alias('oc')
             ->where(['oc.goods_id' => $this->goods_id, 'oc.is_delete' => 0, 'oc.is_hide' => 0, 'oc.score' => 1])->count();
         return (object)[
             'score_all' => $score_all ? $score_all : 0,

@@ -23,6 +23,7 @@ use app\models\PtOrderDetail;
 use app\models\Store;
 use app\models\Topic;
 use app\models\UserCoupon;
+use app\modules\api\models\couponmall\Setting;
 use app\modules\mch\models\bookmall\GoodsSearchForm;
 use yii\helpers\VarDumper;
 
@@ -53,11 +54,14 @@ class IndexForm extends Model
             'store_id' => $this->store_id,
         ])->orderBy('sort ASC,addtime DESC')->select('name,pic_url,url,name,open_type')->asArray()->all();
 
-        $cat_list = Cat::find()->where([
+        $cat_list = Cat::find()
+            ->where([
+            'is_show' => 1,
             'is_delete' => 0,
             'parent_id' => 0,
             'store_id' => $this->store_id,
-        ])->orderBy('sort ASC')->asArray()->all();
+        ])
+            ->orderBy('sort ASC')->asArray()->all();
         foreach ($cat_list as $i => $cat) {
             $cat_list[$i]['page_url'] = '/pages/list/list?cat_id=' . $cat['id'];
             $cat_list[$i]['open_type'] = 'navigate';
@@ -70,6 +74,29 @@ class IndexForm extends Model
             $goods_list = $goods_list_form_res['code'] == 0 ? $goods_list_form_res['data']['list'] : [];
             $cat_list[$i]['goods_list'] = $goods_list;
         }
+
+
+        //首页推荐
+        $recommend_goods_list_form = new GoodsListForm();
+        $recommend_goods_list_form->store_id = $this->store_id;
+        $recommend_goods_list_form->is_hot = 1;
+        $recommend_goods_list_form->limit = $store->cat_goods_count;
+        $recommend_goods_list_form_res = $recommend_goods_list_form->search();
+        $recommend_goods_list_res['goods_list'] = $recommend_goods_list_form_res['code'] == 0 ? $recommend_goods_list_form_res['data']['list'] : [];
+        $recommend_goods_list_res['name']='商城特惠';
+
+        //首页精选
+        $best_goods_list_form = new GoodsListForm();
+        $best_goods_list_form->store_id = $this->store_id;
+        $best_goods_list_form->is_best = 1;
+        $best_goods_list_form->limit = $store->cat_goods_count;
+        $best_goods_list_form_res = $best_goods_list_form->search();
+        $best_goods_list_res['goods_list'] = $best_goods_list_form_res['code'] == 0 ? $best_goods_list_form_res['data']['list'] : [];
+        $best_goods_list_res['name']='精品推荐';
+
+
+
+
 
         $block_list = HomeBlock::find()->where(['store_id' => $this->store_id, 'is_delete' => 0])->all();
         $new_block_list = [];
@@ -110,6 +137,8 @@ class IndexForm extends Model
                 'nav_icon_list' => $nav_icon_list,
                 'cat_goods_cols' => $store->cat_goods_cols,
                 'cat_list' => $cat_list,
+                'recommend' => $recommend_goods_list_res, //热门推荐
+                'best' => $best_goods_list_res, //精选
                 'block_list' => $new_block_list,
                 'coupon_list' => $coupon_list,
                 'topic_list' => $topic_list,
@@ -117,8 +146,91 @@ class IndexForm extends Model
                 'notice' => Option::get('notice', $this->store_id, 'admin'),
                 'seckill' => $this->getSeckillData(),
                 'bookmall_seckill' => $this->getBookmallSeckillData(),
+                'crowdapply' => $this->getCrowdapply(),
+                'crowdstockright' => $this->getCrowdstockright(),
+                'cheapmarket' => $this->getCheapmarket(),
                 'pintuan' => $this->getPintuanData(),
+                'crowdc_seckill' => $this->getCrowdSeckillData(),
             ],
+        ];
+    }
+
+//报名
+
+    private function getCrowdapply()
+    {
+        // 获取导航分类
+        $cat = \app\modules\api\models\crowdapply\Cat::find()
+            ->select('id,name')
+            ->andWhere(['is_delete' => 0, 'store_id' => $this->store_id])
+            ->orderBy('sort ASC')
+            ->asArray()
+            ->all();
+//        $ad = Option::get('pt_ad', $this->store_id);
+        $yyGoods = new \app\modules\api\models\crowdapply\GoodsForm();
+        $yyGoods->store_id = $this->store_id;
+        $yyGoods->user_id = \Yii::$app->user->id;
+        $goods = $yyGoods->getList();
+        $catShow = \app\modules\api\models\crowdapply\Setting::findOne(['store_id' => $this->store_id]);
+        if (!$catShow->cat) {
+            $cat[0]['name'] = '众筹报名';
+        }
+        return [
+            'cat' => $cat[0],
+            'goods_list' => $goods['list'],
+            'cat_show' => $catShow->cat,
+        ];
+    }
+
+
+    private function getCrowdstockright()
+    {
+        // 获取导航分类
+        $cat = \app\modules\api\models\crowdstockright\Cat::find()
+            ->select('id,name')
+            ->andWhere(['is_delete' => 0, 'store_id' => $this->store_id])
+            ->orderBy('sort ASC')
+            ->asArray()
+            ->all();
+//        $ad = Option::get('pt_ad', $this->store_id);
+        $yyGoods = new \app\modules\api\models\crowdstockright\GoodsForm();
+        $yyGoods->store_id = $this->store_id;
+        $yyGoods->user_id = \Yii::$app->user->id;
+        $goods = $yyGoods->getList();
+        $catShow = \app\modules\api\models\crowdstockright\Setting::findOne(['store_id' => $this->store_id]);
+        if (!$catShow->cat) {
+            $cat[0]['name'] = '众筹权益';
+        }
+        return [
+            'cat' => $cat[0],
+            'goods_list' => $goods['list'],
+            'cat_show' => $catShow->cat,
+        ];
+    }
+
+
+    private function getCheapmarket()
+    {
+        // 获取导航分类
+        $cat = \app\modules\api\models\couponmall\Cat::find()
+            ->select('id,name')
+            ->andWhere(['is_delete' => 0, 'store_id' => $this->store_id])
+            ->orderBy('sort ASC')
+            ->asArray()
+            ->all();
+        $ad = Option::get('pt_ad', $this->store_id);
+        $yyGoods = new \app\modules\api\models\couponmall\GoodsForm();
+        $yyGoods->store_id = $this->store_id;
+        $yyGoods->user_id = \Yii::$app->user->id;
+        $goods = $yyGoods->getList();
+        $catShow = Setting::findOne(['store_id' => $this->store_id]);
+        if (!$catShow->cat) {
+            $cat[0]['name'] = '兑换商城';
+        }
+        return [
+            'cat' => $cat[0],
+            'goods_list' => $goods['list'],
+            'cat_show' => $catShow->cat,
         ];
     }
 
@@ -229,6 +341,67 @@ class IndexForm extends Model
     }
 
 
+    public function getCrowdSeckillData()
+    {
+        $list = \app\modules\api\models\crowdc\SeckillGoods::find()->alias('mg')
+            ->select('g.id,g.name,g.cover_pic AS pic,
+            integral_all_crowdc,returnback_integral,send_date_num,end_date_crowdc,start_date_crowdc,
+            g.price,mg.attr,mg.start_time,mg.start_date_crowdc,mg.end_date_crowdc,mg.open_date')
+            ->leftJoin(['g' => \app\modules\api\models\crowdc\Goods::tableName()], 'mg.goods_id=g.id')
+            ->where([
+                'AND',
+                [
+                    'mg.is_delete' => 0,
+                    'g.is_delete' => 0,
+                    'mg.open_date' => date('Y-m-d'),
+                    'g.status' => 1,
+                    'mg.start_time' => date('H'),
+                    'mg.store_id' => $this->store_id,
+                ],
+            ])
+            ->orderBy('g.sort ASC,g.addtime DESC')
+            ->limit(10)
+            ->asArray()
+            ->all();
+        foreach ($list as $i => $item) {
+            $item['attr'] = json_decode($item['attr'], true);
+            $list[$i] = $item;
+            $price_list = [];
+            foreach ($item['attr'] as $attr) {
+                if ($attr['seckill_price'] <= 0) {
+                    $price_list[] = doubleval($item['price']);
+                } else {
+                    $price_list[] = doubleval($attr['seckill_price']);
+                }
+            }
+            $list[$i]['price'] = number_format($list[$i]['price'], 2, '.', '');
+            $list[$i]['seckill_price'] = number_format(min($price_list), 2, '.', '');
+            $list[$i]['rest_time_list'] = number_format(min($price_list), 2, '.', '');
+            $list[$i]['date_num_has_crowdc']=round(($item['end_date_crowdc']-$item['start_date_crowdc'])/3600/24);//天数剩余
+            $list[$i]['send_date_num']=$item['send_date_num'];//发货的天数
+            $list[$i]['integral_all_crowdc']=$item['integral_all_crowdc'];//需要的积分
+            $list[$i]['returnback_integral']=$item['returnback_integral'];//余份数
+            $list[$i]['integral_has_crowdc']=$item['sell_num']*$item['seckill_price'];//已经筹集到的积分
+            $list[$i]['has_people_num']= intval($item['sell_num']);//已经筹集到的积分
+//            $list[$i]['all_limit_num']=$item['price'];//总份数
+//            $list[$i]['remaining']=$item['price'];//余份数
+            $list[$i]['rest_time']=max(intval(strtotime($list[$i]['start_date_crowdc'] - time()), 0));//余份数
+            unset($list[$i]['attr']);
+        }
+        if (count($list) == 0)
+            return [
+                'name' => '暂无预售活动',
+                'rest_time' => 0,
+                'goods_list' => null,
+            ];
+        return [
+            'name' => intval(date('H')) . '点场',
+            'rest_time' => max(intval(strtotime(date('Y-m-d H:59:59')) - time()), 0),
+            'goods_list' => $list,
+        ];
+    }
+
+
     public function getBookmallSeckillData()
     {
         $list = \app\modules\api\models\bookmall\SeckillGoods::find()->alias('mg')
@@ -265,7 +438,7 @@ class IndexForm extends Model
         }
         if (count($list) == 0)
             return [
-                'name' => '暂无秒杀活动',
+                'name' => '暂无预售活动',
                 'rest_time' => 0,
                 'goods_list' => null,
             ];

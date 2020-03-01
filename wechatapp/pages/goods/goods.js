@@ -1,4 +1,5 @@
 // goods.js
+var mta = require('../../analysis/mta_analysis.js');
 var api = require('../../api.js');
 var utils = require('../../utils.js');
 var app = getApp();
@@ -13,6 +14,7 @@ Page({
      * 页面的初始数据
      */
     data: {
+        parent_id:0,
         id: null,
         goods: {},
         show_attr_picker: false,
@@ -74,6 +76,7 @@ Page({
         app.loginBindParent({parent_id: parent_id});
         var page = this;
         page.setData({
+            parent_id:parent_id,
             id: options.id,
         });
         page.getGoods();
@@ -218,6 +221,7 @@ Page({
 
     buyNow: function () {
         this.submit('BUY_NOW');
+        mta.Event.stat("myprice",{})
     },
 
     submit: function (type) {
@@ -298,16 +302,38 @@ Page({
             });
         }
         if (type == 'BUY_NOW') {//立即购买
+
             page.setData({
                 show_attr_picker: false,
             });
-            wx.redirectTo({
-                url: "/pages/order-submit/order-submit?goods_info=" + JSON.stringify({
-                    goods_id: page.data.id,
-                    attr: checked_attr_list,
-                    num: page.data.form.number,
-                }),
-            });
+            //判断是否登入
+            var user_info = wx.getStorageSync("user_info");
+
+            console.log(user_info)
+            console.log(user_info.id)
+            if(user_info && user_info.id!= "undefined"&& user_info.id!= 0&& user_info.id!= undefined){
+                wx.redirectTo({
+                    url: "/pages/order-submit/order-submit?goods_info=" + JSON.stringify({
+                        goods_id: page.data.id,
+                        attr: checked_attr_list,
+                        num: page.data.form.number,
+                    }),
+                });
+            }else {
+                wx.showLoading({
+                    title: "请登入",
+                    mask: true,
+                });
+
+                if (page.data.parent_id == "undefined"){
+                    page.data.parent_id =0;
+                }
+                wx.redirectTo({
+                    url: "/pages/user/user?user_id=" + page.data.parent_id,
+                });
+                wx.hideLoading();
+            }
+
         }
 
     },
@@ -387,6 +413,7 @@ Page({
                 }
             }
         });
+        mta.Event.stat("myprice",{})
 
     },
 

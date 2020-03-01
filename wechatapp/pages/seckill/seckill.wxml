@@ -17,7 +17,7 @@
             <view class="flex-grow-1 flex-y-center" style="color: #ff4544">限时限量 先到先得</view>
             <view wx:for="{{time_list}}" wx:if="{{item.active}}" class="flex-grow-0 flex-y-center" style="color: #888">
                 <block wx:if="{{item.status==0}}">
-                    <text>本场秒杀已结束</text>
+                    <text>本场预售已结束</text>
                 </block>
                 <block wx:if="{{item.status==1}}">
                     <text>距离本场结束</text>

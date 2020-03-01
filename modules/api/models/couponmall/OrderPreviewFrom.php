@@ -9,19 +9,7 @@ namespace app\modules\api\models\couponmall;
 
 
 use app\models\IntegralLog;
-use app\models\QsCmForm;
-use app\models\QsCmGoods;
-use app\models\QsCmOrder;
-use app\models\QsCmOrderForm;
-use app\models\QsCmWechatTplMsgSender;
-use app\models\Store;
 use app\models\User;
-use app\models\YyForm;
-use app\models\YyFormId;
-use app\models\YyGoods;
-use app\models\YyOrder;
-use app\models\YyOrderForm;
-use app\models\YyWechatTplMsgSender;
 use app\modules\api\models\Model;
 
 class OrderPreviewFrom extends Model
@@ -42,12 +30,12 @@ class OrderPreviewFrom extends Model
 
     public function search()
     {
-        $goods = QsCmGoods::find()
+        $goods = Goods::find()
             ->andWhere(['id'=>$this->goods_id,'is_delete'=>0,'status'=>1,'store_id'=>$this->store_id])
             ->asArray()
             ->one();
 
-        $formList = QsCmForm::find()
+        $formList = Form::find()
             ->andWhere(['goods_id'=>$this->goods_id,'is_delete'=>0,'store_id'=>$this->store_id])
             ->orderBy('sort DESC')
             ->asArray()
@@ -83,7 +71,7 @@ class OrderPreviewFrom extends Model
     public function save()
     {
         $this->wechat = $this->getWechat();
-        $goods = QsCmGoods::find()
+        $goods = Goods::find()
             ->andWhere(['id'=>$this->goods_id,'is_delete'=>0,'status'=>1,'store_id'=>$this->store_id])->one();
         if (!$goods){
             return [
@@ -96,7 +84,7 @@ class OrderPreviewFrom extends Model
 
         $this->user = User::findOne(['id' => $this->user_id, 'type' => 1, 'is_delete' => 0]);
 
-        $order = new QsCmOrder();
+        $order = new Order();
         $order->store_id = $this->store_id;
         $order->goods_id = $goods->id;
         $order->user_id  = $this->user_id;
@@ -144,7 +132,7 @@ class OrderPreviewFrom extends Model
                     }
                 }
 
-                $formList = new QsCmOrderForm();
+                $formList = new OrderForm();
                 $formList->store_id = $this->store_id;
                 $formList->goods_id = $goods->id;
                 $formList->user_id  = $this->user_id;
@@ -184,7 +172,7 @@ class OrderPreviewFrom extends Model
                 //会卡死了
                 //查询当前用户订单
 
-                $query = QsCmOrder::find()
+                $query = Order::find()
                     ->alias('o')
                     ->select([
                         'o.id',
@@ -195,10 +183,10 @@ class OrderPreviewFrom extends Model
                         'o.user_id' => $this->user_id,
                         'o.is_cancel' => 0,
                         'g.id' => $goods->id,
-                    ])->leftJoin(['g'=>QsCmGoods::tableName()],'o.goods_id=g.id');
+                    ])->leftJoin(['g'=>Goods::tableName()],'o.goods_id=g.id');
                 $query_num_buy_order = $query->count();
 
-                $query_day = QsCmOrder::find()
+                $query_day = Order::find()
                     ->alias('o')
                     ->select([
                         'o.id',
@@ -214,7 +202,7 @@ class OrderPreviewFrom extends Model
                         ],
                         ['>', 'o.addtime', strtotime(date('Y-m-d'))],
                     ])
-                    ->leftJoin(['g'=>QsCmGoods::tableName()],'o.goods_id=g.id');
+                    ->leftJoin(['g'=>Goods::tableName()],'o.goods_id=g.id');
                 $query_num_buy_order_day = $query_day->count();
                 //查找是否订单数量
                 if($query_num_buy_order_day > $goods->buy_max_day ){
@@ -258,7 +246,7 @@ class OrderPreviewFrom extends Model
 
 
                 if ($order->save()){
-                    $wechat_tpl_meg_sender = new QsCmWechatTplMsgSender($order->store_id, $order->id, $this->wechat);
+                    $wechat_tpl_meg_sender = new WechatTplMsgSender($order->store_id, $order->id, $this->wechat);
                     $wechat_tpl_meg_sender->payMsg();
 
                     $p->commit();
@@ -343,7 +331,7 @@ class OrderPreviewFrom extends Model
         $order_no = null;
         while (true) {
             $order_no = 'Y'.date('YmdHis') . rand(10000, 99999);
-            $exist_order_no = YyOrder::find()->where(['order_no' => $order_no])->exists();
+            $exist_order_no = Order::find()->where(['order_no' => $order_no])->exists();
             if (!$exist_order_no)
                 break;
         }
@@ -398,7 +386,7 @@ class OrderPreviewFrom extends Model
     {
         $this->wechat = $this->getWechat();
         $this->user = User::findOne(['id' => $this->user_id, 'type' => 1, 'is_delete' => 0]);
-        $order = QsCmOrder::find()
+        $order = Order::find()
             ->andWhere([
                 'is_delete' => 0,
                 'store_id' => $this->store_id,
@@ -417,7 +405,7 @@ class OrderPreviewFrom extends Model
         $this->order = $order;
 
 
-        $goods = QsCmGoods::findOne(['id'=>$order->goods_id]);
+        $goods = Goods::findOne(['id'=>$order->goods_id]);
 
 //        if (!$goods){
 //            return [

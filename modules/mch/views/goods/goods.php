@@ -114,26 +114,26 @@ $this->params['active_nav_group'] = 2;
                     </label>
                 </th>
                 <th>商品类型</th>
-                <th class="text-left">商品名称</th>
+                <th >商品名称</th>
                 <th>商品图片</th>
                 <th>售价</th>
                 <th>库存</th>
                 <th>状态</th>
-                <th>虚拟销量</th>
                 <th>排序</th>
+                <th>推荐 精选</th>
                 <th>操作</th>
             </tr>
             </thead>
-            <col style="width: 10%">
-            <col style="width: 7%">
-            <col style="width: 19%">
-            <col style="width: 8%">
-            <col style="width: 8%">
-            <col style="width: 10%">
-            <col style="width: 10%">
-            <col style="width: 10%">
+            <col style="width: 3%">
+            <col style="width: 4%">
             <col style="width: 5%">
-            <col style="width: 13%">
+            <col style="width: 5%">
+            <col style="width: 3%">
+            <col style="width: 2%">
+            <col style="width: 5%">
+            <col style="width: 2%">
+            <col style="width: 5%">
+            <col style="width: 6%">
             <tbody>
             <?php foreach ($list as $index => $goods): ?>
                 <tr>
@@ -185,10 +185,29 @@ $this->params['active_nav_group'] = 2;
                         <?php endif ?>
                     </td>
                     <td class="nowrap">
-                        <?= $goods->virtual_sales ?>
+                        <?= $goods->sort ?>
                     </td>
                     <td class="nowrap">
-                        <?= $goods->sort ?>
+                        <?php if ($goods['is_hot'] == 1): ?>
+                            <a onclick="setHot(<?= $goods['id'] ?>,'nohot');"
+                               class="badge badge-danger"
+                               href="javascript:;"
+                               data-toggle="tooltip" data-placement="top" title="点击取消商品推荐">推荐</a>
+                        <?php else: ?>
+                            <a onclick="setHot(<?= $goods['id'] ?>,'hot');" href="javascript:;"
+                               class="badge badge-primary"
+                               data-toggle="tooltip" data-placement="top" title="点击设置为推荐">普通</a>
+                        <?php endif ?>
+                        <?php if ($goods['is_best'] == 1): ?>
+                            <a onclick="setBest(<?= $goods['id'] ?>,'nobest');"
+                               class="badge badge-danger"
+                               href="javascript:;"
+                               data-toggle="tooltip" data-placement="top" title="点击取消商品精选">精选 </a>
+                        <?php else: ?>
+                            <a onclick="setBest(<?= $goods['id'] ?>,'best');" href="javascript:;"
+                               class="badge badge-primary"
+                               data-toggle="tooltip" data-placement="top" title="点击设置为精选">普通 </a>
+                        <?php endif ?>
                     </td>
                     <td class="nowrap">
                         <a class="btn btn-sm btn-primary"
@@ -493,4 +512,96 @@ $this->params['active_nav_group'] = 2;
             });
         });
     })
+
+
+
+    /**
+     * 设置热销
+     * @param id
+     * @param type
+     */
+    function setHot(id, type) {
+        var text = '';
+        if (type == 'hot') {
+            text = "设置热销";
+        } else {
+            text = '取消热销';
+        }
+        var url = "<?= $urlManager->createUrl(['mch/goods/goods-up-down']) ?>";
+        layer.confirm("是否" + text + "？", {
+            btn: [text, '取消'] //按钮
+        }, function () {
+            layer.msg('加载中', {
+                icon: 16
+                , shade: 0.01
+            });
+            $.ajax({
+                url: url,
+                type: 'get',
+                dataType: 'json',
+                data: {id: id, type: type},
+                success: function (res) {
+                    if (res.code == 0) {
+                        window.location.reload();
+                    }
+                    if (res.code == 1) {
+                        layer.alert(res.msg, {
+                            skin: 'layui-layer-molv'
+                            , closeBtn: 0
+                            , anim: 4 //动画类型
+                        });
+                        if (res.return_url) {
+                            location.href = res.return_url;
+                        }
+                    }
+                }
+            });
+        });
+    }
+
+
+    /**
+     * 设置热销
+     * @param id
+     * @param type
+     */
+    function setBest(id, type) {
+        var text = '';
+        if (type == 'best') {
+            text = "设置精选";
+        } else {
+            text = '取消精选';
+        }
+        var url = "<?= $urlManager->createUrl(['mch/goods/goods-up-down']) ?>";
+        layer.confirm("是否" + text + "？", {
+            btn: [text, '取消'] //按钮
+        }, function () {
+            layer.msg('加载中', {
+                icon: 16
+                , shade: 0.01
+            });
+            $.ajax({
+                url: url,
+                type: 'get',
+                dataType: 'json',
+                data: {id: id, type: type},
+                success: function (res) {
+                    if (res.code == 0) {
+                        window.location.reload();
+                    }
+                    if (res.code == 1) {
+                        layer.alert(res.msg, {
+                            skin: 'layui-layer-molv'
+                            , closeBtn: 0
+                            , anim: 4 //动画类型
+                        });
+                        if (res.return_url) {
+                            location.href = res.return_url;
+                        }
+                    }
+                }
+            });
+        });
+    }
+
 </script>

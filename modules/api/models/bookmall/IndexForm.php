@@ -211,7 +211,7 @@ class IndexForm extends Model
         }
         if (count($list) == 0)
             return [
-                'name' => '暂无秒杀活动',
+                'name' => '暂无预售活动',
                 'rest_time' => 0,
                 'goods_list' => null,
             ];

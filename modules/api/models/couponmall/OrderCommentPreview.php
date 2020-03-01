@@ -7,14 +7,6 @@
 
 namespace app\modules\api\models\couponmall;
 
-use app\models\Order;
-use app\models\PtGoods;
-use app\models\PtOrder;
-use app\models\PtOrderDetail;
-use app\models\QsCmGoods;
-use app\models\QsCmOrder;
-use app\models\YyGoods;
-use app\models\YyOrder;
 use app\modules\api\models\Model;
 
 class OrderCommentPreview extends Model
@@ -34,7 +26,7 @@ class OrderCommentPreview extends Model
     {
         if (!$this->validate())
             return $this->getModelError();
-        $order = QsCmOrder::findOne([
+        $order = Order::findOne([
             'is_delete' => 0,
             'store_id' => $this->store_id,
             'user_id' => $this->user_id,
@@ -64,13 +56,13 @@ class OrderCommentPreview extends Model
 //        foreach ($order_detail_list as $i => $order_detail) {
 //            $order_detail_list[$i]['goods_pic'] = PtGoods::getGoodsPicStatic($order_detail['goods_id']);
 //        }
-        $orderInfo = QsCmOrder::find()
+        $orderInfo = Order::find()
             ->alias('o')
             ->select([
                 'o.*','g.cover_pic'
             ])
             ->andWhere(['o.id'=>$order->id])
-            ->leftJoin(['g'=>QsCmGoods::tableName()],'g.id=o.goods_id')
+            ->leftJoin(['g'=>Goods::tableName()],'g.id=o.goods_id')
             ->asArray()
             ->all();
         return [

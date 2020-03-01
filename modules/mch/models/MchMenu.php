@@ -219,7 +219,7 @@ class MchMenu
 //            ],
 
             [
-                'name' => '新预售管理',
+                'name' => '预售管理',
                 'route' => 'mch/bookmall/goods/goods',
                 'icon' => 'icon-service',
                 'list' => [
@@ -288,7 +288,7 @@ class MchMenu
 
             [
 //                'id' => 'book',
-                'name' => '优惠商场管理',
+                'name' => '优惠券商场管理',
                 'icon' => 'icon-service',
                 'route' => 'mch/couponmall/goods/index',
                 'list' => [
@@ -325,41 +325,297 @@ class MchMenu
                 ],
             ],
             [
-//                'id' => 'book',
-                'name' => '众筹管理',
+                'name' => '众筹C管理',
+                'route' => 'mch/crowdc/goods/goods',
                 'icon' => 'icon-service',
-                'route' => 'mch/crowd/goods/index',
                 'list' => [
                     [
                         'name' => '商品管理',
-                        'route' => 'mch/crowd/goods/index',
+                        'route' => 'mch/crowdc/goods/goods',
                         'sub' => [
-                            'mch/crowd/goods/goods-edit'
-                        ]
+                            'mch/crowdc/goods/goods-edit',
+                        ],
                     ],
                     [
-                        'name' => '商品分类',
-                        'route' => 'mch/crowd/goods/cat',
+                        'name' => '分类',
+                        'route' => 'mch/crowdc/store/cat',
                         'sub' => [
-                            'mch/crowd/goods/cat-edit'
-                        ]
+                            'mch/crowdc/store/cat-edit',
+                        ],
                     ],
                     [
                         'name' => '订单管理',
-                        'route' => 'mch/crowd/order/index',
+                        'route' => 'mch/crowdc/order/index',
+                        'icon' => 'icon-activity',
+                        'list' => [
+                            [
+                                'name' => '订单列表',
+                                'route' => 'mch/crowdc/order/index',
+                                'sub' => [
+                                    'mch/crowdc/order/detail',
+                                    'mch/crowdc/order/index',
+                                ]
+                            ],
+                            [
+                                'name' => '自提订单',
+                                'route' => 'mch/crowdc/order/offline',
+                            ],
+                            [
+                                'name' => '售后订单',
+                                'route' => 'mch/crowdc/order/refund',
+                            ],
+                            [
+                                'name' => '评价管理',
+                                'route' => 'mch/crowdc/comment/index',
+                            ],
+                        ],
                     ],
                     [
-                        'name' => '基础设置',
-                        'route' => 'mch/crowd/index/setting',
+                        'name' => '整点众筹',
+                        'route' => 'mch/crowdc/seckill/index',
+                        'list' => [
+                            [
+                                'name' => '开放时间',
+                                'route' => 'mch/crowdc/seckill/index',
+                            ],
+                            [
+                                'name' => '商品设置',
+                                'route' => 'mch/crowdc/seckill/goods',
+                                'sub' => [
+                                    'mch/crowdc/seckill/goods-edit',
+                                    'mch/crowdc/seckill/goods-detail',
+                                    'mch/crowdc/seckill/calendar',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'name' => '众筹B管理',
+                'route' => 'mch/crowdapply/goods/index',
+                'icon' => 'icon-service',
+                'list' => [
+                    [
+                        'name' => '众筹报名管理',
+                        'icon' => 'icon-service',
+                        'route' => 'mch/crowdapply/goods/index',
+                        'list' => [
+                            [
+                                'name' => '活动管理',
+                                'route' => 'mch/crowdapply/goods/index',
+                                'sub' => [
+                                    'mch/crowdapply/goods/goods-edit'
+                                ]
+                            ],
+                            [
+                                'name' => '活动分类',
+                                'route' => 'mch/crowdapply/goods/cat',
+                                'sub' => [
+                                    'mch/crowdapply/goods/cat-edit'
+                                ]
+                            ],
+                            [
+                                'name' => '报名记录管理',
+                                'route' => 'mch/crowdapply/order/index',
+                            ],
+                            [
+                                'name' => '基础设置',
+                                'route' => 'mch/crowdapply/index/setting',
+                            ],
+                            [
+                                'name' => '模板消息',
+                                'route' => 'mch/crowdapply/notice/setting',
+                            ],
+                            [
+                                'name' => '报名评论管理',
+                                'route' => 'mch/crowdapply/comment/index',
+                            ],
+                        ],
                     ],
                     [
-                        'name' => '模板消息',
-                        'route' => 'mch/crowd/notice/setting',
+                        'name' => '众筹资格管理',
+                        'icon' => 'icon-service',
+                        'route' => 'mch/crowdstockright/goods/index',
+                        'list' => [
+                            [
+                                'name' => '权益管理',
+                                'route' => 'mch/crowdstockright/goods/index',
+                                'sub' => [
+                                    'mch/crowdstockright/goods/goods-edit'
+                                ]
+                            ],
+                            [
+                                'name' => '权益分类',
+                                'route' => 'mch/crowdstockright/goods/cat',
+                                'sub' => [
+                                    'mch/crowdstockright/goods/cat-edit'
+                                ]
+                            ],
+                            [
+                                'name' => '权益记录管理',
+                                'route' => 'mch/crowdstockright/order/index',
+                            ],
+                            [
+                                'name' => '基础设置',
+                                'route' => 'mch/crowdstockright/index/setting',
+                            ],
+                            [
+                                'name' => '模板消息',
+                                'route' => 'mch/crowdstockright/notice/setting',
+                            ],
+                            [
+                                'name' => '评论管理',
+                                'route' => 'mch/crowdstockright/comment/index',
+                            ],
+                        ],
                     ],
+                ],
+            ],
+
+            [
+                'name' => '奖金结算管理',
+                'route' => 'mch/settlementbonus/goods/index',
+                'icon' => 'icon-service',
+                'list' => [
                     [
-                        'name' => '评论管理',
-                        'route' => 'mch/crowd/comment/index',
+                        'name' => '奖金结算管理',
+                        'icon' => 'icon-service',
+                        'route' => 'mch/settlementbonus/goods/index',
+                        'list' => [
+                            [
+                                'name' => '奖金管理',
+                                'route' => 'mch/settlementbonus/goods/index',
+                                'sub' => [
+                                    'mch/settlementbonus/goods/goods-edit'
+                                ]
+                            ],
+                            [
+                                'name' => '奖金分类',
+                                'route' => 'mch/settlementbonus/goods/cat',
+                                'sub' => [
+                                    'mch/settlementbonus/goods/cat-edit'
+                                ]
+                            ],
+                            [
+                                'name' => '奖金发放记录',
+                                'route' => 'mch/settlementbonus/order/index',
+                            ],
+
+//                            [
+//                                'name' => '加权分红放记录管理',
+//                                'route' => 'mch/settlementbonus/order/offline1',
+//                            ],
+//
+//                            [
+//                                'name' => '返点奖金放记录管理',
+//                                'route' => 'mch/settlementbonus/order/offline2',
+//                            ],
+//
+//                            [
+//                                'name' => '福利分红发放记录管理',
+//                                'route' => 'mch/settlementbonus/order/offline3',
+//                            ],
+//                            [
+//                                'name' => '基础设置',
+//                                'route' => 'mch/settlementbonus/index/setting',
+//                            ],
+//                            [
+//                                'name' => '模板消息',
+//                                'route' => 'mch/settlementbonus/notice/setting',
+//                            ],
+//                            [
+//                                'name' => '奖金评论管理',
+//                                'route' => 'mch/settlementbonus/comment/index',
+//                            ],
+                        ],
                     ],
+
+                    [
+                        'name' => '统计结算管理',
+                        'icon' => 'icon-service',
+                        'route' => 'mch/settlementstatistics/data/user',
+                        'list' => [
+                            [
+                                'name' => '用户推荐用户统计',
+                                'route' => 'mch/settlementstatistics/data/user',
+                                'sub' => [
+                                    'mch/settlementstatistics/data/goods'
+                                ]
+                            ],
+                            [
+                                'name' => '总消费和返点结算',
+                                'route' => 'mch/settlementstatistics/data/user1',
+                                'sub' => [
+                                    'mch/settlementstatistics/data/goods'
+                                ]
+                            ],
+                            [
+                                'name' => '返点等级',
+                                'route' => 'mch/settlementstatistics/choujiang/level',
+                                'sub' => [
+                                    'mch/settlementstatistics/data/goods',
+                                    'mch/settlementstatistics/choujiang/level-edit'
+                                ]
+                            ],
+                            [
+                                'name' => '返点佣金',
+                                'route' => 'mch/settlementstatistics/choujiang/sharemoney',
+                                'sub' => [
+                                    'mch/settlementstatistics/data/goods',
+                                ]
+                            ],
+                            [
+                                'name' => '返点佣金明细',
+                                'route' => 'mch/settlementstatistics/choujiang/sharemoneydetail',
+                                'sub' => [
+                                    'mch/settlementstatistics/data/goods',
+                                ]
+                            ],
+
+
+//
+//                            [
+////                                'name' => '数据统计',
+////                                'route' => 'mch/group/data/goods',
+////                                'sub' => [
+////                                    'mch/group/data/user'
+////                                ]
+////                            ],
+//                            [
+//                                'name' => '数据统计',
+//                                'route' => 'mch/group/data/goods',
+//                                'sub' => [
+//                                    'mch/group/data/user'
+//                                ]
+//                            ],
+//                            [
+//                                'name' => '用户积分统计',
+//                                'route' => 'mch/settlementstatistics/data/user',
+//                                'sub' => [
+//                                    'mch/settlementstatistics/data/user'
+//                                ]
+//                            ],
+//                            [
+//                                'name' => '用户现金消费统计',
+//                                'route' => 'mch/settlementstatistics/data/user',
+//                            ],
+//                            [
+//                                'name' => '用户的用户统计',
+//                                'route' => 'mch/settlementstatistics/data/user',
+//                            ],
+//                            [
+//                                'name' => '模板消息',
+//                                'route' => 'mch/settlementstatistics/data/user',
+//                            ],
+//                            [
+//                                'name' => '用户评论管理',
+//                                'route' => 'mch/settlementstatistics/data/user',
+//                            ],
+                        ],
+                    ],
+
+
                 ],
             ],
 
@@ -444,9 +700,10 @@ class MchMenu
                     ],
                     [
                         'name' => '福利分红兑换列表',
-                        'route' => 'mch/fair/level',
+                        'route' => 'mch/settlementstatistics/fuli/level',
                         'sub' => [
                             'mch/fair/level-edit',
+                            'mch/settlementstatistics/fuli/level-edit',
                         ]
                     ],
                     [
@@ -493,7 +750,7 @@ class MchMenu
 //            ],
 
             [
-                'name' => '财务管理',
+                'name' => '财务报表',
                 'route' => 'mch/financial/index',
                 'icon' => 'icon-people',
                 'list' => [
@@ -506,22 +763,43 @@ class MchMenu
                             'mch/financial/rechange-log',
                             'mch/financial/edit',
                         ],
+                        'list' => [
+
+                            [
+                                'name' => '积分提现',
+                                'route' => 'mch/share/cash',
+                            ],
+                            [
+                                'name' => '积分收入',
+                                'route' => 'mch/share/cash',
+                            ],
+                            [
+                                'name' => '提现设置',
+                                'route' => 'mch/financial/clerk',
+                            ],
+                            [
+                                'name' => '收银台',
+                                'route' => 'mch/financial/index',
+                            ],
+                        ]
                     ],
+
                     [
-                        'name' => '积分提现',
-                        'route' => 'mch/share/cash',
-                    ],
-                    [
-                        'name' => '积分收入',
-                        'route' => 'mch/share/cash',
-                    ],
-                    [
-                        'name' => '提现设置',
-                        'route' => 'mch/financial/clerk',
-                    ],
-                    [
-                        'name' => '收银台',
-                        'route' => 'mch/financial/index',
+                        'name' => '报表查询',
+                        'route' => 'mch/financial/report',
+                        'list' => [
+                            [
+                                'name' => '每日营销数据',
+                                'route' => 'mch/financial/report',
+                                'sub' => [
+                                    'mch/share/qrcode'
+                                ]
+                            ],
+                            [
+                                'name' => '每日订单数据',
+                                'route' => 'mch/financial/reportforms'
+                            ]
+                        ]
                     ],
                 ],
             ],
@@ -531,6 +809,7 @@ class MchMenu
                 'route' => 'mch/user/index',
                 'icon' => 'icon-people',
                 'list' => [
+
                     [
                         'name' => '用户列表',
                         'route' => 'mch/user/index',
@@ -540,16 +819,25 @@ class MchMenu
                             'mch/user/rechange-log',
                             'mch/user/edit',
                         ],
-                    ],
-                    [
-                        'name' => '核销员',
-                        'route' => 'mch/user/clerk',
-                    ],
-                    [
-                        'name' => '会员等级',
-                        'route' => 'mch/user/level',
-                        'sub' => [
-                            'mch/user/level-edit',
+                        'list' => [
+                            [
+                                'name' => '用户列表',
+                                'route' => 'mch/user/index',
+                                'sub' => [
+                                    'mch/user/index'
+                                ]
+                            ],
+                            [
+                                'name' => '核销员',
+                                'route' => 'mch/user/clerk'
+                            ],
+                            [
+                                'name' => '会员等级',
+                                'route' => 'mch/user/level',
+                                'sub' => [
+                                    'mch/user/level-edit',
+                                ]
+                            ]
                         ]
                     ],
                 ],
@@ -584,6 +872,44 @@ class MchMenu
                                 'route' => 'mch/share/setting'
                             ]
                         ]
+                    ],
+
+                    [
+                        'name' => '代理商管理',
+                        'icon' => 'icon-service',
+                        'route' => 'mch/crowdstockright/goods/index',
+                        'list' => [
+                            [
+                                'name' => '代理商管理',
+                                'route' => 'mch/agent/goods/index',
+                                'sub' => [
+                                    'mch/agent/goods/goods-edit'
+                                ]
+                            ],
+                            [
+                                'name' => '代理商分类',
+                                'route' => 'mch/agent/goods/cat',
+                                'sub' => [
+                                    'mch/agent/goods/cat-edit'
+                                ]
+                            ],
+                            [
+                                'name' => '代理商记录管理',
+                                'route' => 'mch/agent/order/index',
+                            ],
+                            [
+                                'name' => '基础设置',
+                                'route' => 'mch/agent/index/setting',
+                            ],
+                            [
+                                'name' => '模板消息',
+                                'route' => 'mch/agent/notice/setting',
+                            ],
+                            [
+                                'name' => '评论管理',
+                                'route' => 'mch/agent/comment/index',
+                            ],
+                        ],
                     ],
                 ],
             ],
@@ -771,6 +1097,10 @@ class MchMenu
 
         ];
 
+
+        $menu_list=$this->kefulist($menu_list);
+
+
         $menu_list = $this->resetList($menu_list);
         foreach ($menu_list as $i => $item) {
             if (is_array($item['list']) && count($item['list']) == 0) {
@@ -800,6 +1130,84 @@ class MchMenu
         }
         $list = array_values($list);
         return $list;
+    }
+
+
+    private function kefulist($menu_list)
+    {
+        $identity = \Yii::$app->store->identity;
+        if($identity->user_id!=10){
+            $menu_list=[];
+            $menu_list = [
+
+                [
+                    'name' => '商场管理',
+                    'route' => 'mch/goods/goods',
+                    'icon' => 'icon-service',
+                    'list' => [
+                        [
+                            'name' => '订单管理',
+                            'route' => 'mch/order/index',
+                            'icon' => 'icon-activity',
+                            'list' => [
+                                [
+                                    'name' => '订单列表',
+                                    'route' => 'mch/order/index',
+                                    'sub' => [
+                                        'mch/order/detail'
+                                    ]
+                                ],
+                                [
+                                    'name' => '自提订单',
+                                    'route' => 'mch/order/offline',
+                                ],
+                                [
+                                    'name' => '售后订单',
+                                    'route' => 'mch/order/refund',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+
+                [
+                    'name' => '优惠券商场管理',
+                    'icon' => 'icon-service',
+                    'route' => 'mch/couponmall/goods/index',
+                    'list' => [
+                        [
+                            'name' => '订单管理',
+                            'route' => 'mch/couponmall/order/index',
+                        ],
+                    ],
+                ],
+            ];
+
+
+        //判断权限
+        $menu_list_limit=[];
+        foreach ($menu_list as $i => $item) {
+            if (is_array($item['list'])) {
+                foreach ($item['list']  as $key => $value ){
+                    $menu_list_limit[]='/index.php/'.$value['route'];
+
+                    foreach ($value['list']  as $key_1 => $value_1 ){
+                        $menu_list_limit[]='/index.php/'.$value_1['route'];
+                        foreach ($value_1['sub']  as $key_2 => $value_2 ){
+                            $menu_list_limit[]='/index.php/'.$value_2;
+                        }
+                    }
+                }
+            }
+        }
+
+            if (!in_array(parse_url(\Yii::$app->request->url)['path'], $menu_list_limit)) {
+                echo '<h1/>没有权限查看</h1>';
+                die;
+//            header("Location: /mch/couponmall/order/index");
+            }
+        }
+        return $menu_list;
     }
 
 }

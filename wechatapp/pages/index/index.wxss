@@ -636,8 +636,9 @@
     border-radius: 10rpx;
 }
 .con-list .body .swiper-item .li{
-    width: 150rpx;
+    /*width: 150rpx;*/
     margin: 0 12rpx;
+    width:33%;
     padding-top: 34rpx;
 }
 .con-list .body .swiper-item .li .img{

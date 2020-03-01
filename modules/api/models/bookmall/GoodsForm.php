@@ -60,6 +60,63 @@ class GoodsForm extends Model
             }
         $res_url = getInfo::getVideoInfo($goods->video_url);
         $goods->video_url = $res_url['url'];
+
+
+
+
+        $seckill_data = $this->getSeckillData($goods->id);
+
+        if (!$seckill_data){
+            return [
+                'code' => 1,
+                'msg' => '整点预售结束',
+            ];
+        }
+
+
+        //查询当前总共订单量
+        $query_num_buy_order = Order::find()->alias('o')
+            ->where(
+                [
+                    'od.goods_id' => $goods->id,
+                    'o.is_delete' => 0,
+                    'o.store_id' => $this->store_id])
+            ->leftJoin(['od' => OrderDetail::tableName()], 'od.order_id=o.id')
+            ->andWhere([
+                'AND',
+                [
+                    'od.is_delete' => 0,
+                    'o.is_delete' => 0,
+                    'o.is_pay' => 1,
+//                        'o.is_check_yukuan' => 0,//还未审核到
+                    'o.is_yukuan' => 0//未支付余款的
+                ],
+            ])->count();
+//            $num = $seckill_data['sell_num'];
+        $num = $query_num_buy_order;
+        $charge_coupon = 0;
+        $charge_integral_buy = 0;
+
+        if ($goods->is_buy_integral_down) {
+            $charge_integral_buy = $this->getCharge($num, $goods)['charge'];
+        }
+
+        if ($goods->is_coupon_down) {
+            $charge_coupon = $this->getCharge($num, $goods)['charge'];
+        }
+        if ($seckill_data !== false) {
+            $next_coupon = intval($seckill_data['seckill_coupon'] * (1 - $charge_coupon / 100));
+            $next_integral_buy = intval($seckill_data['seckill_integral_buy'] * (1 - $charge_integral_buy / 100));
+            $next_num = intval($this->getCharge($num, $goods)['nextnum']);
+        }
+        $seckill_data['next']=array(
+             'next_coupon'=>$next_coupon,
+             'next_integral_buy'=>$next_integral_buy,
+             'next_num'=>$next_num,
+        );
+        $seckill_data['sell_num']=$num;
+
+
         return [
             'code' => 0,
             'data' => (object)[
@@ -76,7 +133,7 @@ class GoodsForm extends Model
                 'original_price' => floatval($goods->original_price),
                 'video_url' => $goods->video_url,
                 'unit' => $goods->unit,
-                'seckill' => $this->getSeckillData($goods->id),
+                'seckill' => $seckill_data,
                 'use_attr' => intval($goods->use_attr),
                 'coupon' => intval($goods->coupon),
                 'integral_buy' => intval($goods->integral_buy),
@@ -124,5 +181,38 @@ class GoodsForm extends Model
             'end_time' => strtotime($seckill_goods->open_date . ' ' . $seckill_goods->start_time . ':59:59'),
             'now_time' => time(),
         ];
+    }
+
+    public function getCharge($num, $goods)
+    {
+        $charge = 0;
+        $nextnum=0;
+
+        if ($num <= $goods->chargeNum && $num > 0) {
+            $charge = $goods->charge;  //1张
+            $nextnum=$goods->chargeNum1;
+        } elseif ($num <= $goods->chargeNum1 && $num > $goods->chargeNum) {
+            $charge = $goods->charge1; //1-6
+            $nextnum=$goods->chargeNum2;
+        } elseif ($num <= $goods->chargeNum2 && $num > $goods->chargeNum1) {
+            $charge = $goods->charge2;//7-18
+            $nextnum=$goods->chargeNum3;
+        } elseif ($num <= $goods->chargeNum3 && $num > $goods->chargeNum2) {
+            $charge = $goods->charge3; //18以上
+            $nextnum=$goods->chargeNum3;
+        }elseif($num == 0) {
+            $charge = 0;  //1张
+            $nextnum=$goods->chargeNum;
+        } else {
+            $charge = $goods->charge5;  //1张
+            $nextnum=$goods->chargeNum3;
+        }
+
+        $date=array(
+            'charge'=>$charge,
+            'nextnum'=>$nextnum,
+        );
+
+        return $date;
     }
 }

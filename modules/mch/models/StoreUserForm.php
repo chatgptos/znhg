@@ -20,6 +20,9 @@ class StoreUserForm extends Model
     public $user_name;
     public $password;
     public $repassword;
+    public $store_id;
+
+
 
     public function rules()
     {
@@ -75,6 +78,38 @@ class StoreUserForm extends Model
                 $model->setPassword($this->password);
             }
             $model->save(false);
+            return ['code' => 0, 'msg' => '保存成功'];
+        }
+        return $this->getModelError();
+    }
+
+
+
+    /**
+     * 更新账户信息
+     * @param $data
+     * @return array|bool
+     * @throws \yii\base\Exception
+     */
+    public function add($data)
+    {
+        if ($this->load($data) && $this->validate()) {
+
+
+            $name = StoreUser::findByUsername($this->user_name);
+            if($name){
+                return ['code' => 1, 'msg' => '用户已经存在'];
+            }else{
+                if (!empty($this->password)) {
+                    $StoreUser = new StoreUser();
+                    $StoreUser->user_name = $this->user_name;
+                    $StoreUser->store_id = $this->store_id;
+                    $StoreUser->setPassword($this->password);
+                    $StoreUser->auth_key =$StoreUser->getgenerateAuthKey();
+                    $StoreUser->password =$StoreUser->getPassword();
+                }
+                $StoreUser->save(false);
+            }
             return ['code' => 0, 'msg' => '保存成功'];
         }
         return $this->getModelError();

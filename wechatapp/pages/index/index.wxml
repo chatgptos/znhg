@@ -3,7 +3,7 @@
 
 <view class="index">
 
-    <view class='notice flex-row' wx:if='{{notice}}' bindtap='showNotice'>
+    <view class='notice flex-row' wx:if='{{notice}}' bindtap='showNotice' >
         <view class='flex-grow-0 flex-y-center notice-a'>
             <image src='/images/icon-notice.png' style='width:36rpx;height:36rpx;margin-right:24rpx;'></image>
             <view>公告：</view>
@@ -83,6 +83,11 @@
                 </view>
             </navigator>
         </view>
+
+
+
+
+
 
         <!-- 全部分类 开始 -->
         <view wx:elif="{{item.name=='cat'}}">
@@ -173,7 +178,7 @@
                             <swiper-item>
                                 <view class="swiper-item">
                                     <view class="li" wx:for="{{cat.goods_list}}" wx:for-index="goods_index"
-                                          wx:for-item="goods"  wx:if="{{goods_index <= cat_goods_cols}}">
+                                          wx:for-item="goods" wx:if="{{goods_index <= cat_goods_cols}}">
                                         <navigator url="/pages/goods/goods?id={{goods.id}}">
                                             <view class="img">
                                                 <image style=" height: 64px;width:64px" src="{{goods.pic_url}}"></image>
@@ -194,7 +199,7 @@
                             <swiper-item>
                                 <view class="swiper-item">
                                     <view class="li" wx:for="{{cat.goods_list}}" wx:for-index="goods_index"
-                                          wx:for-item="goods"  wx:if="{{goods_index > cat_goods_cols}}">
+                                          wx:for-item="goods" wx:if="{{goods_index > cat_goods_cols}}">
                                         <navigator url="/pages/goods/goods?id={{goods.id}}">
                                             <view class="img">
                                                 <image style=" height: 64px;width:64px" src="{{goods.pic_url}}"></image>
@@ -214,22 +219,26 @@
                             </swiper-item>
                         </swiper>
                     </view>
-
-
                 </view>
             </block>
         </view>
-        <!-- 拆分的分类 结束 -->
 
-        <!-- 秒杀板块 开始 -->
-        <view wx:elif="{{item.name=='bookmall_seckill'}}" style="margin-bottom:30px;margin-top:30px;">
-            <!--<block wx:for="{{bookmall_seckill.goods_list}}" wx:for-index="cat_index" wx:for-item="cat">-->
-                <view wx:if="{{bookmall_seckill.goods_list.length>0}}">
+
+
+
+
+
+        <!-- 首页推荐 开始 -->
+        <view wx:elif="{{item.name=='recommend'}}">
+
+                <view wx:if="{{recommend.goods_list.length>0}}">
                     <view class="title">
                         <view class="line"></view>
-                        <view class="name">整点预售{{bookmall_seckill.name}}{{bookmall_seckill.times.h?bookmall_seckill.times.h:'--'}}:{{bookmall_seckill.times.m?bookmall_seckill.times.m:'--'}}:{{bookmall_seckill.times.s?bookmall_seckill.times.s:'--'}}</view>
+                        <view class="name">{{recommend.name}}</view>
                         <view class="line"></view>
                     </view>
+
+
                     <view class="con-list">
                         <swiper class="body" indicator-dots="{{indicatorDots}}"
                                 autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}"
@@ -237,18 +246,19 @@
                                 indicator-active-color="{{activeColor}}">
                             <swiper-item>
                                 <view class="swiper-item">
-                                    <view class="li" wx:for="{{bookmall_seckill.goods_list}}" wx:for-index="goods_index"
+                                    <view class="li" wx:for="{{recommend.goods_list}}" wx:for-index="goods_index"
                                           wx:for-item="goods" wx:if="{{goods_index <= cat_goods_cols}}">
-                                        <navigator url="/pages/bookmall/goods/goods?id={{goods.id}}">
+                                        <navigator url="/pages/goods/goods?id={{goods.id}}">
                                             <view class="img">
-                                                <image style=" height: 64px;width:64px" src="{{goods.pic}}"></image>
+                                                <image style=" height: 64px;width:64px" src="{{goods.pic_url}}"></image>
                                             </view>
                                             <view class="x-title">{{goods.name}}</view>
                                             <view class="price">
                                                 <view class="new-p">
-                                                    <text>秒杀积分{{goods.seckill_price}}</text>
+                                                    <text wx:if='{{cat_goods_cols == 3}}'>￥</text>
+                                                    {{goods.price}}
                                                 </view>
-                                                <view class="old-p">积分:{{goods.price}}
+                                                <view class="old-p" wx:if='{{cat_goods_cols == 3}}'>￥{{goods.price}}
                                                 </view>
                                             </view>
                                         </navigator>
@@ -257,30 +267,449 @@
                             </swiper-item>
                             <swiper-item>
                                 <view class="swiper-item">
-                                    <view class="li" wx:for="{{bookmall_seckill.goods_list}}" wx:for-index="goods_index"
+                                    <view class="li" wx:for="{{recommend.goods_list}}" wx:for-index="goods_index"
                                           wx:for-item="goods" wx:if="{{goods_index > cat_goods_cols}}">
-                                        <navigator url="/pages/bookmall/goods/goods?id={{goods.id}}">
+                                        <navigator url="/pages/goods/goods?id={{goods.id}}">
                                             <view class="img">
-                                                <image style=" height: 64px;width:64px" src="{{goods.pic}}"></image>
+                                                <image style=" height: 64px;width:64px" src="{{goods.pic_url}}"></image>
                                             </view>
                                             <view class="x-title">{{goods.name}}</view>
                                             <view class="price">
                                                 <view class="new-p">
-                                                    <text>秒杀积分{{goods.seckill_price}}</text>
+                                                    <text wx:if='{{cat_goods_cols == 3}}'>￥</text>
+                                                    {{goods.price}}
                                                 </view>
-                                                <view class="old-p">积分:{{goods.price}}
+                                                <view class="old-p" wx:if='{{cat_goods_cols == 3}}'>￥{{goods.price}}
                                                 </view>
                                             </view>
                                         </navigator>
                                     </view>
                                 </view>
                             </swiper-item>
-
                         </swiper>
                     </view>
-
-
                 </view>
+        </view>
+
+
+
+
+        <!-- 首页精选 开始 -->
+        <view wx:elif="{{item.name=='best'}}">
+
+            <view wx:if="{{best.goods_list.length>0}}">
+                <view class="title">
+                    <view class="line"></view>
+                    <view class="name">{{best.name}}</view>
+                    <view class="line"></view>
+                </view>
+
+
+                <view class="con-list">
+                    <swiper class="body" indicator-dots="{{indicatorDots}}"
+                            autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}"
+                            indicator-color="{{incolor}}"
+                            indicator-active-color="{{activeColor}}">
+                        <swiper-item>
+                            <view class="swiper-item">
+                                <view class="li" wx:for="{{best.goods_list}}" wx:for-index="goods_index"
+                                      wx:for-item="goods" wx:if="{{goods_index <= cat_goods_cols}}">
+                                    <navigator url="/pages/goods/goods?id={{goods.id}}">
+                                        <view class="img">
+                                            <image style=" height: 64px;width:64px" src="{{goods.pic_url}}"></image>
+                                        </view>
+                                        <view class="x-title">{{goods.name}}</view>
+                                        <view class="price">
+                                            <view class="new-p">
+                                                <text wx:if='{{cat_goods_cols == 3}}'>￥</text>
+                                                {{goods.price}}
+                                            </view>
+                                            <view class="old-p" wx:if='{{cat_goods_cols == 3}}'>￥{{goods.price}}
+                                            </view>
+                                        </view>
+                                    </navigator>
+                                </view>
+                            </view>
+                        </swiper-item>
+                        <swiper-item>
+                            <view class="swiper-item">
+                                <view class="li" wx:for="{{best.goods_list}}" wx:for-index="goods_index"
+                                      wx:for-item="goods" wx:if="{{goods_index > cat_goods_cols}}">
+                                    <navigator url="/pages/goods/goods?id={{goods.id}}">
+                                        <view class="img">
+                                            <image style=" height: 64px;width:64px" src="{{goods.pic_url}}"></image>
+                                        </view>
+                                        <view class="x-title">{{goods.name}}</view>
+                                        <view class="price">
+                                            <view class="new-p">
+                                                <text wx:if='{{cat_goods_cols == 3}}'>￥</text>
+                                                {{goods.price}}
+                                            </view>
+                                            <view class="old-p" wx:if='{{cat_goods_cols == 3}}'>￥{{goods.price}}
+                                            </view>
+                                        </view>
+                                    </navigator>
+                                </view>
+                            </view>
+                        </swiper-item>
+                    </swiper>
+                </view>
+            </view>
+        </view>
+
+
+
+        <!--活动报名-->
+        <!--众筹抢购-->
+        <view wx:elif="{{item.name=='crowdapply'}}">
+            <view wx:if="{{crowdapply.goods_list.length>0}}">
+                <view class="title">
+                    <view class="line"></view>
+                    <view class="name">{{crowdapply.cat.name}}</view>
+                    <view class="line"></view>
+                </view>
+                <view class="con-list">
+                    <swiper class="body" indicator-dots="{{indicatorDots}}"
+                            autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}"
+                            indicator-color="{{incolor}}"
+                            indicator-active-color="{{activeColor}}">
+                        <swiper-item>
+                            <view class="swiper-item">
+                                <view class="li" wx:for="{{crowdapply.goods_list}}" wx:for-index="goods_index"
+                                      wx:for-item="goods" wx:if="{{goods_index <= cat_goods_cols}}">
+                                    <navigator url="/pages/crowdapply/details/details?id={{goods.id}}">
+                                        <view class="img">
+                                            <image style=" height: 64px;width:64px" src="{{goods.cover_pic}}"></image>
+                                        </view>
+                                        <view class="x-title">{{goods.name}}</view>
+                                        <view class="price">
+                                            <view class="new-p">
+                                                <text wx:if='{{cat_goods_cols == 3}}'>积分</text>
+                                                {{goods.integral}}
+                                            </view>
+                                            <view class="old-p" wx:if='{{cat_goods_cols == 3}}'>券{{goods.coupon}}
+                                            </view>
+                                        </view>
+                                    </navigator>
+                                </view>
+                            </view>
+                        </swiper-item>
+                        <swiper-item>
+                            <view class="swiper-item">
+                                <view class="li" wx:for="{{crowdapply.goods_list}}" wx:for-index="goods_index"
+                                      wx:for-item="goods" wx:if="{{goods_index > cat_goods_cols}}">
+                                    <navigator url="/pages/crowdapply/details/details?id={{goods.id}}">
+                                        <view class="img">
+                                            <image style=" height: 64px;width:64px" src="{{goods.cover_pic}}"></image>
+                                        </view>
+                                        <view class="x-title">{{goods.name}}</view>
+                                        <view class="price">
+                                            <view class="new-p">
+                                                <text wx:if='{{cat_goods_cols == 3}}'>积分</text>
+                                                {{goods.integral}}
+                                            </view>
+                                            <view class="old-p" wx:if='{{cat_goods_cols == 3}}'>券{{goods.coupon}}
+                                            </view>
+                                        </view>
+                                    </navigator>
+                                </view>
+                            </view>
+                        </swiper-item>
+                    </swiper>
+                </view>
+            </view>
+        </view>
+
+
+        <!--众筹抢购-->
+        <view wx:elif="{{item.name=='crowdstockright'}}">
+            <view wx:if="{{crowdstockright.goods_list.length>0}}">
+                <view class="title">
+                    <view class="line"></view>
+                    <view class="name">{{crowdstockright.cat.name}}</view>
+                    <view class="line"></view>
+                </view>
+                <view class="con-list">
+                    <swiper class="body" indicator-dots="{{indicatorDots}}"
+                            autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}"
+                            indicator-color="{{incolor}}"
+                            indicator-active-color="{{activeColor}}">
+                        <swiper-item>
+                            <view class="swiper-item">
+                                <view class="li" wx:for="{{crowdstockright.goods_list}}" wx:for-index="goods_index"
+                                      wx:for-item="goods" wx:if="{{goods_index <= cat_goods_cols}}">
+                                    <navigator url="/pages/crowdstockright/details/details?id={{goods.id}}">
+                                        <view class="img">
+                                            <image style=" height: 64px;width:64px" src="{{goods.cover_pic}}"></image>
+                                        </view>
+                                        <view class="x-title">{{goods.name}}</view>
+                                        <view class="price">
+                                            <view class="new-p">
+                                                <text wx:if='{{cat_goods_cols == 3}}'>积分</text>
+                                                {{goods.integral}}
+                                            </view>
+                                            <view class="old-p" wx:if='{{cat_goods_cols == 3}}'>券{{goods.coupon}}
+                                            </view>
+                                        </view>
+                                    </navigator>
+                                </view>
+                            </view>
+                        </swiper-item>
+                        <swiper-item>
+                            <view class="swiper-item">
+                                <view class="li" wx:for="{{crowdstockright.goods_list}}" wx:for-index="goods_index"
+                                      wx:for-item="goods" wx:if="{{goods_index > cat_goods_cols}}">
+                                    <navigator url="/pages/crowdstockright/details/details?id={{goods.id}}">
+                                        <view class="img">
+                                            <image style=" height: 64px;width:64px" src="{{goods.cover_pic}}"></image>
+                                        </view>
+                                        <view class="x-title">{{goods.name}}</view>
+                                        <view class="price">
+                                            <view class="new-p">
+                                                <text wx:if='{{cat_goods_cols == 3}}'>积分</text>
+                                                {{goods.integral}}
+                                            </view>
+                                            <view class="old-p" wx:if='{{cat_goods_cols == 3}}'>券{{goods.coupon}}
+                                            </view>
+                                        </view>
+                                    </navigator>
+                                </view>
+                            </view>
+                        </swiper-item>
+                    </swiper>
+                </view>
+            </view>
+        </view>
+
+
+        <!--众筹抢购-->
+        <view wx:elif="{{item.name=='cheapmarket'}}">
+            <view wx:if="{{cheapmarket.goods_list.length>0}}">
+                <view class="title">
+                    <view class="line"></view>
+                    <view class="name">{{cheapmarket.cat.name}}</view>
+                    <view class="line"></view>
+                </view>
+                <view class="con-list">
+                    <swiper class="body" indicator-dots="{{indicatorDots}}"
+                            autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}"
+                            indicator-color="{{incolor}}"
+                            indicator-active-color="{{activeColor}}">
+                        <swiper-item>
+                            <view class="swiper-item">
+                                <view class="li" wx:for="{{cheapmarket.goods_list}}" wx:for-index="goods_index"
+                                      wx:for-item="goods" wx:if="{{goods_index <= cat_goods_cols}}">
+                                    <navigator url="/pages/cheapmarket/details/details?id={{goods.id}}">
+                                        <view class="img">
+                                            <image style=" height: 64px;width:64px" src="{{goods.cover_pic}}"></image>
+                                        </view>
+                                        <view class="x-title">{{goods.name}}</view>
+                                        <view class="price">
+                                            <view class="new-p">
+                                                <text wx:if='{{cat_goods_cols == 3}}'>积分</text>
+                                                {{goods.integral}}
+                                            </view>
+                                            <view class="old-p" wx:if='{{cat_goods_cols == 3}}'>券{{goods.coupon}}
+                                            </view>
+                                        </view>
+                                    </navigator>
+                                </view>
+                            </view>
+                        </swiper-item>
+                        <swiper-item>
+                            <view class="swiper-item">
+                                <view class="li" wx:for="{{cheapmarket.goods_list}}" wx:for-index="goods_index"
+                                      wx:for-item="goods" wx:if="{{goods_index > cat_goods_cols}}">
+                                    <navigator url="/pages/cheapmarket/details/details?id={{goods.id}}">
+                                        <view class="img">
+                                            <image style=" height: 64px;width:64px" src="{{goods.cover_pic}}"></image>
+                                        </view>
+                                        <view class="x-title">{{goods.name}}</view>
+                                        <view class="price">
+                                            <view class="new-p">
+                                                <text wx:if='{{cat_goods_cols == 3}}'>积分</text>
+                                                {{goods.integral}}
+                                            </view>
+                                            <view class="old-p" wx:if='{{cat_goods_cols == 3}}'>券{{goods.coupon}}
+                                            </view>
+                                        </view>
+                                    </navigator>
+                                </view>
+                            </view>
+                        </swiper-item>
+                    </swiper>
+                </view>
+            </view>
+        </view>
+
+        <!-- 拼团板块 开始 -->
+        <view class="user-block pintuan-block" wx:elif="{{item.name=='pintuan'}}" style="background: #fff7f5;">
+            <view class="flex-row flex-y-center pintuan-header" style="height: 80rpx;padding: 0 20rpx;">
+                <view class="flex-grow-1 flex-y-bottom">
+                    <image src="/images/icon-pintuan-text.png"
+                           style="width: 88rpx;height: 40rpx;margin-right: 20rpx"></image>
+                    <view style="color: #aaa;font-size: 9pt;line-height: 1.2">限量拼团，每日必逛</view>
+                </view>
+                <view class="flex-grow-0">
+                    <navigator url="/pages/pt/index/index" class="flex-y-center">
+                        <view style="margin-right: 14rpx">更多</view>
+                        <image src="/images/icon-jiantou-r.png" style="width: 12rpx;height: 22rpx"></image>
+                    </navigator>
+                </view>
+            </view>
+            <scroll-view scroll-x="true">
+                <view class="flex-row pintuan-goods-list" style="padding: 0 20rpx 20rpx">
+                    <navigator wx:for="{{pintuan.goods_list}}" url="/pages/pt/details/details?gid={{item.id}}"
+                               class="flex-grow-0" style="background: #fff;width: 260rpx;">
+                        <view style="padding:24rpx 20rpx;">
+                            <image src="{{item.pic}}"
+                                   style="width: 220rpx;height: 220rpx;margin-bottom: 12rpx;"></image>
+                            <view style="display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;overflow: hidden;font-size: 9pt;margin-bottom: 16rpx;height: 75rpx">
+                                {{item.name}}
+                            </view>
+                            <view style="color:#ff4544;line-height: 1">
+                                <text style="font-size: 9pt">￥</text>
+                                <text style="font-weight: bold">{{item.price}}</text>
+                            </view>
+                        </view>
+                        <view style="font-size: 9pt;color: #aaa;padding:10rpx 20rpx;border-top: 1rpx solid #eee">
+                            已拼{{item.sale_num}}件
+                        </view>
+                    </navigator>
+                </view>
+            </scroll-view>
+        </view>
+        <!-- 拼团板块 结束 --> 
+        
+        <!-- 拆分的分类 结束 -->
+
+        <!-- 众筹 开始 -->
+        <view wx:elif="{{item.name=='crowdc_seckill'}}" style="margin-bottom:30px;margin-top:30px;">
+            <!--<block wx:for="{{crowdc_seckill.goods_list}}" wx:for-index="cat_index" wx:for-item="cat">-->
+            <view wx:if="{{crowdc_seckill.goods_list.length>0}}">
+                <view class="title">
+                    <view class="line"></view>
+                    <view class="name">
+                        抢鲜{{crowdc_seckill.name}}{{crowdc_seckill.times.h?crowdc_seckill.times.h:'--'}}:{{crowdc_seckill.times.m?crowdc_seckill.times.m:'--'}}:{{crowdc_seckill.times.s?crowdc_seckill.times.s:'--'}}
+                    </view>
+                    <view class="line"></view>
+                </view>
+                <view class="con-list">
+                    <swiper class="body" indicator-dots="{{indicatorDots}}"
+                            autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}"
+                            indicator-color="{{incolor}}"
+                            indicator-active-color="{{activeColor}}">
+                        <swiper-item>
+                            <view class="swiper-item">
+                                <view class="li" wx:for="{{crowdc_seckill.goods_list}}" wx:for-index="goods_index"
+                                      wx:for-item="goods" wx:if="{{goods_index <= cat_goods_cols}}">
+                                    <navigator url="/pages/crowdc/goods/goods?id={{goods.id}}">
+                                        <view class="img">
+                                            <image style=" height: 64px;width:64px" src="{{goods.pic}}"></image>
+                                        </view>
+                                        <view class="x-title">{{goods.name}}</view>
+                                        <view class="price">
+                                            <view class="new-p">
+                                                <text>积分{{goods.seckill_price}}</text>
+                                            </view>
+                                            <view class="old-p">积分:{{goods.price}}
+                                            </view>
+                                        </view>
+                                    </navigator>
+                                </view>
+                            </view>
+                        </swiper-item>
+                        <swiper-item>
+                            <view class="swiper-item">
+                                <view class="li" wx:for="{{crowdc_seckill.goods_list}}" wx:for-index="goods_index"
+                                      wx:for-item="goods" wx:if="{{goods_index > cat_goods_cols}}">
+                                    <navigator url="/pages/crowdc/goods/goods?id={{goods.id}}">
+                                        <view class="img">
+                                            <image style=" height: 64px;width:64px" src="{{goods.pic}}"></image>
+                                        </view>
+                                        <view class="x-title">{{goods.name}}</view>
+                                        <view class="price">
+                                            <view class="new-p">
+                                                <text>积分{{goods.seckill_price}}</text>
+                                            </view>
+                                            <view class="old-p">积分:{{goods.price}}
+                                            </view>
+                                        </view>
+                                    </navigator>
+                                </view>
+                            </view>
+                        </swiper-item>
+
+                    </swiper>
+                </view>
+
+
+            </view>
+            <!--</block>-->
+        </view>
+
+        <!-- 预售板块 开始 -->
+        <view wx:elif="{{item.name=='bookmall_seckill'}}" style="margin-bottom:30px;margin-top:30px;">
+            <!--<block wx:for="{{bookmall_seckill.goods_list}}" wx:for-index="cat_index" wx:for-item="cat">-->
+            <view wx:if="{{bookmall_seckill.goods_list.length>0}}">
+                <view class="title">
+                    <view class="line"></view>
+                    <view class="name">
+                        整点预售{{bookmall_seckill.name}}{{bookmall_seckill.times.h?bookmall_seckill.times.h:'--'}}:{{bookmall_seckill.times.m?bookmall_seckill.times.m:'--'}}:{{bookmall_seckill.times.s?bookmall_seckill.times.s:'--'}}
+                    </view>
+                    <view class="line"></view>
+                </view>
+                <view class="con-list">
+                    <swiper class="body" indicator-dots="{{indicatorDots}}"
+                            autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}"
+                            indicator-color="{{incolor}}"
+                            indicator-active-color="{{activeColor}}">
+                        <swiper-item>
+                            <view class="swiper-item">
+                                <view class="li" wx:for="{{bookmall_seckill.goods_list}}" wx:for-index="goods_index"
+                                      wx:for-item="goods" wx:if="{{goods_index <= cat_goods_cols}}">
+                                    <navigator url="/pages/bookmall/goods/goods?id={{goods.id}}">
+                                        <view class="img">
+                                            <image style=" height: 64px;width:64px" src="{{goods.pic}}"></image>
+                                        </view>
+                                        <view class="x-title">{{goods.name}}</view>
+                                        <view class="price">
+                                            <view class="new-p">
+                                                <text>预售积分{{goods.seckill_price}}</text>
+                                            </view>
+                                            <view class="old-p">积分:{{goods.price}}
+                                            </view>
+                                        </view>
+                                    </navigator>
+                                </view>
+                            </view>
+                        </swiper-item>
+                        <swiper-item>
+                            <view class="swiper-item">
+                                <view class="li" wx:for="{{bookmall_seckill.goods_list}}" wx:for-index="goods_index"
+                                      wx:for-item="goods" wx:if="{{goods_index > cat_goods_cols}}">
+                                    <navigator url="/pages/bookmall/goods/goods?id={{goods.id}}">
+                                        <view class="img">
+                                            <image style=" height: 64px;width:64px" src="{{goods.pic}}"></image>
+                                        </view>
+                                        <view class="x-title">{{goods.name}}</view>
+                                        <view class="price">
+                                            <view class="new-p">
+                                                <text>积分{{goods.seckill_price}}</text>
+                                            </view>
+                                            <view class="old-p">积分:{{goods.price}}
+                                            </view>
+                                        </view>
+                                    </navigator>
+                                </view>
+                            </view>
+                        </swiper-item>
+
+                    </swiper>
+                </view>
+
+
+            </view>
             <!--</block>-->
         </view>
 
@@ -290,8 +719,8 @@
                       style="padding: 0 20rpx;height: 80rpx;background: #fff;margin-bottom: 4rpx">
                     <view class="flex-grow-1 flex-row flex-y-center">
                         <!--<image src="/images/icon-seckill.png"-->
-                               <!--style="width: 34rpx;height: 34rpx;margin-right: 12rpx"></image>-->
-                        <view style="font-size: 12pt;color: #ff8b57;margin-right: 16rpx">整点预售</view>
+                        <!--style="width: 34rpx;height: 34rpx;margin-right: 12rpx"></image>-->
+                        <view style="font-size: 12pt;color: #ff8b57;margin-right: 16rpx">限时秒杀</view>
                         <view style="margin-right: 24rpx">{{seckill.name}}</view>
 
                         <view class="flex-y-center seckill-time-item" style="width: 32rpx;height: 34rpx">
@@ -342,7 +771,7 @@
                 </scroll-view>
             </view>
         </block>
-        <!-- 秒杀板块 结束 -->
+        <!-- 预售板块 结束 -->
 
         <!-- 自定义板块 开始 -->
         <view wx:else>
@@ -468,50 +897,49 @@
 
                 <block wx:if="{{block.data.pic_list.length==5}}">
 
-
-                    <!--<view class="flex-row user-block" style="height: 360rpx;">-->
-                    <!--<view class="flex-grow-0"-->
-                    <!--style="width: 300rpx;height: 100%;border-right: 5rpx solid transparent">-->
-                    <!--<navigator style="display:block;font-size: 0;width: 100%;height: 100%;"-->
-                    <!--bindtap="navigatorClick" data-url="{{block.data.pic_list[0].url}}"-->
-                    <!--data-open_type="{{block.data.pic_list[0].open_type}}"-->
-                    <!--url="{{block.data.pic_list[0].url}}">-->
-                    <!--<image src="{{block.data.pic_list[0].pic_url}}" style="width: 100%;height: 100%;"-->
-                    <!--mode="aspectFill"></image>-->
-                    <!--</navigator>-->
-                    <!--</view>-->
-                    <!--<view class="flex-grow-1 flex-col" style="height: 100%">-->
-                    <!--<view class="flex-grow-1" style="height: 50%;border-bottom: 5rpx solid transparent">-->
-                    <!--<navigator style="display:block;font-size: 0;width: 100%;height: 100%;"-->
-                    <!--bindtap="navigatorClick" data-url="{{block.data.pic_list[1].url}}"-->
-                    <!--data-open_type="{{block.data.pic_list[1].open_type}}"-->
-                    <!--url="{{block.data.pic_list[1].url}}">-->
-                    <!--<image src="{{block.data.pic_list[1].pic_url}}" style="width: 100%;height: 100%;"-->
-                    <!--mode="aspectFill"></image>-->
-                    <!--</navigator>-->
-                    <!--</view>-->
-                    <!--<view class="flex-grow-1 flex-row" style="height: 50%">-->
-                    <!--<view class="flex-grow-1" style="height: 100%;border-right: 5rpx solid transparent">-->
-                    <!--<navigator style="display:block;font-size: 0;width: 100%;height: 100%;"-->
-                    <!--bindtap="navigatorClick" data-url="{{block.data.pic_list[2].url}}"-->
-                    <!--data-open_type="{{block.data.pic_list[2].open_type}}"-->
-                    <!--url="{{block.data.pic_list[2].url}}">-->
-                    <!--<image src="{{block.data.pic_list[2].pic_url}}"-->
-                    <!--style="width: 100%;height: 100%;" mode="aspectFill"></image>-->
-                    <!--</navigator>-->
-                    <!--</view>-->
-                    <!--<view class="flex-grow-1" style="height: 100%;">-->
-                    <!--<navigator style="display:block;font-size: 0;width: 100%;height: 100%;"-->
-                    <!--bindtap="navigatorClick" data-url="{{block.data.pic_list[3].url}}"-->
-                    <!--data-open_type="{{block.data.pic_list[3].open_type}}"-->
-                    <!--url="{{block.data.pic_list[3].url}}">-->
-                    <!--<image src="{{block.data.pic_list[3].pic_url}}"-->
-                    <!--style="width: 100%;height: 100%;" mode="aspectFill"></image>-->
-                    <!--</navigator>-->
-                    <!--</view>-->
-                    <!--</view>-->
-                    <!--</view>-->
-                    <!--</view>-->
+                    <view class="flex-row user-block" style="height: 360rpx;">
+                        <view class="flex-grow-0"
+                              style="width: 300rpx;height: 100%;border-right: 5rpx solid transparent">
+                            <navigator style="display:block;font-size: 0;width: 100%;height: 100%;"
+                                       bindtap="navigatorClick" data-url="{{block.data.pic_list[0].url}}"
+                                       data-open_type="{{block.data.pic_list[0].open_type}}"
+                                       url="{{block.data.pic_list[0].url}}">
+                                <image src="{{block.data.pic_list[0].pic_url}}" style="width: 100%;height: 100%;"
+                                       mode="aspectFill"></image>
+                            </navigator>
+                        </view>
+                        <view class="flex-grow-1 flex-col" style="height: 100%">
+                            <view class="flex-grow-1" style="height: 50%;border-bottom: 5rpx solid transparent">
+                                <navigator style="display:block;font-size: 0;width: 100%;height: 100%;"
+                                           bindtap="navigatorClick" data-url="{{block.data.pic_list[1].url}}"
+                                           data-open_type="{{block.data.pic_list[1].open_type}}"
+                                           url="{{block.data.pic_list[1].url}}">
+                                    <image src="{{block.data.pic_list[1].pic_url}}" style="width: 100%;height: 100%;"
+                                           mode="aspectFill"></image>
+                                </navigator>
+                            </view>
+                            <view class="flex-grow-1 flex-row" style="height: 50%">
+                                <view class="flex-grow-1" style="height: 100%;border-right: 5rpx solid transparent">
+                                    <navigator style="display:block;font-size: 0;width: 100%;height: 100%;"
+                                               bindtap="navigatorClick" data-url="{{block.data.pic_list[2].url}}"
+                                               data-open_type="{{block.data.pic_list[2].open_type}}"
+                                               url="{{block.data.pic_list[2].url}}">
+                                        <image src="{{block.data.pic_list[2].pic_url}}"
+                                               style="width: 100%;height: 100%;" mode="aspectFill"></image>
+                                    </navigator>
+                                </view>
+                                <view class="flex-grow-1" style="height: 100%;">
+                                    <navigator style="display:block;font-size: 0;width: 100%;height: 100%;"
+                                               bindtap="navigatorClick" data-url="{{block.data.pic_list[3].url}}"
+                                               data-open_type="{{block.data.pic_list[3].open_type}}"
+                                               url="{{block.data.pic_list[3].url}}">
+                                        <image src="{{block.data.pic_list[3].pic_url}}"
+                                               style="width: 100%;height: 100%;" mode="aspectFill"></image>
+                                    </navigator>
+                                </view>
+                            </view>
+                        </view>
+                    </view>
                 </block>
 
             </block>
@@ -534,14 +962,14 @@
             <view class="li">商品众筹</view>
         </navigator>
 
-        <navigator  bindtap="integral">
-            <view class="li"  bindtap="yushou" >商品预售</view>
+        <navigator bindtap="integral">
+            <view class="li" bindtap="yushou">商品预售</view>
         </navigator>
     </view>
 </view>
 
 
-<view class="after-navber">
+<view class="after-navber" style="margin-bottom:60px;">
     <!--商城公告 开始-->
 
     <!--<view class='notice flex-row' wx:if='{{notice}}' bindtap='showNotice'>-->
@@ -781,7 +1209,7 @@
     <!--&lt;!&ndash; 拆分的分类 结束 &ndash;&gt;-->
 
 
-    <!--&lt;!&ndash; 秒杀板块 开始 &ndash;&gt;-->
+    <!--&lt;!&ndash; 预售板块 开始 &ndash;&gt;-->
     <!--<block wx:elif="{{item.name=='seckill'}}">-->
     <!--<view class="user-block">-->
     <!--<view class="flex-row seckill-header"-->
@@ -789,7 +1217,7 @@
     <!--<view class="flex-grow-1 flex-row flex-y-center">-->
     <!--<image src="/images/icon-seckill.png"-->
     <!--style="width: 34rpx;height: 34rpx;margin-right: 12rpx"></image>-->
-    <!--<view style="font-size: 12pt;color: #ff8b57;margin-right: 16rpx">整点秒杀</view>-->
+    <!--<view style="font-size: 12pt;color: #ff8b57;margin-right: 16rpx">整点预售</view>-->
     <!--<view style="margin-right: 24rpx">{{seckill.name}}</view>-->
 
     <!--<view class="flex-y-center seckill-time-item" style="width: 32rpx;height: 34rpx">-->
@@ -840,7 +1268,7 @@
     <!--</scroll-view>-->
     <!--</view>-->
     <!--</block>-->
-    <!--&lt;!&ndash; 秒杀板块 结束 &ndash;&gt;-->
+    <!--&lt;!&ndash; 预售板块 结束 &ndash;&gt;-->
 
     <!--&lt;!&ndash; 拼团板块 开始 &ndash;&gt;-->
     <!--<view class="user-block pintuan-block" wx:elif="{{item.name=='pintuan'}}" style="background: #fff7f5;">-->

@@ -108,6 +108,18 @@ class StoreUser extends ActiveRecord implements IdentityInterface
         $this->password = Yii::$app->security->generatePasswordHash($password);
     }
 
+
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+
+    public function getgenerateAuthKey()
+    {
+        return Yii::$app->security->generateRandomString();
+    }
+
     /**
      * Generates "remember me" authentication key
      * @throws \yii\base\Exception

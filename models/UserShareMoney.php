@@ -16,6 +16,9 @@ use Yii;
  * @property string $money
  * @property integer $is_delete
  * @property integer $addtime
+ * @property integer $status
+ *
+ *
  */
 class UserShareMoney extends \yii\db\ActiveRecord
 {
@@ -33,7 +36,7 @@ class UserShareMoney extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['store_id', 'order_id', 'user_id', 'type', 'source', 'is_delete', 'addtime'], 'integer'],
+            [['addtime','status','store_id', 'order_id', 'user_id', 'type', 'source', 'is_delete', 'addtime'], 'integer'],
             [['money'], 'number'],
         ];
     }
@@ -48,21 +51,23 @@ class UserShareMoney extends \yii\db\ActiveRecord
             'store_id' => 'Store ID',
             'order_id' => '订单ID',
             'user_id' => '用户ID',
-            'type' => '类型 0--佣金 1--提现',
+            'type' => '类型 0--佣金 1--提现',//1商城2预售3众筹
             'source' => '佣金来源 1--一级分销 2--二级分销 3--三级分销',
             'money' => '金额',
             'is_delete' => 'Is Delete',
+            'status' => '佣金状态 0--已经计算 1--已经申请 2--发放 3--驳回',
             'addtime' => 'Addtime',
+            'max_user_id' => '顶级拿钱的用户id',
         ];
     }
 
-    public static function set($money,$user_id,$order_id,$type,$source=1,$store_id = 0)
+    public static function set($money,$user_id,$order_id,$type,$source=1,$store_id = 0,$max_user_id=0)
     {
         $model = UserShareMoney::findOne([
             'store_id'=>$store_id,
             'user_id'=>$user_id,
             'order_id'=>$order_id,
-            'type'=>0,
+//            'type'=>0,
             'is_delete'=>0
         ]);
         if($model){
@@ -76,7 +81,9 @@ class UserShareMoney extends \yii\db\ActiveRecord
         $model->source = $source;
         $model->money = $money;
         $model->is_delete = 0;
+        $model->status = 0;
         $model->addtime = time();
+        $model->max_user_id = $max_user_id;
         return $model->save();
     }
 }

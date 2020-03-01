@@ -10,6 +10,7 @@ namespace app\modules\mch\controllers\bookmall;
 use app\models\Attr;
 use app\models\AttrGroup;
 use app\models\Card;
+use app\models\Level;
 use app\modules\mch\models\bookmall\Cat;
 use app\modules\mch\models\bookmall\Goods;
 use app\modules\mch\models\bookmall\GoodsForm;
@@ -143,8 +144,12 @@ class GoodsController extends Controller
             ];
         }
         $goods_card_list = Goods::getGoodsCard($goods->id);
+
+        $level_list = Level::find()->where(['store_id' => $this->store->id, 'is_delete' => 0, 'status' => 1])
+        ->orderBy(['level' => SORT_ASC])->asArray()->all();
         return $this->render('goods-edit', [
             'goods' => $goods,
+            'level_list' => $level_list,
             'cat_list' => $cat_list,
             'postageRiles' => $postageRiles,
             'card_list' => json_encode($card_list, JSON_UNESCAPED_UNICODE),

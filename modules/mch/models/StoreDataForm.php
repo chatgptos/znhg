@@ -12,7 +12,11 @@ use app\models\Goods;
 use app\models\Order;
 use app\models\OrderDetail;
 use app\models\OrderRefund;
+
+
+
 use app\models\User;
+use app\modules\mch\models\couponmall\OrderForm;
 use yii\helpers\VarDumper;
 
 class StoreDataForm extends Model
@@ -165,8 +169,12 @@ class StoreDataForm extends Model
                 ],
             ],
             'panel_4' => [
-                'order_goods_data' => $this->getDaysOrderGoodsData(7),
-                'order_goods_price_data' => $this->getDaysOrderGoodsPriceData(7),
+                'order_goods_data' => $this->getDaysOrderGoodsData(30),
+                'order_goods_price_data' => $this->getDaysOrderGoodsPriceData(30),
+            ],
+            'panel_9' => [
+                'order_goods_data' => $this->getCouponDaysOrderGoodsData(30),
+                'order_goods_price_data' => $this->getCouponDaysOrderGoodsPriceData(30),
             ],
             'panel_5' => [
                 'data_1' => $this->getGoodsSaleTopList(
@@ -191,11 +199,43 @@ class StoreDataForm extends Model
                 ),
             ],
             'panel_6' => $this->getUserTopList(10),
+
+            'panel_8' => $this->getCouponUserTopList(10),
+
+            'panel_7' => [
+                'data_1' => $this->getCouponGoodsSaleTopList(
+                    strtotime(date('Y-m-d 00:00:00')),
+                    strtotime(date('Y-m-d 23:59:59')),
+                    5
+                ),
+                'data_2' => $this->getCouponGoodsSaleTopList(
+                    strtotime(date('Y-m-d 00:00:00') . ' -1 day'),
+                    strtotime(date('Y-m-d 23:59:59') . ' -1 day'),
+                    5
+                ),
+                'data_3' => $this->getCouponGoodsSaleTopList(
+                    strtotime(date('Y-m-d 00:00:00') . ' -6 day'),
+                    strtotime(date('Y-m-d 23:59:59')),
+                    5
+                ),
+                'data_4' => $this->getCouponGoodsSaleTopList(
+                    strtotime(date('Y-m-d 00:00:00') . ' -29 day'),
+                    strtotime(date('Y-m-d 23:59:59')),
+                    5
+                ),
+            ],
         ];
         $data['panel_4']['date'] = [];
         foreach ($data['panel_4']['order_goods_data']['list'] as $item) {
             $data['panel_4']['date'][] = $item['date'];
         }
+
+
+        $data['panel_9']['date'] = [];
+        foreach ($data['panel_9']['order_goods_data']['list'] as $item) {
+            $data['panel_9']['date'][] = $item['date'];
+        }
+
         return [
             'code' => 0,
             'data' => $data,
@@ -223,7 +263,6 @@ class StoreDataForm extends Model
         ])->sum('coupon');
 
 
-
         $integral_count = User::find()->where([
             'store_id' => $this->store_id,
             'is_delete' => 0,
@@ -238,28 +277,27 @@ class StoreDataForm extends Model
         $jruser_count = User::find()->where([
             'store_id' => $this->store_id,
             'is_delete' => 0,
-        ])->andWhere(['>=', 'addtime', strtotime(date("Y-m-d"),time())])->count();
+        ])->andWhere(['>=', 'addtime', strtotime(date("Y-m-d"), time())])->count();
 
 
         $jrintegral_count = User::find()->where([
             'store_id' => $this->store_id,
             'is_delete' => 0,
-        ])->andWhere(['>=', 'addtime', strtotime(date("Y-m-d"),time())])->sum('integral');;
+        ])->andWhere(['>=', 'addtime', strtotime(date("Y-m-d"), time())])->sum('integral');;
 
 
         $jrhld_count = User::find()->where([
             'store_id' => $this->store_id,
             'is_delete' => 0,
-        ])->andWhere(['>=', 'addtime', strtotime(date("Y-m-d"),time())])->sum('hld');
+        ])->andWhere(['>=', 'addtime', strtotime(date("Y-m-d"), time())])->sum('hld');
 
 
         $jrcoupon_count = User::find()->where([
             'store_id' => $this->store_id,
             'is_delete' => 0,
-        ])->andWhere(['>=', 'addtime', strtotime(date("Y-m-d"),time())])->sum('coupon');
+        ])->andWhere(['>=', 'addtime', strtotime(date("Y-m-d"), time())])->sum('coupon');
 
 
- 
         $htuser_count = User::find()->where([
             'store_id' => $this->store_id,
             'is_delete' => 0,
@@ -284,9 +322,6 @@ class StoreDataForm extends Model
         ])->andWhere(['>=', 'addtime', strtotime('yesterday')])->sum('coupon');;
 
 
-
-
-
         return [
             'user_count' => $user_count ? intval($user_count) : 0,
             'goods_count' => $goods_count ? intval($goods_count) : 0,
@@ -298,10 +333,10 @@ class StoreDataForm extends Model
             'jrintegral_count' => $jrintegral_count ? intval($jrintegral_count) : 0,
             'jrhld_count' => $jrhld_count ? intval($jrhld_count) : 0,
             'jrcoupon_count' => $jrcoupon_count ? intval($jrcoupon_count) : 0,
-            'htuser_count' => $htuser_count-$jruser_count ? intval($htuser_count-$jruser_count) : 0,
-            'htintegral_count' => $htintegral_count-$jrintegral_count ? intval($htintegral_count-$jrintegral_count) : 0,
-            'hthld_count' => $hthld_count-$jrhld_count ? intval($hthld_count-$jrhld_count) : 0,
-            'htcoupon_count' => $htcoupon_count-$jrcoupon_count ? intval($htcoupon_count-$jrcoupon_count) : 0,
+            'htuser_count' => $htuser_count - $jruser_count ? intval($htuser_count - $jruser_count) : 0,
+            'htintegral_count' => $htintegral_count - $jrintegral_count ? intval($htintegral_count - $jrintegral_count) : 0,
+            'hthld_count' => $hthld_count - $jrhld_count ? intval($hthld_count - $jrhld_count) : 0,
+            'htcoupon_count' => $htcoupon_count - $jrcoupon_count ? intval($htcoupon_count - $jrcoupon_count) : 0,
         ];
     }
 
@@ -379,6 +414,28 @@ class StoreDataForm extends Model
         return $count['num'] ? intval($count['num']) : 0;
     }
 
+
+    /**
+     * 获取订单商品总数
+     */
+    public function getCouponOrderGoodsCount($start_time = null, $end_time = null)
+    {
+        $query = \app\modules\mch\models\couponmall\Order::find()->alias('o')
+            ->where([
+                'o.is_pay' => 1,
+                'o.is_delete' => 0,
+                'o.store_id' => $this->store_id,
+            ]);
+        if ($start_time !== null) {
+            $query->andWhere(['>=', 'o.addtime', $start_time]);
+        }
+        if ($end_time !== null) {
+            $query->andWhere(['<=', 'o.addtime', $end_time]);
+        }
+        $count = $query->select('count(o.id) AS num')->asArray()->one();
+        return $count['num'] ? intval($count['num']) : 0;
+    }
+
     /**
      * 获取订单金额总数（实际付款）
      */
@@ -399,6 +456,34 @@ class StoreDataForm extends Model
         $count = $query->select('SUM(o.pay_price) AS total_price')->asArray()->one();
         return $count['total_price'] ? doubleval($count['total_price']) : 0;
     }
+
+
+    /**
+     * 获取订单金额总数（实际付款）
+     */
+    public function getCouponOrderPriceCount($start_time = null, $end_time = null)
+    {
+        $query = \app\modules\mch\models\couponmall\Order::find()->alias('o')
+            ->where([
+                'o.is_pay' => 1,
+                'o.is_delete' => 0,
+                'o.store_id' => $this->store_id,
+            ]);
+        if ($start_time !== null) {
+            $query->andWhere(['>=', 'o.addtime', $start_time]);
+        }
+        if ($end_time !== null) {
+            $query->andWhere(['<=', 'o.addtime', $end_time]);
+        }
+        $count = $query->select('SUM(o.coupon) AS coupon  ,SUM(o.integral) AS  integral')->asArray()->one();
+
+        $data = [
+            'coupon' => $count['coupon'] ? doubleval($count['coupon']) : 0,
+            'integral' => $count['integral'] ? doubleval($count['integral']) : 0,
+        ];
+        return $data;
+    }
+
 
     /**
      * 获取订单平均消费金额（实际付款）
@@ -452,6 +537,33 @@ class StoreDataForm extends Model
         ];
     }
 
+
+    /**
+     * 获取n日内每日销量
+     */
+    public function getCouponDaysOrderGoodsData($days = 7)
+    {
+        $list = [];
+        $data = [];
+        for ($i = 0; $i < $days; $i++) {
+            $start_time = strtotime(date('Y-m-d 00:00:00') . ' -' . $i . ' days');
+            $end_time = strtotime(date('Y-m-d 23:59:59') . ' -' . $i . ' days');
+            $date = date('m-d', $start_time);
+            $val = $this->getCouponOrderGoodsCount($start_time, $end_time);
+            $list[] = [
+                'date' => $date,
+                'val' => $val,
+                'start_time' => date('Y-m-d H:i:s', $start_time),
+                'end_time' => date('Y-m-d H:i:s', $end_time),
+            ];
+            $data[] = $val;
+        }
+        return [
+            'list' => array_reverse($list),
+            'data' => array_reverse($data),
+        ];
+    }
+
     /**
      * 获取n日内每日成交额（已付款）
      */
@@ -480,6 +592,42 @@ class StoreDataForm extends Model
 
 
     /**
+     * 获取n日内每日成交额（已付款）
+     */
+    public function getCouponDaysOrderGoodsPriceData($days = 7)
+    {
+        $list = [];
+        $data = [];
+        $data1 = [];
+        $data2 = [];
+        for ($i = 0; $i < $days; $i++) {
+            $start_time = strtotime(date('Y-m-d 00:00:00') . ' -' . $i . ' days');
+            $end_time = strtotime(date('Y-m-d 23:59:59') . ' -' . $i . ' days');
+            $date = date('m-d', $start_time);
+            $val = $this->getCouponOrderPriceCount($start_time, $end_time);
+            $list[] = [
+                'date' => $date,
+                'val' => $val,
+                'start_time' => date('Y-m-d H:i:s', $start_time),
+                'end_time' => date('Y-m-d H:i:s', $end_time),
+            ];
+            $data1[] = $val['coupon'];
+            $data2[] = $val['integral'];
+        }
+        $data = [
+            'coupon' => array_reverse($data1),
+            'integral' => array_reverse($data2),
+        ];
+
+//        echo '<pre>';
+        return [
+            'list' => array_reverse($list),
+            'data' => $data,
+        ];
+    }
+
+
+    /**
      * 获取商品销量排行
      */
     public function getGoodsSaleTopList($start_time = null, $end_time = null, $limit = 10)
@@ -503,6 +651,30 @@ class StoreDataForm extends Model
         return $query->select('g.name,SUM(od.num) AS num')->groupBy('od.goods_id')->orderBy('num DESC')->limit($limit)->asArray()->all();
     }
 
+
+    /**
+     * 获取商品销量排行
+     */
+    public function getCouponGoodsSaleTopList($start_time = null, $end_time = null, $limit = 10)
+    {
+        $query = \app\modules\mch\models\couponmall\Order::find()->alias('od')
+            ->leftJoin(['g' => \app\modules\mch\models\couponmall\Goods::tableName()], 'od.goods_id=g.id')
+            ->where([
+                'g.store_id' => $this->store_id,
+                'g.is_delete' => 0,
+                'od.is_delete' => 0,
+                'od.is_pay' => 1,
+            ]);
+        if ($start_time !== null) {
+            $query->andWhere(['>=', 'od.addtime', $start_time]);
+        }
+        if ($end_time !== null) {
+            $query->andWhere(['<=', 'od.addtime', $end_time]);
+        }
+
+        return $query->select('g.name,count(od.id) AS num,SUM(od.coupon) coupon,SUM(od.integral)integral')->groupBy('od.goods_id')->orderBy('num DESC')->limit($limit)->asArray()->all();
+    }
+
     /**
      * 获取用户消费排行列表
      */
@@ -524,6 +696,42 @@ class StoreDataForm extends Model
                 $list[$i]['money'] = number_format($money / 10000, 2, '.', '') . 'w';
             } else {
                 $list[$i]['money'] = number_format($money, 2, '.', '');
+            }
+        }
+        return $list;
+    }
+
+
+    /**
+     * 获取用户消费排行列表
+     */
+    public function getCouponUserTopList($limit = 10)
+    {
+        $list = \app\modules\mch\models\couponmall\Order::find()->alias('o')->leftJoin(['u' => User::tableName()], 'o.user_id=u.id')
+            ->where([
+                'o.store_id' => $this->store_id,
+                'o.is_pay' => 1,
+                'o.is_delete' => 0,
+            ])->groupBy('o.user_id')
+            ->orderBy('integral DESC ,coupon DESC')
+//            ->orderBy(['integral'=>SORT_DESC,'coupon'=>SORT_DESC])
+            ->limit($limit)
+            ->select('u.id,u.nickname,u.avatar_url AS avatar,SUM(o.coupon) as coupon,SUM(o.integral) as integral')
+            ->asArray()->all();
+        if (!$list)
+            return []; 
+        foreach ($list as $i => $item) {
+            $coupon = doubleval($item['coupon']);
+            if ($coupon >= 10000) {
+                $list[$i]['coupon'] = number_format($coupon / 10000, 2, '.', '') . 'w';
+            } else {
+                $list[$i]['coupon'] = number_format($coupon, 2, '.', '');
+            }
+            $integral = doubleval($item['integral']);
+            if ($coupon >= 10000) {
+                $list[$i]['integral'] = number_format($integral / 10000, 2, '.', '') . 'w';
+            } else {
+                $list[$i]['integral'] = number_format($integral, 2, '.', '');
             }
         }
         return $list;

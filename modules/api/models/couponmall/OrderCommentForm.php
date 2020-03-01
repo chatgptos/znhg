@@ -8,16 +8,6 @@
 namespace app\modules\api\models\couponmall;
 
 
-use app\models\Order;
-use app\models\OrderComment;
-use app\models\OrderDetail;
-use app\models\PtOrder;
-use app\models\PtOrderComment;
-use app\models\PtOrderDetail;
-use app\models\QsCmOrder;
-use app\models\QsCmOrderComment;
-use app\models\YyOrder;
-use app\models\YyOrderComment;
 use app\modules\api\models\Model;
 use yii\helpers\Html;
 
@@ -39,7 +29,7 @@ class OrderCommentForm extends Model
     {
         if (!$this->validate())
             return $this->getModelError();
-        $order = QsCmOrder::findOne([
+        $order = Order::findOne([
             'id' => $this->order_id,
             'store_id' => $this->store_id,
             'user_id' => $this->user_id,
@@ -66,7 +56,7 @@ class OrderCommentForm extends Model
 //            ]);
 //            if (!$order_detail)
 //                continue;
-            $order_comment = new QsCmOrderComment();
+            $order_comment = new OrderComment();
             $order_comment->store_id = $this->store_id;
             $order_comment->user_id = $this->user_id;
             $order_comment->order_id = $this->order_id;

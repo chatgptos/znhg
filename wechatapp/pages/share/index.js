@@ -57,7 +57,7 @@ Page({
                 user_info: user_info,
             });
             wx.showLoading({
-                title: "正在加载",
+                title: "正在排队加载",
                 mask: true,
             });
             app.request({

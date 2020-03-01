@@ -17,13 +17,15 @@ class SeckillGoodsEditForm extends Model
     public $attr;
     public $open_time;
     public $open_date;
+    public $start_date_bookmall;
+    public $end_date_bookmall;
 
     public $buy_max;
 
     public function rules()
     {
         return [
-            [['goods_id', 'attr', 'open_time', 'open_date',], 'required'],
+            [['start_date_bookmall','end_date_bookmall','goods_id', 'attr', 'open_time', 'open_date',], 'required'],
             ['buy_max', 'default', 'value' => 0],
             ['buy_max', 'integer', 'min' => 0],
         ];
@@ -56,6 +58,8 @@ class SeckillGoodsEditForm extends Model
                     'goods_id' => $this->goods_id,
                     'start_time' => intval($time),
                     'open_date' => $date,
+                    'start_date_bookmall' => $this->start_date_bookmall,
+                    'end_date_bookmall' => $this->end_date_bookmall,
                     'is_delete' => 0,
                 ]);
                 \Yii::trace("---->" . ($model == null));
@@ -65,6 +69,8 @@ class SeckillGoodsEditForm extends Model
                     $model->goods_id = $this->goods_id;
                     $model->start_time = intval($time);
                     $model->open_date = $date;
+                    $model->start_date_bookmall = $this->start_date_bookmall;
+                    $model->end_date_bookmall = $this->end_date_bookmall;
                     $model->is_delete = 0;
                 }
                 $model->attr = $this->attr;

@@ -404,6 +404,21 @@ $this->params['active_nav_group'] = 1;
                 </div>
             </div>
 
+
+            <div class="form-group row">
+                <div class="form-group-label col-sm-2 text-right">
+                    <label class="col-form-label required">预售须知规则</label>
+                </div>
+                <div class="col-sm-6">
+                    <textarea class="form-control" type="text"
+                              rows="3"
+                              placeholder="请填写预售须知使用规则"
+                              name="integrationyushou"><?= $store->integrationyushou ?></textarea>
+                    <div class="text-muted fs-sm">预售须知规则用于用户结算页说明显示，为了更好体验字数最好不要超过80字</div>
+                </div>
+            </div>
+
+
             <div class="form-group row">
                 <div class="form-group-label col-sm-2 text-right">
                     <label class="col-form-label">商城首页公告</label>

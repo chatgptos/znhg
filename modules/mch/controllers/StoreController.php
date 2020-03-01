@@ -162,7 +162,9 @@ class StoreController extends Controller
      */
     public function actionCat()
     {
-        $cat_list = Cat::find()->where(['store_id' => $this->store->id, 'is_delete' => 0, 'parent_id' => 0])->orderBy('sort,addtime DESC')->all();
+        $cat_list = Cat::find()->where(['store_id' => $this->store->id, 'is_delete' => 0, 'parent_id' => 0])
+            ->orderBy('sort,addtime DESC')
+            ->all();
         return $this->render('cat', [
             'cat_list' => $cat_list,
         ]);
@@ -743,11 +745,11 @@ class StoreController extends Controller
 
     public function actionUploadFileList($type = 'image', $page = 1, $dataType = 'json')
     {
-        $offset = ($page - 1) * 20;
+        $offset = ($page - 1) * 500;
         $list = UploadFile::find()
             ->where(['store_id' => $this->store->id, 'is_delete' => 0, 'type' => $type])
             ->orderBy('addtime DESC')
-            ->limit(20)->offset($offset)->asArray()->select('file_url')->all();
+            ->limit(500)->offset($offset)->asArray()->select('file_url')->all();
         if ($dataType == 'json') {
             $this->renderJson([
                 'code' => 0,

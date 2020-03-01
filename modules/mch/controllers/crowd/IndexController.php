@@ -8,8 +8,7 @@
 namespace app\modules\mch\controllers\crowd;
 
 
-use app\models\YySetting;
-use app\models\ZcSetting;
+use app\modules\mch\models\crowd\ZcSetting;
 
 class IndexController extends Controller
 {

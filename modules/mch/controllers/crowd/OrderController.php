@@ -8,10 +8,8 @@
 namespace app\modules\mch\controllers\crowd;
 
 
-use app\models\YyOrder;
-use app\models\YyWechatTplMsgSender;
-use app\models\ZcOrder;
-use app\models\ZcWechatTplMsgSender;
+use app\modules\mch\models\crowd\ZcOrder;
+use app\modules\mch\models\crowd\ZcWechatTplMsgSender;
 use app\modules\mch\models\crowd\OrderForm;
 
 class OrderController extends Controller

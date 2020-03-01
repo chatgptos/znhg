@@ -16,7 +16,7 @@
     <view class="app">
         <view class="title_scan">附近货柜</view>
         <view class="ditu">
-            <image src="/Img/znhgdt.png"></image>
+            <image src="/Img/znhgdt.jepg"></image>
         </view>
     </view>
 

@@ -41,7 +41,6 @@ class UserForm extends Model
         }
         $this->user->level = $this->level;
         $this->user->parent_id = $this->parent_id;
-
         if($this->user->save()){
             return [
                 'code'=>0,

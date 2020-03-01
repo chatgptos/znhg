@@ -45,6 +45,9 @@ $this->params['active_nav_group'] = 0;
         height: 12rem;
     }
 
+    .panel-7 {
+        height: 20rem;
+    }
     .panel-2 hr {
         border-top-color: #eee;
     }
@@ -147,6 +150,7 @@ $this->params['active_nav_group'] = 0;
     }
 </style>
 <div class="row home-row" id="app" style="display: none">
+
     <div class="home-col col-md-4">
         <div class="panel panel-1" v-if="panel_1">
             <div class="panel-header">今日数据</div>
@@ -409,8 +413,213 @@ $this->params['active_nav_group'] = 0;
                 <div id="echarts_1" style="height:15rem;"></div>
             </div>
         </div>
+        <div class="panel panel-4" v-if="panel_9">
+            <div class="panel-body">
+                <div id="echarts_2" style="height:15rem;"></div>
+            </div>
+        </div>
+
+
     </div>
     <div class="home-col col-md-6">
+
+
+        <div class="panel panel-5 mb-3" v-if="panel_5">
+            <div class="panel-header">
+                <span>后台系统公告</span>
+                <ul class="nav nav-right">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="javascript:" data-tab=".tab-1">功能</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:" data-tab=".tab-2">运营</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:" data-tab=".tab-3">数据</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:" data-tab=".tab-4">报表</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="panel-body">
+                <div class="tab-body tab-1 active">
+                    <table class="table">
+                        <col style="width: 10%">
+                        <col style="width: 75%">
+                        <col style="width: 15%">
+                        <thead>
+                        <tr>
+                            <th>排名</th>
+                            <th>功能名称</th>
+                            <th class="text-center">信息</th>
+                        </tr>
+                        </thead>
+                        <tr  >
+                            <td>1</td>
+                            <td>
+                                <div style="color:red">预售1新增须知2.阶段价格显示3.达到人数下降余款4.后台一键计算尾款5.预售增加整体时间</div>
+                            </td>
+                            <td class="text-center" style="color:red">注意</td>
+                        </tr>
+                        <tr  >
+                            <td>2</td>
+                            <td>
+                                <div style="color:red">新增7等级会员</div>
+                            </td>
+                            <td class="text-center" style="color:red">注意</td>
+                        </tr>
+                        <tr  >
+                            <td>2</td>
+                            <td>
+                                <div style="color:red">用户申请前端一键申请经销后台审核（代理商设置优惠券门槛和推广人数/代理商类目设置扣除的优惠券或者积分）</div>
+                            </td>
+                            <td class="text-center" style="color:red">注意</td>
+                        </tr>
+
+                    </table>
+                </div>
+                <div class="tab-body tab-2">
+                    <table class="table">
+                        <col style="width: 10%">
+                        <col style="width: 75%">
+                        <col style="width: 15%">
+                        <thead>
+                        <tr>
+                            <th>排名</th>
+                            <th>功能名称</th>
+                            <th class="text-center">信息</th>
+                        </tr>
+                        </thead>
+
+                        <tr  >
+                            <td>1</td>
+                            <td>
+                                <div style="color:red">可以创建客服了（右上角）</div>
+                            </td>
+                            <td class="text-center" style="color:red">注意</td>
+                        </tr>
+                        <tr  >
+                            <td>2</td>
+                            <td>
+                                <div>后台可以一键导出订单数据啦</div>
+                            </td>
+                            <td class="text-center">使用</td>
+                        </tr>
+                        <tr  >
+                            <td>3</td>
+                            <td>
+                                <div>可以按照商品名称搜索订单并且导出啦</div>
+                            </td>
+                            <td class="text-center">使用</td>
+                        </tr>
+
+                        <tr  >
+                            <td>5</td>
+                            <td>
+                                <div style="color:red">白天请不要过多拉取数据</div>
+                            </td>
+                            <td class="text-center" style="color:red">注意</td>
+                        </tr>
+
+                        <tr  >
+                            <td>6</td>
+                            <td>
+                                <div style="color:red">客服账号请不要外流，可以使用没有做完整的安全测试</div>
+                            </td>
+                            <td class="text-center" style="color:red">注意</td>
+                        </tr>
+
+                        <tr  >
+                            <td>7</td>
+                            <td>
+                                <div style="color:red">客服不可以拉去数据报表只可以查看和发货</div>
+                            </td>
+                            <td class="text-center" style="color:red">注意</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="tab-body tab-3">
+                    <table class="table">
+                        <col style="width: 10%">
+                        <col style="width: 75%">
+                        <col style="width: 15%">
+                        <thead>
+                        <tr>
+                            <th>排名</th>
+                            <th>功能名称</th>
+                            <th class="text-center">信息</th>
+                        </tr>
+                        </thead>
+                        <tr >
+                            <td>1</td>
+                            <td>
+                                <div>预售</div>
+                            </td>
+                            <td class="text-center"  >可以测试并使用啦</td>
+                        </tr>
+                        <tr >
+                            <td>1</td>
+                            <td>
+                                <div>报名/众筹</div>
+                            </td>
+                            <td class="text-center">可以创建发起报名活动啦</td>
+                        </tr>
+                        <tr >
+                            <td>1</td>
+                            <td>
+                                <div>众筹资格</div>
+                            </td>
+                            <td class="text-center">可以发起众筹抢购啦（请在首页布局增加众筹模块）</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="tab-body tab-4">
+                    <table class="table">
+                        <col style="width: 10%">
+                        <col style="width: 75%">
+                        <col style="width: 15%">
+                        <thead>
+                        <tr>
+                            <th>排名</th>
+                            <th>功能名称</th>
+                            <th class="text-center">信息</th>
+                        </tr>
+                        </thead>
+                        <tr>
+                            <td>8</td>
+                            <td>
+                                <div style="color:red">报表功能逐步移到财务报表模块</div>
+                            </td>
+                            <td class="text-center" style="color:red">注意</td>
+                        </tr>
+                        <tr >
+                            <td>1</td>
+                            <td>
+                                <div>奖金结算/用户推荐统计</div>
+                            </td>
+                            <td class="text-center">可以按时间统计推荐付费用户数量啦可以并且拉出数据</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>
+                                <div style="color:red">管理员所有的报表均可拉取（订单/商城/兑换/用户推荐统计）</div>
+                            </td>
+                            <td class="text-center" style="color:red">注意</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>
+                                <div style="color:red">券商也可以拉取报表了（每次只能拉去一个用户的所有下级，先搜索再拉取）</div>
+                            </td>
+                            <td class="text-center" style="color:red">注意</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
         <div class="panel panel-5 mb-3" v-if="panel_5">
             <div class="panel-header">
                 <span>商品销量排行</span>
@@ -529,7 +738,6 @@ $this->params['active_nav_group'] = 0;
             </div>
         </div>
 
-
         <div class="panel panel-6" v-if="panel_6">
             <div class="panel-body">
                 <div class="mb-3">用户购买力排行</div>
@@ -544,6 +752,171 @@ $this->params['active_nav_group'] = 0;
                 </div>
             </div>
         </div>
+
+
+
+        <div class="panel panel-5 mb-3" v-if="panel_7">
+            <div class="panel-header">
+                <span>优惠券兑换销量排行</span>
+                <ul class="nav nav-right">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="javascript:" data-tab=".tab-1">今日</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:" data-tab=".tab-2">昨日</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:" data-tab=".tab-3">最近7天</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:" data-tab=".tab-4">最近30天</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="panel-body">
+                <div class="tab-body tab-1 active">
+                    <table class="table">
+                        <col style="width: 10%">
+                        <col style="width: 75%">
+                        <col style="width: 15%">
+                        <col style="width: 15%">
+                        <col style="width: 15%">
+                        <thead>
+                        <tr>
+                            <th>排名</th>
+                            <th>商品名称</th>
+                            <th class="text-center">成交数量</th>
+                            <th class="text-center">成交积分</th>
+                            <th class="text-center">成交优惠券</th>
+                        </tr>
+                        </thead>
+                        <tr v-if="panel_7.data_1.length==0">
+                            <td colspan="3" class="text-center">今日暂无销售记录</td>
+                        </tr>
+                        <tr v-else v-for="(item,index) in panel_7.data_1">
+                            <td>{{index+1}}</td>
+                            <td>
+                                <div>{{item.name}}</div>
+                            </td>
+                            <td class="text-center">{{item.num}}</td>
+                            <td class="text-center">{{item.integral}}</td>
+                            <td class="text-center">{{item.coupon}}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="tab-body tab-2">
+                    <table class="table">
+                        <col style="width: 10%">
+                        <col style="width: 75%">
+                        <col style="width: 15%">
+                        <col style="width: 15%">
+                        <col style="width: 15%">
+                        <thead>
+                        <tr>
+                            <th>排名</th>
+                            <th>商品名称</th>
+                            <th class="text-center">成交数量</th>
+                            <th class="text-center">成交积分</th>
+                            <th class="text-center">成交优惠券</th>
+                        </tr>
+                        </thead>
+                        <tr v-if="panel_7.data_2.length==0">
+                            <td colspan="3" class="text-center">今日暂无销售记录</td>
+                        </tr>
+                        <tr v-else v-for="(item,index) in panel_7.data_2">
+                            <td>{{index+1}}</td>
+                            <td>
+                                <div>{{item.name}}</div>
+                            </td>
+                            <td class="text-center">{{item.num}}</td>
+                            <td class="text-center">{{item.integral}}</td>
+                            <td class="text-center">{{item.coupon}}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="tab-body tab-3">
+                    <table class="table">
+                        <col style="width: 10%">
+                        <col style="width: 75%">
+                        <col style="width: 15%">
+                        <col style="width: 15%">
+                        <col style="width: 15%">
+                        <thead>
+                        <tr>
+                            <th>排名</th>
+                            <th>商品名称</th>
+                            <th class="text-center">成交数量</th>
+                            <th class="text-center">成交积分</th>
+                            <th class="text-center">成交优惠券</th>
+                        </tr>
+                        </thead>
+                        <tr v-if="panel_7.data_3.length==0">
+                            <td colspan="3" class="text-center">今日暂无销售记录</td>
+                        </tr>
+                        <tr v-else v-for="(item,index) in panel_7.data_3">
+                            <td>{{index+1}}</td>
+                            <td>
+                                <div>{{item.name}}</div>
+                            </td>
+                            <td class="text-center">{{item.num}}</td>
+                            <td class="text-center">{{item.integral}}</td>
+                            <td class="text-center">{{item.coupon}}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="tab-body tab-4">
+                    <table class="table">
+                        <col style="width: 10%">
+                        <col style="width: 75%">
+                        <col style="width: 15%">
+                        <col style="width: 15%">
+                        <col style="width: 15%">
+                        <thead>
+                        <tr>
+                            <th>排名</th>
+                            <th>商品名称</th>
+                            <th class="text-center">成交数量</th>
+                            <th class="text-center">成交积分</th>
+                            <th class="text-center">成交优惠券</th>
+                        </tr>
+                        </thead>
+                        <tr v-if="panel_7.data_4.length==0">
+                            <td colspan="3" class="text-center">今日暂无销售记录</td>
+                        </tr>
+                        <tr v-else v-for="(item,index) in panel_7.data_4">
+                            <td>{{index+1}}</td>
+                            <td>
+                                <div>{{item.name}}</div>
+                            </td>
+                            <td class="text-center">{{item.num}}</td>
+                            <td class="text-center">{{item.integral}}</td>
+                            <td class="text-center">{{item.coupon}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-6" v-if="panel_8">
+            <div class="panel-body">
+                <div class="mb-3">用户兑换排行</div>
+                <div style="overflow-x: auto">
+                    <div class="user-top-list">
+                        <div class="user-top-item" v-for="(item,index) in panel_8">
+                            <div class="user-avatar" v-bind:style="'background-image:url('+item.avatar+')'"></div>
+                            <div class="user-nickname fs-sm">{{item.nickname}}</div>
+                            <div class="user-money fs-sm text-muted">积{{item.integral}}+券{{item.coupon}}</div>
+                            <div class="user-money fs-sm text-muted"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
 
     </div>
 </div>
@@ -560,6 +933,9 @@ $this->params['active_nav_group'] = 0;
             panel_4: null,
             panel_5: null,
             panel_6: null,
+            panel_7: null,
+            panel_8: null,
+            panel_9: null,
         },
     });
     $('#app').show();
@@ -589,6 +965,12 @@ $this->params['active_nav_group'] = 0;
             app.panel_4 = res.data.panel_4;
             app.panel_5 = res.data.panel_5;
             app.panel_6 = res.data.panel_6;
+            app.panel_7 = res.data.panel_7;
+            app.panel_8 = res.data.panel_8;
+            app.panel_9 = res.data.panel_9;
+
+            console.log(res.data.panel_4);
+            console.log(res.data.panel_9);
 
             setTimeout(function () {
                 var echarts_1 = echarts.init(document.getElementById('echarts_1'));
@@ -630,6 +1012,55 @@ $this->params['active_nav_group'] = 0;
                 };
                 // 使用刚指定的配置项和数据显示图表。
                 echarts_1.setOption(echarts_1_option);
+            }, 500);
+
+
+
+            setTimeout(function () {
+                var echarts_2 = echarts.init(document.getElementById('echarts_2'));
+                // 指定图表的配置项和数据
+                var echarts_2_option = {
+                    title: {
+                        text: '近七日兑换商城走势'
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data: ['成交量', '成交积分额', '成交优惠券额']
+                    },
+                    grid: {
+                        left: '0%',
+                        right: '0%',
+                        bottom: '0%',
+                        containLabel: true
+                    },
+                    xAxis: {
+                        data: res.data.panel_9.date,
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [
+                        {
+                            name: '成交量',
+                            type: 'line',
+                            data: res.data.panel_9.order_goods_data.data,
+                        },
+                        {
+                            name: '成交积分',
+                            type: 'line',
+                            data: res.data.panel_9.order_goods_price_data.data.integral,
+                        },
+                        {
+                            name: '成交优惠券',
+                            type: 'line',
+                            data: res.data.panel_9.order_goods_price_data.data.coupon,
+                        },
+                    ]
+                };
+                // 使用刚指定的配置项和数据显示图表。
+                echarts_2.setOption(echarts_2_option);
             }, 500);
         }
     });

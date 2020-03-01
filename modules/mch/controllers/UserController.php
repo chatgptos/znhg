@@ -16,6 +16,7 @@ use app\models\User;
 use app\models\UserCoupon;
 use app\modules\mch\models\LevelForm;
 use app\modules\mch\models\LevelListForm;
+use app\modules\mch\models\settlementstatistics\AwardFuli;
 use app\modules\mch\models\UserCardListForm;
 use app\modules\mch\models\UserCouponForm;
 use app\modules\mch\models\UserForm;
@@ -32,11 +33,15 @@ class UserController extends Controller
         $data = $form->search();
         $level_list = Level::find()->where(['store_id' => $this->store->id, 'is_delete' => 0, 'status' => 1])
             ->orderBy(['level' => SORT_ASC])->asArray()->all();
+
+        $awardFuli = AwardFuli::findOne([ 'is_delete' => 0, 'store_id' => $this->store->id, 'status' => 1]);
         return $this->render('index', [
             'row_count' => $data['row_count'],
             'pagination' => $data['pagination'],
             'list' => $data['list'],
-            'level_list' => $level_list
+            'all_fuliquan' => $data['all_fuliquan'],
+            'level_list' => $level_list,
+            'awardFuli' => $awardFuli
         ]);
     }
 

@@ -8,12 +8,9 @@
 namespace app\modules\mch\controllers\crowd;
 
 
-use app\models\PtGoods;
 use app\models\User;
-use app\models\YyGoods;
-use app\models\YyOrderComment;
-use app\models\ZcGoods;
-use app\models\ZcOrderComment;
+use app\modules\mch\models\crowd\ZcGoods;
+use app\modules\mch\models\crowd\ZcOrderComment;
 use yii\data\Pagination;
 
 class CommentController extends Controller

@@ -3,6 +3,7 @@
 
 var api = require('../../api.js');
 var app = getApp();
+var mta = require('../../analysis/mta_analysis.js');
 
 Page({
 
@@ -64,6 +65,9 @@ Page({
         console.log('查看parent_id');
         console.log(parent_id);
         console.log(app.globalData.parent_id);
+        mta.Event.stat('loginBindParent',{'scene':'true'})
+        mta.Event.stat('loginBindParent',{'userid':'true'})
+        mta.Event.stat('loginBindParent',{'parentid':'true'})
     },
     /**
      * 绑定获取parent_id

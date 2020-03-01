@@ -8,13 +8,9 @@
 namespace app\modules\mch\controllers\crowd;
 
 
-use app\models\PostageRules;
-use app\models\YyCat;
-use app\models\YyForm;
-use app\models\YyGoods;
-use app\models\ZcCat;
-use app\models\ZcForm;
-use app\models\ZcGoods;
+use app\modules\mch\models\crowd\ZcCat;
+use app\modules\mch\models\crowd\ZcForm;
+use app\modules\mch\models\crowd\ZcGoods;
 use app\modules\mch\models\crowd\ZcCatForm;
 use app\modules\mch\models\crowd\ZcGoodsForm;
 
