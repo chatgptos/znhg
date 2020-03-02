@@ -8,6 +8,9 @@
 namespace app\modules\api\models;
 
 
+use app\extensions\HuoGui;
+use app\extensions\WxPayScore;
+use app\extensions\WxPayScoreOrder;
 use app\models\FormId;
 use app\models\Goods;
 use app\models\Order;
@@ -103,55 +106,78 @@ class OrderPayDataForm extends Model
 
     public function search1()
     {
-
-        $pay_data = array(
-            'appId' => "2019082351351",
-            "timestamp"=>"2014-07-24 03:07:50",
-            'biz_content' => array(
-                "deviceId"=>100023,//必须要有设备
-                "unionid"=>"1353817842",
-                "opendoorRecordId"=>"9516",
-            )
-
-        );
-        $pay_data['sign'] = $this->makeSignHG($pay_data['biz_content']);
-
-        $url="https://api.voidiot.com/open-api/syncUserInfo";//同步用户数据可以开门
-        $url="https://api.voidiot.com/open-api/getDeviceList";//获取货柜列表
-        $url="https://api.voidiot.com/open-api/getDeviceById";//获取货柜详情
-        $url="https://api.voidiot.com/open-api/completeOrder";//完结订单传入开门id记录
-        $url="https://api.voidiot.com/open-api/openDoor";//取货开门
-        $url="https://api.voidiot.com/open-api/getSelectGoods";//实时购买商品数据 判断门是否关闭
-        $url="https://api.voidiot.com/open-api/getOrdersByOpenDoorId";//获取货柜商品详情
-//            $url="https://api.voidiot.com/open-api/getDeviceGoods";//获取货柜商品详情
-//            $url="https://api.voidiot.com/open-api/replenish";//补货开门
-//            $url="https://api.voidiot.com/open-api/getDeviceRealTimeGoods";//获取补货实时货品
-
-        $pay_data['biz_content'] = json_encode($pay_data['biz_content'],true);
-        $data  = json_encode($pay_data,true);
-
-        $headerArray =array("Content-type:application/json;charset='utf-8'","Accept:application/json");
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST,FALSE);
-        curl_setopt($curl, CURLOPT_POST, 1);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-        curl_setopt($curl,CURLOPT_HTTPHEADER,$headerArray);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        $output = curl_exec($curl);
-        curl_close($curl);
-
+       $biz_content=array(
+        "deviceId"=>100073,//必须要有设备
+        "unionid"=>"1353817842",
+       );
+        $HuoGui = new HuoGui();
         echo '<pre>';
-        var_dump($output);
-        var_dump(json_decode($output,true));
-        die;
+
+
+        $res= $HuoGui->replenish($biz_content);//补货开门
+        var_dump($res);
+//        $res= $HuoGui->syncUserInfo($biz_content);
+//        var_dump($res);
+//        $res= $HuoGui->getDeviceList($biz_content);
+//        var_dump($res);
+//        $res= $HuoGui->getDeviceById($biz_content);
+//        var_dump($res);
+
+//        $res= $HuoGui->completeOrder($biz_content);
+//        var_dump($res);
+
+//        echo '<hr>openDoor';
+        $biz_content=array(
+            "deviceId"=>100073,//必须要有设备
+            "unionid"=>"1353817842",
+        "opendoorRecordId"=>"9516",
+        );
+
+//        $res= $HuoGui->openDoor($biz_content);
+//        var_dump($res);
+//        $res= $HuoGui->getSelectGoods($biz_content);
+//        var_dump($res);
+////
+//        $res= $HuoGui->getOrdersByOpenDoorId($biz_content);
+//        var_dump($res);
+////
+//        $res= $HuoGui->getDeviceGoods($biz_content);
+//        var_dump($res);
+//        $res= $HuoGui->getDeviceRealTimeGoods($biz_content);
+//        var_dump($res);
     }
 
 
 
     public function search2()
     {
+
+        $HuoGui = new WxPayScoreOrder();
+        echo '<pre>';
+        $out_order_no="234323JKHDFE1243252Ba";
+        $res= $HuoGui->queryOrder($out_order_no);//补货开门
+//        var_dump(json_decode($res, true));
+        $res= $HuoGui->serviceorder($out_order_no);//补货开门
+        var_dump(json_decode($res, true));
+        $res= $HuoGui->userServiceState($this->user->wechat_open_id);//补货开门
+        var_dump($res);
+        $res= $HuoGui->modify($out_order_no);//补货开门
+        var_dump($res);
+        $res= $HuoGui->pay($out_order_no);//补货开门
+        var_dump($res);
+        $res= $HuoGui->complete($out_order_no);//补货开门
+        var_dump($res);
+        $res= $HuoGui->cancel($out_order_no);//补货开门
+        var_dump($res);
+
+        $res= $HuoGui->wxpayScoreEnable($out_order_no);//补货开门
+        var_dump($res);
+        $res= $HuoGui->wxpayScoreDetail($out_order_no);//补货开门
+        var_dump($res);
+        die;
+
+
+
         $this->wechat = $this->getWechat();
 //// 商户配置
         $merchantId = $this->wechat->mchId;
@@ -159,6 +185,8 @@ class OrderPayDataForm extends Model
 //        $merchantPrivateKey = PemUtil::loadPrivateKey('/path/to/mch/private/key.pem');
 //        $wechatpayCertificate = PemUtil::loadCertificate('/path/to/wechatpay/cert.pem');
 
+
+        var_dump($this->wechat->keyPem);die;
         $merchantPrivateKey = PemUtil::loadPrivateKey($this->wechat->keyPem);
         $wechatpayCertificate = PemUtil::loadCertificate($this->wechat->certPem);
 //
@@ -427,26 +455,14 @@ class OrderPayDataForm extends Model
 
     public function search3()
     {
-        $this->wechat = $this->getWechat();
-        $out_order_no="234323JKHDFE1243252B";
-        $pay_data = array(
-            'mch_id' => "1555897421",
-            'service_id' => "00004000000000158195309791355586",
-            'out_order_no' => $out_order_no,
-            'timestamp' => '1583037425',
-            'nonce_str' => $this->getNonce(),
-            'sign_type' => "HMAC-SHA256",
-        );
 
-        $pay_data = array(
-            'mch_id' => "1555897421",
-            'service_id' => "00004000000000158195309791355586",
-            'out_request_no' => $out_order_no,
-            'timestamp' => '1583037425',
-            'nonce_str' => $this->getNonce(),
-            'sign_type' => "HMAC-SHA256",
-        );
-        $pay_data['sign'] = $this->makeSign($pay_data,$this->wechat->apiKey);
+        $HuoGui = new WxPayScore();
+        echo '<pre>';
+        $out_order_no="234323JKHDFE1243252B";
+        $pay_data= $HuoGui->wxpayScoreDetail($out_order_no);//补货开门
+        $out_request_noo="234323JKHDFE1243252B";
+        $pay_data= $HuoGui->wxpayScoreEnable($out_request_noo);//补货开门
+        var_dump($pay_data);
         return([
             'code' => 0,
             'msg' => 'success',
