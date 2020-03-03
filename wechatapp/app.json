@@ -1,5 +1,7 @@
 {
   "pages": [
+    "pages/huogui-detail/huogui-detail",
+    "pages/huogui-cart/cart",
     "pages/index/index",
     "pages/mall/mall",
     "pages/coupon-merchant/index",

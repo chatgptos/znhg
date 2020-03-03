@@ -8,6 +8,7 @@
 namespace app\modules\api\models;
 
 
+use app\extensions\HuoGui;
 use app\models\Attr;
 use app\models\AttrGroup;
 use app\models\Cart;
@@ -83,6 +84,91 @@ class CartListForm extends Model
             'data' => [
                 'row_count' => $count,
                 'page_count' => $pagination->pageCount,
+                'list' => $new_list,
+            ],
+        ];
+    }
+
+
+
+    public function searchHg()
+    {
+        //调用实时数据
+
+
+//        echo '<hr>openDoor';
+        $biz_content=array(
+            "deviceId"=>100073,//必须要有设备
+            "unionid"=>"1353817842",
+            "opendoorRecordId"=>"9516",
+        );
+
+        $HuoGui = new HuoGui();
+        $goods= $HuoGui->getSelectGoods($biz_content);
+
+
+
+        $goods='{
+                "msg":"",
+                "code":200,
+                "success":true,
+                "data":{
+                    "isClose":false,
+                    "goodsList":[
+                        {
+                            "goodsName":"瓶装饮料",
+                            "imgUrl":"http://images.voidiot.com/Foj2Z9bLgpPuueLMnKd5e6RN10oh",
+                            "price":3,
+                            "count":2,
+                            "valuatType":0,
+                            "weight":1070,
+                            "baseWeight":550,
+                            "deviceId":100023,
+                            "trayNum":4,
+                            "sourPrice":0,
+                            "discount":null
+                        }
+                    ]
+                },
+                "fail":false
+            }';
+
+        $res =json_decode($goods,true);
+
+        if ($res['success']==true){
+            $data=$res['data'];
+            $list=$data['goodsList'];
+        }
+
+        $new_list = [];
+        foreach ($list as $item) {
+            $attr_list[] = [
+                'attr_group_name'=>'来源',
+                'attr_name'=>'智能货柜',
+            ];
+            $attr_num = 99;
+            $num =$item['count'];
+            $goods_pic =$item['imgUrl'];
+            $new_item = (object)[
+                'cart_id' => $item['categoryId'],
+                'goods_id' =>$item['goodsId'],
+                'goods_name' =>$item['goodsName'],
+                'goods_pic' => $goods_pic,
+                'num' =>$num,
+                'attr_list' => $attr_list,
+                'price' =>$item['price'],
+                'max_num' => $attr_num,
+                'disabled' => ($num > $attr_num) ? true : false,
+            ];
+
+            $new_list[] = $new_item;
+        }
+        return [
+            'code' => 0,
+            'msg' => 'success',
+            'data' => [
+                'row_count' => count($new_item),
+                'page_count' => 10,
                 'list' => $new_list,
             ],
         ];

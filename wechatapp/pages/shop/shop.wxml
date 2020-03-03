@@ -53,9 +53,10 @@
         </block>
     </view>
 
-
-
     <view>
-        <a href="" class="button_scan">扫码开锁</a>
+        <a href="" class="button_scan"  bindtap="scanCode" >扫码开柜</a>
+    </view>
+    <view>
+        <a href="" class="button_scan"  bindtap="scanCode" >使用券多多扫码打开宝箱（免费）</a>
     </view>
 </view>

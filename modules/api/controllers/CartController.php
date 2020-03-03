@@ -34,6 +34,17 @@ class CartController extends Controller
         $this->renderJson($form->search());
     }
 
+
+
+    public function actionListhg()
+    {
+        $form = new CartListForm();
+        $form->attributes = \Yii::$app->request->get();
+        $form->store_id = $this->store->id;
+        $form->user_id = \Yii::$app->user->id;
+        $this->renderJson($form->searchHg());
+    }
+
     public function actionAddCart()
     {
         if (\Yii::$app->request->isPost) {
