@@ -1,8 +1,9 @@
 {
   "pages": [
+    "pages/huogui-order/details",
+    "pages/index/index",
     "pages/huogui-detail/huogui-detail",
     "pages/huogui-cart/cart",
-    "pages/index/index",
     "pages/mall/mall",
     "pages/coupon-merchant/index",
     "pages/coupon-merchant-mall/index",
@@ -104,7 +105,7 @@
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "集市",
+    "navigationBarTitleText": "智能鲜蜂",
     "navigationBarTextStyle": "black",
     "backgroundColor": "#EFEFF4"
   },

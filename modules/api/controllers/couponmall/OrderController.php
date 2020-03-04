@@ -76,6 +76,20 @@ class OrderController extends Controller
 
 
     /**
+     * 订单列表
+     */
+    public function actionListhg()
+    {
+        $form = new OrderListForm();
+        $form->attributes = \Yii::$app->request->get();
+        $form->store_id = $this->store->id;
+        $form->user_id = \Yii::$app->user->id;
+        $this->renderJson($form->search());
+    }
+
+
+
+    /**
      * @param int $id
      * 用户取消
      */
@@ -196,6 +210,24 @@ class OrderController extends Controller
            'msg'    => 'success',
            'data'   => $order
         ]);
+    }
+
+
+
+
+    /**
+     * @param int $id
+     * 订单详情
+     */
+    public function actionOrderDetailshg($id = 0)
+    {
+        $form = new OrderListForm();
+        $form->attributes = \Yii::$app->request->post();
+        $form->store_id = $this->store->id;
+        $form->user_id = \Yii::$app->user->id;
+        //查询是否生成订单
+        $opendoorRecordId = \Yii::$app->request->post('opendoorRecordId');
+        $this->renderJson($form->actionOrderDetailshg($opendoorRecordId));
     }
 
     /**

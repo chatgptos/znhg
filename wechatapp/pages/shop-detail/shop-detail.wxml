@@ -11,7 +11,7 @@
     </view>
 
 
-    <view class='block_3 flex-y-center'>货柜商品</view>
+    <view class='block_3 flex-y-center'>智能鲜蜂柜商品</view>
     <view class='block'>
         <view class='wrap'>
             <navigator style="display: inline-table" wx:for="{{goods}}" url='/pages/cheapmarket/details/details?id={{item.id}}'>
@@ -21,13 +21,13 @@
                     <view class='info'>  {{item.name}}</view>
                     <view class='price'>
                         <view class='pri-icon'>
-                            <image src='../../../Img/money-2.png'></image>
+                            <image src='/../../Img/jifen.png'></image>
                         </view>
                         <view class='num'>{{item.coupon}}</view>
                     </view>
                     <view class='price'>
                         <view class='pri-icon'>
-                            <image src='../../../Img/jifen.png'></image>
+                            <image src='/../../Img/jifen.png'></image>
                         </view>
                         <view class='num'>{{item.integral}}</view>
                     </view>

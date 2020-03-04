@@ -10,6 +10,7 @@ Page({
      */
     data: {
         score: [1, 2, 3, 4, 5],
+        goodshg:[],
     },
 
     /**
@@ -59,17 +60,49 @@ Page({
             }
         });
 
+        // app.request({
+        //     url: api.cheapmarket.list,
+        //     method: "get",
+        //     // data: { cid: 1 },
+        //     success: function (res) {
+        //         if (res.code == 0) {
+        //             setTimeout(function () {
+        //                 // 延长一秒取消加载动画
+        //                 wx.hideLoading();
+        //             }, 1000);
+        //             var goods = res.data.list;
+        //             if (res.data.page_count >= res.data.page) {
+        //                 page.setData({
+        //                     goods: goods,
+        //                     // page: res.data.page,
+        //                     page_count: res.data.page_count,
+        //                     row_count: res.data.row_count,
+        //                     show_loading_bar: 0,
+        //                 });
+        //             } else {
+        //                 page.setData({
+        //                     emptyGoods: 1,
+        //                 });
+        //             }
+        //         }
+        //     }
+        // });
+
+
+
         app.request({
-            url: api.cheapmarket.list,
-            method: "get",
-            // data: { cid: 1 },
+            url: api.cheapmarket.listhg,
+            method: "post",
+            data: { shop_id: options.shop_id},
             success: function (res) {
                 if (res.code == 0) {
                     setTimeout(function () {
                         // 延长一秒取消加载动画
                         wx.hideLoading();
-                    }, 1000);
+                    }, 100);
                     var goods = res.data.list;
+
+                    console.log(goods)
                     if (res.data.page_count >= res.data.page) {
                         page.setData({
                             goods: goods,

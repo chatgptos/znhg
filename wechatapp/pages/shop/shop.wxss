@@ -90,5 +90,5 @@
     color: rgba(255, 255, 255, 1);
     opacity: 1;
     text-decoration: none;
-    margin: 141rpx auto 0;
+    margin: 10rpx auto 0;
 }

@@ -290,11 +290,7 @@ class WxPayScoreOrder extends Controller
             'sign_type' => "HMAC-SHA256",
         );
         $pay_data['sign'] = $this->makeSign($pay_data, $this->wechat->apiKey);
-        return ([
-            'code' => 0,
-            'msg' => 'success',
-            'data' => $pay_data,
-        ]);
+        return $pay_data;
     }
 
 
@@ -309,13 +305,42 @@ class WxPayScoreOrder extends Controller
             'sign_type' => "HMAC-SHA256",
         );
         $pay_data['sign'] = $this->makeSign($pay_data,$this->wechat->apiKey);
-        return([
-            'code' => 0,
-            'msg' => 'success',
-            'data' => $pay_data,
-        ]);
+        return $pay_data;
     }
 
+
+
+
+
+    /**
+     * @return null|string
+     * 生成订单号
+     */
+    public function getOrderNoWxQY()
+    {
+        $order_no = null;
+        $order_no = 'WxScoreQY'.date('YmdHis') . rand(10000, 99999);
+//        while (true) {
+//        $store_id = empty($this->store_id) ? 0 : $this->store_id;
+//            $order_no = 'Y'.date('YmdHis') . rand(10000, 99999);
+////            //$exist_order_no = YyOrder::find()->where(['order_no' => $order_no])->exists();
+////            if (!$exist_order_no)
+////                break;
+//        }
+        return $order_no;
+    }
+
+
+    /**
+     * @return null|string
+     * 生成订单号
+     */
+    public function getOrderNoWx()
+    {
+        $order_no = null;
+        $order_no = 'WxScore'.date('YmdHis') . rand(10000, 99999);
+        return $order_no;
+    }
 
     /**
      * Json方式 调用电子面单接口

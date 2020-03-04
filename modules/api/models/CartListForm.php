@@ -93,29 +93,43 @@ class CartListForm extends Model
 
     public function searchHg()
     {
+        //查询实时货柜信息
+        $hg_id = \Yii::$app->request->post('hg_id');
+        //创建订单
+        $opendoorRecordId = \Yii::$app->request->post('opendoorRecordId');
+        $isreplenish =  \Yii::$app->request->post('isreplenish');
         //调用实时数据
-
-
-//        echo '<hr>openDoor';
         $biz_content=array(
-            "deviceId"=>100073,//必须要有设备
-            "unionid"=>"1353817842",
-            "opendoorRecordId"=>"9516",
+            "deviceId"=>$hg_id,//必须要有设备
+            "unionid"=>\Yii::$app->user->identity->wechat_open_id,
         );
 
         $HuoGui = new HuoGui();
-        $goods= $HuoGui->getSelectGoods($biz_content);
-
-
-
+        if($isreplenish){
+            $goods= $HuoGui->getDeviceRealTimeGoods($biz_content);
+        }else{
+            $goods= $HuoGui->getSelectGoods($biz_content);
+        }
         $goods='{
                 "msg":"",
                 "code":200,
                 "success":true,
                 "data":{
-                    "isClose":false,
+                    "isClose":true,
                     "goodsList":[
                         {
+                            "goodsName":"瓶装饮料",
+                            "imgUrl":"http://images.voidiot.com/Foj2Z9bLgpPuueLMnKd5e6RN10oh",
+                            "price":3,
+                            "count":2,
+                            "valuatType":0,
+                            "weight":1070,
+                            "baseWeight":550,
+                            "deviceId":100023,
+                            "trayNum":4,
+                            "sourPrice":0,
+                            "discount":null
+                        },{
                             "goodsName":"瓶装饮料",
                             "imgUrl":"http://images.voidiot.com/Foj2Z9bLgpPuueLMnKd5e6RN10oh",
                             "price":3,
@@ -138,8 +152,33 @@ class CartListForm extends Model
         if ($res['success']==true){
             $data=$res['data'];
             $list=$data['goodsList'];
+            $isClose=$data['isClose'];
+            if($isClose){
+                //如果关门 订单显示
+                //支付订单
+                //查询订单
+                $form = new \app\modules\api\models\couponmall\OrderListForm();
+                $res = $form->actionOrderDetailshg($opendoorRecordId);
+                if($res['success']){
+                    if(empty($isreplenish)){
+                        $isreplenish=false;
+                    }
+                    return [
+                        'code' => 0,
+                        'msg' => 'success',
+                        'data' => [
+                            'isClose' => true,
+                            'opendoorRecordId' => $opendoorRecordId,
+                            'data' => $res['data'],
+                            'isreplenish'=>$isreplenish,
+                            'order_no' => $res['data']['order_no'],
+                        ],
+                    ];
+                }
+            }
         }
 
+        //购物车显示
         $new_list = [];
         foreach ($list as $item) {
             $attr_list[] = [
