@@ -9,6 +9,7 @@ namespace app\modules\api\models;
 
 
 use app\extensions\HuoGui;
+use app\extensions\WxPayScoreOrder;
 use app\models\Attr;
 use app\models\AttrGroup;
 use app\models\Cart;
@@ -210,13 +211,23 @@ class CartListForm extends Model
                 $res = $form->actionOrderDetailshg($opendoorRecordId,true);
                 //如果成功生成货柜订单+微信订单
                 if($res['success']){
+
+                    $pay_data=[];
+                    if(true){
+                        //没有授权，开始授权
+                        $WxPayScoreOrder = new WxPayScoreOrder();
+                        $out_order_no=$res['data']['order_no'];
+                        $pay_data= $WxPayScoreOrder->wxpayScoreDetail($out_order_no);//获得微信分授权参数
+                    }
                     return [
                         'code' => 0,
                         'msg' => 'success',
                         'data' => [
+                            'isWechatJump' => true,
                             'isClose' => true,
                             'opendoorRecordId' => $opendoorRecordId,
                             'data' => $res['data'],
+                            'pay_data' => $pay_data,
                             'isreplenish'=>$isreplenish,
                             'order_no' => $res['data']['order_no'],
                         ],
