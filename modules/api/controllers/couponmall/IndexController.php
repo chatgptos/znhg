@@ -107,6 +107,18 @@ class IndexController extends Controller
             ],JSON_UNESCAPED_UNICODE);
         }
 
+
+        //查看是否配置
+        $shop = Shop::findOne(['hg_id' => $hg_id, 'store_id' => $this->store->id, 'is_delete' => 0]);
+        if (!$shop) {
+            return json_encode([
+                'code'  => '1',
+                'msg'   => '该货柜没有还未人抢购，未配置',
+                'success'   => false,
+                'data'  => '该货柜没有还未人抢购，未配置',
+            ],JSON_UNESCAPED_UNICODE);
+        }
+
         $HuoGui = new HuoGui();
         $biz_content=array(
             "deviceId"=>$hg_id,//必须要有设备

@@ -15,6 +15,7 @@ use app\models\AttrGroup;
 use app\models\Cart;
 use app\models\Goods;
 use app\models\SeckillGoods;
+use app\models\Shop;
 use yii\data\Pagination;
 
 class CartListForm extends Model
@@ -104,6 +105,18 @@ class CartListForm extends Model
             "deviceId"=>$hg_id,//必须要有设备
             "unionid"=>\Yii::$app->user->identity->wechat_open_id,
         );
+
+
+
+        $shop = Shop::findOne(['hg_id' => $hg_id, 'store_id' => $this->store_id, 'is_delete' => 0]);
+        if (!$shop) {
+            return json_encode([
+                'code'  => '1',
+                'msg'   => '该货柜没有还未人抢购，未配置',
+                'success'   => false,
+                'data'  => '该货柜没有还未人抢购，未配置',
+            ],JSON_UNESCAPED_UNICODE);
+        }
 
         $HuoGui = new HuoGui();
         if($isreplenish){
@@ -211,7 +224,6 @@ class CartListForm extends Model
                 $res = $form->actionOrderDetailshg($opendoorRecordId,true);
                 //如果成功生成货柜订单+微信订单
                 if($res['success']){
-
                     $pay_data=[];
                     if(true){
                         //没有授权，开始授权
@@ -219,11 +231,16 @@ class CartListForm extends Model
                         $out_order_no=$res['data']['order_no'];
                         $pay_data= $WxPayScoreOrder->wxpayScoreDetail($out_order_no);//获得微信分授权参数
                     }
+                    if ($shop->hg_yx){
+                        $isWechatJump=true;
+                    }else{
+                        $isWechatJump=false;
+                    }
                     return [
                         'code' => 0,
                         'msg' => 'success',
                         'data' => [
-                            'isWechatJump' => true,
+                            'isWechatJump' => $isWechatJump,
                             'isClose' => true,
                             'opendoorRecordId' => $opendoorRecordId,
                             'data' => $res['data'],

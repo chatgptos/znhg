@@ -62,6 +62,7 @@ class Shop extends \yii\db\ActiveRecord
             'latitude' => 'Latitude',
             'score' => '评分 1~5',
             'hg_id' => 'hg',
+            'hg_yx' => 'hgyx',
             'cover_url' => '门店大图',
             'pic_url' => '门店小图',
             'shop_time' => '营业时间',

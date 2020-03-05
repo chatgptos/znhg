@@ -36,13 +36,14 @@ class ShopForm extends Model
     public $shop_time;
     public $shop_pic;
     public $hg_id;
+    public $hg_yx;
 
     public function rules()
     {
         return [
             [['name', 'mobile', 'address','latitude','longitude'], 'required'],
             [['name', 'mobile', 'address','latitude','longitude','cover_url','pic_url','content','shop_time'], 'string'],
-            [['hg_id','name', 'mobile', 'address','cover_url','pic_url','content','shop_time'], 'trim'],
+            [['hg_yx','hg_id','name', 'mobile', 'address','cover_url','pic_url','content','shop_time'], 'trim'],
             [['score'],'integer','min'=>1,'max'=>5],
             [['shop_pic'],'safe']
         ];
@@ -58,6 +59,7 @@ class ShopForm extends Model
             'longitude'=>'经纬度',
             'score'=>'评分',
             'hg_id'=>'hg',
+            'hg_yx'=>'hgyx',
             'cover_url'=>'货柜大图',
             'pic_url'=>'门店小图',
             'content'=>'门店介绍',

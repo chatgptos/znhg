@@ -133,13 +133,13 @@ class OrderListForm extends Model
     "success":true,
     "data":{
         "errTag":2,
-        "orderNo":"126789888777777",
+        "orderNo":"12678988877cjz",
         "payTime":1565603026000,
         "totalGoodCount":1,
         "goodsList":[
             {
                 "id":340,
-                "goodsName":"好愿薯片",
+                "goodsName":"餐巾纸",
                 "imgUrl":"http://images.voidiot.com/FtZleANQ-HyskUgRhU6rSWMQfjZ_",
                 "price":0.03,
                 "baseWeight":null,
