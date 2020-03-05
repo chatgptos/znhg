@@ -125,8 +125,14 @@ class IndexController extends Controller
             //如果柜子存在
             if(empty($shop['code']) && $shop['success']){
                 //如果货柜编号相等//调用补货接口开门
-                $hg_id=$hg_id;
-
+                if(!isset($shop['data']['shop']['hg_id']) || $hg_id != $shop['data']['shop']['hg_id']){
+                    return json_encode([
+                        'code'  => '1',
+                        'msg'   => '不是您的货柜',
+                        'success'   => false,
+                        'data'  => '不是您的货柜',
+                    ],JSON_UNESCAPED_UNICODE);
+                }
                 //开始调用货柜补货
                 unset($biz_content['unionid']);
                 //不用同步用户信息

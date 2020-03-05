@@ -39,7 +39,7 @@ class Shop extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['store_id', 'is_delete', 'addtime', 'score'], 'integer'],
+            [['hg_id','store_id', 'is_delete', 'addtime', 'score'], 'integer'],
             [['longitude', 'latitude', 'cover_url', 'pic_url', 'content'], 'string'],
             [['name', 'mobile', 'address', 'shop_time'], 'string', 'max' => 255],
         ];
@@ -61,6 +61,7 @@ class Shop extends \yii\db\ActiveRecord
             'longitude' => 'Longitude',
             'latitude' => 'Latitude',
             'score' => '评分 1~5',
+            'hg_id' => 'hg',
             'cover_url' => '门店大图',
             'pic_url' => '门店小图',
             'shop_time' => '营业时间',
