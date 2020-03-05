@@ -7,7 +7,7 @@
 
 namespace yii\web;
 
-use yii\base\BaseObject;
+use yii\base\Object;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use Yii;
@@ -27,7 +27,7 @@ use Yii;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class AssetBundle extends BaseObject
+class AssetBundle extends Object
 {
     /**
      * @var string the directory that contains the source asset files for this asset bundle.

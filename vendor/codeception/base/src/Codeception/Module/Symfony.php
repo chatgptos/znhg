@@ -1,7 +1,9 @@
 <?php
+
 namespace Codeception\Module;
 
 use Codeception\Configuration;
+use Codeception\Exception\ModuleException;
 use Codeception\Lib\Framework;
 use Codeception\Exception\ModuleRequireException;
 use Codeception\Lib\Connector\Symfony as SymfonyConnector;
@@ -9,6 +11,7 @@ use Codeception\Lib\Interfaces\DoctrineProvider;
 use Codeception\Lib\Interfaces\PartedModule;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\VarDumper\Cloner\Data;
 
 /**
@@ -18,17 +21,53 @@ use Symfony\Component\VarDumper\Cloner\Data;
  *
  * <https://github.com/Codeception/symfony-demo>
  *
- * ## Status
- *
- * * Maintainer: **raistlin**
- * * Stability: **stable**
- *
  * ## Config
+ *
+ * ### Symfony 4.x
+ *
+ * * app_path: 'src' - in Symfony 4 Kernel is located inside `src`
+ * * environment: 'local' - environment used for load kernel
+ * * kernel_class: 'App\Kernel' - kernel class name
+ * * em_service: 'doctrine.orm.entity_manager' - use the stated EntityManager to pair with Doctrine Module.
+ * * debug: true - turn on/off debug mode
+ * * cache_router: 'false' - enable router caching between tests in order to [increase performance](http://lakion.com/blog/how-did-we-speed-up-sylius-behat-suite-with-blackfire)
+ * * rebootable_client: 'true' - reboot client's kernel before each request
+ *
+ * #### Example (`functional.suite.yml`) - Symfony 4 Directory Structure
+ *
+ *     modules:
+ *        enabled:
+ *           - Symfony:
+ *               app_path: 'src'
+ *               environment: 'test'
+ *
+ *
+ * ### Symfony 3.x
+ *
+ * * app_path: 'app' - specify custom path to your app dir, where the kernel interface is located.
+ * * var_path: 'var' - specify custom path to your var dir, where bootstrap cache is located.
+ * * environment: 'local' - environment used for load kernel
+ * * kernel_class: 'AppKernel' - kernel class name
+ * * em_service: 'doctrine.orm.entity_manager' - use the stated EntityManager to pair with Doctrine Module.
+ * * debug: true - turn on/off debug mode
+ * * cache_router: 'false' - enable router caching between tests in order to [increase performance](http://lakion.com/blog/how-did-we-speed-up-sylius-behat-suite-with-blackfire)
+ * * rebootable_client: 'true' - reboot client's kernel before each request
+ *
+ * #### Example (`functional.suite.yml`) - Symfony 3 Directory Structure
+ *
+ *     modules:
+ *        enabled:
+ *           - Symfony:
+ *               app_path: 'app/front'
+ *               var_path: 'var'
+ *               environment: 'local_test'
+ *
  *
  * ### Symfony 2.x
  *
  * * app_path: 'app' - specify custom path to your app dir, where bootstrap cache and kernel interface is located.
  * * environment: 'local' - environment used for load kernel
+ * * kernel_class: 'AppKernel' - kernel class name
  * * debug: true - turn on/off debug mode
  * * em_service: 'doctrine.orm.entity_manager' - use the stated EntityManager to pair with Doctrine Module.
  * * cache_router: 'false' - enable router caching between tests in order to [increase performance](http://lakion.com/blog/how-did-we-speed-up-sylius-behat-suite-with-blackfire)
@@ -42,26 +81,6 @@ use Symfony\Component\VarDumper\Cloner\Data;
  *            app_path: 'app/front'
  *            environment: 'local_test'
  * ```
- *
- * ### Symfony 3.x Directory Structure
- *
- * * app_path: 'app' - specify custom path to your app dir, where the kernel interface is located.
- * * var_path: 'var' - specify custom path to your var dir, where bootstrap cache is located.
- * * environment: 'local' - environment used for load kernel
- * * em_service: 'doctrine.orm.entity_manager' - use the stated EntityManager to pair with Doctrine Module.
- * * debug: true - turn on/off debug mode
- * * cache_router: 'false' - enable router caching between tests in order to [increase performance](http://lakion.com/blog/how-did-we-speed-up-sylius-behat-suite-with-blackfire)
- * * rebootable_client: 'true' - reboot client's kernel before each request
- *
- * ### Example (`functional.suite.yml`) - Symfony 3 Directory Structure
- *
- *     modules:
- *        enabled:
- *           - Symfony:
- *               app_path: 'app/front'
- *               var_path: 'var'
- *               environment: 'local_test'
- *
  *
  * ## Public Properties
  *
@@ -90,6 +109,11 @@ use Symfony\Component\VarDumper\Cloner\Data;
  */
 class Symfony extends Framework implements DoctrineProvider, PartedModule
 {
+    private static $possibleKernelClasses = [
+        'AppKernel', // Symfony Standard
+        'App\Kernel', // Symfony Flex
+    ];
+
     /**
      * @var \Symfony\Component\HttpKernel\Kernel
      */
@@ -98,6 +122,7 @@ class Symfony extends Framework implements DoctrineProvider, PartedModule
     public $config = [
         'app_path' => 'app',
         'var_path' => 'app',
+        'kernel_class' => null,
         'environment' => 'test',
         'debug' => true,
         'cache_router' => false,
@@ -196,6 +221,13 @@ class Symfony extends Framework implements DoctrineProvider, PartedModule
         parent::_after($test);
     }
 
+    public function onReconfigure($settings = [])
+    {
+
+        parent::_beforeSuite($settings);
+        $this->_initialize();
+    }
+
     /**
      * Retrieve Entity Manager.
      *
@@ -242,8 +274,8 @@ class Symfony extends Framework implements DoctrineProvider, PartedModule
      */
     protected function getKernelClass()
     {
-        $path = \Codeception\Configuration::projectDir() . $this->config['app_path'];
-        if (!file_exists(\Codeception\Configuration::projectDir() . $this->config['app_path'])) {
+        $path = codecept_root_dir() . $this->config['app_path'];
+        if (!file_exists(codecept_root_dir() . $this->config['app_path'])) {
             throw new ModuleRequireException(
                 __CLASS__,
                 "Can't load Kernel from $path.\n"
@@ -257,17 +289,37 @@ class Symfony extends Framework implements DoctrineProvider, PartedModule
         if (!count($results)) {
             throw new ModuleRequireException(
                 __CLASS__,
-                "AppKernel was not found at $path. "
-                . "Specify directory where Kernel class for your application is located with `app_path` parameter."
+                "File with Kernel class was not found at $path. "
+                . "Specify directory where file with Kernel class for your application is located with `app_path` parameter."
             );
         }
 
-        $file = current($results);
-        $class = $file->getBasename('.php');
+        if (file_exists(codecept_root_dir() . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php')) {
+            // ensure autoloader from this dir is loaded
+            require_once codecept_root_dir() . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+        }
 
-        require_once $file;
+        $filesRealPath = array_map(function ($file) {
+            require_once $file;
+            return $file->getRealPath();
+        }, $results);
 
-        return $class;
+        $possibleKernelClasses = $this->getPossibleKernelClasses();
+
+        foreach ($possibleKernelClasses as $class) {
+            if (class_exists($class)) {
+                $refClass = new \ReflectionClass($class);
+                if ($file = array_search($refClass->getFileName(), $filesRealPath)) {
+                    return $class;
+                }
+            }
+        }
+
+        throw new ModuleRequireException(
+            __CLASS__,
+            "Kernel class was not found in $file. "
+            . "Specify directory where file with Kernel class for your application is located with `app_path` parameter."
+        );
     }
 
     /**
@@ -364,7 +416,7 @@ class Symfony extends Framework implements DoctrineProvider, PartedModule
         } catch (\Symfony\Component\Routing\Exception\ResourceNotFoundException $e) {
             $this->fail(sprintf('The "%s" url does not match with any route', $uri));
         }
-        $expected = array_merge(array('_route' => $routeName), $params);
+        $expected = array_merge(['_route' => $routeName], $params);
         $intersection = array_intersect_assoc($expected, $match);
 
         $this->assertEquals($expected, $intersection);
@@ -400,11 +452,18 @@ class Symfony extends Framework implements DoctrineProvider, PartedModule
     }
 
     /**
-     * Checks if any email were sent by last request
+     * Checks if the desired number of emails was sent.
+     * If no argument is provided then at least one email must be sent to satisfy the check.
      *
-     * @throws \LogicException
+     * ``` php
+     * <?php
+     * $I->seeEmailIsSent(2);
+     * ?>
+     * ```
+     *
+     * @param null|int $expectedCount
      */
-    public function seeEmailIsSent()
+    public function seeEmailIsSent($expectedCount = null)
     {
         $profile = $this->getProfile();
         if (!$profile) {
@@ -414,7 +473,38 @@ class Symfony extends Framework implements DoctrineProvider, PartedModule
             $this->fail('Emails can\'t be tested without SwiftMailer connector');
         }
 
-        $this->assertGreaterThan(0, $profile->getCollector('swiftmailer')->getMessageCount());
+        if (!is_int($expectedCount) && !is_null($expectedCount)) {
+            $this->fail(sprintf(
+                'The required number of emails must be either an integer or null. "%s" was provided.',
+                print_r($expectedCount, true)
+            ));
+        }
+
+        $realCount = $profile->getCollector('swiftmailer')->getMessageCount();
+        if ($expectedCount === null) {
+            $this->assertGreaterThan(0, $realCount);
+        } else {
+            $this->assertEquals(
+                $expectedCount,
+                $realCount,
+                sprintf(
+                    'Expected number of sent emails was %d, but in reality %d %s sent.',
+                    $expectedCount,
+                    $realCount,
+                    $realCount === 2 ? 'was' : 'were'
+                )
+            );
+        }
+    }
+
+    /**
+     * Checks that no email was sent. This is an alias for seeEmailIsSent(0).
+     *
+     * @part email
+     */
+    public function dontSeeEmailIsSent()
+    {
+        $this->seeEmailIsSent(0);
     }
 
     /**
@@ -521,9 +611,14 @@ class Symfony extends Framework implements DoctrineProvider, PartedModule
      */
     private function extractRawRoles(Data $data)
     {
-        $raw = $data->getRawData();
+        if ($this->dataRevealsValue($data)) {
+            $roles = $data->getValue();
+        } else {
+            $raw = $data->getRawData();
+            $roles = isset($raw[1]) ? $raw[1] : [];
+        }
 
-        return isset($raw[1]) ? $raw[1] : [];
+        return $roles;
     }
 
     /**
@@ -572,5 +667,38 @@ class Symfony extends Framework implements DoctrineProvider, PartedModule
         if ($this->client) {
             $this->client->rebootKernel();
         }
+    }
+
+    /**
+     * Public API from Data changed from Symfony 3.2 to 3.3.
+     *
+     * @param \Symfony\Component\VarDumper\Cloner\Data $data
+     *
+     * @return bool
+     */
+    private function dataRevealsValue(Data $data)
+    {
+        return method_exists($data, 'getValue');
+    }
+
+    /**
+     * Returns list of the possible kernel classes based on the module configuration
+     *
+     * @return array
+     */
+    private function getPossibleKernelClasses()
+    {
+        if (empty($this->config['kernel_class'])) {
+            return self::$possibleKernelClasses;
+        }
+
+        if (!is_string($this->config['kernel_class'])) {
+            throw new ModuleException(
+                __CLASS__,
+                "Parameter 'kernel_class' must have 'string' type.\n"
+            );
+        }
+
+        return [$this->config['kernel_class']];
     }
 }

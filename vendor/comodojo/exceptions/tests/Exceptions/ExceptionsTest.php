@@ -182,4 +182,31 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    /**
+     * @expectedException        Comodojo\Exception\InvalidCacheArgumentException
+     */
+    public function testInvalidCacheArgumentException() {
+
+        throw new \Comodojo\Exception\InvalidCacheArgumentException("Test Exception", 1);
+
+    }
+
+    /**
+     * @expectedException        Comodojo\Exception\SimpleCacheException
+     */
+    public function testSimpleCacheException() {
+
+        throw new \Comodojo\Exception\SimpleCacheException("Test Exception", 1);
+
+    }
+
+    /**
+     * @expectedException        Comodojo\Exception\InvalidSimpleCacheArgumentException
+     */
+    public function testInvalidSimpleCacheArgumentException() {
+
+        throw new \Comodojo\Exception\InvalidSimpleCacheArgumentException("Test Exception", 1);
+
+    }
+
 }

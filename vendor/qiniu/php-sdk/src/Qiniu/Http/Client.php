@@ -13,9 +13,21 @@ final class Client
         return self::sendRequest($request);
     }
 
+    public static function delete($url, array $headers = array())
+    {
+        $request = new Request('DELETE', $url, $headers);
+        return self::sendRequest($request);
+    }
+
     public static function post($url, $body, array $headers = array())
     {
         $request = new Request('POST', $url, $headers, $body);
+        return self::sendRequest($request);
+    }
+
+    public static function PUT($url, $body, array $headers = array())
+    {
+        $request = new Request('PUT', $url, $headers, $body);
         return self::sendRequest($request);
     }
 
@@ -50,6 +62,7 @@ final class Client
         array_push($data, '');
 
         $body = implode("\r\n", $data);
+        // var_dump($data);exit;
         $contentType = 'multipart/form-data; boundary=' . $mimeBoundary;
         $headers['Content-Type'] = $contentType;
         $request = new Request('POST', $url, $headers, $body);
@@ -83,14 +96,12 @@ final class Client
             CURLOPT_HEADER => true,
             CURLOPT_NOBODY => false,
             CURLOPT_CUSTOMREQUEST => $request->method,
-            CURLOPT_URL => $request->url
+            CURLOPT_URL => $request->url,
         );
-
         // Handle open_basedir & safe mode
         if (!ini_get('safe_mode') && !ini_get('open_basedir')) {
             $options[CURLOPT_FOLLOWLOCATION] = true;
         }
-
         if (!empty($request->headers)) {
             $headers = array();
             foreach ($request->headers as $key => $val) {
@@ -99,7 +110,6 @@ final class Client
             $options[CURLOPT_HTTPHEADER] = $headers;
         }
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Expect:'));
-
         if (!empty($request->body)) {
             $options[CURLOPT_POSTFIELDS] = $request->body;
         }
@@ -129,6 +139,7 @@ final class Client
             $headerLine = trim($line);
             $kv = explode(':', $headerLine);
             if (count($kv) > 1) {
+                $kv[0] =self::ucwordsHyphen($kv[0]);
                 $headers[$kv[0]] = trim($kv[1]);
             }
         }
@@ -140,5 +151,10 @@ final class Client
         $find = array("\\", "\"");
         $replace = array("\\\\", "\\\"");
         return str_replace($find, $replace, $str);
+    }
+    
+    private static function ucwordsHyphen($str)
+    {
+        return str_replace('- ', '-', ucwords(str_replace('-', '- ', $str)));
     }
 }

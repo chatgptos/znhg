@@ -48,9 +48,9 @@ class Phalcon extends Client
         } elseif (is_string($application)) {
             /** @noinspection PhpIncludeInspection */
             return require $application;
-        } else {
-            return $application;
         }
+
+        return $application;
     }
 
     /**
@@ -151,7 +151,7 @@ class Phalcon extends Client
         }
 
         return new Response(
-            $response->getContent(),
+            $response->getContent() ?: '',
             $status ? $status : 200,
             $headers
         );

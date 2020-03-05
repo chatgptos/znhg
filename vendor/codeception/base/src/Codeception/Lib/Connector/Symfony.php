@@ -36,6 +36,7 @@ class Symfony extends \Symfony\Component\HttpKernel\Client
         $this->followRedirects(true);
         $this->rebootable = (boolean)$rebootable;
         $this->persistentServices = $services;
+        $this->container = $this->kernel->getContainer();
         $this->rebootKernel();
     }
 
@@ -75,12 +76,17 @@ class Symfony extends \Symfony\Component\HttpKernel\Client
         $this->kernel->boot();
         $this->container = $this->kernel->getContainer();
 
-        if ($this->container->has('profiler')) {
-            $this->container->get('profiler')->enable();
+        foreach ($this->persistentServices as $serviceName => $service) {
+            try {
+                $this->container->set($serviceName, $service);
+            } catch (\InvalidArgumentException $e) {
+                //Private services can't be set in Symfony 4
+                codecept_debug("[Symfony] Can't set persistent service $serviceName: " . $e->getMessage());
+            }
         }
 
-        foreach ($this->persistentServices as $serviceName => $service) {
-            $this->container->set($serviceName, $service);
+        if ($this->container->has('profiler')) {
+            $this->container->get('profiler')->enable();
         }
     }
 }

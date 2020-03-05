@@ -6,7 +6,7 @@ Module for AngularJS testing, based on [WebDriver module](http://codeception.com
 Performs **synchronization to ensure that page content is fully rendered**.
 Uses Angular's and Protractor internals methods to synchronize with the page.
 
-## Configurarion
+## Configuration
 
 The same as for [WebDriver](http://codeception.com/docs/modules/WebDriver#Configuration), but few new options added:
 
@@ -33,8 +33,81 @@ Example:
 $I->selectOption(['model' => 'customerId'], '3');
 ```
 
-
 ## Actions
+
+### _backupSession
+
+*hidden API method, expected to be used from Helper classes*
+ 
+Returns current WebDriver session for saving
+
+ * `return` RemoteWebDriver
+
+
+### _capabilities
+
+*hidden API method, expected to be used from Helper classes*
+ 
+Change capabilities of WebDriver. Should be executed before starting a new browser session.
+This method expects a function to be passed which returns array or [WebDriver Desired Capabilities](https://github.com/facebook/php-webdriver/blob/community/lib/Remote/DesiredCapabilities.php) object.
+Additional [Chrome options](https://github.com/facebook/php-webdriver/wiki/ChromeOptions) (like adding extensions) can be passed as well.
+
+```php
+<?php // in helper
+public function _before(TestInterface $test)
+{
+    $this->getModule('WebDriver')->_capabilities(function($currentCapabilities) {
+        // or new \Facebook\WebDriver\Remote\DesiredCapabilities();
+        return \Facebook\WebDriver\Remote\DesiredCapabilities::firefox();
+    });
+}
+```
+
+to make this work load `\Helper\Acceptance` before `WebDriver` in `acceptance.suite.yml`:
+
+```yaml
+modules:
+    enabled:
+        - \Helper\Acceptance
+        - WebDriver
+```
+
+For instance, [**BrowserStack** cloud service](https://www.browserstack.com/automate/capabilities) may require a test name to be set in capabilities.
+This is how it can be done via `_capabilities` method from `Helper\Acceptance`:
+
+```php
+<?php // inside Helper\Acceptance
+public function _before(TestInterface $test)
+{
+     $name = $test->getMetadata()->getName();
+     $this->getModule('WebDriver')->_capabilities(function($currentCapabilities) use ($name) {
+         $currentCapabilities['name'] = $name;
+         return $currentCapabilities;
+     });
+}
+```
+In this case, please ensure that `\Helper\Acceptance` is loaded before WebDriver so new capabilities could be applied.
+
+ * `param \Closure` $capabilityFunction
+
+
+### _closeSession
+
+*hidden API method, expected to be used from Helper classes*
+ 
+Manually closes current WebDriver session.
+
+```php
+<?php
+$this->getModule('WebDriver')->_closeSession();
+
+// close a specific session
+$webDriver = $this->getModule('WebDriver')->webDriver;
+$this->getModule('WebDriver')->_closeSession($webDriver);
+```
+
+ * `param` $webDriver (optional) a specific webdriver session instance
+
 
 ### _findClickable
 
@@ -57,7 +130,7 @@ $topBar = $module->_findElements('.top-bar')[0];
 $el = $module->_findClickable($topBar, 'Click Me');
 
 ```
- * `param` $page WebDriver instance or an element to search within
+ * `param RemoteWebDriver` $page WebDriver instance or an element to search within
  * `param` $link a link text or locator to click
  * `return` WebDriverElement
 
@@ -104,7 +177,30 @@ Uri of currently opened page.
 *hidden API method, expected to be used from Helper classes*
  
 Returns URL of a host.
+
 @throws ModuleConfigException
+
+
+### _initializeSession
+
+*hidden API method, expected to be used from Helper classes*
+ 
+Manually starts a new browser session.
+
+```php
+<?php
+$this->getModule('WebDriver')->_initializeSession();
+```
+
+
+
+### _loadSession
+
+*hidden API method, expected to be used from Helper classes*
+ 
+Loads current RemoteWebDriver instance as a session
+
+ * `param RemoteWebDriver` $session
 
 
 ### _restart
@@ -169,7 +265,7 @@ $I->amOnPage('/');
 $I->amOnPage('/register');
 ```
 
- * `param` $page
+ * `param string` $page
 
 
 ### amOnSubdomain
@@ -231,7 +327,7 @@ $I->appendField('#myTextField', 'appended');
 
 ### attachFile
  
-Attaches a file relative to the Codeception data directory to the given file upload field.
+Attaches a file relative to the Codeception `_data` directory to the given file upload field.
 
 ``` php
 <?php
@@ -246,7 +342,7 @@ $I->attachFile('input[@type="file"]', 'prices.xls');
 
 ### cancelPopup
  
-Dismisses the active JavaScript popup, as created by `window.alert`|`window.confirm`|`window.prompt`.
+Dismisses the active JavaScript popup, as created by `window.alert`, `window.confirm`, or `window.prompt`.
 
 
 ### checkOption
@@ -260,6 +356,18 @@ $I->checkOption('#agree');
 ```
 
  * `param` $option
+
+
+### clearField
+ 
+Clears given field which isn't empty.
+
+``` php
+<?php
+$I->clearField('#username');
+```
+
+ * `param` $field
 
 
 ### click
@@ -283,7 +391,7 @@ $I->click('Submit');
 // CSS button
 $I->click('#form input[type=submit]');
 // XPath
-$I->click('//form/*[@type=submit]');
+$I->click('//form/*[@type="submit"]');
 // link in context
 $I->click('Logout', '#nav');
 // using strict locator
@@ -335,8 +443,8 @@ $I->clickWithRightButton(['css' => '.checkout'], 20, 50);
 ```
 
  * `param string` $cssOrXPath css or xpath of the web element (body by default).
- * `param int`    $offsetX
- * `param int`    $offsetY
+ * `param int` $offsetX
+ * `param int` $offsetY
 
 @throws \Codeception\Exception\ElementNotFound
 
@@ -357,7 +465,16 @@ Can't be used with PhantomJS
  
 Print out latest Selenium Logs in debug mode
 
- * `param TestInterface` $test
+ * `param \Codeception\TestInterface` $test
+
+
+### deleteSessionSnapshot
+ 
+Deletes session snapshot.
+
+See [saveSessionSnapshot](#saveSessionSnapshot)
+
+ * `param` $name
 
 
 ### dontSee
@@ -387,8 +504,8 @@ But will ignore strings like:
 
 For checking the raw source code, use `seeInSource()`.
 
- * `param`      $text
- * `param null` $selector
+ * `param string` $text
+ * `param array|string` $selector optional
 
 
 ### dontSeeCheckboxIsChecked
@@ -427,7 +544,7 @@ $I->dontSeeCurrentUrlEquals('/');
 ?>
 ```
 
- * `param` $uri
+ * `param string` $uri
 
 
 ### dontSeeCurrentUrlMatches
@@ -437,11 +554,11 @@ Checks that current url doesn't match the given regular expression.
 ``` php
 <?php
 // to match root url
-$I->dontSeeCurrentUrlMatches('~$/users/(\d+)~');
+$I->dontSeeCurrentUrlMatches('~^/users/(\d+)~');
 ?>
 ```
 
- * `param` $uri
+ * `param string` $uri
 
 
 ### dontSeeElement
@@ -480,7 +597,7 @@ $I->dontSeeInCurrentUrl('/users/');
 ?>
 ```
 
- * `param` $uri
+ * `param string` $uri
 
 
 ### dontSeeInField
@@ -553,6 +670,16 @@ Checks that the page source doesn't contain the given string.
  * `param` $text
 
 
+### dontSeeInPopup
+ 
+Checks that the active JavaScript popup,
+as created by `window.alert`|`window.confirm`|`window.prompt`, does NOT contain the given string.
+
+ * `param` $text
+
+@throws \Codeception\Exception\ModuleException
+
+
 ### dontSeeInSource
  
 Checks that the current page contains the given string in its
@@ -586,8 +713,8 @@ $I->dontSeeLink('Checkout now', '/store/cart.php');
 ?>
 ```
 
- * `param` $text
- * `param null` $url
+ * `param string` $text
+ * `param string` $url optional
 
 
 ### dontSeeOptionIsSelected
@@ -627,6 +754,25 @@ $I->dragAndDrop('#drag', '#drop');
  * `param string` $target (CSS ID or XPath)
 
 
+### executeAsyncJS
+ 
+Executes asynchronous JavaScript.
+A callback should be executed by JavaScript to exit from a script.
+Callback is passed as a last element in `arguments` array.
+Additional arguments can be passed as array in second parameter.
+
+```js
+// wait for 1200 milliseconds my running `setTimeout`
+* $I->executeAsyncJS('setTimeout(arguments[0], 1200)');
+
+$seconds = 1200; // or seconds are passed as argument
+$I->executeAsyncJS('setTimeout(arguments[1], arguments[0])', [$seconds]);
+```
+
+ * `param` $script
+ * `param array` $arguments
+
+
 ### executeInSelenium
  
 Low-level API method.
@@ -655,10 +801,14 @@ This example uses jQuery to get a value and assigns that value to a PHP variable
 ```php
 <?php
 $myVar = $I->executeJS('return $("#myField").val()');
-?>
+
+// additional arguments can be passed as array
+// Example shows `Hello World` alert:
+$I->executeJS("window.alert(arguments[0])", ['Hello world']);
 ```
 
  * `param` $script
+ * `param array` $arguments
 
 
 ### fillField
@@ -687,7 +837,6 @@ $I->grabAttributeFrom('#tooltip', 'title');
 ?>
 ```
 
-
  * `param` $cssOrXpath
  * `param` $attribute
 
@@ -705,17 +854,17 @@ You can set additional cookie params like `domain`, `path` in array passed as la
 
 ### grabFromCurrentUrl
  
-Executes the given regular expression against the current URI and returns the first match.
+Executes the given regular expression against the current URI and returns the first capturing group.
 If no parameters are provided, the full URI is returned.
 
 ``` php
 <?php
-$user_id = $I->grabFromCurrentUrl('~$/user/(\d+)/~');
+$user_id = $I->grabFromCurrentUrl('~^/user/(\d+)/~');
 $uri = $I->grabFromCurrentUrl();
 ?>
 ```
 
- * `param null` $uri
+ * `param string` $uri optional
 
 
 
@@ -792,8 +941,12 @@ $name = $I->grabValueFrom(['name' => 'username']);
 
 ### loadSessionSnapshot
  
- * `param string` $name
- * `return` bool
+Loads cookies from a saved snapshot.
+Allows to reuse same session across tests without additional login.
+
+See [saveSessionSnapshot](#saveSessionSnapshot)
+
+ * `param` $name
 
 
 ### makeScreenshot
@@ -807,7 +960,6 @@ $I->makeScreenshot('edit_page');
 // saved to: tests/_output/debug/edit_page.png
 $I->makeScreenshot();
 // saved to: tests/_output/debug/2017-05-26_14-24-11_4b3403665fea6.png
-?>
 ```
 
  * `param` $name
@@ -974,7 +1126,33 @@ $I->resizeWindow(800, 600);
 
 ### saveSessionSnapshot
  
- * `param string` $name
+Saves current cookies into named snapshot in order to restore them in other tests
+This is useful to save session state between tests.
+For example, if user needs log in to site for each test this scenario can be executed once
+while other tests can just restore saved cookies.
+
+``` php
+<?php
+// inside AcceptanceTester class:
+
+public function login()
+{
+     // if snapshot exists - skipping login
+     if ($I->loadSessionSnapshot('login')) return;
+
+     // logging in
+     $I->amOnPage('/login');
+     $I->fillField('name', 'jon');
+     $I->fillField('password', '123345');
+     $I->click('Login');
+
+     // saving snapshot
+     $I->saveSessionSnapshot('login');
+}
+?>
+```
+
+ * `param` $name
 
 
 ### scrollTo
@@ -1023,8 +1201,8 @@ But will *not* be true for strings like:
 
 For checking the raw source code, use `seeInSource()`.
 
- * `param`      $text
- * `param null` $selector
+ * `param string` $text
+ * `param array|string` $selector optional
 
 
 ### seeCheckboxIsChecked
@@ -1069,7 +1247,7 @@ $I->seeCurrentUrlEquals('/');
 ?>
 ```
 
- * `param` $uri
+ * `param string` $uri
 
 
 ### seeCurrentUrlMatches
@@ -1079,11 +1257,11 @@ Checks that the current URL matches the given regular expression.
 ``` php
 <?php
 // to match root url
-$I->seeCurrentUrlMatches('~$/users/(\d+)~');
+$I->seeCurrentUrlMatches('~^/users/(\d+)~');
 ?>
 ```
 
- * `param` $uri
+ * `param string` $uri
 
 
 ### seeElement
@@ -1135,13 +1313,13 @@ $I->seeInCurrentUrl('/users/');
 ?>
 ```
 
- * `param` $uri
+ * `param string` $uri
 
 
 ### seeInField
  
-Checks that the given input field or textarea contains the given value.
-For fuzzy locators, fields are matched by label text, the "name" attribute, CSS, and XPath.
+Checks that the given input field or textarea *equals* (i.e. not just contains) the given value.
+Fields are matched by label text, the "name" attribute, CSS, or XPath.
 
 ``` php
 <?php
@@ -1282,8 +1460,8 @@ $I->seeLink('Logout','/logout'); // matches <a href="/logout">Logout</a>
 ?>
 ```
 
- * `param`      $text
- * `param null` $url
+ * `param string` $text
+ * `param string` $url optional
 
 
 ### seeNumberOfElements
@@ -1293,13 +1471,11 @@ Checks that there are a certain number of elements matched by the given locator 
 ``` php
 <?php
 $I->seeNumberOfElements('tr', 10);
-$I->seeNumberOfElements('tr', [0,10]); //between 0 and 10 elements
+$I->seeNumberOfElements('tr', [0,10]); // between 0 and 10 elements
 ?>
 ```
  * `param` $selector
- * `param mixed` $expected :
-- string: strict number
-- array: range of numbers [0,10]
+ * `param mixed` $expected int or int[]
 
 
 ### seeNumberOfElementsInDOM
@@ -1574,15 +1750,15 @@ Can't be used with PhantomJS
 
 ### switchToPreviousTab
  
-Switches to next browser tab.
+Switches to previous browser tab.
 An offset can be specified.
 
 ```php
 <?php
 // switch to previous tab
-$I->switchToNextTab();
+$I->switchToPreviousTab();
 // switch to 2nd previous tab
-$I->switchToNextTab(-2);
+$I->switchToPreviousTab(2);
 ```
 
 Can't be used with PhantomJS
@@ -1662,7 +1838,7 @@ Unselect an option in the given select box.
  
 Wait for $timeout seconds.
 
- * `param int` $timeout secs
+ * `param int|float` $timeout secs
 @throws \Codeception\Exception\TestRuntimeException
 
 
@@ -1702,6 +1878,23 @@ $I->waitForElementChange('#menu', function(WebDriverElement $el) {
  * `param \Closure` $callback
  * `param int` $timeout seconds
 @throws \Codeception\Exception\ElementNotFound
+
+
+### waitForElementClickable
+ 
+Waits up to $timeout seconds for the given element to be clickable.
+If element doesn't become clickable, a timeout exception is thrown.
+
+``` php
+<?php
+$I->waitForElementClickable('#agree_button', 30); // secs
+$I->click('#agree_button');
+?>
+```
+
+ * `param` $element
+ * `param int` $timeout seconds
+@throws \Exception
 
 
 ### waitForElementNotVisible
@@ -1770,7 +1963,7 @@ $I->waitForText('foo', 30, '.title'); // secs
 
  * `param string` $text
  * `param int` $timeout seconds
- * `param null` $selector
+ * `param string` $selector optional
 @throws \Exception
 
-<p>&nbsp;</p><div class="alert alert-warning">Module reference is taken from the source code. <a href="https://github.com/Codeception/Codeception/tree/2.3/src/Codeception/Module/AngularJS.php">Help us to improve documentation. Edit module reference</a></div>
+<p>&nbsp;</p><div class="alert alert-warning">Module reference is taken from the source code. <a href="https://github.com/Codeception/Codeception/tree/2.5/src/Codeception/Module/AngularJS.php">Help us to improve documentation. Edit module reference</a></div>

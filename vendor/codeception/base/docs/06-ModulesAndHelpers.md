@@ -35,7 +35,7 @@ modules:
 
 The FunctionalTester class has its methods defined in modules. Actually, it doesn't contain any of them,
 but rather acts as a proxy. It knows which module executes this action and passes parameters into it.
-To make your IDE see all of the FunctionalTester methods, you should run use the `codecept build` command.
+To make your IDE see all of the FunctionalTester methods, you should run the `codecept build` command.
 It generates method signatures from enabled modules and saves them into a trait which is included in an actor.
 In the current example, the `tests/support/_generated/FunctionalTesterActions.php` file will be generated.
 By default, Codeception automatically rebuilds the Actions trait on each change of the suite configuration.
@@ -130,8 +130,6 @@ Your project might need your own actions added to the test suite. By running the
 Codeception generates three dummy modules for you, one for each of the newly created suites.
 These custom modules are called 'Helpers', and they can be found in the `tests/_support` directory.
 
-
-
 ```php
 <?php
 namespace Helper;
@@ -144,7 +142,6 @@ class Functional extends \Codeception\Module
 
 Actions are also quite simple. Every action you define is a public function. Write a public method,
 then run the `build` command, and you will see the new function added into the FunctionalTester class.
-
 
 <div class="alert alert-info">
 Public methods prefixed by `_` are treated as hidden and won't be added to your Actor class.
@@ -264,47 +261,6 @@ In this helper you can replace the parent's methods with your own implementation
 You can also replace the `_before` and `_after` hooks, which might be an option
 when you need to customize starting and stopping of a testing session.
 
-If some of the methods of the parent class should not be used in a child module, you can disable them.
-Codeception has several options for this:
-
-```php
-<?php
-namespace Helper;
-
-class MyExtendedSelenium extends \Codeception\Module\WebDriver
-{
-    // disable all inherited actions
-    public static $includeInheritedActions = false;
-
-    // include only "see" and "click" actions
-    public static $onlyActions = ['see','click'];
-
-    // exclude "seeElement" action
-    public static $excludeActions = ['seeElement'];
-}
-```
-
-Setting `$includeInheritedActions` to `false` adds the ability to create aliases for parent methods.
-It also allows you to resolve conflicts between modules. Let's say we want to use the `Db` module with our `SecondDbHelper`
-that actually inherits from `Db`. How can we use the `seeInDatabase` methods from both modules? Let's find out:
-
-```php
-<?php
-namespace Helper;
-
-class SecondDb extends \Codeception\Module\Db
-{
-    public static $includeInheritedActions = false;
-
-    public function seeInSecondDb($table, $data)
-    {
-        $this->seeInDatabase($table, $data);
-    }
-}
-```
-
-Setting `$includeInheritedActions` to false won't include the methods from parent classes into the generated Actor.
-
 ### Hooks
 
 Each module can handle events from the running test. A module can be executed before the test starts,
@@ -318,42 +274,42 @@ All hooks are defined in [Codeception\Module](http://codeception.com/docs/refere
 <?php
 
     // HOOK: used after configuration is loaded
-    public function _initialize() 
+    public function _initialize()
     {
     }
 
     // HOOK: before each suite
-    public function _beforeSuite($settings = array()) 
+    public function _beforeSuite($settings = array())
     {
     }
 
     // HOOK: after suite
-    public function _afterSuite() 
+    public function _afterSuite()
     {
     }
 
     // HOOK: before each step
-    public function _beforeStep(\Codeception\Step $step) 
+    public function _beforeStep(\Codeception\Step $step)
     {
     }
 
     // HOOK: after each step
-    public function _afterStep(\Codeception\Step $step) 
+    public function _afterStep(\Codeception\Step $step)
     {
     }
 
     // HOOK: before test
-    public function _before(\Codeception\TestInterface $test) 
+    public function _before(\Codeception\TestInterface $test)
     {
     }
 
     // HOOK: after test
-    public function _after(\Codeception\TestInterface $test) 
+    public function _after(\Codeception\TestInterface $test)
     {
     }
 
     // HOOK: on fail
-    public function _failed(\Codeception\TestInterface $test, $fail) 
+    public function _failed(\Codeception\TestInterface $test, $fail)
     {
     }
 ```
@@ -389,7 +345,6 @@ I click "All pages"
 * Response code: 200
 ```
 
-
 ## Configuration
 
 Modules and Helpers can be configured from the suite configuration file, or globally from `codeception.yml`.
@@ -402,6 +357,8 @@ Here is how it is done in the Db module:
 class Db extends \Codeception\Module
 {
     protected $requiredFields = ['dsn', 'user', 'password'];
+    // ...
+}
 ```
 
 The next time you start the suite without setting one of these values, an exception will be thrown.
@@ -415,6 +372,8 @@ class WebDriver extends \Codeception\Module
 {
     protected $requiredFields = ['browser', 'url'];
     protected $config = ['host' => '127.0.0.1', 'port' => '4444'];
+    // ...
+}
 ```
 
 The host and port parameter can be redefined in the suite configuration.
@@ -511,7 +470,7 @@ $this->getModule('PhpBrowser')->_reconfigure(array('url' => 'http://localhost/ad
 ```
 
 However, in WebDriver configuration changes can't be applied that easily. For instance, if you change the browser you need to close the current browser session and start a new one.
-For that WebDriver module provides `_restart` method which takes an array with config and restarts the browser. 
+For that WebDriver module provides `_restart` method which takes an array with config and restarts the browser.
 
 ```php
 <?php
@@ -523,8 +482,38 @@ $this->getModule('WebDriver')->_restart();
 
 At the end of a test all configuration changes will be rolled back to the original configuration values.
 
-## Conclusion
+### Runtime Configuration of a Test
 
+Sometimes it is needed to set custom configuration for a specific test only.
+For [Cest](http://codeception.com/docs/07-AdvancedUsage#Cest-Classes) and [Test\Unit](http://codeception.com/docs/05-UnitTests)
+formats you can use `@prepare` annotation which can execute the code before other hooks are executed. This allows `@prepare`
+to change the module configuration in runtime. `@prepare` uses [dependency injection](http://codeception.com/docs/07-AdvancedUsage#Dependency-Injection)
+to automatically inject required modules into a method.
+
+To run a specific test only in Chrome browser, you can call `_reconfigure` from WebDriver module for a test itself using `@prepare`.
+
+```php
+<?php
+/**
+ * @prepare useChrome
+ */
+public function chromeSpecificTest()
+{
+    // ...
+}
+
+protected function useChrome(\Codeception\Module\WebDriver $webdriver)
+{
+    // WebDriver was injected by the class name
+    $webdriver->_reconfigure(['browser' => 'chrome']);
+}
+```
+
+Prepare methods can invoke all methods of a module, as well as hidden API methods (starting with `_`). Use them to customize the module setup for a specific test.
+
+To change module configuration for a specific group of tests use [GroupObjects](http://codeception.com/docs/08-Customization#Group-Objects).
+
+## Conclusion
 
 Modules are the real power of Codeception. They are used to emulate multiple inheritances for Actor classes
 (UnitTester, FunctionalTester, AcceptanceTester, etc). Codeception provides modules to emulate web requests,

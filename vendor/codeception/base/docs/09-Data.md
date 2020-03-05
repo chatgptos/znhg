@@ -26,13 +26,12 @@ modules:
             password:
 ```
 
-
 <div class="alert alert-notice">
 Use <a href="http://codeception.com/docs/06-ModulesAndHelpers#Dynamic-Configuration-With-Params">module parameters</a>
 to set the database credentials from environment variables or from application configuration files.
 </div>
 
-Db module can cleanup database between tests by loading a database dump. This can be done by parsing SQL file and 
+Db module can cleanup database between tests by loading a database dump. This can be done by parsing SQL file and
 executing its commands using current connection
 
 ```yaml
@@ -45,12 +44,12 @@ modules:
             dump: tests/_data/your-dump-name.sql
             cleanup: true # reload dump between tests
             populate: true # load dump before all tests
-            
+
 ```
 
  Alternatively an external tool (like mysql client, or pg_restore) can be used. This approach is faster and won't produce parsing errors while loading a dump.
  Use `populator` config option to specify the command. For MySQL it can look like this:
- 
+
 ```yaml
  modules:
     enabled:
@@ -63,7 +62,7 @@ modules:
           populator: 'mysql -u $user $dbname < tests/_data/dump.sql'
 ```
 
-See the []Db module reference](http://codeception.com/docs/modules/Db#SQL-data-dump) for more examples.
+See the [Db module reference](http://codeception.com/docs/modules/Db#SQL-data-dump) for more examples.
 
 To ensure database dump is loaded before all tests add `populate: true`. To clean current database and reload dump between tests use `cleanup: true`.
 
@@ -197,7 +196,6 @@ modules:
         - Db
 ```
 
-
 ### DataMapper
 
 Doctrine is also a popular ORM, unlike some others it implements the DataMapper pattern and is not bound to any framework.
@@ -219,7 +217,6 @@ modules:
         - Doctrine2:
             depends: ZF2
 ```
-
 
 If no framework is used with Doctrine you should provide the `connection_callback` option
 with a valid callback to a function which returns an `EntityManager` instance.
@@ -274,6 +271,66 @@ modules:
 
 DataFactory provides a powerful solution for managing data in integration/functional/acceptance tests.
 Read the [full reference](http://codeception.com/docs/modules/DataFactory) to learn how to set this module up.
+
+## Testing Dynamic Data with Snapshots
+
+What if you deal with data which you don't own? For instance, the page look depends on number of categories in database, 
+and categories are set by admin user. How would you test that the page is still valid?  
+
+There is a way to get it tested as well. Codeception allows you take a snapshot of a data on first run and compare with on next executions.
+This principle is so general that it can work for testing APIs, items on a web page, etc.
+
+Let's check that list of categories on a page is the same it was before.    
+Create a snapshot class:
+
+```
+php vendor/bin/codecept g:snapshot Categories
+```
+
+Inject an actor class via constructor and implement `fetchData` method which should return a data set from a test.
+
+```php
+<?php
+namespace Snapshot;
+
+class Categories extends \Codeception\Snapshot
+{
+    /** @var \AcceptanceTester */
+    protected $i;
+
+    public function __construct(\AcceptanceTester $I)
+    {
+        $this->i = $I;
+    }
+
+    protected function fetchData()
+    {
+        // fetch texts from all 'a.category' elements on a page        
+        return $this->i->grabMultiple('a.category');
+    }
+}
+```
+
+Inside a test you can inject the snapshot class and call `assert` method on it:
+
+```php
+<?php
+public function testCategoriesAreTheSame(\AcceptanceTester $I, \Snapshot\Categories $snapshot)
+{
+    $I->amOnPage('/categories');
+    // if previously saved array of users does not match current set, test will fail
+    // to update data in snapshot run test with --debug flag
+    $snapshot->assert();
+}
+```
+
+On the first run, data will be obtained via `fetchData` method and saved to `tests/_data` directory in json format.
+On next execution the obtained data will be compared with previously saved snapshot.
+
+**To update a snapshot with a new data run tests in `--debug` mode.**
+
+By default Snapshot uses `assertEquals` assertion, however this can be customized by overriding `assertData` method.
+  
 
 ## Conclusion
 

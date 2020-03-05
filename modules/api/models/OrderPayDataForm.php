@@ -8,12 +8,18 @@
 namespace app\modules\api\models;
 
 
+use app\extensions\HuoGui;
+use app\extensions\WxPayScore;
+use app\extensions\WxPayScoreOrder;
 use app\models\FormId;
 use app\models\Goods;
 use app\models\Order;
 use app\models\OrderDetail;
 use app\models\Setting;
 use app\models\User;
+use GuzzleHttp\HandlerStack;
+use WechatPay\GuzzleMiddleware\Util\PemUtil;
+use WechatPay\GuzzleMiddleware\WechatPayMiddleware;
 use yii\helpers\VarDumper;
 
 /**
@@ -100,54 +106,118 @@ class OrderPayDataForm extends Model
 
     public function search1()
     {
-
-        $pay_data = array(
-            'appId' => "2019082351351",
-            "timestamp"=>"2014-07-24 03:07:50",
-            'biz_content' => array(
-                "deviceId"=>100023,//必须要有设备
-                "unionid"=>"1353817842",
-                "opendoorRecordId"=>"9516",
-            )
-
-        );
-        $pay_data['sign'] = $this->makeSign($pay_data['biz_content']);
-
-        $url="https://api.voidiot.com/open-api/syncUserInfo";//同步用户数据可以开门
-        $url="https://api.voidiot.com/open-api/getDeviceList";//获取货柜列表
-        $url="https://api.voidiot.com/open-api/getDeviceById";//获取货柜详情
-        $url="https://api.voidiot.com/open-api/completeOrder";//完结订单传入开门id记录
-        $url="https://api.voidiot.com/open-api/openDoor";//取货开门
-        $url="https://api.voidiot.com/open-api/getSelectGoods";//实时购买商品数据 判断门是否关闭
-        $url="https://api.voidiot.com/open-api/getOrdersByOpenDoorId";//获取货柜商品详情
-//            $url="https://api.voidiot.com/open-api/getDeviceGoods";//获取货柜商品详情
-//            $url="https://api.voidiot.com/open-api/replenish";//补货开门
-//            $url="https://api.voidiot.com/open-api/getDeviceRealTimeGoods";//获取补货实时货品
-
-        $pay_data['biz_content'] = json_encode($pay_data['biz_content'],true);
-        $data  = json_encode($pay_data,true);
-
-        $headerArray =array("Content-type:application/json;charset='utf-8'","Accept:application/json");
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST,FALSE);
-        curl_setopt($curl, CURLOPT_POST, 1);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-        curl_setopt($curl,CURLOPT_HTTPHEADER,$headerArray);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        $output = curl_exec($curl);
-        curl_close($curl);
-
+       $biz_content=array(
+        "deviceId"=>100073,//必须要有设备
+        "unionid"=>"1353817842",
+       );
+        $HuoGui = new HuoGui();
         echo '<pre>';
-        var_dump($output);
-        var_dump(json_decode($output,true));
-        die;
+
+
+        $res= $HuoGui->replenish($biz_content);//补货开门
+        var_dump($res);
+        $res= $HuoGui->syncUserInfo($biz_content);
+        var_dump($res);
+        $res= $HuoGui->getDeviceList($biz_content);
+        var_dump($res);
+        $res= $HuoGui->getDeviceById($biz_content);
+        var_dump($res);
+
+        $res= $HuoGui->completeOrder($biz_content);
+        var_dump($res);
+
+//        echo '<hr>openDoor';
+        $biz_content=array(
+            "deviceId"=>100073,//必须要有设备
+            "unionid"=>"1353817842",
+        "opendoorRecordId"=>"9516",
+        );
+
+        $res= $HuoGui->openDoor($biz_content);
+        var_dump($res);
+        $res= $HuoGui->getSelectGoods($biz_content);
+        var_dump($res);
+//
+        $res= $HuoGui->getOrdersByOpenDoorId($biz_content);
+        var_dump($res);
+//
+        $res= $HuoGui->getDeviceGoods($biz_content);
+        var_dump($res);
+        $res= $HuoGui->getDeviceRealTimeGoods($biz_content);
+        var_dump($res);
     }
+
+
+
+    public function search2()
+    {
+//        $HuoGui = new WxPayScoreOrder();
+//        echo '<pre><code>';
+//        $out_order_no="123killaProgramerForSkytoo";
+//        $res= $HuoGui->queryOrder($out_order_no);//查询
+//        echo "<br/>queryOrder";
+//        var_dump(json_decode($res, true));
+//        $res= $HuoGui->serviceorder($out_order_no);//创建
+//        echo "<br/>serviceorder";
+//        var_dump(json_decode($res, true));
+//        $res= $HuoGui->cancel($out_order_no);//取消
+//        echo "<br/>cancel";
+//        var_dump($res);
+//        $res= $HuoGui->complete($out_order_no);//完结付钱
+//        echo "<br/>complete";
+//        var_dump($res);
+//        $res= $HuoGui->userServiceState($this->user->wechat_open_id);//授权
+//        echo "<br/>userServiceState";
+//        var_dump($res);
+//        $res= $HuoGui->modify($out_order_no);//修改
+//        echo "<br/>modify";
+//        var_dump($res);
+//        $res= $HuoGui->pay($out_order_no);//支付
+//        echo "<br/>pay";
+//        var_dump($res);
+//        $res= $HuoGui->wxpayScoreEnable($out_order_no);//授权
+//        echo "<br/>wxpayScoreEnable";
+//        var_dump($res);
+//        $res= $HuoGui->wxpayScoreDetail($out_order_no);//订单详情
+//        echo "<br/>wxpayScoreDetail";
+//        var_dump($res);
+    }
+
+
+
+
+    public function search3()
+    {
+        $HuoGui = new WxPayScore();
+        echo '<pre>';
+        $out_order_no="234323JKHDFE1243252B";
+        $pay_data= $HuoGui->wxpayScoreDetail($out_order_no);//补货开门
+        $out_request_noo="234323JKHDFE1243252B";
+        $pay_data= $HuoGui->wxpayScoreEnable($out_request_noo);//补货开门
+        var_dump($pay_data);
+        return([
+            'code' => 0,
+            'msg' => 'success',
+            'data' => $pay_data,
+        ]);
+    }
+
+
+    protected function getNonce()
+    {
+        static $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < 32; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
     /**
      * MD5签名
      */
-    public function makeSign($args)
+    public function makeSignHG($args)
     {
         if (isset($args['sign']))
             unset($args['sign']);
@@ -163,6 +233,27 @@ class OrderPayDataForm extends Model
         return $result;
     }
 
+
+
+
+    /**
+     * MD5签名
+     */
+    public function makeSign($args,$merchantPrivateKey='qwertyuiopyang111111111111111111')
+    {
+        if (isset($args['sign']))
+            unset($args['sign']);
+        ksort($args);
+        foreach ($args as $i => $arg) {
+            if ($args === null || $arg === '')
+                unset($args[$i]);
+        }
+        $string = $this->arrayToUrlParam($args, false);
+        $string = $string . "&key=".$merchantPrivateKey;
+        $raw_sign =  hash_hmac('sha256', $string, $merchantPrivateKey);
+        $result = strtoupper($raw_sign);
+        return $result;
+    }
 
 
     public static function arrayToUrlParam($array, $url_encode = true)

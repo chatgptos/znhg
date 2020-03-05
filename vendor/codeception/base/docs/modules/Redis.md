@@ -35,7 +35,6 @@ to interact with a Redis server.
 
 @author Marc Verney <marc@marcverney.net>
 
-
 ## Actions
 
 ### cleanup
@@ -47,7 +46,7 @@ Delete all the keys in the Redis database
 
 ### dontSeeInRedis
  
-Asserts that a key does not exist or, optionaly, that it doesn't have the
+Asserts that a key does not exist or, optionally, that it doesn't have the
 provided $value
 
 Examples:
@@ -153,7 +152,6 @@ $I->grabFromRedis('example:hash', 'foo');
 ```
 
  * `param string` $key The key name
-
 
 @throws ModuleException if the key does not exist
 
@@ -284,4 +282,4 @@ $I->sendCommandToRedis('flushdb');
  * `param string` $command The command name
 
 
-<p>&nbsp;</p><div class="alert alert-warning">Module reference is taken from the source code. <a href="https://github.com/Codeception/Codeception/tree/2.3/src/Codeception/Module/Redis.php">Help us to improve documentation. Edit module reference</a></div>
+<p>&nbsp;</p><div class="alert alert-warning">Module reference is taken from the source code. <a href="https://github.com/Codeception/Codeception/tree/2.5/src/Codeception/Module/Redis.php">Help us to improve documentation. Edit module reference</a></div>

@@ -16,6 +16,7 @@ To use this module with Composer you need <em>"php-amqplib/php-amqplib": "~2.4"<
 * vhost: '/' - vhost to connect
 * cleanup: true - defined queues will be purged before running every test.
 * queues: [mail, twitter] - queues to cleanup
+* single_channel - create and use only one channel during test execution
 
 ### Example
 
@@ -28,11 +29,11 @@ To use this module with Composer you need <em>"php-amqplib/php-amqplib": "~2.4"<
                 password: 'guest'
                 vhost: '/'
                 queues: [queue1, queue2]
+                single_channel: false
 
 ## Public Properties
 
 * connection - AMQPStreamConnection - current connection
-
 
 ## Actions
 
@@ -110,6 +111,20 @@ $I->declareQueue(
  * `return` mixed|null
 
 
+### dontSeeQueueIsEmpty
+ 
+Checks if queue is not empty.
+
+``` php
+<?php
+$I->pushToQueue('queue.emails', 'Hello, davert');
+$I->dontSeeQueueIsEmpty('queue.emails');
+?>
+```
+
+ * `param string` $queue
+
+
 ### grabMessageFromQueue
  
 Takes last message from queue.
@@ -121,7 +136,7 @@ $message = $I->grabMessageFromQueue('queue.emails');
 ```
 
  * `param string` $queue
- * `return` AMQPMessage
+ * `return` \PhpAmqpLib\Message\AMQPMessage
 
 
 ### purgeAllQueues
@@ -162,7 +177,7 @@ $I->pushToExchange('exchange.emails', new AMQPMessage('Thanks!'), 'severity');
 ```
 
  * `param string` $exchange
- * `param string|AMQPMessage` $message
+ * `param string|\PhpAmqpLib\Message\AMQPMessage` $message
  * `param string` $routing_key
 
 
@@ -178,7 +193,14 @@ $I->pushToQueue('queue.jobs', new AMQPMessage('create'));
 ```
 
  * `param string` $queue
- * `param string|AMQPMessage` $message
+ * `param string|\PhpAmqpLib\Message\AMQPMessage` $message
+
+
+### scheduleQueueCleanup
+ 
+Add a queue to purge list
+
+ * `param string` $queue
 
 
 ### seeMessageInQueueContainsText
@@ -198,4 +220,35 @@ $I->seeMessageInQueueContainsText('queue.emails','davert');
  * `param string` $queue
  * `param string` $text
 
-<p>&nbsp;</p><div class="alert alert-warning">Module reference is taken from the source code. <a href="https://github.com/Codeception/Codeception/tree/2.3/src/Codeception/Module/AMQP.php">Help us to improve documentation. Edit module reference</a></div>
+
+### seeNumberOfMessagesInQueue
+ 
+Checks that queue have expected number of message
+
+``` php
+<?php
+$I->pushToQueue('queue.emails', 'Hello, davert');
+$I->seeNumberOfMessagesInQueue('queue.emails',1);
+?>
+```
+
+ * `param string` $queue
+ * `param int` $expected
+
+
+### seeQueueIsEmpty
+ 
+Checks that queue is empty
+
+``` php
+<?php
+$I->pushToQueue('queue.emails', 'Hello, davert');
+$I->purgeQueue('queue.emails');
+$I->seeQueueIsEmpty('queue.emails');
+?>
+```
+
+ * `param string` $queue
+ * `param int` $expected
+
+<p>&nbsp;</p><div class="alert alert-warning">Module reference is taken from the source code. <a href="https://github.com/Codeception/Codeception/tree/2.5/src/Codeception/Module/AMQP.php">Help us to improve documentation. Edit module reference</a></div>
