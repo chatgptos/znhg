@@ -1,7 +1,7 @@
 {
   "pages": [
-    "pages/huogui-order/details",
     "pages/index/index",
+    "pages/huogui-order/details",
     "pages/huogui-detail/huogui-detail",
     "pages/huogui-cart/cart",
     "pages/mall/mall",

@@ -125,8 +125,14 @@ class IndexController extends Controller
             //如果柜子存在
             if(empty($shop['code']) && $shop['success']){
                 //如果货柜编号相等//调用补货接口开门
-                $hg_id=$hg_id;
-
+                if(!isset($shop['data']['shop']['hg_id']) || $hg_id != $shop['data']['shop']['hg_id']){
+                    return json_encode([
+                        'code'  => '1',
+                        'msg'   => '不是您的货柜',
+                        'success'   => false,
+                        'data'  => '不是您的货柜',
+                    ],JSON_UNESCAPED_UNICODE);
+                }
                 //开始调用货柜补货
                 unset($biz_content['unionid']);
                 //不用同步用户信息
@@ -163,7 +169,6 @@ class IndexController extends Controller
         }
 
         $res= $HuoGui->syncUserInfo($biz_content);
-
         if ($res['msg']=='用户已注册过了' || $res['success']==true){ //同步用户信息给用户开门权限
             $WxPayScoreOrder = new WxPayScoreOrder();
             $res= $WxPayScoreOrder->userServiceState(\Yii::$app->user->identity->wechat_open_id);//补货开门
@@ -231,31 +236,16 @@ class IndexController extends Controller
 
         $hg_id = \Yii::$app->request->post('hg_id');
         $isreplenish = \Yii::$app->request->post('isreplenish');
-        if($hg_id){
-            return json_encode([
-                'code'  => '1',
-                'msg'   => '货柜不存在',
-                'success'   => false,
-                'data'  => '货柜不存在',
-            ],JSON_UNESCAPED_UNICODE);
-        }
-
-        if (!\Yii::$app->user->id){
-            return json_encode([
-                'code'  => '3',
-                'msg'   => '请登入',
-                'success'   => false,
-                'data'  => '请登入',
-            ],JSON_UNESCAPED_UNICODE);
-        }
-
-        $HuoGui = new HuoGui();
-        $biz_content=array(
-            "deviceId"=>$hg_id,//必须要有设备
-            "unionid"=>\Yii::$app->user->identity->wechat_open_id,
-        );
-        $goods= $HuoGui->getDeviceGoods($biz_content);
-        $goods='{
+        if(!$hg_id){
+            $new_list=[];
+        }else{
+            $HuoGui = new HuoGui();
+            $biz_content=array(
+                "deviceId"=>$hg_id,//必须要有设备
+                "unionid"=>\Yii::$app->user->identity->wechat_open_id,
+            );
+            $goods= $HuoGui->getDeviceGoods($biz_content);
+            $goods='{
     "msg":"",
     "code":200,
     "success":true,
@@ -312,43 +302,61 @@ class IndexController extends Controller
     "fail":false
 }';
 
-        $res =json_decode($goods,true);
-        $goods=[];
-        if ($res['success']==true){
-            $data=$res['data'];
-            $goods=$data;
+            $res =json_decode($goods,true);
+            $goods=[];
+            if ($res['success']==true){
+                $data=$res['data'];
+                $goods=$data;
+            }
+
+            $new_list = [];
+            foreach ($goods as $item) {
+                $attr_list[] = [
+                    'attr_group_name'=>'来源',
+                    'attr_name'=>'智能货柜',
+                ];
+                $attr_num = 99;
+                $num =$item['count'];
+                $goods_id =$item['id'];
+                $goods_pic =$item['imgUrl'];
+                $goods_name =$item['goodsName'];
+                $new_item = (object)[
+                    'cart_id' => $item['categoryId'],
+                    'goods_id' =>$item['goodsId'],
+                    'goods_pic' => $goods_pic,
+                    'num' =>$num,
+                    'attr_list' => $attr_list,
+                    'price' =>$item['price'],
+                    'max_num' => $attr_num,
+                    'disabled' => ($num > $attr_num) ? true : false,
+                    'cover_pic'=>$goods_pic,
+                    'goods_id'=>$goods_id,
+                    'id'=>$goods_id,
+                    'goods_name'=>$goods_name,
+                    'integral'=>$item['price'],
+                    'coupon'=>$item['discount'],
+                ];
+
+                $new_list[] = $new_item;
+            }
         }
 
-        $new_list = [];
-        foreach ($goods as $item) {
-            $attr_list[] = [
-                'attr_group_name'=>'来源',
-                'attr_name'=>'智能货柜',
-            ];
-            $attr_num = 99;
-            $num =$item['count'];
-            $goods_id =$item['id'];
-            $goods_pic =$item['imgUrl'];
-            $goods_name =$item['goodsName'];
-            $new_item = (object)[
-                'cart_id' => $item['categoryId'],
-                'goods_id' =>$item['goodsId'],
-                'goods_pic' => $goods_pic,
-                'num' =>$num,
-                'attr_list' => $attr_list,
-                'price' =>$item['price'],
-                'max_num' => $attr_num,
-                'disabled' => ($num > $attr_num) ? true : false,
-                'cover_pic'=>$goods_pic,
-                'goods_id'=>$goods_id,
-                'id'=>$goods_id,
-                'goods_name'=>$goods_name,
-                'integral'=>$item['price'],
-                'coupon'=>$item['discount'],
-            ];
+//        if (!\Yii::$app->user->id){
+//            return json_encode([
+//                'code'  => '3',
+//                'msg'   => '请登入',
+//                'success'   => false,
+//                'data'  => '请登入',
+//            ],JSON_UNESCAPED_UNICODE);
+//        }
 
-            $new_list[] = $new_item;
-        }
+//        return json_encode([
+//            'code'  => '1',
+//            'msg'   => '货柜不存在',
+//            'success'   => false,
+//            'data'  => '货柜不存在',
+//        ],JSON_UNESCAPED_UNICODE);
+
 
         $yyGoods = new GoodsForm();
         $yyGoods->store_id = $this->store_id;

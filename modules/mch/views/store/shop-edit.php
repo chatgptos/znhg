@@ -159,6 +159,17 @@ $this->params['active_nav_group'] = 1;
                         <div class="text-danger">仅支持1~5的评分</div>
                     </div>
                 </div>
+
+                <div class="form-group row">
+                    <div class="col-3 text-right">
+                        <label class=" col-form-label">货柜设置实体货柜编号（关联）：</label>
+                    </div>
+                    <div class="col-9">
+                        <input class="form-control" type="number" name="hg_id" min="1" max="100000000"
+                               value="<?= $shop->hg_id ? $shop->hg_id : 0 ?>">
+                        <div class="text-danger">只设置数字，到微信小程序后台发布链接该二维码，并把二维码制作在实体货柜上</div>
+                    </div>
+                </div>
                 <div class="form-group row">
                     <div class="col-3 text-right">
                         <label class=" col-form-label">营业时间：</label>

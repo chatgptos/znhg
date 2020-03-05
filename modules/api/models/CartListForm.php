@@ -9,6 +9,7 @@ namespace app\modules\api\models;
 
 
 use app\extensions\HuoGui;
+use app\extensions\WxPayScoreOrder;
 use app\models\Attr;
 use app\models\AttrGroup;
 use app\models\Cart;
@@ -149,35 +150,12 @@ class CartListForm extends Model
 
         $res =json_decode($goods,true);
 
-        if ($res['success']==true){
-            $data=$res['data'];
-            $list=$data['goodsList'];
-            $isClose=$data['isClose'];
-            if($isClose){
-                //如果关门 订单显示
-                //支付订单
-                //查询订单
-                $form = new \app\modules\api\models\couponmall\OrderListForm();
-                $res = $form->actionOrderDetailshg($opendoorRecordId);
-                if($res['success']){
-                    if(empty($isreplenish)){
-                        $isreplenish=false;
-                    }
-                    return [
-                        'code' => 0,
-                        'msg' => 'success',
-                        'data' => [
-                            'isClose' => true,
-                            'opendoorRecordId' => $opendoorRecordId,
-                            'data' => $res['data'],
-                            'isreplenish'=>$isreplenish,
-                            'order_no' => $res['data']['order_no'],
-                        ],
-                    ];
-                }
-            }
-        }
 
+
+        //加工返回参数
+        $data=$res['data'];
+        $list=$data['goodsList'];
+        $isClose=$data['isClose'];
         //购物车显示
         $new_list = [];
         foreach ($list as $item) {
@@ -201,6 +179,61 @@ class CartListForm extends Model
             ];
 
             $new_list[] = $new_item;
+        }
+
+        //开始判断逻辑
+        if ($res['success']==true){
+            if($isClose){
+                //这是管理员补货标记 过滤返回规定格式参数
+                if(empty($isreplenish)){
+                    $isreplenish=false;
+                }
+                if($isreplenish){
+                    //直接返回
+                    return [
+                        'code' => 0,
+                        'msg' => 'success',
+                        'data' => [
+                            'isClose' => true,
+                            'opendoorRecordId' => $opendoorRecordId,
+                            'data' => $res['data'],
+                            'isreplenish'=>$isreplenish,
+                            'order_no' => $res['data']['order_no'],
+                        ],
+                    ];
+                }
+
+                //如果是用户继续往下走
+                //如果关门 订单显示
+                //支付订单
+                //查询订单 查询货柜生成的订单---生成的订单支付
+                $form = new \app\modules\api\models\couponmall\OrderListForm();
+                $res = $form->actionOrderDetailshg($opendoorRecordId,true);
+                //如果成功生成货柜订单+微信订单
+                if($res['success']){
+
+                    $pay_data=[];
+                    if(true){
+                        //没有授权，开始授权
+                        $WxPayScoreOrder = new WxPayScoreOrder();
+                        $out_order_no=$res['data']['order_no'];
+                        $pay_data= $WxPayScoreOrder->wxpayScoreDetail($out_order_no);//获得微信分授权参数
+                    }
+                    return [
+                        'code' => 0,
+                        'msg' => 'success',
+                        'data' => [
+                            'isWechatJump' => true,
+                            'isClose' => true,
+                            'opendoorRecordId' => $opendoorRecordId,
+                            'data' => $res['data'],
+                            'pay_data' => $pay_data,
+                            'isreplenish'=>$isreplenish,
+                            'order_no' => $res['data']['order_no'],
+                        ],
+                    ];
+                }
+            }
         }
         return [
             'code' => 0,
