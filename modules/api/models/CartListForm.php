@@ -8,6 +8,7 @@
 namespace app\modules\api\models;
 
 
+use app\extensions\HuoGui;
 use app\models\Attr;
 use app\models\AttrGroup;
 use app\models\Cart;
@@ -83,6 +84,130 @@ class CartListForm extends Model
             'data' => [
                 'row_count' => $count,
                 'page_count' => $pagination->pageCount,
+                'list' => $new_list,
+            ],
+        ];
+    }
+
+
+
+    public function searchHg()
+    {
+        //查询实时货柜信息
+        $hg_id = \Yii::$app->request->post('hg_id');
+        //创建订单
+        $opendoorRecordId = \Yii::$app->request->post('opendoorRecordId');
+        $isreplenish =  \Yii::$app->request->post('isreplenish');
+        //调用实时数据
+        $biz_content=array(
+            "deviceId"=>$hg_id,//必须要有设备
+            "unionid"=>\Yii::$app->user->identity->wechat_open_id,
+        );
+
+        $HuoGui = new HuoGui();
+        if($isreplenish){
+            $goods= $HuoGui->getDeviceRealTimeGoods($biz_content);
+        }else{
+            $goods= $HuoGui->getSelectGoods($biz_content);
+        }
+        $goods='{
+                "msg":"",
+                "code":200,
+                "success":true,
+                "data":{
+                    "isClose":true,
+                    "goodsList":[
+                        {
+                            "goodsName":"瓶装饮料",
+                            "imgUrl":"http://images.voidiot.com/Foj2Z9bLgpPuueLMnKd5e6RN10oh",
+                            "price":3,
+                            "count":2,
+                            "valuatType":0,
+                            "weight":1070,
+                            "baseWeight":550,
+                            "deviceId":100023,
+                            "trayNum":4,
+                            "sourPrice":0,
+                            "discount":null
+                        },{
+                            "goodsName":"瓶装饮料",
+                            "imgUrl":"http://images.voidiot.com/Foj2Z9bLgpPuueLMnKd5e6RN10oh",
+                            "price":3,
+                            "count":2,
+                            "valuatType":0,
+                            "weight":1070,
+                            "baseWeight":550,
+                            "deviceId":100023,
+                            "trayNum":4,
+                            "sourPrice":0,
+                            "discount":null
+                        }
+                    ]
+                },
+                "fail":false
+            }';
+
+        $res =json_decode($goods,true);
+
+        if ($res['success']==true){
+            $data=$res['data'];
+            $list=$data['goodsList'];
+            $isClose=$data['isClose'];
+            if($isClose){
+                //如果关门 订单显示
+                //支付订单
+                //查询订单
+                $form = new \app\modules\api\models\couponmall\OrderListForm();
+                $res = $form->actionOrderDetailshg($opendoorRecordId);
+                if($res['success']){
+                    if(empty($isreplenish)){
+                        $isreplenish=false;
+                    }
+                    return [
+                        'code' => 0,
+                        'msg' => 'success',
+                        'data' => [
+                            'isClose' => true,
+                            'opendoorRecordId' => $opendoorRecordId,
+                            'data' => $res['data'],
+                            'isreplenish'=>$isreplenish,
+                            'order_no' => $res['data']['order_no'],
+                        ],
+                    ];
+                }
+            }
+        }
+
+        //购物车显示
+        $new_list = [];
+        foreach ($list as $item) {
+            $attr_list[] = [
+                'attr_group_name'=>'来源',
+                'attr_name'=>'智能货柜',
+            ];
+            $attr_num = 99;
+            $num =$item['count'];
+            $goods_pic =$item['imgUrl'];
+            $new_item = (object)[
+                'cart_id' => $item['categoryId'],
+                'goods_id' =>$item['goodsId'],
+                'goods_name' =>$item['goodsName'],
+                'goods_pic' => $goods_pic,
+                'num' =>$num,
+                'attr_list' => $attr_list,
+                'price' =>$item['price'],
+                'max_num' => $attr_num,
+                'disabled' => ($num > $attr_num) ? true : false,
+            ];
+
+            $new_list[] = $new_item;
+        }
+        return [
+            'code' => 0,
+            'msg' => 'success',
+            'data' => [
+                'row_count' => count($new_item),
+                'page_count' => 10,
                 'list' => $new_list,
             ],
         ];

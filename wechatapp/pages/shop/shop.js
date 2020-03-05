@@ -298,4 +298,12 @@ Page({
             path: "/pages/shop/shop?user_id=" + user_info.id,
         };
     },
+    scanCode() {
+        wx.scanCode({
+            onlyFromCamera: true,
+            success(res) {
+                console.log(res.result)
+            }
+        })
+    },
 })

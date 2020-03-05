@@ -33,7 +33,7 @@ class GoodsForm extends Model
     public function getList()
     {
         $page = \Yii::$app->request->get('page')?:1;
-        $limit = (int)\Yii::$app->request->get('limit')?:6;
+        $limit = (int)\Yii::$app->request->get('limit')?:30;
         $cid = \Yii::$app->request->get('cid');
         $query = Goods::find()
               ->andWhere(['is_delete' => 0, 'store_id' => $this->store_id, 'status' => 1]);

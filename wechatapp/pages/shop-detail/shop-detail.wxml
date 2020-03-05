@@ -9,6 +9,40 @@
             </block>
         </swiper>
     </view>
+
+
+    <view class='block_3 flex-y-center'>智能鲜蜂柜商品</view>
+    <view class='block'>
+        <view class='wrap'>
+            <navigator style="display: inline-table" wx:for="{{goods}}" url='/pages/cheapmarket/details/details?id={{item.id}}'>
+                <view class='li'>
+                    <view class='img'> <image src='{{item.cover_pic}}'></image>
+                    </view>
+                    <view class='info'>  {{item.name}}</view>
+                    <view class='price'>
+                        <view class='pri-icon'>
+                            <image src='/../../Img/jifen.png'></image>
+                        </view>
+                        <view class='num'>{{item.coupon}}</view>
+                    </view>
+                    <view class='price'>
+                        <view class='pri-icon'>
+                            <image src='/../../Img/jifen.png'></image>
+                        </view>
+                        <view class='num'>{{item.integral}}</view>
+                    </view>
+                </view>
+            </navigator>
+        </view>
+    </view>
+
+
+    <view class='block_3 flex-y-center'>邀请您</view>
+    <view>
+        <a href="" class="button_scan"  bindtap="scanCode" >扫码打开</a>
+    </view>
+
+
     <view class='block block_1'>
         <view class='title'>{{shop.name}}</view>
         <view class='flex-row middle'>
@@ -41,9 +75,13 @@
             </view>
         </view>
     </view>
-    <view class='block_3 flex-y-center'>店铺介绍</view>
-    <view class='detail'>
-        <import src="../../wxParse/wxParse.wxml" />
-        <template is="wxParse" data="{{wxParseData:detail.nodes}}" />
-    </view>
+
+
+
+
+    <view class='block_3 flex-y-center'>货柜介绍</view>
+        <view class='detail'>
+            <import src="../../wxParse/wxParse.wxml" />
+            <template is="wxParse" data="{{wxParseData:detail.nodes}}" />
+        </view>
 </view>

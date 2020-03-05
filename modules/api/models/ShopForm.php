@@ -37,7 +37,7 @@ class ShopForm extends Model
         if (!$shop) {
             return [
                 'code' => 1,
-                'msg' => '店铺不存在'
+                'msg' => '货柜不存在'
             ];
         }
         $shop_pic = ShopPic::find()->select(['pic_url'])->where(['store_id' => $this->store_id, 'shop_id' => $shop['id'], 'is_delete' => 0])->column();
@@ -58,6 +58,7 @@ class ShopForm extends Model
         return [
             'code' => 0,
             'msg' => '',
+            'success' => true,
             'data' => [
                 'shop' => $shop
             ]

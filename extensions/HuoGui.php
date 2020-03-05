@@ -144,7 +144,8 @@ class HuoGui
         $pay_data['biz_content'] = json_encode($pay_data['biz_content'],true);
         $data  = json_encode($pay_data,true);
         $res= self::post($url,$data);
-        return $res;
+        $res = json_decode($res,true);
+        return  $res;
     }
 
 
