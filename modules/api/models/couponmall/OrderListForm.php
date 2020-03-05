@@ -133,13 +133,13 @@ class OrderListForm extends Model
     "success":true,
     "data":{
         "errTag":2,
-        "orderNo":"123killaProgramerForSkyMore",
+        "orderNo":"126789888777777",
         "payTime":1565603026000,
         "totalGoodCount":1,
         "goodsList":[
             {
                 "id":340,
-                "goodsName":"佳佳薯条",
+                "goodsName":"好愿薯片",
                 "imgUrl":"http://images.voidiot.com/FtZleANQ-HyskUgRhU6rSWMQfjZ_",
                 "price":0.03,
                 "baseWeight":null,
