@@ -176,7 +176,7 @@ $this->params['active_nav_group'] = 1;
                         <label class=" col-form-label">是否开启货柜实体营销：</label>
                     </div>
                     <div class="col-9">
-                        <input class="form-control" type="number" name="hg_id" min="1" max="100000000"
+                        <input class="form-control" type="number" name="hg_yx" min="0" max="1"
                                value="<?= $shop->hg_yx ? $shop->hg_yx : 0 ?>">
                         <div class="text-danger">只设置数字0/1，1开启后支付订单直接跳转到目标营销商品，或者订单否则跳转到微信支付分订单</div>
                     </div>
