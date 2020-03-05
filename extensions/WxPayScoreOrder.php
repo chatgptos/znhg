@@ -81,7 +81,7 @@ class WxPayScoreOrder extends Controller
     }
 
 //        //取消订单
-    public function cancel($out_order_no,$reason='')
+    public function cancel($out_order_no,$reason='不想买了')
     {
         $url = '/v3/payscore/serviceorder/' . $out_order_no . '/cancel';
         $res = $this->client->request('POST', $url, [
@@ -89,11 +89,11 @@ class WxPayScoreOrder extends Controller
                     'Accept' => 'application/json',
                     'Content-Type' => 'application/json',
                 ],
-                'query' => [
-                    'appid' => $this->wechat->appId,
-                    'service_id' => $this->service_id,
-                    'reason' => '不想买了',
-                ],
+                'body' => json_encode((array)[
+                    'appid'=>$this->wechat_app->app_id,
+                    'service_id'=>'00004000000000158195309791355586',
+                    'reason'=>$reason,
+                ]),
             ]
         );
 
@@ -111,35 +111,20 @@ class WxPayScoreOrder extends Controller
                     'Accept' => 'application/json',
                     'Content-Type' => 'application/json',
                 ],
-                'query' => [
-                    'appid' => $this->wechat->appId,
-                    'service_id' =>  $this->service_id,
-                    'service_introduction' => '货柜可乐',
-                    "notify_url" => "https://app.aijiehun.com/paynotify/wechatscorepay",
-                    'risk_fund' => json_encode([
-                        'name' => "ESTIMATE_ORDER_COST",
-                        'amount' => 10000,
-                        'description' => "可乐的预估费用",
-                    ]),
-                    'post_payments' => json_encode([
-                        'name' => "可乐",
-                        'amount' => 1,
-                        'description' => "可乐的预估费用",
-                        'count' => 2,
-                    ]),
-//                    'post_discounts'=>json_encode([
-//                         'name'=>"满2减1元",
-//                        'amount'=>1,
-//                        'description'=>"不与其他优惠叠加",
-//                    ]),
-                    "location" => json_encode([
-                        'start_location' => "深圳货柜",
-                        'end_location' => "深圳货柜",
-                    ]),
-                    "total_amount" => 1,
-                    'profit_sharing' => false,
-
-                ],
+                'body' => json_encode((array)[
+                    'appid'=>$this->wechat_app->app_id,
+                    'service_id'=>'00004000000000158195309791355586',
+                    'service_introduction'=>'货柜可乐',
+                    'post_payments'=>[
+                        [ 'name'=>'可乐',
+                            'amount'=>10,
+                            'count'=>1,
+                            'description'=>'可乐'
+                        ]
+                    ],
+                    "total_amount"=> 10,
+                    'profit_sharing'=>false,
+                ]),
             ]
         );
         return $res->getBody()->getContents();
@@ -155,7 +140,7 @@ class WxPayScoreOrder extends Controller
                     'Accept' => 'application/json',
                     'Content-Type' => 'application/json',
                 ],
-                'query' => [
+                'body' => [
                     'appid' => $this->wechat->appId,
                     'service_id' => $this->service_id,
                 ],
@@ -173,35 +158,38 @@ class WxPayScoreOrder extends Controller
                     'Accept' => 'application/json',
                     'Content-Type' => 'application/json',
                 ],
-                'query' => [
+                'body' => json_encode((array)[
                     'appid' => $this->wechat->appId,
                     'service_id' =>  $this->service_id,
                     'service_introduction' => '货柜可乐',
                     "notify_url" => "https://app.aijiehun.com/paynotify/wechatscorepay",
-                    'risk_fund' => json_encode([
+                    'time_range' => [
+                        'start_time' => "20200305123510",
+                        'end_time' => $this->endtime,
+                    ],
+                    'risk_fund' => [
                         'name' => "ESTIMATE_ORDER_COST",
                         'amount' => 10000,
                         'description' => "可乐的预估费用",
-                    ]),
-                    'post_payments' => json_encode([
+                    ],
+                    'post_payments' => [[
                         'name' => "可乐",
                         'amount' => 100,
                         'description' => "可乐的预估费用",
-                        'count' => 1,
-                    ]),
-//                    'post_discounts'=>json_encode([
-//                         'name'=>"满2减1元",
-//                        'amount'=>1,
-//                        'description'=>"不与其他优惠叠加",
-//                    ]),
-                    "location" => json_encode([
+                        'count' => 2,
+                    ]],
+                    'post_discounts' => [[
+                        'name' => "满2减1元",
+                        'amount' => 1,
+                        'description' => "不与其他优惠叠加",
+                    ]],
+                    "location" => [
                         'start_location' => "深圳货柜",
                         'end_location' => "深圳货柜",
-                    ]),
-                    "total_amount" => 100,
-                    'profit_sharing' => false,
-                    'reason' => '买多了',
-                ],
+                    ],
+                    'openid' => 'ogZOL5XwAe-PVnKuJnAAiSXP5fA0',
+                    'need_user_confirm' => false,//提示服务无权限 是因为这个参数
+                ]),
             ]
         );
 
@@ -239,40 +227,39 @@ class WxPayScoreOrder extends Controller
                     'Accept' => 'application/json',
                     'Content-Type' => 'application/json',
                 ],
-                'query' => [
+                'body' => json_encode([
                     'out_order_no' => $out_order_no,
                     'appid' => $this->wechat->appId,
                     'service_id' =>  $this->service_id,
                     'service_introduction' => '货柜可乐',
                     "notify_url" => "https://app.aijiehun.com/paynotify/wechatscorepay",
-                    'time_range' => json_encode([
-                        'start_time' => $this->starttime,
+                    'time_range' => [
+                        'start_time' => "20200305123510",
                         'end_time' => $this->endtime,
-                    ]),
-                    'risk_fund' => json_encode([
+                    ],
+                    'risk_fund' => [
                         'name' => "ESTIMATE_ORDER_COST",
                         'amount' => 10000,
                         'description' => "可乐的预估费用",
-                    ]),
-                    'openid' => 'ogZOL5XwAe-PVnKuJnAAiSXP5fA0',
-                    'post_payments' => json_encode([
+                    ],
+                    'post_payments' => [[
                         'name' => "可乐",
                         'amount' => 100,
                         'description' => "可乐的预估费用",
                         'count' => 2,
-                    ]),
-                    'post_discounts' => json_encode([
+                    ]],
+                    'post_discounts' => [[
                         'name' => "满2减1元",
                         'amount' => 1,
                         'description' => "不与其他优惠叠加",
-                    ]),
-                    "location" => json_encode([
+                    ]],
+                    "location" => [
                         'start_location' => "深圳货柜",
                         'end_location' => "深圳货柜",
-                    ]),
+                    ],
                     'openid' => 'ogZOL5XwAe-PVnKuJnAAiSXP5fA0',
                     'need_user_confirm' => false,//提示服务无权限 是因为这个参数
-                ],
+                ]),
             ]
         );
         return $res->getBody()->getContents();
