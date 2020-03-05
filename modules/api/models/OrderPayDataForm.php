@@ -151,28 +151,36 @@ class OrderPayDataForm extends Model
 
     public function search2()
     {
-        $HuoGui = new WxPayScoreOrder();
-        echo '<pre>';
-        $out_order_no="234323JKHDFE1243252Ba";
-        $res= $HuoGui->queryOrder($out_order_no);//补货开门
+//        $HuoGui = new WxPayScoreOrder();
+//        echo '<pre><code>';
+//        $out_order_no="123killaProgramerForSkytoo";
+//        $res= $HuoGui->queryOrder($out_order_no);//查询
+//        echo "<br/>queryOrder";
 //        var_dump(json_decode($res, true));
-        $res= $HuoGui->serviceorder($out_order_no);//补货开门
-        var_dump(json_decode($res, true));
-        $res= $HuoGui->userServiceState($this->user->wechat_open_id);//补货开门
-        var_dump($res);
-        $res= $HuoGui->modify($out_order_no);//补货开门
-        var_dump($res);
-        $res= $HuoGui->pay($out_order_no);//补货开门
-        var_dump($res);
-        $res= $HuoGui->complete($out_order_no);//补货开门
-        var_dump($res);
-        $res= $HuoGui->cancel($out_order_no);//补货开门
-        var_dump($res);
-
-        $res= $HuoGui->wxpayScoreEnable($out_order_no);//补货开门
-        var_dump($res);
-        $res= $HuoGui->wxpayScoreDetail($out_order_no);//补货开门
-        var_dump($res);
+//        $res= $HuoGui->serviceorder($out_order_no);//创建
+//        echo "<br/>serviceorder";
+//        var_dump(json_decode($res, true));
+//        $res= $HuoGui->cancel($out_order_no);//取消
+//        echo "<br/>cancel";
+//        var_dump($res);
+//        $res= $HuoGui->complete($out_order_no);//完结付钱
+//        echo "<br/>complete";
+//        var_dump($res);
+//        $res= $HuoGui->userServiceState($this->user->wechat_open_id);//授权
+//        echo "<br/>userServiceState";
+//        var_dump($res);
+//        $res= $HuoGui->modify($out_order_no);//修改
+//        echo "<br/>modify";
+//        var_dump($res);
+//        $res= $HuoGui->pay($out_order_no);//支付
+//        echo "<br/>pay";
+//        var_dump($res);
+//        $res= $HuoGui->wxpayScoreEnable($out_order_no);//授权
+//        echo "<br/>wxpayScoreEnable";
+//        var_dump($res);
+//        $res= $HuoGui->wxpayScoreDetail($out_order_no);//订单详情
+//        echo "<br/>wxpayScoreDetail";
+//        var_dump($res);
     }
 
 
@@ -180,7 +188,6 @@ class OrderPayDataForm extends Model
 
     public function search3()
     {
-
         $HuoGui = new WxPayScore();
         echo '<pre>';
         $out_order_no="234323JKHDFE1243252B";
