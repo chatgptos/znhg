@@ -231,7 +231,7 @@ class IndexController extends Controller
 
         $hg_id = \Yii::$app->request->post('hg_id');
         $isreplenish = \Yii::$app->request->post('isreplenish');
-        if($hg_id){
+        if(!$hg_id){
             return json_encode([
                 'code'  => '1',
                 'msg'   => '货柜不存在',

@@ -106,8 +106,10 @@ class OrderListForm extends Model
 
 
 
+    //只请求一次性的
+    //一次性的请求api    用户购物车--订单    补货购物车--订单
 
-    public function actionOrderDetailshg($opendoorRecordId)
+    public function actionOrderDetailshg($opendoorRecordId,$statusIsOrder=false)
     {
         //查询是否生成订单
         if(!$opendoorRecordId){
@@ -125,78 +127,53 @@ class OrderListForm extends Model
         $HuoGui = new HuoGui();
         //成功关门查询订单
         $res= $HuoGui->getOrdersByOpenDoorId($biz_content);
-//        $res='{
-//    "msg":"",
-//    "code":200,
-//    "success":true,
-//    "data":{
-//        "errTag":2,
-//        "orderNo":"2019081237682398",
-//        "payTime":1565603026000,
-//        "totalGoodCount":1,
-//        "goodsList":[
-//            {
-//                "id":340,
-//                "goodsName":"上好佳",
-//                "imgUrl":"http://images.voidiot.com/FtZleANQ-HyskUgRhU6rSWMQfjZ_",
-//                "price":0.03,
-//                "baseWeight":null,
-//                "count":1,
-//                "valuatType":0,
-//                "sourPrice":0,
-//                "discount":0,
-//                "weight":9,
-//                "deviceId":100015,
-//                "trayNum":4,
-//                "merchantId":10000,
-//                "goodsId":948,
-//                "ch1":4,
-//                "ch2":16
-//            }
-//        ],
-//        "payWay":1,
-//        "deviceName":"待初始化",
-//        "userId":10881,
-//        "payMoney":0.02,
-//        "createTime":1565603025000,
-//        "price":0.03,
-//        "id":2995,
-//        "status":1
-//    },
-//    "fail":false
-//}';
-
-        //开始请求数据
-        $res =json_decode($res,true);
-        if ($res['success']==true) {
-            $data = $res['data'];
-            $goodsList = $data['goodsList'];
-            //订单
-            $order_no=$data['orderNo'];
-            if($order_no){
-                //创建订单
-
-//                $HuoGui = new WxPayScoreOrder();
-//                echo '<pre>';
-//                $out_order_no="234323JKHDFE1243252Ba";
-//                $res= $HuoGui->queryOrder($out_order_no);//补货开门
-////        var_dump(json_decode($res, true));
-//                $res= $HuoGui->serviceorder($out_order_no);//补货开门
+        $res='{
+    "msg":"",
+    "code":200,
+    "success":true,
+    "data":{
+        "errTag":2,
+        "orderNo":"123killaProgramerForSkyMore",
+        "payTime":1565603026000,
+        "totalGoodCount":1,
+        "goodsList":[
+            {
+                "id":340,
+                "goodsName":"佳佳薯条",
+                "imgUrl":"http://images.voidiot.com/FtZleANQ-HyskUgRhU6rSWMQfjZ_",
+                "price":0.03,
+                "baseWeight":null,
+                "count":1,
+                "valuatType":0,
+                "sourPrice":0,
+                "discount":0,
+                "weight":9,
+                "deviceId":100015,
+                "trayNum":4,
+                "merchantId":10000,
+                "goodsId":948,
+                "ch1":4,
+                "ch2":16
             }
+        ],
+        "payWay":1,
+        "deviceName":"待初始化",
+        "userId":10881,
+        "payMoney":0.03,
+        "createTime":1565603025000,
+        "price":0.01,
+        "id":2995,
+        "status":1
+    },
+    "fail":false
+}';
 
 
-
-
-        }else{
-            return [
-                'code'  => 1,
-                'msg'   => '未创建订单',
-                'data'  => $res,
-            ];
-        }
-
-//        var_dump($goodsList);
-
+        //开始判断逻辑
+        $res =json_decode($res,true);
+        $data = $res['data'];
+        $goodsList = $data['goodsList'];
+        //开始加工数据
         $new_list = [];
         foreach ($goodsList as $item) {
             $attr_list[] = [
@@ -229,6 +206,7 @@ class OrderListForm extends Model
             'total_price'=>$data['price'],
             'pay_price'=>$data['payMoney'],
             'is_use'=>1,
+            'num' =>$num,
             'order_no'=>$data['orderNo'],
             'original_price'=>$data['price'],
             'pay_time'=>date('Y-m-d h:m:s',$data['payTime']),
@@ -251,12 +229,106 @@ class OrderListForm extends Model
             'is_refund'=>0,
             'offline_qrcode'=>0,
         );
-        return [
-            'code'  => 0,
-            'msg'   => 'success',
-            'success'  => true,
-            'data'  => $list,
-        ];
+
+
+        if ($res['success']==true) {
+            if ($statusIsOrder) {
+                //订单
+                $order_no=$data['orderNo'];
+                if($order_no){
+                    //创建订单
+                    $WxPayScoreOrder = new WxPayScoreOrder();
+                    $out_order_no="234323JKHDFE1243252Ba1111111111%$%^%$^^%&%*^*&^";
+                    $out_order_no=$order_no;
+                    $res= $WxPayScoreOrder->queryOrder($out_order_no);//补货开门
+                    $res =json_decode($res,true);
+                    //如果没有订单 继续创建订单
+
+
+                    if(!isset($res['out_order_no']) || !$res['out_order_no']){
+                        //不存在订单创建
+                        $res= $WxPayScoreOrder->serviceorder($out_order_no,$list);//补货开门
+                        $res =json_decode($res,true);
+                        if(!isset($res['out_order_no']) || !$res['out_order_no']){
+                            // 存在直接返回订单号
+                            return [
+                                'code'  => 1,
+                                'msg'   => '未创建订单1',
+                                'success'  => false,
+                                'data'  => $res,
+                            ];
+                        }
+                    }
+                    //如果订单是完成的
+                    //CREATED：商户已创建服务订单；
+                    //DOING：服务订单进行中；
+                    //DONE  跳出
+                    if($res['state']=='DONE' || $res['state']=='REVOKED'  || $res['state']=='EXPIRED'){
+                        return [
+                            'code'  => 0,
+                            'msg'   => 'success',
+                            'success'  => true,
+                            'data'  => $list,
+                        ];
+                    }
+
+                    //订单创建或者 进行中开始支付
+                    $res= $WxPayScoreOrder->complete($out_order_no,$list);//支付
+
+
+
+                    $res =json_decode($res,true);
+                    if(!isset($res['out_order_no']) || !$res['out_order_no']){
+                         //支付不成功
+                        return [
+                            'code'  => 1,
+                            'msg'   => '未创建订单2',
+                            'success'  => false,
+                            'data'  => $res,
+                        ];
+                    }
+
+                    //如果订单是完成的
+                    //CREATED：商户已创建服务订单；
+                    //DOING：服务订单进行中；
+                    //DONE  跳出
+                    if($res['state']=='DONE' || $res['state']=='REVOKED'  || $res['state']=='EXPIRED'){
+                        return [
+                            'code'  => 0,
+                            'msg'   => 'success',
+                            'success'  => true,
+                            'data'  => $list,
+                        ];
+                    }
+
+
+                    // 存在直接返回成功 里面就是订单的信息和同图片逻辑
+                    return [
+                        'code'  => 1,
+                        'msg'   => '未创建订单5',
+                        'success'  => false,
+                        'data'  => $res,
+                    ];
+                }
+
+            }
+            return [
+                'code'  => 0,
+                'msg'   => 'success',
+                'success'  => true,
+                'data'  => $list,
+            ];
+
+        }else{
+
+            return [
+                'code'  => 1,
+                'msg'   => '未创建订单',
+                'success'  => false,
+                'data'  => $res,
+            ];
+
+        }
 
     }
 
