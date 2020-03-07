@@ -101,6 +101,70 @@ class WxPayScoreOrder extends Controller
 
     }
 
+    //创建订单
+    public function serviceorder($out_order_no,$goods='')
+    {
+        if($goods){
+            $goods_name = $goods['goods_name'];
+            $pay_price = $goods['pay_price'];
+            $total_price = $goods['total_price'];
+            $original_price = $goods['original_price'];
+            $integral = $goods['integral'];
+            $coupon = $goods['coupon'];
+            $num = $goods['num'];
+            $goods_list = $goods['goods_list'];
+            $shop = $goods['shop'];
+        }
+        $url = '/v3/payscore/serviceorder';
+        $res = $this->client->request('POST', $url, [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Content-Type' => 'application/json',
+                ],
+                'body' => json_encode([
+                    'out_order_no' => $out_order_no,
+                    'appid' => $this->wechat->appId,
+                    'service_id' =>  $this->service_id,
+                    'service_introduction' => '智慧零售',
+//                    'service_introduction' => '智能鲜蜂券池独享柜'.$goods_name,
+//                    'post_payments' => [[
+//                        'name' => '券池独享福利:'.$goods_name,
+//                        'amount' =>intval( $pay_price*100),
+//                        'description' => '只属于你的:'.$goods_name,
+//                        'count' => $num,
+//                    ]],
+//                    "location" => [
+//                        'start_location' => "智能鲜蜂券池独享柜，开门一切就是你的-AI BEE",
+//                        'end_location' => "智能鲜蜂券池,更多的券,更多福利,独享属于你的世界-INCHINA,有券还有现金抢哦",
+//                    ],
+                    "notify_url" => "https://app.aijiehun.com/paynotify/wechatscorepay",
+                    'time_range' => [
+                        'start_time' => $this->starttime,
+                        'end_time' => $this->endtime,
+                    ],
+                    'attach' => $out_order_no,
+//                    'post_payments' => $goods_list,
+                    'risk_fund' => [
+                        'name' => "ESTIMATE_ORDER_COST",
+                        'amount' => 10000,
+//                        'description' => $goods_name,
+                    ],
+//                    'post_discounts' => [[
+//                        'name' => "智能鲜蜂券池独享优惠",
+//                        'amount' => intval($total_price-$pay_price)*100,
+//                        'description' => "券池独享柜，您的独享，进入小程序券池子抢券得到更多",
+//                    ]],
+//                    "location" => [
+//                        'start_location' => $shop->address,
+//                        'start_location' => $shop->address,
+//                    ],
+                    'openid' => \Yii::$app->user->identity->wechat_open_id,
+                    'need_user_confirm' => false,//提示服务无权限 是因为这个参数
+                ]),
+            ]
+        );
+        return $res->getBody()->getContents();
+    }
 
 //        //完结订单
     public function complete($out_order_no ,$goods='')
@@ -113,6 +177,8 @@ class WxPayScoreOrder extends Controller
             $integral = $goods['integral'];
             $coupon = $goods['coupon'];
             $num = $goods['num'];
+            $goods_list = $goods['goods_list'];
+            $shop = $goods['shop'];
         }
         $url = '/v3/payscore/serviceorder/' . $out_order_no . '/complete';
         $res = $this->client->request('POST', $url, [
@@ -123,13 +189,14 @@ class WxPayScoreOrder extends Controller
                 'body' => json_encode((array)[
                     'appid'=>$this->wechat_app->app_id,
                     'service_id'=>'00004000000000158195309791355586',
-                    'service_introduction'=>'智能鲜蜂券池独享福利'.$goods_name,
-                    'post_payments' => [[
-                        'name' => '券池独享福利:'.$goods_name,
-                        'amount' =>intval( $pay_price*100),
-                        'description' => '只属于你的:'.$goods_name,
-                        'count' => $num,
-                    ]],
+                    'service_introduction'=>'智慧零售',
+//                    'post_payments' => [[
+//                        'name' => '券池独享福利:'.$goods_name,
+//                        'amount' =>intval( $pay_price*100),
+//                        'description' => '只属于你的:'.$goods_name,
+//                        'count' => $num,
+//                    ]],
+                    'post_payments' => $goods_list,
                     "total_amount"=> intval( $pay_price*100),
                     'risk_fund' => [
                         'name' => "ESTIMATE_ORDER_COST",
@@ -240,61 +307,6 @@ class WxPayScoreOrder extends Controller
     }
 
 
-    //创建订单
-    public function serviceorder($out_order_no,$goods='')
-    {
-        if($goods){
-            $goods_name = $goods['goods_name'];
-            $pay_price = $goods['pay_price'];
-            $total_price = $goods['total_price'];
-            $original_price = $goods['original_price'];
-            $integral = $goods['integral'];
-            $coupon = $goods['coupon'];
-            $num = $goods['num'];
-        }
-        $url = '/v3/payscore/serviceorder';
-        $res = $this->client->request('POST', $url, [
-                'headers' => [
-                    'Accept' => 'application/json',
-                    'Content-Type' => 'application/json',
-                ],
-                'body' => json_encode([
-                    'out_order_no' => $out_order_no,
-                    'appid' => $this->wechat->appId,
-                    'service_id' =>  $this->service_id,
-                    'service_introduction' => '智能鲜蜂券池独享柜'.$goods_name,
-                    "notify_url" => "https://app.aijiehun.com/paynotify/wechatscorepay",
-                    'time_range' => [
-                        'start_time' => $this->starttime,
-                        'end_time' => $this->endtime,
-                    ],
-                    'post_payments' => [[
-                        'name' => '券池独享福利:'.$goods_name,
-                        'amount' =>intval( $pay_price*100),
-                        'description' => '只属于你的:'.$goods_name,
-                        'count' => $num,
-                    ]],
-                    'risk_fund' => [
-                        'name' => "ESTIMATE_ORDER_COST",
-                        'amount' => 10000,
-                        'description' => $goods_name,
-                    ],
-                    'post_discounts' => [[
-                        'name' => "智能鲜蜂券池独享优惠",
-                        'amount' => intval($total_price-$pay_price)*100,
-                        'description' => "券池独享柜，您的独享，进入小程序券池子抢券得到更多",
-                    ]],
-                    "location" => [
-                        'start_location' => "智能鲜蜂券池独享柜，开门一切就是你的-AI BEE",
-                        'end_location' => "智能鲜蜂券池,更多的券,更多福利,独享属于你的世界-INCHINA,有券还有现金抢哦",
-                    ],
-                    'openid' => \Yii::$app->user->identity->wechat_open_id,
-                    'need_user_confirm' => false,//提示服务无权限 是因为这个参数
-                ]),
-            ]
-        );
-        return $res->getBody()->getContents();
-    }
 
 
     public function wxpayScoreEnable($out_request_no)
@@ -351,7 +363,7 @@ class WxPayScoreOrder extends Controller
 
     /**
      * @return null|string
-     * 生成订单号
+     * 生成签约号
      */
     public function getOrderNoWx()
     {

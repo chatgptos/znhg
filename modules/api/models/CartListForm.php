@@ -100,6 +100,7 @@ class CartListForm extends Model
         //创建订单
         $opendoorRecordId = \Yii::$app->request->post('opendoorRecordId');
         $isreplenish =  \Yii::$app->request->post('isreplenish');
+        $out_order_no =  \Yii::$app->request->post('out_order_no');
         //调用实时数据
         $biz_content=array(
             "deviceId"=>$hg_id,//必须要有设备
@@ -120,50 +121,48 @@ class CartListForm extends Model
 
         $HuoGui = new HuoGui();
         if($isreplenish){
-            $goods= $HuoGui->getDeviceRealTimeGoods($biz_content);
+            $res= $HuoGui->getDeviceRealTimeGoods($biz_content);
         }else{
-            $goods= $HuoGui->getSelectGoods($biz_content);
+            $res= $HuoGui->getSelectGoods($biz_content);
         }
-        $goods='{
-                "msg":"",
-                "code":200,
-                "success":true,
-                "data":{
-                    "isClose":true,
-                    "goodsList":[
-                        {
-                            "goodsName":"瓶装饮料",
-                            "imgUrl":"http://images.voidiot.com/Foj2Z9bLgpPuueLMnKd5e6RN10oh",
-                            "price":3,
-                            "count":2,
-                            "valuatType":0,
-                            "weight":1070,
-                            "baseWeight":550,
-                            "deviceId":100023,
-                            "trayNum":4,
-                            "sourPrice":0,
-                            "discount":null
-                        },{
-                            "goodsName":"瓶装饮料",
-                            "imgUrl":"http://images.voidiot.com/Foj2Z9bLgpPuueLMnKd5e6RN10oh",
-                            "price":3,
-                            "count":2,
-                            "valuatType":0,
-                            "weight":1070,
-                            "baseWeight":550,
-                            "deviceId":100023,
-                            "trayNum":4,
-                            "sourPrice":0,
-                            "discount":null
-                        }
-                    ]
-                },
-                "fail":false
-            }';
-
-        $res =json_decode($goods,true);
-
-
+//        $res='{
+//                "msg":"",
+//                "code":200,
+//                "success":true,
+//                "data":{
+//                    "isClose":true,
+//                    "goodsList":[
+//                        {
+//                            "goodsName":"瓶装饮料",
+//                            "imgUrl":"http://images.voidiot.com/Foj2Z9bLgpPuueLMnKd5e6RN10oh",
+//                            "price":3,
+//                            "count":2,
+//                            "valuatType":0,
+//                            "weight":1070,
+//                            "baseWeight":550,
+//                            "deviceId":100023,
+//                            "trayNum":4,
+//                            "sourPrice":0,
+//                            "discount":null
+//                        },{
+//                            "goodsName":"瓶装饮料",
+//                            "imgUrl":"http://images.voidiot.com/Foj2Z9bLgpPuueLMnKd5e6RN10oh",
+//                            "price":3,
+//                            "count":2,
+//                            "valuatType":0,
+//                            "weight":1070,
+//                            "baseWeight":550,
+//                            "deviceId":100023,
+//                            "trayNum":4,
+//                            "sourPrice":0,
+//                            "discount":null
+//                        }
+//                    ]
+//                },
+//                "fail":false
+//            }';
+//
+//        $res =json_decode($res,true);
 
         //加工返回参数
         $data=$res['data'];
@@ -195,7 +194,7 @@ class CartListForm extends Model
         }
 
         //开始判断逻辑
-        if ($res['success']==true){
+        if ($res['success']==true && $res['code']==200){
             if($isClose){
                 //这是管理员补货标记 过滤返回规定格式参数
                 if(empty($isreplenish)){
@@ -221,18 +220,17 @@ class CartListForm extends Model
                 //支付订单
                 //查询订单 查询货柜生成的订单---生成的订单支付
                 $form = new \app\modules\api\models\couponmall\OrderListForm();
-                $res = $form->actionOrderDetailshg($opendoorRecordId,true);
+                $res = $form->actionOrderDetailshg($opendoorRecordId,true,$shop,$out_order_no);
                 //如果成功生成货柜订单+微信订单
                 if($res['success']){
                     $pay_data=[];
-                    if(true){
-                        //没有授权，开始授权
-                        $WxPayScoreOrder = new WxPayScoreOrder();
-                        $out_order_no=$res['data']['order_no'];
-                        $pay_data= $WxPayScoreOrder->wxpayScoreDetail($out_order_no);//获得微信分授权参数
-                    }
                     if ($shop->hg_yx){
                         $isWechatJump=true;
+                        //获取微信跳转分api json
+                        $WxPayScoreOrder = new WxPayScoreOrder();
+                        $out_order_no=$res['data']['order_no'];
+                        $out_order_no=$out_order_no;
+                        $pay_data= $WxPayScoreOrder->wxpayScoreDetail($out_order_no);//获得微信分授权参数
                     }else{
                         $isWechatJump=false;
                     }
@@ -247,6 +245,21 @@ class CartListForm extends Model
                             'pay_data' => $pay_data,
                             'isreplenish'=>$isreplenish,
                             'order_no' => $res['data']['order_no'],
+                        ],
+                    ];
+                }else{
+                    //没有生成订单 0元结束单子 跳转出来 到首页 isreplenish  控制跳到货柜 首页去
+                    //取消订单
+                    return [
+                        'code' => 0,
+                        'msg' => 'success',
+                        'data' => [
+                            'isWechatJump' => false,
+                            'isClose' => true,
+                            'opendoorRecordId' => $opendoorRecordId,
+                            'data' => $res,
+                            'isreplenish'=>true,
+                            'order_no' => $out_order_no,
                         ],
                     ];
                 }

@@ -81,6 +81,14 @@ class IndexController extends Controller
      */
     public function actionOpendoor()
     {
+
+        //取消订单
+//        $WxPayScoreOrder = new WxPayScoreOrder();
+//        $out_order_no='WxScorePay2020030717110672634';
+//        $res= $WxPayScoreOrder->cancel($out_order_no);//补货开门
+////        var_dump($res);die;
+
+
         $yyGoods = new GoodsForm();
         $yyGoods->store_id = $this->store_id;
         $yyGoods->user_id = \Yii::$app->user->id;
@@ -183,12 +191,39 @@ class IndexController extends Controller
         $res= $HuoGui->syncUserInfo($biz_content);
         if ($res['msg']=='用户已注册过了' || $res['success']==true){ //同步用户信息给用户开门权限
             $WxPayScoreOrder = new WxPayScoreOrder();
-            $res= $WxPayScoreOrder->userServiceState(\Yii::$app->user->identity->wechat_open_id);//补货开门
+            $res= $WxPayScoreOrder->userServiceState(\Yii::$app->user->identity->wechat_open_id);//购买开门
             $res = json_decode($res,true);
             if(isset($res['use_service_state']) && $res['use_service_state'] == 'AVAILABLE'){
                 //有授权
                 $res= $HuoGui->openDoor($biz_content);
                 if ($res['success'] && isset($res['data']['opendoorRecordId'])){
+                    //立即生成订单阻止 恶意取消授权的货损
+                    $order_no=$this->getOrderNoWxPay();
+                    //创建订单
+                    $WxPayScoreOrder = new WxPayScoreOrder();
+                    $out_order_no=$order_no;
+                    $resScoreOrder= $WxPayScoreOrder->queryOrder($out_order_no);//下单
+                    $resScoreOrder =json_decode($resScoreOrder,true);
+                    //如果没有订单 继续创建订单
+                    if(!isset($resScoreOrder['out_order_no']) || !$resScoreOrder['out_order_no']){
+                        //不存在订单创建
+                        $resScoreOrder= $WxPayScoreOrder->serviceorder($out_order_no);//补货开门
+                        $resScoreOrder =json_decode($resScoreOrder,true);
+                        if(!isset($resScoreOrder['out_order_no']) || !$resScoreOrder['out_order_no']){
+                            // 存在直接返回订单号
+                            return json_encode([
+                                'code'  => 1,
+                                'msg'   => '开门失败未创建订单',
+                                'success'   => false,
+                                'data'  =>array(
+                                    'isOpen'=>false,
+                                    'isreplenish'=>false,
+                                    'out_order_no'=>$out_order_no,
+                                    'opendoorRecordId'=>$res['data']['opendoorRecordId'],
+                                ),
+                            ],JSON_UNESCAPED_UNICODE);
+                        }
+                    }
                     return json_encode([
                         'code'  => 0,
                         'msg'   => '成功开门',
@@ -196,6 +231,7 @@ class IndexController extends Controller
                         'data'  => array(
                             'isOpen'=>true,
                             'isreplenish'=>false,
+                            'out_order_no'=>$out_order_no,
                             'opendoorRecordId'=>$res['data']['opendoorRecordId'],
                         ),
                     ],JSON_UNESCAPED_UNICODE);
@@ -236,6 +272,17 @@ class IndexController extends Controller
             ],JSON_UNESCAPED_UNICODE);
 
         }
+    }
+
+    /**
+     * @return null|string
+     * 生成订单号
+     */
+    public function getOrderNoWxPay()
+    {
+        $order_no = null;
+        $order_no = 'WxScorePay'.date('YmdHis') . rand(10000, 99999);
+        return $order_no;
     }
 
 

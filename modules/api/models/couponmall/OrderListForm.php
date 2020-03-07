@@ -109,7 +109,7 @@ class OrderListForm extends Model
     //只请求一次性的
     //一次性的请求api    用户购物车--订单    补货购物车--订单
 
-    public function actionOrderDetailshg($opendoorRecordId,$statusIsOrder=false)
+    public function actionOrderDetailshg($opendoorRecordId,$statusIsOrder=false,$shop='',$out_order_no=0)
     {
         //查询是否生成订单
         if(!$opendoorRecordId){
@@ -127,119 +127,149 @@ class OrderListForm extends Model
         $HuoGui = new HuoGui();
         //成功关门查询订单
         $res= $HuoGui->getOrdersByOpenDoorId($biz_content);
-        $res='{
-    "msg":"",
-    "code":200,
-    "success":true,
-    "data":{
-        "errTag":2,
-        "orderNo":"12678988877cjz",
-        "payTime":1565603026000,
-        "totalGoodCount":1,
-        "goodsList":[
-            {
-                "id":340,
-                "goodsName":"餐巾纸",
-                "imgUrl":"http://images.voidiot.com/FtZleANQ-HyskUgRhU6rSWMQfjZ_",
-                "price":0.03,
-                "baseWeight":null,
-                "count":1,
-                "valuatType":0,
-                "sourPrice":0,
-                "discount":0,
-                "weight":9,
-                "deviceId":100015,
-                "trayNum":4,
-                "merchantId":10000,
-                "goodsId":948,
-                "ch1":4,
-                "ch2":16
-            }
-        ],
-        "payWay":1,
-        "deviceName":"待初始化",
-        "userId":10881,
-        "payMoney":0.03,
-        "createTime":1565603025000,
-        "price":0.01,
-        "id":2995,
-        "status":1
-    },
-    "fail":false
-}';
+
+////        array(5) { ["msg"]=> string(0) "" ["code"]=> int(10020) ["success"]=> bool(false) ["data"]=> string(15) "订单未生成" ["fail"]=> bool(true) }
+//        var_dump($res);
+//        die;
+//        $res='{
+//    "msg":"",
+//    "code":200,
+//    "success":true,
+//    "data":{
+//        "errTag":2,
+//        "orderNo":"12678988877cjzkc",
+//        "payTime":1565603026000,
+//        "totalGoodCount":1,
+//        "goodsList":[
+//            {
+//                "id":340,
+//                "goodsName":"餐巾纸",
+//                "imgUrl":"http://images.voidiot.com/FtZleANQ-HyskUgRhU6rSWMQfjZ_",
+//                "price":0.02,
+//                "baseWeight":null,
+//                "count":2,
+//                "valuatType":0,
+//                "sourPrice":0,
+//                "discount":0,
+//                "weight":9,
+//                "deviceId":100015,
+//                "trayNum":4,
+//                "merchantId":10000,
+//                "goodsId":948,
+//                "ch1":4,
+//                "ch2":16
+//            },{
+//                "id":340,
+//                "goodsName":"矿泉水",
+//                "imgUrl":"http://images.voidiot.com/FtZleANQ-HyskUgRhU6rSWMQfjZ_",
+//                "price":0.01,
+//                "baseWeight":null,
+//                "count":1,
+//                "valuatType":0,
+//                "sourPrice":0,
+//                "discount":0,
+//                "weight":9,
+//                "deviceId":100015,
+//                "trayNum":4,
+//                "merchantId":10000,
+//                "goodsId":948,
+//                "ch1":4,
+//                "ch2":16
+//            }
+//        ],
+//        "payWay":1,
+//        "deviceName":"待初始化",
+//        "userId":10881,
+//        "payMoney":0.03,
+//        "createTime":1565603025000,
+//        "price":0.01,
+//        "id":2995,
+//        "status":1
+//    },
+//    "fail":false
+//}';
+        $res =json_decode($res,true);
 
 
         //开始判断逻辑
-        $res =json_decode($res,true);
-        $data = $res['data'];
-        $goodsList = $data['goodsList'];
-        //开始加工数据
-        $new_list = [];
-        foreach ($goodsList as $item) {
-            $attr_list[] = [
-                'attr_group_name'=>'来源',
-                'attr_name'=>'智能货柜',
-            ];
-            $attr_num = 99;
-            $num =$item['count'];
-            $goods_id =$item['id'];
-            $goods_pic =$item['imgUrl'];
-            $goods_name =$item['goodsName'];
-            $new_item = (object)[
-                'cart_id' => $item['categoryId'],
-                'goods_id' =>$item['goodsId'],
-                'goods_name' =>$item['goodsName'],
-                'goods_pic' => $goods_pic,
+        if ($res['success']==true && $res['code']==200) {
+            $data = $res['data'];
+            $goodsList = $data['goodsList'];
+            //开始加工数据
+            $new_list = [];
+            foreach ($goodsList as $item) {
+                $attr_list[] = [
+                    'attr_group_name'=>'来源',
+                    'attr_name'=>'智能货柜',
+                ];
+                $attr_num = 99;
+                $num =$item['count'];
+                $goods_id =$item['id'];
+                $goods_pic =$item['imgUrl'];
+                $goods_name =$item['goodsName'];
+                $new_item = (object)[
+                    'cart_id' => $item['categoryId'],
+                    'goods_id' =>$item['goodsId'],
+                    'goods_name' =>$item['goodsName'],
+                    'goods_pic' => $goods_pic,
+                    'num' =>$num,
+                    'attr_list' => $attr_list,
+                    'price' =>$item['price'],
+                    'max_num' => $attr_num,
+                    'disabled' => ($num > $attr_num) ? true : false,
+
+
+
+                    'name' => '券池独享福利:'.$item['goodsName'],
+                    'amount' =>intval( $item['price']*100),
+                    'description' => '只属于你的:'.$item['goodsName'],
+                    'count' => $num,
+                ];
+
+                $new_list[] = $new_item;
+            }
+
+            $list=array(
+                'integral'=>1,
+                'coupon'=>1,
+                'total_price'=>$data['price'],
+                'pay_price'=>$data['payMoney'],
+                'is_use'=>1,
                 'num' =>$num,
-                'attr_list' => $attr_list,
-                'price' =>$item['price'],
-                'max_num' => $attr_num,
-                'disabled' => ($num > $attr_num) ? true : false,
-            ];
+                'order_no'=>$data['orderNo'],
+                'original_price'=>$data['price'],
+                'pay_time'=>date('Y-m-d h:m:s',$data['payTime']),
+                'pay_type'=>1,
+                'shop_id'=>1,
+                'store_id'=>1,
+                'use_time'=>date('Y-m-d h:m:s',$data['payTime']),
+                'user_id'=>$this->user_id,
+                'addtime'=>date('Y-m-d h:m:s',$data['createTime']),
+                'cover_pic'=>$goods_pic,
+                'goods_id'=>$goods_id,
+                'goods_name'=>$goods_name,
+                'goods_list'=>$new_list,
+                'shop'=>$shop,
+                'apply_delete'=>0,
+                'clerk_id'=>0,
+                'form_id'=>0,
+                'is_cancel'=>0,
+                'is_comment'=>0,
+                'is_delete'=>0,
+                'is_pay'=>1,
+                'is_refund'=>0,
+                'offline_qrcode'=>0,
+            );
 
-            $new_list[] = $new_item;
-        }
-
-        $list=array(
-            'integral'=>1,
-            'coupon'=>1,
-            'total_price'=>$data['price'],
-            'pay_price'=>$data['payMoney'],
-            'is_use'=>1,
-            'num' =>$num,
-            'order_no'=>$data['orderNo'],
-            'original_price'=>$data['price'],
-            'pay_time'=>date('Y-m-d h:m:s',$data['payTime']),
-            'pay_type'=>1,
-            'shop_id'=>1,
-            'store_id'=>1,
-            'use_time'=>date('Y-m-d h:m:s',$data['payTime']),
-            'user_id'=>$this->user_id,
-            'addtime'=>date('Y-m-d h:m:s',$data['createTime']),
-            'cover_pic'=>$goods_pic,
-            'goods_id'=>$goods_id,
-            'goods_name'=>$goods_name,
-            'apply_delete'=>0,
-            'clerk_id'=>0,
-            'form_id'=>0,
-            'is_cancel'=>0,
-            'is_comment'=>0,
-            'is_delete'=>0,
-            'is_pay'=>1,
-            'is_refund'=>0,
-            'offline_qrcode'=>0,
-        );
-
-
-        if ($res['success']==true) {
             if ($statusIsOrder) {
                 //订单
                 $order_no=$data['orderNo'];
+                $order_no=$out_order_no;//传进来的订单号
+
                 if($order_no){
                     //创建订单
                     $WxPayScoreOrder = new WxPayScoreOrder();
-                    $out_order_no="234323JKHDFE1243252Ba1111111111%$%^%$^^%&%*^*&^";
-                    $out_order_no=$order_no;
+//                    $out_order_no=$order_no; //创建订单使用前面穿过来的订单
                     $res= $WxPayScoreOrder->queryOrder($out_order_no);//补货开门
                     $res =json_decode($res,true);
                     //如果没有订单 继续创建订单
@@ -275,8 +305,6 @@ class OrderListForm extends Model
                     //订单创建或者 进行中开始支付
                     $res= $WxPayScoreOrder->complete($out_order_no,$list);//支付
 
-
-
                     $res =json_decode($res,true);
                     if(!isset($res['out_order_no']) || !$res['out_order_no']){
                          //支付不成功
@@ -292,22 +320,33 @@ class OrderListForm extends Model
                     //CREATED：商户已创建服务订单；
                     //DOING：服务订单进行中；
                     //DONE  跳出
-                    if($res['state']=='DONE' || $res['state']=='REVOKED'  || $res['state']=='EXPIRED'){
+
+                    $biz_content=array(
+                        "unionid"=>\Yii::$app->user->identity->wechat_open_id,
+                        "orderNo"=>$order_no,
+                    );
+                    //完结货柜订单
+                    $res= $HuoGui->completeOrder($biz_content);
+
+                    //开始判断逻辑
+                    if(isset($res['success']) && $res['success'] && $res['code'] =200){
+                        //确认完结
+
+                        //没有完结就异步完结 前端还是返回完结
                         return [
                             'code'  => 0,
                             'msg'   => 'success',
                             'success'  => true,
                             'data'  => $list,
                         ];
+
                     }
 
-
-                    // 存在直接返回成功 里面就是订单的信息和同图片逻辑
                     return [
-                        'code'  => 1,
-                        'msg'   => '未创建订单5',
-                        'success'  => false,
-                        'data'  => $res,
+                        'code'  => 0,
+                        'msg'   => 'success',
+                        'success'  => true,
+                        'data'  => $list,
                     ];
                 }
 
@@ -320,12 +359,20 @@ class OrderListForm extends Model
             ];
 
         }else{
-
+            //取消订单
+            $WxPayScoreOrder = new WxPayScoreOrder();
+            $res= $WxPayScoreOrder->cancel($out_order_no);//补货开门
             return [
                 'code'  => 1,
-                'msg'   => '未创建订单',
+                'msg'   => '没有选购商品',
                 'success'  => false,
-                'data'  => $res,
+                'data' => [
+                    'isClose' => true,
+                    'opendoorRecordId' => $opendoorRecordId,
+                    'data' => $res,
+                    'isreplenish'=>true,//跳转到首页
+                    'order_no' => $out_order_no,
+                ],
             ];
 
         }
