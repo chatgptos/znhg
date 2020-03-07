@@ -207,7 +207,7 @@ class IndexController extends Controller
                     //如果没有订单 继续创建订单
                     if(!isset($resScoreOrder['out_order_no']) || !$resScoreOrder['out_order_no']){
                         //不存在订单创建
-                        $resScoreOrder= $WxPayScoreOrder->serviceorder($out_order_no);//补货开门
+                        $resScoreOrder= $WxPayScoreOrder->serviceorder($out_order_no,'',$shop->address);//补货开门
                         $resScoreOrder =json_decode($resScoreOrder,true);
                         if(!isset($resScoreOrder['out_order_no']) || !$resScoreOrder['out_order_no']){
                             // 存在直接返回订单号

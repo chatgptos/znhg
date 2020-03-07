@@ -137,7 +137,7 @@ class OrderListForm extends Model
 //    "success":true,
 //    "data":{
 //        "errTag":2,
-//        "orderNo":"12678988877cjzkc",
+//        "orderNo":"126789888776666",
 //        "payTime":1565603026000,
 //        "totalGoodCount":1,
 //        "goodsList":[
@@ -249,7 +249,7 @@ class OrderListForm extends Model
                 'goods_id'=>$goods_id,
                 'goods_name'=>$goods_name,
                 'goods_list'=>$new_list,
-                'shop'=>$shop,
+                'address'=>$shop->address,
                 'apply_delete'=>0,
                 'clerk_id'=>0,
                 'form_id'=>0,
@@ -260,12 +260,10 @@ class OrderListForm extends Model
                 'is_refund'=>0,
                 'offline_qrcode'=>0,
             );
-
             if ($statusIsOrder) {
                 //订单
                 $order_no=$data['orderNo'];
                 $order_no=$out_order_no;//传进来的订单号
-
                 if($order_no){
                     //创建订单
                     $WxPayScoreOrder = new WxPayScoreOrder();
@@ -301,7 +299,6 @@ class OrderListForm extends Model
                             'data'  => $list,
                         ];
                     }
-
                     //订单创建或者 进行中开始支付
                     $res= $WxPayScoreOrder->complete($out_order_no,$list);//支付
 

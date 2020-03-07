@@ -102,7 +102,7 @@ class WxPayScoreOrder extends Controller
     }
 
     //创建订单
-    public function serviceorder($out_order_no,$goods='')
+    public function serviceorder($out_order_no,$goods='',$address='')
     {
         if($goods){
             $goods_name = $goods['goods_name'];
@@ -113,7 +113,7 @@ class WxPayScoreOrder extends Controller
             $coupon = $goods['coupon'];
             $num = $goods['num'];
             $goods_list = $goods['goods_list'];
-            $shop = $goods['shop'];
+            $address = $goods['address'];
         }
         $url = '/v3/payscore/serviceorder';
         $res = $this->client->request('POST', $url, [
@@ -154,10 +154,10 @@ class WxPayScoreOrder extends Controller
 //                        'amount' => intval($total_price-$pay_price)*100,
 //                        'description' => "券池独享柜，您的独享，进入小程序券池子抢券得到更多",
 //                    ]],
-//                    "location" => [
-//                        'start_location' => $shop->address,
-//                        'start_location' => $shop->address,
-//                    ],
+                    "location" => [
+                        'start_location' => $address,
+                        'start_location' => $address,
+                    ],
                     'openid' => \Yii::$app->user->identity->wechat_open_id,
                     'need_user_confirm' => false,//提示服务无权限 是因为这个参数
                 ]),
@@ -169,6 +169,7 @@ class WxPayScoreOrder extends Controller
 //        //完结订单
     public function complete($out_order_no ,$goods='')
     {
+        $address='';
         if($goods){
             $goods_name = $goods['goods_name'];
             $pay_price = $goods['pay_price'];
@@ -178,7 +179,7 @@ class WxPayScoreOrder extends Controller
             $coupon = $goods['coupon'];
             $num = $goods['num'];
             $goods_list = $goods['goods_list'];
-            $shop = $goods['shop'];
+            $address = $goods['address'];
         }
         $url = '/v3/payscore/serviceorder/' . $out_order_no . '/complete';
         $res = $this->client->request('POST', $url, [
@@ -206,8 +207,12 @@ class WxPayScoreOrder extends Controller
                     'post_discounts' => [[
                         'name' => "智能鲜蜂券池独享优惠",
                         'amount' => intval($total_price-$pay_price)*100,
-                        'description' => "券池独享柜，您的独享，进入小程序券池子抢券得到更多",
+                        'description' => "券池独享柜,进入小程序券池子抢券,得更多,有券还有现金",
                     ]],
+                    "location" => [
+                        'start_location' => $address,
+                        'start_location' => $address,
+                    ],
 //                    "location" => [
 //                        'start_location' => "智能鲜蜂券池独享柜，开门一切就是你的-AI BEE",
 //                        'end_location' => "智能鲜蜂券池,更多的券,更多福利,独享属于你的世界-INCHINA,有券还有现金抢哦",
