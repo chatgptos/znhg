@@ -86,7 +86,7 @@ class IndexController extends Controller
 //        $WxPayScoreOrder = new WxPayScoreOrder();
 //        $out_order_no='WxScorePay2020030717110672634';
 //        $res= $WxPayScoreOrder->cancel($out_order_no);//补货开门
-////        var_dump($res);die;
+//        var_dump($res);die;
 
 
         $yyGoods = new GoodsForm();

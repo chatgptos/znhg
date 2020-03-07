@@ -135,7 +135,7 @@ class CartListForm extends Model
 //                        {
 //                            "goodsName":"瓶装饮料",
 //                            "imgUrl":"http://images.voidiot.com/Foj2Z9bLgpPuueLMnKd5e6RN10oh",
-//                            "price":3,
+//                            "price":0.02,
 //                            "count":2,
 //                            "valuatType":0,
 //                            "weight":1070,
@@ -147,8 +147,8 @@ class CartListForm extends Model
 //                        },{
 //                            "goodsName":"瓶装饮料",
 //                            "imgUrl":"http://images.voidiot.com/Foj2Z9bLgpPuueLMnKd5e6RN10oh",
-//                            "price":3,
-//                            "count":2,
+//                            "price":0.01,
+//                            "count":1,
 //                            "valuatType":0,
 //                            "weight":1070,
 //                            "baseWeight":550,
