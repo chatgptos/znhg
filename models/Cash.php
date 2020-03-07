@@ -22,11 +22,14 @@ use Codeception\PHPUnit\ResultPrinter\HTML;
  */
 class Cash extends \yii\db\ActiveRecord
 {
+    public static $LiLv = 0.97;
+
+
     public static $status = [
-        '待审核',
-        '待打款',
-        '已打款',
-        '无效'
+        '待审核(手续费后)',
+        '待打款(手续费后)',
+        '已打款(手续费后)',
+        '无效(续费后)'
     ];
     public static $type = [
         '微信支付',

@@ -332,8 +332,9 @@ class ShareController extends Controller
             $data = [
                 'partner_trade_no' => md5(uniqid()),
                 'openid' => $user->wechat_open_id,
-                'amount' => $cash->price * 100,
-                'desc' => '转账'
+//                'amount' => $cash->price * 100,
+                'amount' => $cash->price * 100*Cash::$LiLv,
+                'desc' => '智能鲜蜂VIP专属提现(扣除手续费*'.Cash::$LiLv.')'
             ];
             $res = $this->wechat->pay->transfers($data);
         } else if ($status == 4) { //手动打款

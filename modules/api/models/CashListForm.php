@@ -55,7 +55,8 @@ class CashListForm extends Model
         /* @var Cash[] $list */
         foreach($list as $index=>$value){
             $new_list[] = (object)[
-                'price'=>$value->price,
+//                'price'=>$value->price,
+                'price'=>$value->price*Cash::$LiLv,
                 'addtime'=>date('Y-m-d H:i:s',$value->addtime),
                 'status'=>Cash::$status[$value->status]
             ];
