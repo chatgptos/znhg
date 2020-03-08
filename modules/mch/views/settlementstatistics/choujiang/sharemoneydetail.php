@@ -12,6 +12,8 @@ $this->params['active_nav_group'] = 4;
 <!--    <iframe style="height:1000px;width:1200px"  src="https://mta.qq.com/wechat_mini/base/ctr_realtime_data?app_id=500706424">-->
 <!--    </iframe>>-->
         <div class="alert alert-info rounded-0">
+
+    <div>注：自动发放 1配置系统层级 2单个商品配置返点</div>
     <div>注：确认超过设置的售后时间且没有在售后的订单 系统自动按最新设置的匹配等级计算</div>
     <div>注：设置层级返点      未设置0 （所有统计返点不包含自身，自身消费请单独统计）</div>
     <div>注：返点商品 分别结算栏目可以看到 分别计算出的 商城/预售/众筹 兑换暂未统计</div>
@@ -109,17 +111,17 @@ $this->params['active_nav_group'] = 4;
                     <td class="nowrap"><?= $value['money'] ?></td>
                     <td class="nowrap">
                         <?php if ($value['status'] == 3): ?>驳回<?php endif; ?>
-                        <?php if ($value['status'] == 2): ?>成功发发放<?php endif; ?>
-                        <?php if ($value['status'] == 1): ?>用户申请中<?php endif; ?>
-                        <?php if ($value['status'] == 0): ?>系统成功计算<?php endif; ?>
+                        <?php if ($value['status'] == 2): ?>用户申请中<?php endif; ?>
+                        <?php if ($value['status'] == 1): ?>系统成功计算<?php endif; ?>
+                        <?php if ($value['status'] == 0): ?>成功发发放(自动发放)<?php endif; ?>
                     </td>
                     <td class="nowrap"><?= date('Y-m-d H:i:s', $value['addtime']) ?></td>
                     <td class="nowrap"><?= date('Y-m-d H:i:s', $value['usm_addtime']) ?></td>
 
 
                     <td class="nowrap">
-                        <a class="btn btn-sm update" href="javascript:" data-toggle="modal"
-                           data-target="#price" data-id="<?= $value['order_id'] ?>">查看</a>
+<!--                        <a class="btn btn-sm update" href="javascript:" data-toggle="modal"-->
+<!--                           data-target="#price" data-id="--><?//= $value['order_id'] ?><!--">查看</a>-->
                         <a class="btn btn-sm"
                            href="<?= $urlManager->createUrl(['mch/order/detail', 'order_id' => $value['order_id']]) ?>">订单</a>
                         <a class="btn btn-sm btn-primary"

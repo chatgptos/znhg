@@ -6,6 +6,7 @@ use app\extensions\PinterOrder;
 use app\models\Goods;
 use app\models\IntegralLog;
 use app\models\Level;
+use app\models\Message;
 use app\models\Order;
 use app\models\OrderDetail;
 use app\models\OrderRefund;
@@ -16,6 +17,7 @@ use app\models\StoreUser;
 use app\models\User;
 use app\models\UserShareMoney;
 use app\models\UserShareMoneyDetail;
+use app\models\UserShareMoneyIntegral;
 use app\modules\mch\models\BusinessListForm;
 use app\modules\mch\models\crontab\DailyData;
 use app\modules\mch\models\crontab\Stock;
@@ -529,6 +531,7 @@ class CrontabController extends Controller
         foreach ($order_list as $index => $value) {
             \Yii::warning('==>' . $value['id']);
             $this->share_money_new($value['id']);
+            $this->share_money_integral($value['id']);
             Order::updateAll(['is_price' => 1], ['id' => $value['id']]);
         }
         \Yii::warning('==>' .'end-order7');
@@ -607,6 +610,40 @@ class CrontabController extends Controller
 //        \Yii::warning('==>' .'end-order8');
 //    }
 
+
+
+    /**
+     * @param $parent_id
+     * @param $money
+     * @return array
+     *
+     */
+    private function money_integral($parent_id, $money,$user='',$user_2='')
+    {
+        if ($parent_id == 0) {
+            return ['code' => 1, 'parent_id' => 0];
+        }
+        $parent = User::findOne(['id' => $parent_id]);
+        if (!$parent) {
+            return ['code' => 1, 'parent_id' => 0];
+        }
+        $parent->total_price += $money;
+        $parent->price += $money;
+        $parent->total_integral += $money;
+        $parent->integral += $money;
+        $this->give_integral_UserShareMoneyIntegral($money,$user_2,$user);
+        if ($parent->save()) {
+            return [
+                'code' => 0,
+                'parent_id' => $parent->parent_id
+            ];
+        } else {
+            return [
+                'code' => 1,
+                'parent_id' => 0
+            ];
+        }
+    }
 
     /**
      * @param $parent_id
@@ -914,9 +951,95 @@ class CrontabController extends Controller
      * @param $id
      * 佣金发放
      */
+    private function share_money_integral($id)
+    {
+        $order = Order::findOne($id);
+        //获取下单人
+        $user = User::findOne($order->user_id);
+
+        \Yii::warning('==>' . $id . '1');
+        if ($this->share_setting->level == 0) {
+            return;
+        }
+        \Yii::warning('==>' . $id . '2');
+        if ($order->is_price != 0) {
+            return;
+        }
+//        \Yii::warning('==>'.$id.'3');
+        //一级佣金发放
+
+        if ($this->share_setting->level >= 1) {
+//            \Yii::warning('==>'.$id.'4');
+            $user_1 = User::findOne($order->parent_id);
+            if (!$user_1) {
+                return;
+            }
+
+            //增加积分记录日志，提示消息
+            $this->give_integral_UserShareMoneyIntegral($order->first_price,$user_1,$user);
+//            \Yii::warning('==>'.$id.'5');
+            $user_1->total_integral += $order->first_price;
+            $user_1->integral += $order->first_price;
+            $user_1->total_price += $order->first_price;
+            $user_1->price += $order->first_price;
+            $user_1->save();
+//            \Yii::warning('==>'.$id.'6');
+            UserShareMoneyIntegral::set($order->first_price, $user_1->id, $order->id, 0, 1, $this->store_id);
+//            \Yii::warning('==>'.$id.'7');
+            $order->is_price = 1;
+            $order->save();
+        }
+//        \Yii::warning('==>'.$id.'8');
+//        \Yii::warning('==>'.$id.'9');
+        //二级佣金发放
+        if ($this->share_setting->level >= 2) {
+            $user_2 = User::findOne($order->parent_id_1);
+            if (!$user_2) {
+                if ($user_1->parent_id != 0 && $order->parent_id_1 == 0) {
+                    $res = self::money_integral($user_1->parent_id, $order->second_price,$user,$user_2);
+                    //日志记录
+                    $this->give_integral_UserShareMoneyIntegral($order->second_price,$user_2,$user);
+                    UserShareMoneyIntegral::set($order->second_price, $user_1->parent_id, $order->id, 0, 2, $this->store_id);
+                    if ($res['parent_id'] != 0 && $this->share_setting->level == 3) {
+                        $res = self::money_integral($res['parent_id'], $order->third_price);
+                        UserShareMoneyIntegral::set($order->third_price, $res['parent_id'], $order->id, 0, 3, $this->store_id);
+                    }
+                }
+                return;
+            }
+            $user_2->total_price += $order->second_price;
+            $user_2->price += $order->second_price;
+            $user_2->total_integral += $order->second_price;
+            $user_2->integral += $order->second_price;
+            $user_2->save();
+            UserShareMoneyIntegral::set($order->second_price, $user_2->id, $order->id, 0, $this->store_id);
+        }
+        //三级佣金发放
+        if ($this->share_setting->level >= 3) {
+            $user_3 = User::findOne($order->parent_id_2);
+            if (!$user_3) {
+                if ($user_2->parent_id != 0 && $order->parent_id_2 == 0) {
+                    self::money_integral($user_2->parent_id, $order->third_price,$user,$user_2);
+                    UserShareMoneyIntegral::set($order->third_price, $user_2->parent_id, $order->id, 0, 3, $this->store_id);
+                }
+                return;
+            }
+            $user_3->total_integral += $order->third_price;
+            $user_3->integral += $order->third_price;
+            $user_2->total_price += $order->third_price;
+            $user_2->price += $order->third_price;
+            $user_3->save();
+            UserShareMoneyIntegral::set($order->third_price, $user_3->id, $order->id, 0, $this->store_id);
+        }
+    }
+    /**
+     * @param $id
+     * 佣金发放
+     */
     private function share_money($id)
     {
         $order = Order::findOne($id);
+
         \Yii::warning('==>' . $id . '1');
         if ($this->share_setting->level == 0) {
             return;
@@ -979,6 +1102,36 @@ class CrontabController extends Controller
             $user_3->save();
             UserShareMoney::set($order->third_price, $user_3->id, $order->id, 0, $this->store_id);
         }
+    }
+    /**
+     * 积分发放
+     */
+    private function give_integral_UserShareMoneyIntegral($integral,$user_1,$user)
+    {
+        //积分日志增加
+        $Message = new Message();
+        $Message->user_id = $user_1->id;
+        $Message->content = "推荐".$user->nickname."用户，智能鲜蜂系统奖励：" . $integral . " 积分（已到账）";
+        $Message->integral = $integral;
+        $Message->addtime = time();
+        $Message->username = $user_1->nickname;
+        $Message->operator = 'admin';
+        $Message->store_id = $this->store->id;
+        $Message->operator_id = 0;
+        $Message->save();
+
+
+        //积分日志增加
+        $integralLog = new IntegralLog();
+        $integralLog->user_id = $user_1->id;
+        $integralLog->content = "推荐".$user->nickname."用户，智能鲜蜂系统奖励：" . $integral . " 积分（已到账）";
+        $integralLog->integral = intval($integral);
+        $integralLog->addtime = time();
+        $integralLog->username = $user_1->nickname;
+        $integralLog->operator = 'admin';
+        $integralLog->store_id = $this->store->id;
+        $integralLog->operator_id = 0;
+        $integralLog->save();
     }
 
     /**

@@ -130,7 +130,7 @@ class CashForm extends Model
                     'user_id'=>$user->id
                 ]);
                 //提现减少积分
-                $user->price -= $this->cash;
+//                $user->price -= $this->cash;//去掉
                 $user->integral -= $this->cash;
                 //提现记录
                 //记录日志

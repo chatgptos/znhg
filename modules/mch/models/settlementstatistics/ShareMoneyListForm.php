@@ -16,6 +16,7 @@ use app\models\Shop;
 use app\models\User;
 use app\models\UserShareMoney;
 use app\models\UserShareMoneyDetail;
+use app\models\UserShareMoneyIntegral;
 use app\modules\mch\models\Model;
 use yii\data\Pagination;
 
@@ -96,7 +97,7 @@ class ShareMoneyListForm extends Model
             return $this->getModelError();
         }
 
-        $query = UserShareMoneyDetail::find() ->alias('usm')
+        $query = UserShareMoneyIntegral::find() ->alias('usm')
             ->select('usm.max_user_id,usm.id,o.order_no,o.order_no,o.order_no,o.order_no,u.nickname,us.nickname as us_nickname,o.order_no,usm.user_id,usm.money,usm.order_id,usm.type,usm.status,usm.source,usm.is_delete,usm.addtime as usm_addtime,o.addtime as addtime')
             ->leftJoin(['o' => Order::tableName()], 'o.id=usm.order_id')
             ->leftJoin(['u' => User::tableName()], 'u.id=o.user_id')
