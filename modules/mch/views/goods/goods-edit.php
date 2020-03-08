@@ -931,7 +931,7 @@ if (!$returnUrl)
                                            step="0.01"
                                            min="0" max="100">
                                     <span
-                                        class="input-group-addon percent"><?= $goods->share_type == 1 ? "元" : "%" ?></span>
+                                        class="input-group-addon percent"><?= $goods->share_type == 1 ? "积分" : "%" ?></span>
                                 </div>
                                 <div class="input-group mb-3">
                                     <span class="input-group-addon">二级佣金</span>
@@ -942,7 +942,7 @@ if (!$returnUrl)
                                            step="0.01"
                                            min="0" max="100">
                                     <span
-                                        class="input-group-addon percent"><?= $goods->share_type == 1 ? "元" : "%" ?></span>
+                                        class="input-group-addon percent"><?= $goods->share_type == 1 ? "积分" : "%" ?></span>
                                 </div>
                                 <div class="input-group mb-3">
                                     <span class="input-group-addon">三级佣金</span>
@@ -953,7 +953,7 @@ if (!$returnUrl)
                                            step="0.01"
                                            min="0" max="100">
                                     <span
-                                        class="input-group-addon percent"><?= $goods->share_type == 1 ? "元" : "%" ?></span>
+                                        class="input-group-addon percent"><?= $goods->share_type == 1 ? "积分" : "%" ?></span>
                                 </div>
                                 <div class="fs-sm">
                                     <a href="<?= $urlManager->createUrl(['mch/share/basic']) ?>"

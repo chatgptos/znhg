@@ -59,7 +59,7 @@ $this->params['active_nav_group'] = 5;
                             <div class="input-group">
                                 <input class="form-control" type="number" name="model[first]" min="0"
                                        value="<?= $list->first ? $list->first : 0 ?>">
-                                <span class="input-group-addon percent"><?= $list->price_type == 0 ? '%' : '元' ?></span>
+                                <span class="input-group-addon percent"><?= $list->price_type == 0 ? '%' : '积分' ?></span>
                             </div>
                         </div>
                     </div>
@@ -84,7 +84,7 @@ $this->params['active_nav_group'] = 5;
                                     <input class="form-control" type="number" name="model[second]" min="0"
                                            value="<?= $list->second ? $list->second : 0 ?>">
                                     <span
-                                        class="input-group-addon percent"><?= $list->price_type == 0 ? '%' : '元' ?></span>
+                                        class="input-group-addon percent"><?= $list->price_type == 0 ? '%' : '积分' ?></span>
                                 </div>
                             </div>
                         </div>
@@ -109,7 +109,7 @@ $this->params['active_nav_group'] = 5;
                                         <input class="form-control" type="number" name="model[third]" min="0"
                                                value="<?= $list->third ? $list->third : 0 ?>">
                                         <span
-                                            class="input-group-addon percent"><?= $list->price_type == 0 ? '%' : '元' ?></span>
+                                            class="input-group-addon percent"><?= $list->price_type == 0 ? '%' : '积分' ?></span>
                                     </div>
                                 </div>
                             </div>
