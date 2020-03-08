@@ -132,7 +132,7 @@ $this->params['active_nav_group'] = 5;
     $(document).on('click', '.price_type', function () {
         var price_type = $(this).children('input');
         if ($(price_type).val() == 1) {
-            $('.percent').html('元');
+            $('.percent').html('积分');
         } else {
             $('.percent').html('%');
         }
