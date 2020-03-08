@@ -304,62 +304,62 @@ class IndexController extends Controller
                 "unionid"=>\Yii::$app->user->identity->wechat_open_id,
             );
             $goods= $HuoGui->getDeviceGoods($biz_content);
-            $goods='{
-    "msg":"",
-    "code":200,
-    "success":true,
-    "data":[
-        {
-            "id":2772,
-            "goodsName":"脉动",
-            "imgUrl":"http://images.voidiot.com/Fk6gC_mxXKKv-6RWGbFoFP9NzRVi",
-            "price":4,
-            "baseWeight":644,
-            "count":0,
-            "weight":20,
-            "valuatType":0,
-            "deviceId":100023,
-            "date":null,
-            "trayNum":1,
-            "status":1,
-            "merchantId":10015,
-            "goodsId":1024,
-            "createTime":"2019-08-29 11:57",
-            "updateTime":"2020-01-08 09:55",
-            "ch1":null,
-            "ch2":null,
-            "sourPrice":0,
-            "discount":0,
-            "avgWeight":30,
-            "categoryId":1000
-        },
-        {
-            "id":2791,
-            "goodsName":"景田",
-            "imgUrl":"http://images.voidiot.com/FlPGbw1lBclUdP6MU5Orz1OExgff",
-            "price":2,
-            "baseWeight":600,
-            "count":0,
-            "weight":20,
-            "valuatType":0,
-            "deviceId":100023,
-            "date":"20190829",
-            "trayNum":2,
-            "status":1,
-            "merchantId":10015,
-            "goodsId":1026,
-            "createTime":"2019-08-29 11:57",
-            "updateTime":"2019-12-26 12:34",
-            "ch1":null,
-            "ch2":null,
-            "sourPrice":0,
-            "discount":0,
-            "avgWeight":30,
-            "categoryId":null
-        }
-    ],
-    "fail":false
-}';
+//            $goods='{
+//    "msg":"",
+//    "code":200,
+//    "success":true,
+//    "data":[
+//        {
+//            "id":2772,
+//            "goodsName":"脉动",
+//            "imgUrl":"http://images.voidiot.com/Fk6gC_mxXKKv-6RWGbFoFP9NzRVi",
+//            "price":4,
+//            "baseWeight":644,
+//            "count":0,
+//            "weight":20,
+//            "valuatType":0,
+//            "deviceId":100023,
+//            "date":null,
+//            "trayNum":1,
+//            "status":1,
+//            "merchantId":10015,
+//            "goodsId":1024,
+//            "createTime":"2019-08-29 11:57",
+//            "updateTime":"2020-01-08 09:55",
+//            "ch1":null,
+//            "ch2":null,
+//            "sourPrice":0,
+//            "discount":0,
+//            "avgWeight":30,
+//            "categoryId":1000
+//        },
+//        {
+//            "id":2791,
+//            "goodsName":"景田",
+//            "imgUrl":"http://images.voidiot.com/FlPGbw1lBclUdP6MU5Orz1OExgff",
+//            "price":2,
+//            "baseWeight":600,
+//            "count":0,
+//            "weight":20,
+//            "valuatType":0,
+//            "deviceId":100023,
+//            "date":"20190829",
+//            "trayNum":2,
+//            "status":1,
+//            "merchantId":10015,
+//            "goodsId":1026,
+//            "createTime":"2019-08-29 11:57",
+//            "updateTime":"2019-12-26 12:34",
+//            "ch1":null,
+//            "ch2":null,
+//            "sourPrice":0,
+//            "discount":0,
+//            "avgWeight":30,
+//            "categoryId":null
+//        }
+//    ],
+//    "fail":false
+//}';
 
             $res =json_decode($goods,true);
             $goods=[];
