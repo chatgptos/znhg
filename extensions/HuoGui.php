@@ -45,8 +45,8 @@ class HuoGui
 
         );
         $pay_data['sign'] = $this->makeSignHG($pay_data['biz_content']);
-        $url="https://api.voidiot.com/open-api/syncUserInfo";//同步用户数据可以开门
-//        $url="https://api.voidiot.com/open-api/getDeviceList";//获取货柜列表
+//        $url="https://api.voidiot.com/open-api/syncUserInfo";//同步用户数据可以开门
+        $url="https://api.voidiot.com/open-api/getDeviceList";//获取货柜列表
 //        $url="https://api.voidiot.com/open-api/getDeviceById";//获取货柜详情
 //        $url="https://api.voidiot.com/open-api/completeOrder";//完结订单传入开门id记录
 //        $url="https://api.voidiot.com/open-api/openDoor";//取货开门
@@ -71,6 +71,11 @@ class HuoGui
 
     public function getDeviceList($biz_content)
     {
+        if(!$biz_content){
+            $biz_content=$biz_content=array(
+                "deviceId"=>100023,//必须要有设备
+            );
+        }
         $res = $this->setPostBodyCommon($biz_content,'getDeviceList');
         return $res;
     }
@@ -136,12 +141,18 @@ class HuoGui
     {
         $pay_data = array(
             'appId' =>$this->app_id,
-            "timestamp"=>date('Y-m-d His', time()),
+            "timestamp"=>date('Y-m-d H:i:s', time()),
             'biz_content' =>$biz_content
         );
-        $pay_data['sign'] = $this->makeSignHG($pay_data['biz_content']);
+
+
         $url=$this->api.'/'.$uri;//同步用户数据可以开门
-        $pay_data['biz_content'] = json_encode($pay_data['biz_content'],true);
+        if($biz_content){
+            $pay_data['sign'] = $this->makeSignHG($pay_data['biz_content']);
+            $pay_data['biz_content'] = json_encode($pay_data['biz_content'],true);
+        }else{
+            unset($pay_data['biz_content']);
+        }
         $data  = json_encode($pay_data,true);
         $res= self::post($url,$data);
         $res = json_decode($res,true);

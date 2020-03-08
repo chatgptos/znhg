@@ -948,6 +948,13 @@ class MchMenu
                             'mch/store/shop-edit',
                         ],
                     ],
+                    [
+                        'name' => '货柜设备',
+                        'route' => 'mch/store/huogui',
+                        'sub' => [
+                            'mch/store/huogui-edit',
+                        ],
+                    ],
                 ],
             ],
             [

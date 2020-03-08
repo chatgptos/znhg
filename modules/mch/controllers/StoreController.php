@@ -7,6 +7,7 @@
 
 namespace app\modules\mch\controllers;
 
+use app\modules\mch\models\HuoguiForm;
 use Yii;
 use app\extensions\FileHelper;
 use app\models\AppNavbar;
@@ -1019,5 +1020,73 @@ class StoreController extends Controller
                 'model' => $this->wechat_app,
             ]);
         }
+    }
+
+
+
+
+    public function actionHuogui()
+    {
+        $form = new HuoguiForm();
+        $form->store_id = $this->store->id;
+        if (Yii::$app->request->isPost) {
+            $form->attributes = Yii::$app->request->post();
+            $this->renderJson($form->save());
+        }
+        $form->limit = 20;
+        $arr = $form->getList();
+        return $this->render('huogui', [
+            'row_count' => $arr['row_count'],
+            'pagination' => $arr['pagination'],
+            'list' => $arr['list'],
+        ]);
+    }
+
+    public function actionHuoguiDel($id = null)
+    {
+        $shop = Shop::findOne(['id' => $id, 'store_id' => $this->store->id, 'is_delete' => 0]);
+        if (!$shop) {
+            $this->renderJson([
+                'code' => 1,
+                'msg' => '网络异常'
+            ]);
+        }
+        $user_exit = User::find()->where(['store_id' => $this->store->id, 'is_delete' => 0, 'shop_id' => $id])->exists();
+        if ($user_exit) {
+            $this->renderJson([
+                'code' => 1,
+                'msg' => '请先删除门店下的核销员'
+            ]);
+        }
+        $shop->is_delete = 1;
+        if ($shop->save()) {
+            $this->renderJson([
+                'code' => 0,
+                'msg' => '成功'
+            ]);
+        } else {
+            $this->renderJson([
+                'code' => 1,
+                'msg' => '网络异常'
+            ]);
+        }
+    }
+
+    public function actionHuoguiEdit($id = null)
+    {
+        $shop = Shop::findOne(['id' => $id, 'store_id' => $this->store->id, 'is_delete' => 0]);
+        if (!$shop) {
+            $shop = new Shop();
+        }
+        if (Yii::$app->request->isPost) {
+            $form = new HuoguiForm();
+            $form->store_id = $this->store->id;
+            $form->shop = $shop;
+            $form->attributes = Yii::$app->request->post();
+            $this->renderJson($form->save());
+        }
+        return $this->render('huogui-edit', [
+            'shop' => $shop
+        ]);
     }
 }
