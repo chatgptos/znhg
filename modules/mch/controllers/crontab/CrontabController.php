@@ -1109,6 +1109,9 @@ class CrontabController extends Controller
      */
     private function give_integral_UserShareMoneyIntegral($integral,$user_1,$user)
     {
+        if(!$integral){
+            return ;
+        }
         //积分日志增加
         $Message = new Message();
         $Message->user_id = $user_1->id;

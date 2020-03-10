@@ -566,7 +566,7 @@ class MchMenu
                                 ]
                             ],
                             [
-                                'name' => '返点佣金明细',
+                                'name' => '直推奖返点',
                                 'route' => 'mch/settlementstatistics/choujiang/sharemoneydetail',
                                 'sub' => [
                                     'mch/settlementstatistics/data/goods',
