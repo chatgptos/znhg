@@ -755,7 +755,8 @@ class CrontabController extends Controller
         $user = User::findOne($id);
         //计算佣金
         $level= $level+1;
-        if($user['parent_id']){
+        $user_1 = User::findOne($user['parent_id']);
+        if($user['parent_id'] && $user_1){
 //            echo $money."<br/>|maxlevel";
 //            echo $maxlevel."<br/>";
 //            echo $level."<br/>";
