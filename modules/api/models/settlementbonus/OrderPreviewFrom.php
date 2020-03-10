@@ -202,11 +202,11 @@ class OrderPreviewFrom extends Model
                 ['<=', 'addtime', strtotime(date('Y-m-t', strtotime('-1 month')))],
             ]);
 
-            if(!$UserShareMoney){
+            if(!$UserShareMoney|| $UserShareMoney <1){
                 $p->rollBack();
                 return [
                     'code'  => 1,
-                    'msg'   => '暂时无奖励',
+                    'msg'   => '暂时无奖励或小于1',
                 ];
             }
             $money = UserShareMoney::find()->alias('usm')

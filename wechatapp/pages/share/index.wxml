@@ -48,7 +48,6 @@
     <!--<view class="flex-x-center list-content">-->
       <!--<view class="list-red">{{order_money}}</view>元</view>-->
   <!--</navigator>-->
-
   <navigator class="item border-bottom border-between" url="/pages/share-qrcode/share-qrcode">
     <view class="list-img flex-x-center">
       <image class="img" src="/images/img-share-qrcode.png"></image>
@@ -80,6 +79,14 @@
     </view>
     <view class="flex-x-center list-content">推广二维码</view>
   </navigator>-->
-  <view class="item border-bottom">
-  </view>
+
+
+  <navigator class="item border-bottom border-between" url="/pages/share-order/share-order">
+    <view class="list-img flex-x-center">
+      <image class="img" src="../../images/znxflogo.jpg" ></image>
+    </view>
+    <view class="flex-x-center list-content">直推订单</view>
+    <view class="flex-x-center list-content">
+      <view class="list-red">{{order_money}}</view>积分</view>
+  </navigator>
 </view>

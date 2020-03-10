@@ -9,6 +9,7 @@ namespace app\modules\mch\models\settlementbonus;
 
 
 use app\models\IntegralLog;
+use app\models\Message;
 use app\models\OrderDetail;
 use app\models\User;
 use app\models\UserShareMoney;
@@ -128,6 +129,19 @@ class OrderClerkForm extends Model
         $integralLog->store_id = $this->store_id;
         $integralLog->operator_id = 0;
         $integralLog->save();
+
+
+        //积分日志增加
+        $Message = new Message();
+        $Message->user_id = $user->id;
+        $Message->content = "奖励".$user->nickname."用户，智能鲜蜂系统奖励：" . $integral . " 积分（已到账）";
+        $Message->integral = $integral;
+        $Message->addtime = time();
+        $Message->username = $user->nickname;
+        $Message->operator = 'admin';
+        $Message->store_id = $this->store_id;
+        $Message->operator_id = 0;
+        $Message->save();
 
 
         if ($user->save() && $order->save()) {

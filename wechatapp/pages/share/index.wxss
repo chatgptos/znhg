@@ -2,7 +2,7 @@
 
 .info {
   width: 100%;
-  background-color: #ff4544;
+  background-color: #68C3B2;
   padding: 20rpx 24rpx 0 24rpx;
   color: #fff;
 }
