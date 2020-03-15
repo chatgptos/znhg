@@ -236,32 +236,32 @@ $this->params['active_nav_group'] = 3;
                             <tr>
                                 <td>直推</td>
                                 <td class="order-tab-5">
-                                    <?php if ($order_item['is_price'] == 1): ?>
+                                    <?php if ($order['is_price'] == 1): ?>
                                         <div>
                                             直推奖发放状态：<span class="badge badge-success">奖金已发放</span>
                                         </div>
                                     <?php endif; ?>
                                     <div flex="dir:left">
                                         <div class="p-2 text-left">
-                                            <div>昵称：<?= $order_item['share']['nickname'] ?></div>
-                                            <div><?= $order_item['share']['name'] ? "姓名：" . $order_item['share']['name'] : "" ?></div>
-                                            <div><?= $order_item['share']['mobile'] ? "电话：" . $order_item['share']['mobile'] : "" ?></div>
-                                            <div>一级佣金：<?= $order_item['first_price'] ?>积分</div>
+                                            <div>昵称：<?= $order['share']['nickname'] ?></div>
+                                            <div><?= $order['share']['name'] ? "姓名：" . $order['share']['name'] : "" ?></div>
+                                            <div><?= $order['share']['mobile'] ? "电话：" . $order['share']['mobile'] : "" ?></div>
+                                            <div>一级佣金：<?= $order['first_price'] ?>积分</div>
                                         </div>
-                                        <?php if ($order_item['share_1']): ?>
+                                        <?php if ($order['share_1']): ?>
                                             <div class="p-2 text-left">
-                                                <div>昵称：<?= $order_item['share_1']['nickname'] ?></div>
-                                                <div><?= $order_item['share_1']['name'] ? "姓名：" . $order_item['share_1']['name'] : "" ?></div>
-                                                <div><?= $order_item['share_1']['mobile'] ? "电话：" . $order_item['share_1']['mobile'] : "" ?></div>
-                                                <div>二级佣金：<?= $order_item['second_price'] ?>积分</div>
+                                                <div>昵称：<?= $order['share_1']['nickname'] ?></div>
+                                                <div><?= $order['share_1']['name'] ? "姓名：" . $order['share_1']['name'] : "" ?></div>
+                                                <div><?= $order['share_1']['mobile'] ? "电话：" . $order['share_1']['mobile'] : "" ?></div>
+                                                <div>二级佣金：<?= $order['second_price'] ?>积分</div>
                                             </div>
                                         <?php endif; ?>
-                                        <?php if ($order_item['share_2']): ?>
+                                        <?php if ($order['share_2']): ?>
                                             <div class="p-2 text-left">
-                                                <div>昵称：<?= $order_item['share_2']['nickname'] ?></div>
-                                                <div><?= $order_item['share_2']['name'] ? "姓名：" . $order_item['share_2']['name'] : "" ?></div>
-                                                <div><?= $order_item['share_2']['mobile'] ? "电话：" . $order_item['share_2']['mobile'] : "" ?></div>
-                                                <div>三级佣金：<?= $order_item['third_price'] ?>积分</div>
+                                                <div>昵称：<?= $order['share_2']['nickname'] ?></div>
+                                                <div><?= $order['share_2']['name'] ? "姓名：" . $order['share_2']['name'] : "" ?></div>
+                                                <div><?= $order['share_2']['mobile'] ? "电话：" . $order['share_2']['mobile'] : "" ?></div>
+                                                <div>三级佣金：<?= $order['third_price'] ?>积分</div>
                                             </div>
                                         <?php endif; ?>
                                     </div>
