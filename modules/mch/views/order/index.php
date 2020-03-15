@@ -240,6 +240,7 @@ isset($Gets['shop_id']) && $condition['shop_id'] = $Gets['shop_id'];
                 <th class="order-tab-2">金额</th>
                 <th class="order-tab-3">实际付款</th>
                 <th class="order-tab-4">订单状态</th>
+                <th class="order-tab-4">直推奖</th>
                 <th class="order-tab-5">操作</th>
             </tr>
         </table>
@@ -384,8 +385,39 @@ isset($Gets['shop_id']) && $condition['shop_id'] = $Gets['shop_id'];
                                     <?php endif; ?>
                                 </div>
                             <?php endif; ?>
-
+                            <?php if ($order_item['is_price'] == 1): ?>
+                                <div>
+                                    直推奖发放状态：<span class="badge badge-success">奖金已发放</span>
+                                </div>
+                            <?php endif; ?>
                         </td>
+                        <td class="order-tab-5">
+                            <div flex="dir:left">
+                                <div class="p-2 text-left">
+                                    <div>昵称：<?= $order_item['share']['nickname'] ?></div>
+                                    <div><?= $order_item['share']['name'] ? "姓名：" . $order_item['share']['name'] : "" ?></div>
+                                    <div><?= $order_item['share']['mobile'] ? "电话：" . $order_item['share']['mobile'] : "" ?></div>
+                                    <div>一级佣金：<?= $order_item['first_price'] ?>积分</div>
+                                </div>
+                                <?php if ($order_item['share_1']): ?>
+                                    <div class="p-2 text-left">
+                                        <div>昵称：<?= $order_item['share_1']['nickname'] ?></div>
+                                        <div><?= $order_item['share_1']['name'] ? "姓名：" . $order_item['share_1']['name'] : "" ?></div>
+                                        <div><?= $order_item['share_1']['mobile'] ? "电话：" . $order_item['share_1']['mobile'] : "" ?></div>
+                                        <div>二级佣金：<?= $order_item['second_price'] ?>积分</div>
+                                    </div>
+                                <?php endif; ?>
+                                <?php if ($order_item['share_2']): ?>
+                                    <div class="p-2 text-left">
+                                        <div>昵称：<?= $order_item['share_2']['nickname'] ?></div>
+                                        <div><?= $order_item['share_2']['name'] ? "姓名：" . $order_item['share_2']['name'] : "" ?></div>
+                                        <div><?= $order_item['share_2']['mobile'] ? "电话：" . $order_item['share_2']['mobile'] : "" ?></div>
+                                        <div>三级佣金：<?= $order_item['third_price'] ?>积分</div>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </td>
+
                         <td class="order-tab-5">
                             <?php if ($order_item['is_pay'] == 0 && $order_item['is_cancel'] == 0): ?>
                                 <a class="btn btn-sm btn-primary update" href="javascript:" data-toggle="modal"

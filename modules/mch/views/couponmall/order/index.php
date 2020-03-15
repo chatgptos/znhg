@@ -243,7 +243,11 @@ $condition = [
                                 <div class="goods-info">
                                     <div class="goods-name"><?= $order_item['goods_name'] ?></div>
                                     <div class="fs-sm">小计：
-                                        <span class="text-danger"><?= $order_item['total_price'] ?>元</span></div>
+                                        <span class="text-danger"><?= $order_item['total_price'] ?>元</span>
+                                        <span class="text-danger"><?= $order_item['integral'] ?>积分</span>
+                                        <span class="text-danger"><?= $order_item['coupon'] ?>优惠券</span>
+
+                                    </div>
                                 </div>
                             </div>
                         </td>
@@ -255,6 +259,8 @@ $condition = [
                         </td>
                         <td class="order-tab-3">
                             <div><?= $order_item['pay_price'] ?>元</div>
+                            <span class="text-danger"><?= $order_item['integral'] ?>积分</span>
+                            <span class="text-danger"><?= $order_item['coupon'] ?>优惠券</span>
                         </td>
                         <td class="order-tab-4">
                             <div>
