@@ -185,6 +185,23 @@ class OrderListForm extends Model
                 $list[$i]['refund'] = $order_refund->status;
             }
             $list[$i]['integral'] = json_decode($item['integral'], true);
+
+            //积分的等级
+            $share = Share::find()->alias('s')->where(['s.user_id' => $item['parent_id'], 's.store_id' => $this->store_id, 's.is_delete' => 0])
+                ->leftJoin(User::tableName() . ' u', 'u.id=s.user_id')->select([
+                    'u.nickname', 's.name', 's.mobile'
+                ])->asArray()->one();
+            $list[$i]['share'] = $share;
+            $share_1 = Share::find()->alias('s')->where(['s.user_id' => $item['parent_id_1'], 's.store_id' => $this->store_id, 's.is_delete' => 0])
+                ->leftJoin(User::tableName() . ' u', 'u.id=s.user_id')->select([
+                    'u.nickname', 's.name', 's.mobile'
+                ])->asArray()->one();
+            $list[$i]['share_1'] = $share_1;
+            $share_2 = Share::find()->alias('s')->where(['s.user_id' => $item['parent_id_2'], 's.store_id' => $this->store_id, 's.is_delete' => 0])
+                ->leftJoin(User::tableName() . ' u', 'u.id=s.user_id')->select([
+                    'u.nickname', 's.name', 's.mobile'
+                ])->asArray()->one();
+            $list[$i]['share_2'] = $share_2;
         }
         return [
             'row_count' => $count,

@@ -11,6 +11,7 @@ namespace app\modules\mch\controllers;
 use app\models\Express;
 use app\models\Order;
 use app\models\OrderRefund;
+use app\models\Share;
 use app\models\Shop;
 use app\models\User;
 use app\models\WechatTplMsgSender;
@@ -205,6 +206,24 @@ class OrderController extends Controller
             $this->redirect($url)->send();
         }
         $order['integral_arr'] = json_decode($order['integral'], true);
+
+        //直推
+        $share = Share::find()->alias('s')->where(['s.user_id' => $order['parent_id'], 's.store_id' => $this->store_id, 's.is_delete' => 0])
+            ->leftJoin(User::tableName() . ' u', 'u.id=s.user_id')->select([
+                'u.nickname', 's.name', 's.mobile'
+            ])->asArray()->one();
+        $order['share'] = $share;
+        $share_1 = Share::find()->alias('s')->where(['s.user_id' => $order['parent_id_1'], 's.store_id' => $this->store_id, 's.is_delete' => 0])
+            ->leftJoin(User::tableName() . ' u', 'u.id=s.user_id')->select([
+                'u.nickname', 's.name', 's.mobile'
+            ])->asArray()->one();
+        $order['share_1'] = $share_1;
+        $share_2 = Share::find()->alias('s')->where(['s.user_id' => $order['parent_id_2'], 's.store_id' => $this->store_id, 's.is_delete' => 0])
+            ->leftJoin(User::tableName() . ' u', 'u.id=s.user_id')->select([
+                'u.nickname', 's.name', 's.mobile'
+            ])->asArray()->one();
+        $order['share_2'] = $share_2;
+
         $form = new OrderListForm();
         $goods_list = $form->getOrderGoodsList($order['id']);
         $user = User::find()->where(['id' => $order['user_id'], 'store_id' => $this->store->id])->asArray()->one();
