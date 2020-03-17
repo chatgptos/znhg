@@ -120,7 +120,7 @@ class HuoguiForm extends Model
                     "deviceId"=>$value['id'],//必须要有设备
                 );
                 $res= $HuoGui->getDeviceGoods($biz_content);
-                $list['good_list']=$res['data'];
+                $list[$index]['good_list']=$res['data'];
         }
 
 
