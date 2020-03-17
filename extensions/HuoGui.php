@@ -13,9 +13,9 @@ use app\models\Store;
 class HuoGui
 {
 
-    public $app_id='2019082351351';
+    public $app_id='2020031723148';
     public $order_id;
-    public $key='DE448FA75DAB07D141343D590BBE679D';
+    public $key='p6GHYMDpkj2BiiIzQMA6RLzgbEYoJkcm';
     public $api='https://api.voidiot.com/open-api';
     public $user;
 

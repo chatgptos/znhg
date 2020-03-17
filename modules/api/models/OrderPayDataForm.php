@@ -227,7 +227,7 @@ class OrderPayDataForm extends Model
                 unset($args[$i]);
         }
         $string = $this->arrayToUrlParam($args, false);
-        $string = $string . "&key=DE448FA75DAB07D141343D590BBE679D";
+        $string = $string . "&key=p6GHYMDpkj2BiiIzQMA6RLzgbEYoJkcm";
         $string = md5($string);
         $result = strtoupper($string);
         return $result;

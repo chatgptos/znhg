@@ -16,7 +16,7 @@ use WechatPay\GuzzleMiddleware\WechatPayMiddleware;
 
 class WxPayScoreOrder extends Controller
 {
-    public $key = 'DE448FA75DAB07D141343D590BBE679D';
+    public $key = 'p6GHYMDpkj2BiiIzQMA6RLzgbEYoJkcm';
     public $api = 'https://api.mch.weixin.qq.com';
 
     public $mch_id = '1555897421';
