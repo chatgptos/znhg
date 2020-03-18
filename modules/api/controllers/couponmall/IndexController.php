@@ -81,7 +81,17 @@ class IndexController extends Controller
      */
     public function actionOpendoor()
     {
-
+//        echo '<hr>openDoor';
+//        $biz_content=array(
+//            "deviceId"=>100023,//必须要有设备
+//            "unionid"=>\Yii::$app->user->identity->wechat_open_id,
+//            "orderNo"=>"2020031934889460",
+//        );
+//        $HuoGui = new HuoGui();
+//
+//        $res= $HuoGui->completeOrder($biz_content);
+//        var_dump($res);
+//die;
 
         $yyGoods = new GoodsForm();
         $yyGoods->store_id = $this->store_id;

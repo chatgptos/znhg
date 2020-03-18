@@ -158,7 +158,7 @@ class CartListForm extends Model
         //开始判断逻辑
         if ($res['success']==true && $res['code']==200){
             if($isClose){
-                usleep(100000);
+//                usleep(9000000);
                 //这是管理员补货标记 过滤返回规定格式参数
                 if(empty($isreplenish)){
                     $isreplenish=false;
@@ -177,6 +177,26 @@ class CartListForm extends Model
                         ],
                     ];
                 }
+
+                //当商品数量大于0时候 有商品没有订单
+                if(count($list)>0){
+                    $HuoGui = new HuoGui();
+                    //成功关门查询订单
+                    $res= $HuoGui->getOrdersByOpenDoorId($biz_content);
+                    if ($res['success']==false) {
+                        return [
+                            'code' => 0,
+                            'msg' => 'success',
+                            'data' => [
+                                'row_count' => count($new_item),
+                                'page_count' => 10,
+                                'list' => $new_list,
+                            ],
+                        ];
+                    }
+                }
+
+
 
                 //如果是用户继续往下走
                 //如果关门 订单显示

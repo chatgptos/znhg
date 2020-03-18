@@ -128,6 +128,7 @@ class OrderListForm extends Model
         //成功关门查询订单
         $res= $HuoGui->getOrdersByOpenDoorId($biz_content);
         //开始判断逻辑
+        $res1=$res;
         if ($res['success']==true && $res['code']==200) {
             $data = $res['data'];
             $goodsList = $data['goodsList'];
@@ -303,6 +304,7 @@ class OrderListForm extends Model
                     'isClose' => true,
                     'opendoorRecordId' => $opendoorRecordId,
                     'data' => $res,
+                    'res' => $res1,
                     'isreplenish'=>true,//跳转到首页
                     'order_no' => $out_order_no,
                 ],
