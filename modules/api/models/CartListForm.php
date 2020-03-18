@@ -125,44 +125,6 @@ class CartListForm extends Model
         }else{
             $res= $HuoGui->getSelectGoods($biz_content);
         }
-//        $res='{
-//                "msg":"",
-//                "code":200,
-//                "success":true,
-//                "data":{
-//                    "isClose":true,
-//                    "goodsList":[
-//                        {
-//                            "goodsName":"瓶装饮料",
-//                            "imgUrl":"http://images.voidiot.com/Foj2Z9bLgpPuueLMnKd5e6RN10oh",
-//                            "price":0.02,
-//                            "count":2,
-//                            "valuatType":0,
-//                            "weight":1070,
-//                            "baseWeight":550,
-//                            "deviceId":100023,
-//                            "trayNum":4,
-//                            "sourPrice":0,
-//                            "discount":null
-//                        },{
-//                            "goodsName":"瓶装饮料",
-//                            "imgUrl":"http://images.voidiot.com/Foj2Z9bLgpPuueLMnKd5e6RN10oh",
-//                            "price":0.01,
-//                            "count":1,
-//                            "valuatType":0,
-//                            "weight":1070,
-//                            "baseWeight":550,
-//                            "deviceId":100023,
-//                            "trayNum":4,
-//                            "sourPrice":0,
-//                            "discount":null
-//                        }
-//                    ]
-//                },
-//                "fail":false
-//            }';
-//
-//        $res =json_decode($res,true);
 
         //加工返回参数
         $data=$res['data'];
@@ -196,6 +158,7 @@ class CartListForm extends Model
         //开始判断逻辑
         if ($res['success']==true && $res['code']==200){
             if($isClose){
+                usleep(100000);
                 //这是管理员补货标记 过滤返回规定格式参数
                 if(empty($isreplenish)){
                     $isreplenish=false;
