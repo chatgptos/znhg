@@ -133,14 +133,19 @@ class CartListForm extends Model
         //购物车显示
         $new_list = [];
         foreach ($list as $item) {
-            $attr_list[] = [
-                'attr_group_name'=>'来源',
-                'attr_name'=>'智能货柜',
-            ];
             $attr_num = 99;
             $num =$item['count'];
             $goods_pic =$item['imgUrl'];
             if($num>0){
+                $attr_list[] = [
+                    'attr_group_name'=>'来源',
+                    'attr_name'=>'智能货柜',
+                    '单价'=>$item['price'],
+                ];
+                $attr_list[] = [
+                    'attr_group_name'=>'单价',
+                    'attr_name'=>$item['price'],
+                ];
                 $new_item = (object)[
                     'cart_id' => $item['categoryId'],
                     'goods_id' =>$item['goodsId'],
@@ -148,7 +153,7 @@ class CartListForm extends Model
                     'goods_pic' => $goods_pic,
                     'num' =>$num,
                     'attr_list' => $attr_list,
-                    'price' =>$item['price'],
+                    'price' =>$item['price']*$num,
                     'max_num' => $attr_num,
                     'disabled' => ($num > $attr_num) ? true : false,
                 ];

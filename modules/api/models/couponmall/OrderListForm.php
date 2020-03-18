@@ -158,7 +158,7 @@ class OrderListForm extends Model
 
 
                     'name' => '券池独享福利:'.$item['goodsName'],
-                    'amount' =>intval( $item['price']*100),
+                    'amount' =>intval( $item['price']*$num*100),
                     'description' => '只属于你的:'.$item['goodsName'],
                     'count' => $num,
                 ];
@@ -221,6 +221,7 @@ class OrderListForm extends Model
                                 'msg'   => '未创建订单1',
                                 'success'  => false,
                                 'data'  => $res,
+                                'list'  => $list,
                             ];
                         }
                     }

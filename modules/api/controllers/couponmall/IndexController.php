@@ -81,6 +81,12 @@ class IndexController extends Controller
      */
     public function actionOpendoor()
     {
+
+////
+//            $WxPayScoreOrder = new WxPayScoreOrder();
+//            $res= $WxPayScoreOrder->cancel('WxScorePay2020031901194396762');//补货开门
+//        var_dump($res);die;
+//die;
 //        echo '<hr>openDoor';
 //        $biz_content=array(
 //            "deviceId"=>100023,//必须要有设备
@@ -242,7 +248,7 @@ class IndexController extends Controller
                 }else{
                     return json_encode([
                         'code'  => 1,
-                        'msg'   => '升级中',
+                        'msg'   => '升级中或有未完结订单',
                         'success'   => false,
                         'data'  =>array(
                             'isOpen'=>false,
