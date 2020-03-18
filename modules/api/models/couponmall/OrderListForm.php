@@ -257,7 +257,7 @@ class OrderListForm extends Model
 
                     $biz_content=array(
                         "unionid"=>\Yii::$app->user->identity->wechat_open_id,
-                        "orderNo"=>$order_no,
+                        "orderNo"=>$data['orderNo'],
                     );
                     //完结货柜订单
                     $res= $HuoGui->completeOrder($biz_content);

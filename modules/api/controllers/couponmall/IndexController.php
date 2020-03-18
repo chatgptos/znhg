@@ -175,7 +175,7 @@ class IndexController extends Controller
                 }else{
                     return json_encode([
                         'code'  => 1,
-                        'msg'   => '升级中',
+                        'msg'   => '升级中或有未完结订单',
                         'success'   => false,
                         'data'  =>array(
                             'isOpen'=>false,
