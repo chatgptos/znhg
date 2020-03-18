@@ -140,19 +140,20 @@ class CartListForm extends Model
             $attr_num = 99;
             $num =$item['count'];
             $goods_pic =$item['imgUrl'];
-            $new_item = (object)[
-                'cart_id' => $item['categoryId'],
-                'goods_id' =>$item['goodsId'],
-                'goods_name' =>$item['goodsName'],
-                'goods_pic' => $goods_pic,
-                'num' =>$num,
-                'attr_list' => $attr_list,
-                'price' =>$item['price'],
-                'max_num' => $attr_num,
-                'disabled' => ($num > $attr_num) ? true : false,
-            ];
-
-            $new_list[] = $new_item;
+            if($num>0){
+                $new_item = (object)[
+                    'cart_id' => $item['categoryId'],
+                    'goods_id' =>$item['goodsId'],
+                    'goods_name' =>$item['goodsName'],
+                    'goods_pic' => $goods_pic,
+                    'num' =>$num,
+                    'attr_list' => $attr_list,
+                    'price' =>$item['price'],
+                    'max_num' => $attr_num,
+                    'disabled' => ($num > $attr_num) ? true : false,
+                ];
+                $new_list[] = $new_item;
+            }
         }
 
         //开始判断逻辑
