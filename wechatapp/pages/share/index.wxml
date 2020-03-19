@@ -83,7 +83,7 @@
 
   <navigator class="item border-bottom border-between" url="/pages/share-order/share-order">
     <view class="list-img flex-x-center">
-      <image class="img" src="../../images/znxflogo.jpg" ></image>
+      <image class="img" src="/images/img-share-order.png" ></image>
     </view>
     <view class="flex-x-center list-content">直推订单</view>
     <view class="flex-x-center list-content">

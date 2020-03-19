@@ -11,6 +11,7 @@ Page({
     data: {
         score: [1, 2, 3, 4, 5],
         goodshg:[],
+        hg_id:0,
     },
 
     /**
@@ -209,7 +210,18 @@ Page({
         wx.scanCode({
             onlyFromCamera: true,
             success(res) {
+                var page =this;
                 console.log(res.result)
+                var scan_url = res.result;
+                // var scan_url = decodeURIComponent(options.q);
+                var hg_id = scan_url.match(/\d+/) //提取链接中的数字，也就是链接中的参数id，/\d+/ 为正则表达式
+                console.log(hg_id[0]);
+                if(hg_id[0]){
+                    wx.redirectTo({
+                        url: "/pages/huogui-detail/huogui-detail?hg_id=" + hg_id[0],
+                    });
+
+                }
             }
         })
     },
