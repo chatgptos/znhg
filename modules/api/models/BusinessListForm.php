@@ -104,6 +104,7 @@ class BusinessListForm extends Model
                 'page_count' => $pagination->pageCount,
                 'pagination' => $pagination,
                 'list' => $list,
+                'is_hongbao' => $getHongbao,
             ],
         ];
     }
@@ -176,10 +177,10 @@ class BusinessListForm extends Model
             $score +=10;
         }
         $gailv=rand($score,60);
-        if($gailv>40){//概率大 抽奖看到
-            return true;
+        if($gailv>50){//概率大 抽奖看到
+            return 1;
         }else{
-            return false;
+            return 0;
         }
     }
 }
