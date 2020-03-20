@@ -9,6 +9,7 @@ namespace app\modules\api\models;
 
 use app\extensions\getInfo;
 use app\models\Business;
+use app\models\CashWechatTplSender;
 use app\models\Favorite;
 use app\models\Goods;
 use app\models\GoodsPic;
@@ -50,6 +51,9 @@ class BusinessForm extends Model
         $pic_list['avatar_url'] =  User::findOne(['id' => $goods['user_id'], 'store_id' => $this->store_id])->avatar_url;
         $pic_list['nickname'] =  User::findOne(['id' => $goods['user_id'], 'store_id' => $this->store_id])->nickname;
 
+        //新增点击发放奖金
+//        $this->Hongbao(0,$goods['user_id'],false,false);
+
 
         $is_favorite = 0;
         if ($this->user_id) {
@@ -78,6 +82,113 @@ class BusinessForm extends Model
             ],
         ];
     }
+
+    /**
+     * 排序类型$sort   1--综合排序 2--销量排序
+     *
+     * 发放金额   操作目标
+     */
+    public function Hongbao($price,$useridAm,$is_parent=false,$isAm=false)
+    {
+        //目标用户 操作人
+        $user = User::findOne(['id' => $this->user_id]);
+
+        //广告
+        $guanggao = array(
+            '1' => "(兑换生红包,金额:券池广告点击次数/千*人)",
+            '2' => "(兑换必有红包,去找券池找吧--就看你了)",
+            '3' => "(有人兑换就有红包,找到就归你--小红留言)",
+            '4' => "(你的推荐人也有红包,赶紧萌新--小红留言)"
+//            '1' => "(每次兑换产生红包一个,金额为券池广告点击次数/1000*人数)"
+        );
+        $ad = $guanggao[array_rand($guanggao)];
+
+        //操作目标
+        $user_from = User::findOne(['id' => $useridAm]);
+        if(!$price){
+            $price = 0.3;
+        }
+        $data = [
+            'partner_trade_no' => md5(uniqid()),
+            'openid' => $user->wechat_open_id,
+            'amount' =>$price * 100,
+            'desc' => '点击'.$this->r_mb_str($user_from->nickname,3).'优惠券得红包'.$ad
+        ];
+        $res = $this->wechat->pay->transfers($data);
+
+        if ($res['result_code'] != 'SUCCESS') {
+            return json_encode([
+                'code' => 1,
+                'msg' => $res['err_code_des'],
+                'data' => $res
+            ], JSON_UNESCAPED_UNICODE);
+        }
+
+        if($isAm){
+            $data_from = [
+                'partner_trade_no' => md5(uniqid()),
+                'openid' => $user_from->wechat_open_id,
+                'amount' =>$price * 100,
+                'desc' => '优惠券获被'.$this->r_mb_str($user->nickname,3).'点击奖励券池红包'.$ad
+            ];
+            $res = $this->wechat->pay->transfers($data_from);
+            if ($res['result_code'] != 'SUCCESS') {
+                return json_encode([
+                    'code' => 1,
+                    'msg' => $res['err_code_des'],
+                    'data' => $res
+                ], JSON_UNESCAPED_UNICODE);
+            }
+        }
+        //发给上级
+        if($is_parent){
+            //目标用户的上级
+            $user_1 = User::findOne($user->parent_id);
+            if (!$user_1) {
+                return;
+            }
+            $data_1 = [
+                'partner_trade_no' => md5(uniqid()),
+                'openid' => $user_1->wechat_open_id,
+                'amount' =>$price * 100,
+                'desc' => '你推荐的'.$this->r_mb_str($user->nickname,3).'点击优惠券送你红包'.$ad
+            ];
+            $res = $this->wechat->pay->transfers($data_1);
+            if ($res['result_code'] != 'SUCCESS') {
+                return json_encode([
+                    'code' => 1,
+                    'msg' => $res['err_code_des'],
+                    'data' => $res
+                ], JSON_UNESCAPED_UNICODE);
+            }
+        }
+
+        if ($res['result_code'] == 'SUCCESS') {
+            //发模版消息
+            return json_encode([
+                'code' => 0,
+                'msg' => '成功'
+            ], JSON_UNESCAPED_UNICODE);
+        } else {
+            return json_encode([
+                'code' => 1,
+                'msg' => $res['err_code_des'],
+                'data' => $res
+            ], JSON_UNESCAPED_UNICODE);
+        }
+    }
+
+
+    /**
+     * 补齐空格
+     * 截取$n个中文字符长度
+     */
+    private function r_mb_str($input, $n)
+    {
+        $string = mb_substr($input, 0, $n);
+        return $string;
+    }
+
 
     //获取商品秒杀数据
     public function getSeckillData($goods_id)

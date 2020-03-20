@@ -66,6 +66,15 @@ class BusinessListForm extends Model
                 $list[$i]['pic_url'] =  User::findOne(['id' => $item['user_id'], 'store_id' => $this->store_id])->avatar_url;
                 $list[$i]['name'] =  User::findOne(['id' => $item['user_id'], 'store_id' => $this->store_id])->nickname;
 
+                if($i%10==6){
+                    $list[$i]['is_hongbao'] =  true;
+                }
+
+                $list[$i]['is_ad'] =  false;
+                if($i%9==5){
+                    $list[$i]['is_ad'] =  true;
+                }
+
             }
         }
         return [
