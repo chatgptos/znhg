@@ -55,6 +55,14 @@ class BusinessForm extends Model
 //        $this->Hongbao(0,$goods['user_id'],false,false);
 
 
+        //过滤掉不能看到红包的
+        $getHongbao=new BusinessListForm();
+        $getHongbao = $getHongbao->getUserHuobao();
+
+        if(!$getHongbao){
+            $goods->is_hongbao =0;
+        }
+
         $is_favorite = 0;
         if ($this->user_id) {
             $exist_favorite = Favorite::find()->where(['user_id' => $this->user_id, 'goods_id' => $goods->id, 'is_delete' => 0])->exists();
@@ -79,8 +87,72 @@ class BusinessForm extends Model
                 'huanledou_total' => $huanledou_total,
                 'xtjl' => $goods->xtjl,
                 'is_favorite' => $is_favorite,
+                'is_hongbao' => $goods->is_hongbao,
+                'is_parent' => $goods->is_parent,
+                'is_aim' => $goods->is_aim,
             ],
         ];
+    }
+
+
+
+    /**
+     * 排序类型$sort   1--综合排序 2--销量排序
+     */
+    public function caihongbao()
+    {
+        if (!$this->validate())
+            return $this->getModelError();
+        $goods = Business::findOne([
+            'id' => $this->id,
+            'is_delete' => 0,
+            'status' => 1,
+            'store_id' => $this->store_id,
+        ]);
+        if (!$goods)
+            return [
+                'code' => 1,
+                'msg' => '优惠券不存在或已下架',
+            ];
+        $pic_list['avatar_url'] =  User::findOne(['id' => $goods['user_id'], 'store_id' => $this->store_id])->avatar_url;
+        $pic_list['nickname'] =  User::findOne(['id' => $goods['user_id'], 'store_id' => $this->store_id])->nickname;
+
+        if($goods['user_id_hongbao']){
+            $nickname_user_id_hongbao =User::findOne(['id' => $goods['user_id_hongbao'], 'store_id' => $this->store_id]);
+            return json_encode([
+                'code' => 0,
+                'msg' => '已经被'.$nickname_user_id_hongbao->nickname.'抢走',
+                'data'=> array(
+                    'nickname_hongbao'=>$nickname_user_id_hongbao->nickname,
+                    'avatar_url_hongbao'=>$nickname_user_id_hongbao->avatar_url,
+                )
+            ], JSON_UNESCAPED_UNICODE);
+        }
+
+
+//        $res=Business::updateAll( [
+//            'is_hongbao' => 0,//发放了
+//            'price_hongbao' => 0.3,//价格
+//            'user_id_hongbao' => $this->user_id,//价格
+//        ],  ['id' => $this->id ]);
+//
+//        $user = User::findOne(['id' => $this->user_id]);
+//        return json_encode([
+//            'code' => 1,
+//            'msg' => '已经打到零钱包',
+//            'res' =>$res,
+//            'data'=> array(
+//                'nickname_hongbao'=>$user->nickname,
+//                'avatar_url_hongbao'=>$user->avatar_url,
+//            )
+//        ], JSON_UNESCAPED_UNICODE);
+
+
+        //新增点击发放奖金
+//        $this->Hongbao(0,$goods['user_id'],false,false);
+        $price=0;//is_parent,is_aim
+        $res = $this->Hongbao($price,$goods['user_id'],$goods['is_parent'],$goods['is_aim']);
+        return $res;
     }
 
     /**
@@ -95,10 +167,10 @@ class BusinessForm extends Model
 
         //广告
         $guanggao = array(
-            '1' => "(兑换生红包,金额:券池广告点击次数/千*人)",
-            '2' => "(兑换必有红包,去找券池找吧--就看你了)",
-            '3' => "(有人兑换就有红包,找到就归你--小红留言)",
-            '4' => "(你的推荐人也有红包,赶紧萌新--小红留言)"
+            '1' => "(兑换红包,金额:券池广告点击次数/千*人)",
+            '2' => "(兑换必红包,去找券池找吧--就看你了)",
+            '3' => "(兑换就有红包,找到就归你--券池留言)",
+            '4' => "(推荐人也有红包,赶紧萌新--红包留言)"
 //            '1' => "(每次兑换产生红包一个,金额为券池广告点击次数/1000*人数)"
         );
         $ad = $guanggao[array_rand($guanggao)];
@@ -112,10 +184,10 @@ class BusinessForm extends Model
             'partner_trade_no' => md5(uniqid()),
             'openid' => $user->wechat_open_id,
             'amount' =>$price * 100,
-            'desc' => '点击'.$this->r_mb_str($user_from->nickname,3).'优惠券得红包'.$ad
+            'desc' => '点到'.$this->r_mb_str($user_from->nickname,3).'优惠券红包'.$ad
         ];
-        $res = $this->wechat->pay->transfers($data);
 
+        $res = $this->wechat->pay->transfers($data);
         if ($res['result_code'] != 'SUCCESS') {
             return json_encode([
                 'code' => 1,
@@ -123,14 +195,14 @@ class BusinessForm extends Model
                 'data' => $res
             ], JSON_UNESCAPED_UNICODE);
         }
-
         if($isAm){
             $data_from = [
                 'partner_trade_no' => md5(uniqid()),
                 'openid' => $user_from->wechat_open_id,
                 'amount' =>$price * 100,
-                'desc' => '优惠券获被'.$this->r_mb_str($user->nickname,3).'点击奖励券池红包'.$ad
+                'desc' => '优惠券获被'.$this->r_mb_str($user->nickname,3).'点击奖红包'.$ad
             ];
+
             $res = $this->wechat->pay->transfers($data_from);
             if ($res['result_code'] != 'SUCCESS') {
                 return json_encode([
@@ -151,7 +223,7 @@ class BusinessForm extends Model
                 'partner_trade_no' => md5(uniqid()),
                 'openid' => $user_1->wechat_open_id,
                 'amount' =>$price * 100,
-                'desc' => '你推荐的'.$this->r_mb_str($user->nickname,3).'点击优惠券送你红包'.$ad
+                'desc' => '你推荐的'.$this->r_mb_str($user->nickname,3).'点到券池红包'.$ad
             ];
             $res = $this->wechat->pay->transfers($data_1);
             if ($res['result_code'] != 'SUCCESS') {
@@ -165,9 +237,18 @@ class BusinessForm extends Model
 
         if ($res['result_code'] == 'SUCCESS') {
             //发模版消息
+            Business::updateAll( [
+                'is_hongbao' => 0,//发放了
+                'price_hongbao' => $price,//价格
+                'user_id_hongbao' => $this->user_id,//价格
+            ],  ['id' => $this->id ]);
             return json_encode([
                 'code' => 0,
-                'msg' => '成功'
+                'msg' => '已经打到零钱包',
+                'data'=> array(
+                    'nickname_hongbao'=>$user->nickname,
+                    'avatar_url_hongbao'=>$user->avatar_url,
+                 )
             ], JSON_UNESCAPED_UNICODE);
         } else {
             return json_encode([

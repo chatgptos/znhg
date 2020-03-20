@@ -88,6 +88,7 @@ class DefaultController extends Controller
     {
         $form = new BusinessListForm();
         $form->attributes = \Yii::$app->request->get();
+        $form->user_id = \Yii::$app->user->id;
         $form->store_id = $this->store->id;
         $this->renderJson($form->search());
     }
@@ -104,6 +105,21 @@ class DefaultController extends Controller
         }
         $form->store_id = $this->store->id;
         $this->renderJson($form->search());
+    }
+
+
+    /**
+     * 踩到红包
+     */
+    public function actionBusinessHongbao()
+    {
+        $form = new BusinessForm();
+        $form->attributes = \Yii::$app->request->post();
+        if (!\Yii::$app->user->isGuest) {
+            $form->user_id = \Yii::$app->user->id;
+        }
+        $form->store_id = $this->store->id;
+        $this->renderJson($form->caihongbao());
     }
 
 
