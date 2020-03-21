@@ -110,6 +110,9 @@ class FairController extends Controller
                 ->andWhere(['>', 'addtime', strtotime(date('Y-m-d'))])
                 ->count();
 
+            $is_hongbao_num_now +=$user_id_hongbao_num_now;
+
+
             return $this->render('opentime', [
                 'model' => $model,
                 'is_hongbao_num_now' => $is_hongbao_num_now,

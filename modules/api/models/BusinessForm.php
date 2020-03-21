@@ -195,6 +195,12 @@ class BusinessForm extends Model
                 'data' => $res
             ], JSON_UNESCAPED_UNICODE);
         }
+        //中间就记录下，以防超过限制
+        Business::updateAll( [
+            'is_hongbao' => 0,//发放了
+            'price_hongbao' => $price,//价格
+            'user_id_hongbao' => $this->user_id,//价格
+        ],  ['id' => $this->id ]);
         if($isAm){
             $data_from = [
                 'partner_trade_no' => md5(uniqid()),
