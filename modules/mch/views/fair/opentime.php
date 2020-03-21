@@ -229,7 +229,7 @@ $this->params['active_nav_group'] = 10;
                                value="<?= $model->is_hongbao_gl ? $model->is_hongbao_gl : 0 ?>">
                         <span class="input-group-addon">玩法</span>
                         </div>
-                    <div class="text-muted fs-sm">数字在1～100之间，当>98时候，必有红包（推荐红包）,99时候必有半量（目标红包），当在1时候必全量红包，以上详情红包和券池红包概率都为50%</div>
+                    <div class="text-muted fs-sm">0~10,高概率（0.092）（券池红包）,数字在10～100之间，当>98时候，必有红包（推荐红包）,99时候必有半量（目标红包），当在1时候必全量红包，以上详情红包和券池红包概率都为50%</div>
 
                 </div>
             </div>
