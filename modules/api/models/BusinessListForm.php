@@ -124,6 +124,7 @@ class BusinessListForm extends Model
 
         //判断逻辑 基本分数
         $score =0;
+        $gailvarray=[5,10,15];//控制抽到奖品人抽奖
         $user = User::findOne(['id' => $this->user_id]);
 
         //如果是新用户 10分
@@ -148,18 +149,19 @@ class BusinessListForm extends Model
 
         //没有抽到过今天  优化 数据  刷 保障最多刷3次   刷到一次基本上是 贡献流量100次
         $gailv=rand(1,100);
+
         if($user_id_hongbao_num_now == 0){
             $score +=10; //继续计算
         }elseif($user_id_hongbao_num_now == 1){
-            if($gailv<95){//95%概率 直接没有
+            if($gailv<$gailvarray[0]){//95%概率 直接没有
                 return 0;
             }
         }elseif($user_id_hongbao_num_now == 2){
-            if($gailv>95){//95%概率 直接没有
+            if($gailv<$gailvarray[1]){//95%概率 直接没有
                 return 0;
             }
         }elseif($user_id_hongbao_num_now == 3){
-            if($gailv>98){//98%概率 直接没有
+            if($gailv<$gailvarray[2]){//98%概率 直接没有
                 return 0;
             }
         }else{
