@@ -133,6 +133,39 @@ class BusinessListForm extends Model
         }
 
 
+
+
+        //如果当天发布优惠券超过10张
+        $user_id_hongbao_num_now = Business::find()->alias('g')
+            ->where([
+                'g.status' => 1,
+                'g.is_delete' => 0,
+                'g.store_id' => $this->store_id,
+                'g.user_id_hongbao' => $this->user_id,
+            ])
+            ->andWhere(['>', 'addtime', strtotime(date('Y-m-d'))])
+            ->count();
+
+        //没有抽到过今天  优化 数据  刷 保障最多刷3次   刷到一次基本上是 贡献流量100次
+        $gailv=rand(1,100);
+        if($user_id_hongbao_num_now == 0){
+            $score +=10; //继续计算
+        }elseif($user_id_hongbao_num_now == 1){
+            if($gailv<95){//95%概率 直接没有
+                return 0;
+            }
+        }elseif($user_id_hongbao_num_now == 2){
+            if($gailv>95){//95%概率 直接没有
+                return 0;
+            }
+        }elseif($user_id_hongbao_num_now == 3){
+            if($gailv>98){//98%概率 直接没有
+                return 0;
+            }
+        }else{
+            //其他的凑中次数太多的 肯定刷了很多次
+        }
+
         //如果当天发布优惠券超过10张
         $query = Business::find()->alias('g')->where([
             'g.status' => 1,
@@ -176,6 +209,8 @@ class BusinessListForm extends Model
         if($orderquerytj){
             $score +=10;
         }
+
+
         $gailv=rand($score,60);
         if($gailv>50){//概率大 抽奖看到
             return 1;
