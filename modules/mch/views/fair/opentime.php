@@ -243,7 +243,7 @@ $this->params['active_nav_group'] = 10;
                                value="<?= $model->is_hongbao_num ? $model->is_hongbao_num : 1 ?>">
                         <span class="input-group-addon">个</span>
                     </div>
-                    <div class="text-muted fs-sm">数量限制,当前已经发放<?= $is_hongbao_num_now ? $is_hongbao_num_now : 0 ?>被领取<?= $user_id_hongbao_num_now ? $user_id_hongbao_num_now : 0 ?>因优惠券红包激活人数*</div>
+                    <div class="text-muted fs-sm">数量限制,当前已经发放<?= $is_hongbao_num_now ? $is_hongbao_num_now : 0 ?>被领取<?= $user_id_hongbao_num_now ? $user_id_hongbao_num_now : 0 ?>过期<?=$is_hongbao_num_now_deasper ?>因优惠券红包激活人数*</div>
 
                 </div>
             </div>

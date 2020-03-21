@@ -100,6 +100,19 @@ class FairController extends Controller
                 ->andWhere(['>', 'addtime', strtotime(date('Y-m-d'))])
                 ->count();
 
+            //过期红包 已经交易 但是没有使用
+            $is_hongbao_num_now_deasper = Business::find()->alias('g')
+                ->where([
+                    'g.status' => 1,
+                    'g.is_delete' => 0,
+                    'g.is_exchange' => 1,
+                    'g.store_id' => $this->store_id,
+                ])
+                ->andWhere(['>', 'is_hongbao', 0])
+                ->andWhere(['>', 'addtime', strtotime(date('Y-m-d'))])
+                ->count();
+
+
             $user_id_hongbao_num_now = Business::find()->alias('g')
                 ->where([
                     'g.status' => 1,
@@ -117,6 +130,7 @@ class FairController extends Controller
                 'model' => $model,
                 'is_hongbao_num_now' => $is_hongbao_num_now,
                 'user_id_hongbao_num_now' => $user_id_hongbao_num_now,
+                'is_hongbao_num_now_deasper' => $is_hongbao_num_now_deasper,
             ]);
         }
     }
