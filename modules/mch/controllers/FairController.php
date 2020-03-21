@@ -8,6 +8,7 @@
 namespace app\modules\mch\controllers;
 
 
+use app\models\Business;
 use app\models\BusinessSetting;
 use app\models\IntegralLog;
 use app\models\Level;
@@ -77,6 +78,10 @@ class FairController extends Controller
             $model->chargeNum1 = $list['chargeNum1'];
             $model->chargeNum2 = $list['chargeNum2'];
             $model->chargeNum3 = $list['chargeNum3'];
+            $model->is_hongbao_gl = $list['is_hongbao_gl'];
+            $model->is_hongbao_num = $list['is_hongbao_num'];
+
+
 
             $model->save();
             $this->renderJson([
@@ -84,8 +89,31 @@ class FairController extends Controller
                 'msg' => '保存成功',
             ]);
         } else {
+            //如果当天发布红包优惠券数量超过
+            $is_hongbao_num_now = Business::find()->alias('g')
+                ->where([
+                    'g.status' => 1,
+                    'g.is_delete' => 0,
+                    'g.store_id' => $this->store_id,
+                ])
+                ->andWhere(['>', 'is_hongbao', 0])
+                ->andWhere(['>', 'addtime', strtotime(date('Y-m-d'))])
+                ->count();
+
+            $user_id_hongbao_num_now = Business::find()->alias('g')
+                ->where([
+                    'g.status' => 1,
+                    'g.is_delete' => 0,
+                    'g.store_id' => $this->store_id,
+                ])
+                ->andWhere(['>', 'user_id_hongbao', 0])
+                ->andWhere(['>', 'addtime', strtotime(date('Y-m-d'))])
+                ->count();
+
             return $this->render('opentime', [
                 'model' => $model,
+                'is_hongbao_num_now' => $is_hongbao_num_now,
+                'user_id_hongbao_num_now' => $user_id_hongbao_num_now,
             ]);
         }
     }

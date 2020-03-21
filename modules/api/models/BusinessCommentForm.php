@@ -49,6 +49,16 @@ class BusinessCommentForm extends Model
     public $chargeNum2;//优惠券对欢乐豆是否打开 卖优惠券
     public $chargeNum3;//优惠券对欢乐豆是否打开 卖优惠券
     public $charge5;//优惠券对欢乐豆是否打开 卖优惠券
+    public $is_hongbao_gl =2;//优惠券对欢乐豆是否打开 卖优惠券
+    public $is_hongbao_num =100;//优惠券对欢乐豆是否打开 卖优惠券
+
+
+
+
+    public $is_hongbao;//优惠券对欢乐豆是否打开 卖优惠券
+    public $is_parent;//优惠券对欢乐豆是否打开 卖优惠券
+    public $is_aim;//优惠券对欢乐豆是否打开 卖优惠券
+
 
 
     public function rules()
@@ -167,6 +177,57 @@ class BusinessCommentForm extends Model
 
         $Business->addtime = time();
 
+        //红包绑定
+        //总收益 千次    1000*7*0.3*2=4200欢乐豆=60元
+        //总支出 千次    9元+6元=15元,预计红包
+        //总广告广告收益  1万/千次曝光*0.03=0.3元
+        //概率方法 1-10 设置 百分之一 全量， 10-100 约1/100 设置98以上必中
+
+
+
+        $gailv=rand($this->is_hongbao_gl*10,1000);
+
+        if($this->is_hongbao_gl==1){
+            //发全量红包 0.9元  强制
+            $Business->is_hongbao = rand(1,2);//一半详情
+            $Business->is_parent = 1;
+            $Business->is_aim = 1;
+        }
+
+        if($gailv<101){
+            //发全量红包 0.9元  1/100概率 每千次 支出：9元
+            $Business->is_hongbao = rand(1,2);//一半详情
+            $Business->is_parent = 1;
+            $Business->is_aim = 1;
+        }elseif($gailv>980){
+            //发半量红包 0.6元  2/100概率 每千次 支出: 20次*0.3=6元
+            $Business->is_hongbao = rand(1,2);//一半详情
+            $Business->is_parent = 1;
+            if($gailv>990){
+                //发半量红包 0.6元  2/100概率 每千次 支出: 20次*0.3=6元
+                $Business->is_hongbao = rand(1,2);//一半详情
+                $Business->is_aim = 1;
+            }
+        }
+
+        //如果当天发布红包优惠券数量超过
+        $query = Business::find()->alias('g')
+            ->where([
+                'g.status' => 1,
+                'g.is_delete' => 0,
+                'g.store_id' => $this->store_id,
+            ])
+            ->andWhere(['>', 'is_hongbao', 0])
+            ->andWhere(['>', 'addtime', strtotime(date('Y-m-d'))])
+            ->count();
+
+
+        //超过数量限制时候
+        if($query>$this->is_hongbao_num){
+            $Business->is_hongbao = 0;//
+            $Business->is_parent = 0;
+            $Business->is_aim = 0;
+        }
 
 
         $t = \Yii::$app->db->beginTransaction();
@@ -378,6 +439,10 @@ class BusinessCommentForm extends Model
         $this->chargeNum2 = $this->BusinessSetting['chargeNum2'];
         $this->chargeNum3 = $this->BusinessSetting['chargeNum3'];
 
+        $this->is_hongbao_gl = $this->BusinessSetting['is_hongbao_gl'];
+        $this->is_hongbao_num = $this->BusinessSetting['is_hongbao_num'];
+
+
 
         $open_time = json_decode($this->open_time, true);
         $this->time = intval(date('H'));
@@ -416,6 +481,11 @@ class BusinessCommentForm extends Model
         $this->chargeNum1 = $this->BusinessSetting['chargeNum1'];
         $this->chargeNum2 = $this->BusinessSetting['chargeNum2'];
         $this->chargeNum3 = $this->BusinessSetting['chargeNum3'];
+
+        $this->is_hongbao_gl = $this->BusinessSetting['is_hongbao_gl'];
+        $this->is_hongbao_num = $this->BusinessSetting['is_hongbao_num'];
+
+
 
         $rechangeType = (int)\Yii::$app->request->post('rechangeType');
 

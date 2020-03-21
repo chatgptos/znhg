@@ -18,6 +18,11 @@ $this->params['active_nav_group'] = 10;
            href="<?= $urlManager->createUrl(['mch/store/home-block']) ?>">图片魔方</a>、
         <a target="_blank" href="<?= $urlManager->createUrl(['mch/store/slide']) ?>">轮播图</a>设置。
     </div>
+    <div>注：
+         总收益 千次    1000*7*0.3*2=4200欢乐豆=60元
+         总支出 千次    9元+6元=15元,预计红包
+         总广告广告收益  1万/千次曝光*0.03=0.3元
+         概率方法 1-10 设置 百分之一 全量， 10-100 约1/100 （设置98以上和1必中）</div>
 </div>
 <div class="panel mb-3">
     <div class="panel-header">
@@ -211,6 +216,35 @@ $this->params['active_nav_group'] = 10;
                                value="<?= $model->xtjlsell ? $model->xtjlsell : 0 ?>">
                         <span class="input-group-addon">张</span>
                     </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-3 text-right">
+                    <label class=" col-form-label required">优惠券红包概率</label>
+                </div>
+                <div class="col-3">
+                    <div class="input-group short-row">
+                        <input class="form-control" name="model[is_hongbao_gl]"
+                               value="<?= $model->is_hongbao_gl ? $model->is_hongbao_gl : 0 ?>">
+                        <span class="input-group-addon">玩法</span>
+                        </div>
+                    <div class="text-muted fs-sm">数字在1～100之间，当>98时候，必有红包（推荐红包）,99时候必有半量（目标红包），当在1时候必全量红包，以上详情红包和券池红包概率都为50%</div>
+
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-3 text-right">
+                    <label class=" col-form-label required">优惠券红包数量限制(当天)</label>
+                </div>
+                <div class="col-3">
+                    <div class="input-group short-row">
+                        <input class="form-control" name="model[is_hongbao_num]"
+                               value="<?= $model->is_hongbao_num ? $model->is_hongbao_num : 1 ?>">
+                        <span class="input-group-addon">个</span>
+                    </div>
+                    <div class="text-muted fs-sm">数量限制,当前已经发放<?= $is_hongbao_num_now ? $is_hongbao_num_now : 0 ?>被领取<?= $user_id_hongbao_num_now ? $user_id_hongbao_num_now : 0 ?>因优惠券红包激活人数*</div>
+
                 </div>
             </div>
 

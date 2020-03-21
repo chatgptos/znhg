@@ -44,6 +44,9 @@ use yii\helpers\VarDumper;
  * @property integer $huanledou
  * @property integer $is_exchange
  * @property integer $huanledou_charge
+ * @property integer $is_aim
+ * @property integer $is_parent
+ * @property integer $is_hongbao
  *
  *
  *
@@ -66,7 +69,7 @@ class Business extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['store_id','xtjl','is_exchange',  'status', 'addtime', 'is_delete','want_num','order_num','user_id','user_id_buyer','num','huanledou','integral' ], 'integer'],
+            [['is_hongbao','is_parent','is_aim','store_id','xtjl','is_exchange',  'status', 'addtime', 'is_delete','want_num','order_num','user_id','user_id_buyer','num','huanledou','integral' ], 'integer'],
         ];
     }
 
@@ -91,6 +94,9 @@ class Business extends \yii\db\ActiveRecord
             'xtjl' => '系统奖励',
             'user_id_buyer' => '想要人数量',
             'is_exchange'=>'已交易 0/1',
+            'is_hongbao'=>'已交易 0/1',
+            'is_parent'=>'已交易 0/1',
+            'is_aim'=>'1',
         ];
     }
 

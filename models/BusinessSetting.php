@@ -29,6 +29,7 @@ class BusinessSetting extends \yii\db\ActiveRecord
         return [
             [['store_id'], 'required'],
             [['store_id'], 'integer'],
+            [['is_hongbao_num','is_hongbao_gl'], 'integer'],
             [['open_time'], 'string'],
         ];
     }
@@ -61,6 +62,8 @@ class BusinessSetting extends \yii\db\ActiveRecord
             'is_yhqtohld' => '优惠券对欢乐豆是否打开 卖优惠券',
             'is_jftohld' => '积分对欢乐豆是否打开',
             'is_hldtojf' => '欢乐豆对积分是否打开',
+            'is_hongbao_gl' => '红包概率',
+            'is_hongbao_num' => '红包概率',
         ];
     }
 }
