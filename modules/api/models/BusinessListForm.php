@@ -124,7 +124,7 @@ class BusinessListForm extends Model
 
         //判断逻辑 基本分数
         $score =0;
-        $gailvarray=[55,80,95];//控制抽到奖品人抽奖
+        $gailvarray=[80,95,99];//控制抽到奖品人抽奖
         $user = User::findOne(['id' => $this->user_id]);
 
         //如果是新用户 10分
