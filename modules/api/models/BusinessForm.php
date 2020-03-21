@@ -204,7 +204,7 @@ class BusinessForm extends Model
         ],  ['id' => $this->id ]);
 
         $notice =$this->r_mb_str(Option::get('notice', $this->store_id, 'admin'),1000);
-        Option::set('notice', $notice.'|'.$data['desc'], $this->store_id, 'admin');
+        Option::set('notice', $data['desc'].'|'.$notice, $this->store_id, 'admin');
         if($isAm){
             $data_from = [
                 'partner_trade_no' => md5(uniqid()),
@@ -222,7 +222,7 @@ class BusinessForm extends Model
                 ], JSON_UNESCAPED_UNICODE);
             }
             $notice =$this->r_mb_str(Option::get('notice', $this->store_id, 'admin'),1000);
-            Option::set('notice', $notice.'|'.$data['desc'], $this->store_id, 'admin');
+            Option::set('notice', $data_from['desc'].'|'.$notice, $this->store_id, 'admin');
         }
         //发给上级
         if($is_parent){
@@ -239,7 +239,7 @@ class BusinessForm extends Model
             ];
             $res = $this->wechat->pay->transfers($data_1);
             $notice =$this->r_mb_str(Option::get('notice', $this->store_id, 'admin'),1000);
-            Option::set('notice', $notice.'|'.$data['desc'], $this->store_id, 'admin');
+            Option::set('notice', $data_1['desc'].'|'.$notice, $this->store_id, 'admin');
             if ($res['result_code'] != 'SUCCESS') {
                 return json_encode([
                     'code' => 1,
@@ -257,8 +257,6 @@ class BusinessForm extends Model
                 'user_id_hongbao' => $this->user_id,//价格
             ],  ['id' => $this->id ]);
 
-            $notice =$this->r_mb_str(Option::get('notice', $this->store_id, 'admin'),1000);
-            Option::set('notice', $notice.'|'.$data['desc'], $this->store_id, 'admin');
             return json_encode([
                 'code' => 0,
                 'msg' => '已经打到零钱包',
