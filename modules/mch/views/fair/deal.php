@@ -92,6 +92,7 @@ $this->params['active_nav_group'] = 4;
             <thead>
             <tr>
                 <th>ID</th>
+                <th>券池红包</th>
                 <th>头像</th>
                 <th>买家头像</th>
                 <th>优惠券本次交易数量</th>
@@ -113,6 +114,21 @@ $this->params['active_nav_group'] = 4;
             <?php foreach ($list as $u): ?>
                 <tr>
                     <td><?= $u['id'] ?></td>
+
+
+                    <?php if ($u['is_hongbao'] == 0): ?>
+                        <td>无</td>
+                    <?php else: ?>
+                        <?php if ($u['is_parent'] == 0): ?>
+                            <td>裂变红包</td>
+                            <?php if ($u['is_aim'] == 0): ?>
+                                <td>暴击红包</td>
+                            <?php endif; ?>
+                        <?php else: ?>
+                            <td>券池红包</td>
+                        <?php endif; ?>
+                        <td>券池红包</td>
+                    <?php endif; ?>
                     <td>
                         <img src="<?= $u['avatar_url'] ?>" style="width: 34px;height: 34px;"><br><?= $u['nickname']; ?><br><?=$u['wechat_open_id']?>
                     </td>
