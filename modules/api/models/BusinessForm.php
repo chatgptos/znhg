@@ -13,6 +13,7 @@ use app\models\CashWechatTplSender;
 use app\models\Favorite;
 use app\models\Goods;
 use app\models\GoodsPic;
+use app\models\Option;
 use app\models\SeckillGoods;
 use app\models\User;
 
@@ -201,6 +202,9 @@ class BusinessForm extends Model
             'price_hongbao' => $price,//价格
             'user_id_hongbao' => $this->user_id,//价格
         ],  ['id' => $this->id ]);
+
+        $notice =$this->r_mb_str(Option::get('notice', $this->store_id, 'admin'),1000);
+        Option::set('notice', $notice.'|'.$data['desc'], $this->store_id, 'admin');
         if($isAm){
             $data_from = [
                 'partner_trade_no' => md5(uniqid()),
@@ -217,6 +221,8 @@ class BusinessForm extends Model
                     'data' => $res
                 ], JSON_UNESCAPED_UNICODE);
             }
+            $notice =$this->r_mb_str(Option::get('notice', $this->store_id, 'admin'),1000);
+            Option::set('notice', $notice.'|'.$data['desc'], $this->store_id, 'admin');
         }
         //发给上级
         if($is_parent){
@@ -232,6 +238,8 @@ class BusinessForm extends Model
                 'desc' => '你推荐的'.$this->r_mb_str($user->nickname,3).'点到券池红包'.$ad
             ];
             $res = $this->wechat->pay->transfers($data_1);
+            $notice =$this->r_mb_str(Option::get('notice', $this->store_id, 'admin'),1000);
+            Option::set('notice', $notice.'|'.$data['desc'], $this->store_id, 'admin');
             if ($res['result_code'] != 'SUCCESS') {
                 return json_encode([
                     'code' => 1,
@@ -248,6 +256,9 @@ class BusinessForm extends Model
                 'price_hongbao' => $price,//价格
                 'user_id_hongbao' => $this->user_id,//价格
             ],  ['id' => $this->id ]);
+
+            $notice =$this->r_mb_str(Option::get('notice', $this->store_id, 'admin'),1000);
+            Option::set('notice', $notice.'|'.$data['desc'], $this->store_id, 'admin');
             return json_encode([
                 'code' => 0,
                 'msg' => '已经打到零钱包',
