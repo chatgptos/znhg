@@ -113,24 +113,40 @@ $this->params['active_nav_group'] = 4;
             </thead>
             <?php foreach ($list as $u): ?>
                 <tr>
-                    <td><?= $u['id'] ?></td>
-
-
+                    <td><?= $u['id'] ?></td><td>
                     <?php if ($u['is_hongbao'] == 0): ?>
-                        <td>无</td>
+                        <?php if ($u['user_id_hongbao'] == 0): ?>
+                            无
+                        <?php else: ?>
+                            已经使用
+                            <?php if ($u['is_parent'] == 0): ?>
+                                裂变红包
+                                <?php if ($u['is_aim'] == 0): ?>
+                                    暴击红包
+                                <?php endif; ?>
+                            <?php else: ?>
+                                券池红包
+                            <?php endif; ?>
+                        <?php endif; ?>
+
                     <?php else: ?>
+                        <?php if ($u['is_exchange'] == 1): ?>
+                            过期
+                        <?php endif; ?>
+                        发放的
                         <?php if ($u['is_parent'] == 0): ?>
-                            <td>裂变红包</td>
+                            裂变红包
                             <?php if ($u['is_aim'] == 0): ?>
-                                <td>暴击红包</td>
+                                暴击红包
                             <?php endif; ?>
                         <?php else: ?>
-                            <td>券池红包</td>
+                            券池红包
                         <?php endif; ?>
-                        <td>券池红包</td>
+                        券池红包
                     <?php endif; ?>
+                    </td>
                     <td>
-                        <img src="<?= $u['avatar_url'] ?>" style="width: 34px;height: 34px;"><br><?= $u['nickname']; ?><br><?=$u['wechat_open_id']?>
+                        <img src="<?= $u['avatar_url'] ?>" style="width: 34px;height: 34px;"><br><?= $u['nickname']; ?>
                     </td>
                     <td>
                      <img src="<?= $u['avatar_url_buyer'] ?>" style="width: 34px;height: 34px;"><br><?= $u['nickname_buyer']; ?><br>
