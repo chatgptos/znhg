@@ -69,6 +69,18 @@ class BusinessListForm extends Model
             $query->andWhere(['g.is_parent'=>1]);
         }elseif($this->keyword == 6) {
             $query->andWhere(['g.is_aim'=>1]);
+        }elseif($this->keyword == 13) {
+            $query->andWhere(['g.is_hongbao'=>1])
+                ->andWhere(['g.is_exchange'=>0]);
+        }elseif($this->keyword == 14) {
+            $query->andWhere(['g.is_hongbao'=>2])
+                ->andWhere(['g.is_exchange'=>0]);
+        }elseif($this->keyword == 15) {
+            $query->andWhere(['g.is_parent'=>1])
+                ->andWhere(['g.is_exchange'=>0]);
+        }elseif($this->keyword == 16) {
+            $query->andWhere(['g.is_aim'=>1])
+                ->andWhere(['g.is_exchange'=>0]);
         }
         if($this->date_begin){
             $query->andWhere(['>', 'g.addtime', strtotime($this->date_begin)]);
