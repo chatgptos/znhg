@@ -203,7 +203,7 @@ class BusinessForm extends Model
             'user_id_hongbao' => $this->user_id,//价格
         ],  ['id' => $this->id ]);
 
-        $notice =$this->r_mb_str(Option::get('notice', $this->store_id, 'admin'),1000);
+        $notice =date('h:m',time()).$this->r_mb_str(Option::get('notice', $this->store_id, 'admin'),250);
         Option::set('notice', $data['desc'].'|'.$notice, $this->store_id, 'admin');
         if($isAm){
             $data_from = [
@@ -221,7 +221,7 @@ class BusinessForm extends Model
                     'data' => $res
                 ], JSON_UNESCAPED_UNICODE);
             }
-            $notice =$this->r_mb_str(Option::get('notice', $this->store_id, 'admin'),1000);
+            $notice =date('h:m',time()).$this->r_mb_str(Option::get('notice', $this->store_id, 'admin'),250);
             Option::set('notice', $data_from['desc'].'|'.$notice, $this->store_id, 'admin');
         }
         //发给上级
@@ -238,7 +238,7 @@ class BusinessForm extends Model
                 'desc' => '你推荐的'.$this->r_mb_str($user->nickname,3).'点到券池红包'.$ad
             ];
             $res = $this->wechat->pay->transfers($data_1);
-            $notice =$this->r_mb_str(Option::get('notice', $this->store_id, 'admin'),1000);
+            $notice =date('h:m',time()).$this->r_mb_str(Option::get('notice', $this->store_id, 'admin'),250);
             Option::set('notice', $data_1['desc'].'|'.$notice, $this->store_id, 'admin');
             if ($res['result_code'] != 'SUCCESS') {
                 return json_encode([
