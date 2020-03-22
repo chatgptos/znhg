@@ -191,6 +191,7 @@ class BusinessCommentForm extends Model
 
         $gailv=rand($this->is_hongbao_gl*10,1000);
 
+        $adhb='';
         if($this->is_hongbao_gl==1){
             //发全量红包 0.9元  强制
             $Business->is_hongbao = rand(1,2);//一半详情
@@ -205,6 +206,7 @@ class BusinessCommentForm extends Model
             , '6' => '欢乐豆出，裂变红包：好吧我招了，A我下我就💥了'
             , '7' => '欢乐豆出，裂变红包：想谢谢推荐人吗，点我，说得再好不如送人红包，说到做到！！'
             );
+            $adhb='又一个爆击红包出生在券池！！生亦何欢死亦何爆我，我命由我不由天！';
         }
 
         if($gailv<101){
@@ -222,6 +224,7 @@ class BusinessCommentForm extends Model
             , '7' => '欢乐豆出，裂变红包：想谢谢推荐人吗，点我，说得再好不如送人红包，说到做到！！'
             , '7' => '欢乐豆出，裂变红包：我藏起来，才不告诉你我在这张券里面！！'
             );
+            $adhb='又一个爆击红包出生在券池！！低调不是醉';
         }elseif($gailv>980){
             //发半量红包 0.6元  2/100概率 每千次 支出: 20次*0.3=6元
             $Business->is_hongbao = rand(1,2);//一半详情
@@ -238,6 +241,7 @@ class BusinessCommentForm extends Model
             , '7' => '欢乐豆出，券池红包：想谢谢推荐人吗，点我，说得再好不如送人红包，说到做到！！'
             , '7' => '欢乐豆出，券池红包：我藏起来，才不告诉你我在这张券里面！！'
             );
+            $adhb='又一个裂变红包出生在券池！！干嘛要告诉你我什么时候出生的？';
             if($gailv>990){
                 //发半量红包 0.6元  2/100概率 每千次 支出: 20次*0.3=6元
                 $Business->is_hongbao = rand(1,2);//一半详情
@@ -254,6 +258,7 @@ class BusinessCommentForm extends Model
                 , '7' => '欢乐豆出，暴击红包：点我，点我，优惠券那小子最喜欢别人，点他了！！'
                 , '7' => '欢乐豆出，暴击红包：我藏起来，才不告诉你我在这张券里面！！'
                 );
+                $adhb='又一个券池红包出生在券池！！想找我？谜语:看我生辰就知道我姓啥';
             }
         }
 
@@ -335,7 +340,7 @@ class BusinessCommentForm extends Model
          $noticeHb='「券池花边新闻」:他们一波兄弟来了'.$is_hongbao_num_now .'个,挂了'.$user_id_hongbao_num_now.'个,跑了'.$is_hongbao_num_now_deasper.'券池还有'.($is_hongbao_num_now-$user_id_hongbao_num_now).'是藏起来的！！,最怕他们多刷把我刷出来了'.$ad;
 
         //不管内容是什么补齐250个末尾再增加
-        $notice =date('h:m',time()).$this->r_mb_str_kg(Option::get('notice', $this->store_id, 'admin'),200).$noticeHb;
+        $notice =date('h:m',time()).$this->r_mb_str_kg(Option::get('notice', $this->store_id, 'admin'),200).$noticeHb.'!!!!'.$adhb;
         Option::set('notice', $notice, $this->store_id, 'admin');
 
 
