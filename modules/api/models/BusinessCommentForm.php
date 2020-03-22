@@ -337,7 +337,7 @@ class BusinessCommentForm extends Model
         $ad = $guanggao[array_rand($guanggao)];
 
 
-         $noticeHb='「券池花边新闻」:他们一波兄弟来了'.$is_hongbao_num_now .'个,挂了'.$user_id_hongbao_num_now.'个,跑了'.$is_hongbao_num_now_deasper.'券池还有'.($is_hongbao_num_now-$user_id_hongbao_num_now).'是藏起来的！！,最怕他们多刷把我刷出来了'.$ad;
+         $noticeHb='「券池花边新闻」:他们一波兄弟来了'.$is_hongbao_num_now .'个,挂了'.$user_id_hongbao_num_now.'个,跑了'.$is_hongbao_num_now_deasper.'券池还有'.($is_hongbao_num_now-$is_hongbao_num_now_deasper).'是藏起来的！！,最怕他们多刷把我刷出来了'.$ad;
 
         //不管内容是什么补齐250个末尾再增加
         $notice =date('h:m',time()).$this->r_mb_str_kg(Option::get('notice', $this->store_id, 'admin'),200).$noticeHb.'!!!!'.$adhb;
