@@ -276,7 +276,7 @@ class BusinessCommentForm extends Model
                 'g.is_delete' => 0,
                 'g.store_id' => $this->store_id,
             ])
-            ->andWhere(['>', 'is_hongbao', 0])
+            ->andWhere(['>', 'user_id_huobao', 0])
             ->andWhere(['>', 'addtime', strtotime(date('Y-m-d'))])
             ->count();
 
