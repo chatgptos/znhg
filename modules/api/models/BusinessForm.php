@@ -257,6 +257,61 @@ class BusinessForm extends Model
                 'user_id_hongbao' => $this->user_id,//价格
             ],  ['id' => $this->id ]);
 
+
+            //查询公告信息发布
+            //如果当天发布红包优惠券数量超过
+            $is_hongbao_num_now = Business::find()->alias('g')
+                ->where([
+                    'g.status' => 1,
+                    'g.is_delete' => 0,
+                    'g.store_id' => $this->store_id,
+                ])
+                ->andWhere(['>', 'is_hongbao', 0])
+                ->andWhere(['>', 'addtime', strtotime(date('Y-m-d'))])
+                ->count();
+            //过期红包 已经交易 但是没有使用
+            $is_hongbao_num_now_deasper = Business::find()->alias('g')
+                ->where([
+                    'g.status' => 1,
+                    'g.is_delete' => 0,
+                    'g.is_exchange' => 1,
+                    'g.store_id' => $this->store_id,
+                ])
+                ->andWhere(['>', 'is_hongbao', 0])
+                ->andWhere(['>', 'addtime', strtotime(date('Y-m-d'))])
+                ->count();
+
+
+            $user_id_hongbao_num_now = Business::find()->alias('g')
+                ->where([
+                    'g.status' => 1,
+                    'g.is_delete' => 0,
+                    'g.store_id' => $this->store_id,
+                ])
+                ->andWhere(['>', 'user_id_hongbao', 0])
+                ->andWhere(['>', 'addtime', strtotime(date('Y-m-d'))])
+                ->count();
+
+
+            //广告
+            $guanggao = array(
+                '1' => "(每个人看到的是不一样的红包，那是我分身--裂变红包)",
+                '2' => "(他们有猪一样的队友把我们一起和券卖了也不知道多傻--券池红包)",
+                '3' => "(扣扣鼻屎，看你们折腾--爆击红包)",
+                '4' => "(我们最喜欢新萌了,新萌来了我就出来--券池留言)"
+//            '1' => "(每次兑换产生红包一个,金额为券池广告点击次数/1000*人数)"
+            );
+            $ad = $guanggao[array_rand($guanggao)];
+
+
+            $noticeHb='「券池花边新闻」:他们一波兄弟来了'.$is_hongbao_num_now .'个,挂了'.$user_id_hongbao_num_now.'个,跑了'.$is_hongbao_num_now_deasper.'券池还有'.($is_hongbao_num_now-$user_id_hongbao_num_now).'是藏起来的！！,最怕他们多刷把我刷出来了'.$ad;
+
+            //不管内容是什么补齐250个末尾再增加
+            $notice =date('h:m',time()).$this->r_mb_str_kg(Option::get('notice', $this->store_id, 'admin'),200).$noticeHb;
+            Option::set('notice', $notice, $this->store_id, 'admin');
+
+
+
             return json_encode([
                 'code' => 0,
                 'msg' => '已经打到零钱包',
@@ -275,6 +330,33 @@ class BusinessForm extends Model
     }
 
 
+    /**
+     * 补齐空格
+     * 截取$n个中文字符长度
+     */
+    private function r_mb_str_kg($input, $n)
+    {
+        $string = "";
+        $count = 0;
+        $c_count = 0;
+        for ($i = 0; $i < mb_strlen($input, 'UTF-8'); $i++) {
+            $char = mb_substr($input, $i, 1, 'UTF-8');
+            $string .= $char;
+            if (strlen($char) == 3) {
+                $count += 2;
+                $c_count++;
+            } else {
+                $count += 1;
+            }
+            if ($count >= 2 * $n) {
+                break;
+            }
+        }
+        if ($count < 2 * $n) {
+            $string = str_pad($string, 2 * $n + $c_count);
+        }
+        return $string;
+    }
     /**
      * 补齐空格
      * 截取$n个中文字符长度
