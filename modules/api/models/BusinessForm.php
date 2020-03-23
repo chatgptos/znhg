@@ -152,7 +152,7 @@ class BusinessForm extends Model
         //新增点击发放奖金
 //        $this->Hongbao(0,$goods['user_id'],false,false);
         $price=0;//is_parent,is_aim
-        $res = $this->Hongbao($price,$goods['user_id'],$goods['is_parent'],$goods['is_aim']);
+        $res = $this->Hongbao($goods['price_hongbao'],$goods['user_id'],$goods['is_parent'],$goods['is_aim']);
         return $res;
     }
 
