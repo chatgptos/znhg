@@ -10,7 +10,11 @@ namespace app\modules\api\controllers\couponmall;
 use app\extensions\HuoGui;
 use app\extensions\WxPayScore;
 use app\extensions\WxPayScoreOrder;
+use app\models\IntegralLog;
+use app\models\Message;
 use app\models\Shop;
+use app\models\User;
+use app\modules\api\models\BusinessCommentForm;
 use app\modules\api\models\couponmall\Cat;
 use app\modules\api\models\couponmall\Setting;
 use app\modules\api\models\couponmall\CommentListForm;
@@ -82,7 +86,7 @@ class IndexController extends Controller
     public function actionOpendoor()
     {
 
-////
+//
 //            $WxPayScoreOrder = new WxPayScoreOrder();
 //            $res= $WxPayScoreOrder->cancel('WxScorePay2020031901194396762');//补货开门
 //        var_dump($res);die;
@@ -91,7 +95,8 @@ class IndexController extends Controller
 //        $biz_content=array(
 //            "deviceId"=>100023,//必须要有设备
 //            "unionid"=>\Yii::$app->user->identity->wechat_open_id,
-//            "orderNo"=>"2020031934889460",
+//            "unionid"=>'ogZOL5WMC-2U32i-S5AfnzrGuM5k',
+//            "orderNo"=>"2020032550610481",
 //        );
 //        $HuoGui = new HuoGui();
 //
@@ -141,6 +146,8 @@ class IndexController extends Controller
         $biz_content=array(
             "deviceId"=>$hg_id,//必须要有设备
             "unionid"=>\Yii::$app->user->identity->wechat_open_id,
+            "nickName"=>\Yii::$app->user->identity->nickname,
+            "avatar"=>\Yii::$app->user->identity->avatar_url,
         );
         //如果是补货人员 并且是补货申请
         if(\Yii::$app->user->identity->is_clerk && !empty($isreplenish)){
@@ -200,6 +207,105 @@ class IndexController extends Controller
 
         $res= $HuoGui->syncUserInfo($biz_content);
         if ($res['msg']=='用户已注册过了' || $res['success']==true){ //同步用户信息给用户开门权限
+
+
+            //新增功能 来自货柜的订单只要注册了判定没有上级 上级的user
+            $user_shop = User::findOne(['shop_id' => $shop->id, 'store_id' => $this->store_id]);
+            //修改当前用户的上级
+
+            if(!\Yii::$app->user->identity->parent_id){
+                //修改上级出错不抛出
+                //先简单使用//注册成功一个并且开门赠送1积分，没有上级的
+                //后期对接到商城
+                $integral='1.00';//赠送积分
+                $coupon=2;//赠送券
+
+                $res=User::updateAll(
+                    ['parent_id' => $user_shop->id,'is_distributor' => 1,'time'=>time(),'coupon'=>\Yii::$app->user->identity->coupon+$coupon,'integral' => \Yii::$app->user->identity->integral+intval($integral)],
+                    ['id' => \Yii::$app->user->identity->id]
+                );
+                //上级  本人
+                $user_1=$user_shop;
+                $user=\Yii::$app->user->identity;
+
+                //积分日志增加
+                $Message = new Message();
+                $Message->user_id = $user_1->id;
+                $Message->content = "货柜自动推荐".$user->nickname."成为你用户此次消费奖励：" . $integral . " 积分（已到账）";
+                $Message->integral = $integral;
+                $Message->addtime = time();
+                $Message->username = $user_1->nickname;
+                $Message->operator = 'huogui';
+                $Message->store_id = $this->store->id;
+                $Message->operator_id = 0;
+                $Message->save();
+
+                //积分日志增加 新人用户端
+                $Message = new Message();
+                $Message->user_id = $user->id;
+                $Message->content = "开门即富贵".$user->nickname."奖励：" . $integral . " 积分（可提现）". $coupon . "券（可卖出)"."进入券池抢红包奖励100%,10秒过期";
+                $Message->integral = $integral;
+                $Message->coupon = $coupon;
+                $Message->addtime = time();
+                $Message->username = $user->nickname;
+                $Message->operator = 'huogui';
+                $Message->store_id = $this->store->id;
+                $Message->operator_id = 0;
+                $Message->save();
+
+
+                //积分日志增加
+                $integralLog = new IntegralLog();
+                $integralLog->user_id = $user_1->id;
+                $integralLog->content = "货柜自动推荐".$user->nickname."成为你用户此次消费奖励：" . $integral . " 积分（已到账）";
+                $integralLog->integral = intval($integral);
+                $integralLog->addtime = time();
+                $integralLog->username = $user_1->nickname;
+                $integralLog->operator = 'huogui';
+                $integralLog->store_id = $this->store->id;
+                $integralLog->operator_id = 0;
+                $integralLog->save();
+
+                //新人增加积分 //优惠券消息 后台
+                $integralLog = new IntegralLog();
+                $integralLog->user_id = $user->id;
+                $integralLog->content = "开门即富贵".$user->nickname."奖励" . $integral . " 积分（可提现）".$coupon."券（可卖出)";
+                $integralLog->integral = intval($integral);
+                $integralLog->coupon = intval($coupon);
+                $integralLog->addtime = time();
+                $integralLog->username = $user->nickname;
+                $integralLog->operator = 'huogui';
+                $integralLog->store_id = $this->store->id;
+                $integralLog->operator_id = 0;
+                $integralLog->save();
+
+                //创建券池 2个券
+                $form = new BusinessCommentForm();
+                $form->store_id = $this->store->id;
+                $form->user_id = \Yii::$app->user->id;
+                $form->num = 1;
+                $form->is_hg = 1;//是货柜 货柜表象
+                $res=$form->add();
+                $form = new BusinessCommentForm();
+                $form->store_id = $this->store->id;
+                $form->user_id = \Yii::$app->user->id;
+                $form->num = 1;
+                $form->is_hg = 2;//是货柜  货柜内页
+                $res=$form->add();
+
+            }
+
+//            $res=User::updateAll(
+//                ['parent_id' => 0,'is_distributor' => 1,'time'=>time(),
+////                    'integral' => \Yii::$app->user->identity->integral+1
+//                ],
+//                ['id' => \Yii::$app->user->identity->id]
+//            );
+//            var_dump( \Yii::$app->user->identity->parent_id);
+//            var_dump( \Yii::$app->user->identity->integral);
+//            var_dump($res);
+//            die;
+
             $WxPayScoreOrder = new WxPayScoreOrder();
             $res= $WxPayScoreOrder->userServiceState(\Yii::$app->user->identity->wechat_open_id);//购买开门
             $res = json_decode($res,true);

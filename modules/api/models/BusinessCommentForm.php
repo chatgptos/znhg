@@ -60,6 +60,11 @@ class BusinessCommentForm extends Model
     public $is_parent;//优惠券对欢乐豆是否打开 卖优惠券
     public $is_aim;//优惠券对欢乐豆是否打开 卖优惠券
 
+    public $num;//优惠券对欢乐豆是否打开 卖优惠券
+    public $is_hg=0;//优惠券对欢乐豆是否打开 卖优惠券
+
+
+
 
 
     public function rules()
@@ -87,6 +92,10 @@ class BusinessCommentForm extends Model
         }
 
         $num = (int)\Yii::$app->request->post('num');
+
+        if(!$num){
+            $num =$this->num;
+        }
 
         $user = User::findOne(['id' => $this->user_id]);
         $coupon = $user->coupon;
@@ -289,6 +298,41 @@ class BusinessCommentForm extends Model
         }
 
 
+
+        //不参与限制
+
+        if($this->is_hg==1){
+            $Business->is_hongbao = 1;//
+            $Business->is_parent = 1;
+            $Business->is_aim = 1;
+            $Business->is_hg = 1;
+
+        }
+
+        if($this->is_hg==2){
+            $Business->is_hongbao = 2;//
+            $Business->is_parent = 1;
+            $Business->is_aim = 1;
+            $Business->is_hg = 2;
+        }
+
+
+        $guanggao = array(
+            '1' => '欢乐豆出，暴击红包：卧槽老子是智能饮料机来的，点进来必爆！'
+        , '2' => '欢乐豆出，暴击红包：智能机消费赠送一个暴击红包！！'
+        , '3' => '欢乐豆出，暴击红包：我能爆击，老子智能机来的！！'
+        , '4' => '欢乐豆出，暴击红包：你想干嘛，这么晚还来"小机"那里买东西奖你?！'
+        , '4' => '欢乐豆出，暴击红包：点我给智能机主人自动发红包咯，我是货柜来的?！'
+        , '4' => '欢乐豆出，暴击红包：智能机自动绑定主人哦，坐着也收钱?！！'
+        , '5' => '欢乐豆出，暴击红包：谁说公"机"不生蛋没有生蛋，我生金蛋！！'
+        , '6' => '欢乐豆出，暴击红包：我是货柜来的？难得我开心，不和你"机"较'
+        , '7' => '欢乐豆出，暴击红包：点我，点我，我喜欢智能机，点他了！！'
+        , '7' => '欢乐豆出，暴击红包：我不藏起来了，我有智能机大哥我怕谁！！'
+        , '7' => '欢乐豆出，暴击红包：智能机半夜也收钱，新人必爆！！'
+        );
+        $adhb='暴击红包："有人在-智能鲜蜂智能机购买饮料，该券必爆，点我点我"';
+        //广告覆盖
+        $Business->title = $num . '优惠券，' . $this->hldtoyhq * $num . $guanggao[array_rand($guanggao)];//卖的张数
 
 
         //查询公告信息发布

@@ -88,6 +88,13 @@ class BusinessListForm extends Model
                 if(!$getHongbao){
                     $list[$i]['is_hongbao'] =  0;
                 }
+
+
+                //如果是货柜来的券必须显示出来
+                if($list[$i]['is_hg']){
+                    $list[$i]['avatar_url_hongbao'] = '/images/red_envelope3.png';
+                    $list[$i]['is_hongbao']=1;
+                }
                 $list[$i]['is_ad'] =  0;
                 if($i%9==5){
                     $list[$i]['is_ad'] =  rand(0,1);

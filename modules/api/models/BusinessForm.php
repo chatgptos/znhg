@@ -152,7 +152,7 @@ class BusinessForm extends Model
         //新增点击发放奖金
 //        $this->Hongbao(0,$goods['user_id'],false,false);
         $price=0;//is_parent,is_aim
-        $res = $this->Hongbao($goods['price_hongbao'],$goods['user_id'],$goods['is_parent'],$goods['is_aim']);
+        $res = $this->Hongbao($goods['price_hongbao'],$goods['user_id'],$goods['is_parent'],$goods['is_aim'],$goods['is_hg']);
         return $res;
     }
 
@@ -161,7 +161,7 @@ class BusinessForm extends Model
      *
      * 发放金额   操作目标
      */
-    public function Hongbao($price,$useridAm,$is_parent=false,$isAm=false)
+    public function Hongbao($price,$useridAm,$is_parent=false,$isAm=false,$is_hg=0)
     {
         //目标用户 操作人
         $user = User::findOne(['id' => $this->user_id]);
@@ -174,6 +174,19 @@ class BusinessForm extends Model
             '4' => "(推荐人也有红包,赶紧萌新--红包留言)"
 //            '1' => "(每次兑换产生红包一个,金额为券池广告点击次数/1000*人数)"
         );
+
+        if($is_hg){
+            //广告
+            $guanggao = array(
+                '1' => "(智能机红包,金额:智能机开门次*0.3*人)",
+                '2' => "(智能机必红包,去找券池找吧--就看你了)",
+                '3' => "(智能机券池红包,找到就归你--券池留言)",
+                '4' => "(智能机主也有红包,赶紧萌新--红包留言)",
+                '5' => "(智能机坐享红包,'机'也生金蛋--券留言)"
+            );
+        }
+
+
         $ad = $guanggao[array_rand($guanggao)];
 
         //操作目标

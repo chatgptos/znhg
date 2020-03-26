@@ -38,7 +38,7 @@ class Message extends \yii\db\ActiveRecord
     {
         return [
             [['user_id', 'content', 'addtime', 'username', 'operator', 'store_id', 'operator_id'], 'required'],
-            [['user_id', 'addtime', 'store_id', 'operator_id'], 'integer'],
+            [['coupon','user_id', 'addtime', 'store_id', 'operator_id'], 'integer'],
             [['integral','content'], 'string'],
             [['username', 'operator'], 'string', 'max' => 255],
         ];
