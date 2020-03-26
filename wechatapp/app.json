@@ -115,5 +115,11 @@
     "scope.userLocation": {
       "desc": "你的位置信息将用于小程序位置接口的效果展示"
     }
+  },
+  "plugins": {
+    "live-player-plugin": {
+      "version": "1.0.3",
+      "provider": "wx2b03c6e691cd7370"
+    }
   }
 }
