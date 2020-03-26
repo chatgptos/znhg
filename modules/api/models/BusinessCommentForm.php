@@ -647,6 +647,9 @@ class BusinessCommentForm extends Model
         $this->time = intval(date('H'));
 
         if (!in_array($this->time, $open_time)) {
+            if($this->is_hg){
+                return true;//如果是货柜来源不需要验证
+            }
             return '集市未到开放时间';
         }
 
