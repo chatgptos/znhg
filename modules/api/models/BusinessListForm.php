@@ -48,11 +48,12 @@ class BusinessListForm extends Model
     {
         if (!$this->validate())
             return $this->getModelError();
-        $query = Business::find()->alias('g')->where([
+        $query = Business::find()->select('u.avatar_url pic_url,u.nickname name,g.id,title,status,g.addtime,num,user_id,huanledou,huanledou_charge,xtjl,user_id_buyer,is_exchange,is_hongbao,is_parent,is_aim,is_hg')->alias('g')->where([
             'g.status' => 1,
             'g.is_exchange' => 0,
             'g.is_delete' => 0,
-        ])->orderBy('g.addtime DESC');
+        ])->leftJoin(['u' => User::tableName()], 'u.id=g.user_id')
+            ->orderBy('g.addtime DESC');
         if ($this->store_id)
             $query->andWhere(['g.store_id' => $this->store_id]);
         if ($this->keyword)
@@ -69,9 +70,9 @@ class BusinessListForm extends Model
         $getHongbao=$this->getUserHuobao();
 
         foreach ($list as $i => $item) {
-            if (!$item['pic_url']) {
-                $list[$i]['pic_url'] =  User::findOne(['id' => $item['user_id'], 'store_id' => $this->store_id])->avatar_url;
-                $list[$i]['name'] =  User::findOne(['id' => $item['user_id'], 'store_id' => $this->store_id])->nickname;
+            if ($item['pic_url']) {
+//                $list[$i]['pic_url'] =  User::findOne(['id' => $item['user_id'], 'store_id' => $this->store_id])->avatar_url;
+//                $list[$i]['name'] =  User::findOne(['id' => $item['user_id'], 'store_id' => $this->store_id])->nickname;
 
                 if($list[$i]['is_hongbao']==1){
                     $list[$i]['avatar_url_hongbao'] = '/images/red_envelope.png';
