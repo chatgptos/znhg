@@ -220,12 +220,21 @@ class IndexController extends Controller
                 $integral='1.00';//赠送积分
                 $coupon=2;//赠送券
 
+                //新人增加
                 $res=User::updateAll(
                     ['parent_id' => $user_shop->id,'is_distributor' => 1,'time'=>time(),'coupon'=>\Yii::$app->user->identity->coupon+$coupon,'integral' => \Yii::$app->user->identity->integral+intval($integral)],
                     ['id' => \Yii::$app->user->identity->id]
                 );
-                //上级  本人
+                //因为柜机不能增加所以增加 同样多积分
+                $res=User::updateAll(
+                    ['integral' => $user_shop->integral+intval($integral)],
+                    ['id' => $user_shop->id]
+                );
+
+
+                //上级
                 $user_1=$user_shop;
+                //本人
                 $user=\Yii::$app->user->identity;
 
                 //积分日志增加
