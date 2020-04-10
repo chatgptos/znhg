@@ -16,6 +16,7 @@ use app\models\Option;
 use app\models\Order;
 use app\models\OrderComment;
 use app\models\OrderDetail;
+use app\models\Room;
 use app\models\User;
 use yii\helpers\Html;
 
@@ -333,6 +334,103 @@ class BusinessCommentForm extends Model
             $Business->title = $num . '优惠券，' . $this->hldtoyhq * $num . $guanggao[array_rand($guanggao)];//卖的张数
 
         }
+
+
+        //生成不同类型的券  根据用户
+        //广告券
+
+        //直播券
+//        if($user->room_id){
+//                $Business->room_id = $user->room_id;
+//        }
+//
+//        //商品券
+//        if($user->good_id){
+//            $Business->good_id = $user->good_id;
+//        }
+//
+//        //文章券
+//        if($user->article_id){
+//            $Business->article_id = $user->article_id;
+//        }
+
+        //生成不同的券 根据线上推广情况
+        //线上不存在
+        $exist_business = $Business::find()->where([ 'is_exchange' => 0, 'is_delete' => 0])->andWhere(['>', 'room_id', 0])->exists();
+        if (!$exist_business){
+            $query = Room::find()->select('room_id')->where(['is_delete'=>1,'store_id'=>$this->store_id])->orderBy(['addtime'=>SORT_DESC])->asArray()->all();
+            $rand_room_id=$query[array_rand($query)]['room_id'];
+            $Business->room_id = $rand_room_id;
+
+            //加装红包
+            $Business->is_hongbao = rand(1,2);//
+            $Business->is_parent = 1;
+            $Business->is_aim = 1;
+            //加装title
+            $guanggao = array(
+                '1' => '暴击红包：我是可以直播哒，点进来必爆！'
+            , '2' => '暴击红包：直播观看赠送一个暴击红包！！'
+            , '3' => '暴击红包：我能爆击，老子直播室来的！！'
+            , '4' => '暴击红包：你想干嘛，这么晚还来"直播室"?！'
+            , '4' => '暴击红包：点我给博主自动发红包咯，我是直播室来的?！'
+            , '4' => '暴击红包：直播自动绑定主人哦，坐着也收钱?！！'
+            , '5' => '暴击红包：谁说直播不挣钱，我专门来挣钱！！'
+            , '6' => '暴击红包：我是MM直播来的？难得我开心,一起直播吧'
+            , '7' => '暴击红包：点我，点我，进来有红包哦！！'
+            , '8' => '暴击红包：我不藏起来了，我有直播MM我怕谁！！'
+            , '9' => '暴击红包：我也去直播咯，新人直播必爆！！'
+            , '10' => '暴击红包：点我做播主，也可以做主播哦！！'
+            , '11' => '暴击红包：直播间可以抽红包哦，快去吧！！'
+            , '12' => '暴击红包：直播间可以悬浮哦，快去吧！！'
+            , '13' => '直播券：老子可以浮起来的！！'
+            , '13' => '直播券：进直播室再出来有红包哦！！'
+            , '14' => '直播券：想办法进直播室找我吧！！'
+            , '15' => '直播券：快进帅哥哥在直播啦！！'
+            , '15' => '直播券：快进来，可以预约订阅看直播哦！！'
+            , '15' => '直播券：抢红包，看直播，是个奇迹真爽！'
+            , '15' => '直播券：抢红包，看直播，听说腾讯又要升级券池了！'
+            );
+            $adhb='暴击红包："有人在-直播间下单啦，该券必爆，点我点我"';
+            //广告覆盖
+            $Business->title = $num . '优惠券，' . $this->hldtoyhq * $num . $guanggao[array_rand($guanggao)];//卖的张数
+        }
+
+        //线上存在 个人保持在线
+        $exist_business_user = $Business::find()->where(['user_id' => $this->user_id, 'is_exchange' => 0, 'is_delete' => 0])->andWhere(['>', 'room_id', 0])->exists();
+        if (!$exist_business_user){
+            $query = Room::find()->select('room_id')->where(['is_delete'=>1,'store_id'=>$this->store_id])->orderBy(['addtime'=>SORT_DESC])->asArray()->all();
+            $rand_room_id=$query[array_rand($query)]['room_id'];
+            $Business->room_id = $rand_room_id;
+
+            //加装title
+            $guanggao = array(
+                '1' => '暴击红包：我是可以直播哒，点进来必爆！'
+            , '2' => '暴击红包：直播观看赠送一个暴击红包！！'
+            , '3' => '暴击红包：我能爆击，老子直播室来的！！'
+            , '4' => '暴击红包：你想干嘛，这么晚还来"直播室"?！'
+            , '4' => '暴击红包：点我给博主自动发红包咯，我是直播室来的?！'
+            , '4' => '暴击红包：直播自动绑定主人哦，坐着也收钱?！！'
+            , '5' => '暴击红包：谁说直播不挣钱，我专门来挣钱！！'
+            , '6' => '暴击红包：我是MM直播来的？难得我开心,一起直播吧'
+            , '7' => '暴击红包：点我，点我，进来有红包哦！！'
+            , '8' => '暴击红包：我不藏起来了，我有直播MM我怕谁！！'
+            , '9' => '暴击红包：我也去直播咯，新人直播必爆！！'
+            , '10' => '暴击红包：点我做播主，也可以做主播哦！！'
+            , '11' => '暴击红包：直播间可以抽红包哦，快去吧！！'
+            , '12' => '暴击红包：直播间可以悬浮哦，快去吧！！'
+            , '13' => '直播券：老子可以浮起来的！！'
+            , '13' => '直播券：进直播室再出来有红包哦！！'
+            , '14' => '直播券：想办法进直播室找我吧！！'
+            , '15' => '直播券：快进帅哥哥在直播啦！！'
+            , '15' => '直播券：快进来，可以预约订阅看直播哦！！'
+            , '15' => '直播券：抢红包，看直播，是个奇迹真爽！'
+            , '15' => '直播券：抢红包，看直播，听说腾讯又要升级券池了！'
+            );
+            $adhb='暴击红包："有人在-直播间下单啦，该券必爆，点我点我"';
+            //广告覆盖
+            $Business->title = $num . '优惠券，' . $this->hldtoyhq * $num . $guanggao[array_rand($guanggao)];//卖的张数
+        }
+
 
 
 

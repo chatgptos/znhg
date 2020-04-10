@@ -69,7 +69,7 @@ class Business extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['is_hg','is_hongbao','is_parent','is_aim','store_id','xtjl','is_exchange',  'status', 'addtime', 'is_delete','want_num','order_num','user_id','user_id_buyer','num','huanledou','integral' ], 'integer'],
+            [['room_id','article_id','good_id','is_hg','is_hongbao','is_parent','is_aim','store_id','xtjl','is_exchange',  'status', 'addtime', 'is_delete','want_num','order_num','user_id','user_id_buyer','num','huanledou','integral' ], 'integer'],
         ];
     }
 
@@ -98,6 +98,9 @@ class Business extends \yii\db\ActiveRecord
             'is_parent'=>'已交易 0/1',
             'is_aim'=>'1',
             'is_hg'=>'1',
+            'room_id' => 'room_id',
+            'article_id' => 'article_id',
+            'good_id'=>'good_id',
         ];
     }
 

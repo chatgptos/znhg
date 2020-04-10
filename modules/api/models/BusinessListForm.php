@@ -49,7 +49,7 @@ class BusinessListForm extends Model
     {
         if (!$this->validate())
             return $this->getModelError();
-        $query = Business::find()->select('u.avatar_url pic_url,u.nickname name,g.id,title,is_exchange,is_hongbao,is_parent,is_aim,is_hg,room_id,good_id,article_id')->alias('g')->where([
+        $query = Business::find()->select('g.num,g.huanledou hld,u.avatar_url pic_url,u.nickname name,g.id,title,is_exchange,is_hongbao,is_parent,is_aim,is_hg,room_id,good_id,article_id')->alias('g')->where([
             'g.status' => 1,
             'g.is_exchange' => 0,
             'g.is_delete' => 0,
