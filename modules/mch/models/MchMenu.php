@@ -991,6 +991,28 @@ class MchMenu
                             'mch/card/edit',
                         ],
                     ],
+                    [
+                        'id' => 'room',
+                        'name' => '腾讯直播间',
+                        'route' => 'mch/room/index',
+                        'sub' => [
+                            'mch/room/send',
+                            'mch/room/edit',
+                        ],
+                        'list' => [
+                            [
+                                'name' => '直播间列表',
+                                'route' => 'mch/room/index'
+                            ],
+                            [
+                                'name' => '直播间申请',
+                                'route' => 'mch/room/send',
+                                'sub' => [
+                                    'mch/room/edit'
+                                ]
+                            ]
+                        ]
+                    ],
                 ],
             ],
             [

@@ -16,6 +16,7 @@ use app\models\GoodsPic;
 use app\models\Option;
 use app\models\SeckillGoods;
 use app\models\User;
+use Curl\Curl;
 
 class BusinessForm extends Model
 {
@@ -91,6 +92,7 @@ class BusinessForm extends Model
                 'is_hongbao' => $goods->is_hongbao,
                 'is_parent' => $goods->is_parent,
                 'is_aim' => $goods->is_aim,
+                'room_info' => $room_info,
             ],
         ];
     }
