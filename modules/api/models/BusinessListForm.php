@@ -14,6 +14,7 @@ use app\models\Goods;
 use app\models\GoodsPic;
 use app\models\Order;
 use app\models\OrderDetail;
+use app\models\Room;
 use app\models\User;
 use yii\data\Pagination;
 
@@ -48,7 +49,7 @@ class BusinessListForm extends Model
     {
         if (!$this->validate())
             return $this->getModelError();
-        $query = Business::find()->select('u.avatar_url pic_url,u.nickname name,g.id,title,is_exchange,is_hongbao,is_parent,is_aim,is_hg')->alias('g')->where([
+        $query = Business::find()->select('u.avatar_url pic_url,u.nickname name,g.id,title,is_exchange,is_hongbao,is_parent,is_aim,is_hg,room_id,good_id,article_id')->alias('g')->where([
             'g.status' => 1,
             'g.is_exchange' => 0,
             'g.is_delete' => 0,
@@ -100,6 +101,17 @@ class BusinessListForm extends Model
                 if($i%9==5){
                     $list[$i]['is_ad'] =  rand(0,1);
                 }
+
+                if($list[$i]['room_id']){
+                    $room_info =  Room::findOne(['room_id' => $list[$i]['room_id'], 'store_id' => $this->store_id ,'is_delete' =>0]);
+                    if($room_info){
+                        $room_info= $room_info->toArray();
+                    }
+                    $list[$i]['room_info']=$room_info;
+                }else{
+                    $list[$i]['room_id'] =  0;
+                }
+
 
             }
         }

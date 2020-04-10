@@ -14,6 +14,7 @@ use app\models\Favorite;
 use app\models\Goods;
 use app\models\GoodsPic;
 use app\models\Option;
+use app\models\Room;
 use app\models\SeckillGoods;
 use app\models\User;
 use Curl\Curl;
@@ -75,6 +76,14 @@ class BusinessForm extends Model
 //      预计付费收益
         $huanledou_total =$goods->huanledou+$goods->huanledou_charge;// 需要的欢乐豆 + 总的*手续费
 
+
+        $room_info =  Room::findOne(['room_id' => $goods->room_id, 'store_id' => $this->store_id ,'is_delete' =>0]);
+
+        if($room_info){
+            $room_info= $room_info->toArray();
+        }
+
+
         return [
             'code' => 0,
             'data' => (object)[
@@ -92,7 +101,10 @@ class BusinessForm extends Model
                 'is_hongbao' => $goods->is_hongbao,
                 'is_parent' => $goods->is_parent,
                 'is_aim' => $goods->is_aim,
+                'room_id' => $goods->room_id,
                 'room_info' => $room_info,
+                'article_id' => $goods->article_id,
+                'good_id' => $goods->good_id,
             ],
         ];
     }
