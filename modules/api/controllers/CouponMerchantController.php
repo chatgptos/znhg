@@ -757,6 +757,119 @@ class CouponMerchantController extends Controller
         }
     }
 
+
+
+
+
+
+    /**
+     * @return mixed|string
+     * 申请成为分销商
+     */
+    public function actionApplyZhibo()
+    {
+        $id = \Yii::$app->request->get('qsId');
+
+        $user = User::findOne(['id' => \Yii::$app->user->identity->id, 'store_id' => $this->store->id]);
+        if (!$user) {
+            return json_encode([
+                'code' => 1,
+                'msg' => '用户不存在，或已删除'
+            ], JSON_UNESCAPED_UNICODE);
+        }
+
+        $store_id = $this->store->id;
+        $list = Setting::findOne(['store_id' => $store_id]);
+
+        //获取我的团队
+        $team = new TeamForm();
+        $team->user_id = \Yii::$app->user->id;
+        $team->store_id = $this->store_id;
+        $team->status = -1;
+        $get_team = $team->getList();
+        $team_count = $get_team['data']['first'] + $get_team['data']['second'] + $get_team['data']['third'];
+
+
+        $card_count = $user->coupon;
+
+        //初始化
+        $youHas = 0;
+        $buttonName = '申请';
+        $buttonClicked = true;
+
+
+
+        $level = Level::findOne(['store_id' => $this->store->id,'id' => $user->level, 'is_delete' => 0]);
+        //经销商
+        $team_count_require = $list->agency_team_count_require;
+        $card_count_require = $list->agency_card_count_require;
+        //检查人数
+        if ($team_count < $team_count_require) {
+            return json_encode([
+                'code' => 1,
+                'msg' => '推荐人数不够'
+            ], JSON_UNESCAPED_UNICODE);
+
+        }
+        $form = new OrderPreviewFrom();
+        $model = \Yii::$app->request->get();
+        $form->attributes = $model;
+        $form->store_id = $this->store->id;
+        $form->user_id = \Yii::$app->user->id;
+        $form->goods_id = 14;//类型到id
+        $form->form_list = json_decode($model['form_list'],true);
+        $form->form_id = $model['form_id'];
+        $res=$form->save();
+        $buttonName=$res['msg'];
+
+        //检查优惠券数量
+        if ($card_count < $card_count_require) {
+            return json_encode([
+                'code' => 1,
+                'msg' => '优惠券数量不够'
+            ], JSON_UNESCAPED_UNICODE);
+        }
+
+        //保存日志
+        $data = array(
+            'buttonClicked' => $buttonClicked,
+            'buttonName' => $buttonName,
+            'coupon' => $user->coupon,
+            'youHas' => $youHas,
+        );
+        if ($user->save()) {
+            //记录日志
+            $hld=0;
+            $coupon=$card_count_require;
+            $integral=0;
+
+            $integralLog = new IntegralLog();
+            $integralLog->user_id = $user->id;
+            //卖优惠券
+            $integralLog->content = "申请（成为主播） 后台操作账号：" . $user->nickname . " 欢乐豆".$user->hld."已经扣除：" . $hld . " 豆" . " 优惠券".$user->coupon."已经扣除：" . $coupon . " 张（申请时扣除）,（交易时扣除去积分" . $integral . '个积分）';
+
+            $integralLog->integral = $integral;
+            $integralLog->hld = $hld;
+            $integralLog->coupon = $coupon;
+            $integralLog->addtime = time();
+            $integralLog->username = $user->nickname;
+            $integralLog->operator = 'admin';
+            $integralLog->store_id = $this->store_id;
+            $integralLog->operator_id = 0;
+            $integralLog->save();
+            return json_encode([
+                'data' => $data,
+                'code' => 0,
+                'msg' => '申请成功'
+            ], JSON_UNESCAPED_UNICODE);
+        } else {
+            return json_encode([
+                'code' => 1,
+                'msg' => '申请失败！请重试'
+            ], JSON_UNESCAPED_UNICODE);
+
+        }
+    }
     /**
      * @return mixed|string
      * 获取用户的审核状态

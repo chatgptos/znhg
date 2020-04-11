@@ -282,7 +282,7 @@ class OrderPreviewFrom extends Model
                 $integralLog = new IntegralLog();
                 $integralLog->user_id = $this->user->id;
                 //购买总筹股权 扣除积分
-                $integralLog->content = "(购买总筹股权)：" . $this->user->nickname . " 欢乐豆".$this->user->hld."已经扣除：" . $hld . " 豆" . " 优惠券".$this->user->coupon."已经扣除：" . $coupon . " 张" . $integral . '个积分）';
+                $integralLog->content = "(购买代理商)：" . $this->user->nickname . " 欢乐豆".$this->user->hld."已经扣除：" . $hld . " 豆" . " 优惠券".$this->user->coupon."已经扣除：" . $coupon . " 张" . $integral . '个积分）';
 
                 $integralLog->integral = $goods->integral;
                 $integralLog->hld = $hld;
