@@ -393,7 +393,7 @@ class BusinessCommentForm extends Model
                 );
                 $adhb='暴击红包："有人在-直播间下单啦，该券必爆，点我点我"';
                 //广告覆盖
-                $Business->title = $num . '优惠券，' . $this->hldtoyhq * $num . $guanggao[array_rand($guanggao)];//卖的张数
+                $Business->title =  $guanggao[array_rand($guanggao)];//卖的张数
             }
         }
 
@@ -437,7 +437,7 @@ class BusinessCommentForm extends Model
                 );
                 $adhb='暴击红包："有人在-直播间下单啦，该券必爆，点我点我"';
                 //广告覆盖
-                $Business->title = $num . '优惠券，' . $this->hldtoyhq * $num . $guanggao[array_rand($guanggao)];//卖的张数
+                $Business->title =  $guanggao[array_rand($guanggao)];//卖的张数
             }
         }
 
