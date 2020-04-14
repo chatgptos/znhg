@@ -11,6 +11,7 @@ namespace app\modules\api\models;
 use app\extensions\getInfo;
 use app\models\Topic;
 use app\models\TopicFavorite;
+use app\models\User;
 use yii\helpers\VarDumper;
 
 class TopicForm extends Model
@@ -48,6 +49,30 @@ class TopicForm extends Model
         if ($model['read_count'] >= 10000) {
             $model['read_count'] = intval($model['read_count'] / 10000) . '万+人浏览';
         }
+
+        //查找出所有的该书籍用户
+        $favorite_user_list = TopicFavorite::find()
+            ->select('u.avatar_url pic_url,u.nickname name')
+            ->alias('t')
+            ->innerJoin(['u' => User::tableName()], 'u.id=t.user_id')
+            ->where([
+            'topic_id' => $model['id'],
+            't.is_delete' => 0,
+            't.store_id' => $this->store_id,
+        ]);
+        $model['user_list']=$favorite_user_list->asArray()->all();
+        $model['user_list_count']=$favorite_user_list->count();
+
+
+        $model['read_count'] = intval($model['read_count']) + intval($model['virtual_read_count']);
+        unset($model['virtual_read_count']);
+        if ($model['read_count'] < 10000) {
+            $model['read_count'] = $model['read_count'] . '人浏览';
+        }
+        if ($model['read_count'] >= 10000) {
+            $model['read_count'] = intval($model['read_count'] / 10000) . '万+人浏览';
+        }
+
 
         $model['addtime'] = date('Y-m-d', $model['addtime']);
 

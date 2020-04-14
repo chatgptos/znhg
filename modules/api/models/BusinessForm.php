@@ -77,11 +77,34 @@ class BusinessForm extends Model
         $huanledou_total =$goods->huanledou+$goods->huanledou_charge;// 需要的欢乐豆 + 总的*手续费
 
 
-        $room_info =  Room::findOne(['room_id' => $goods->room_id, 'store_id' => $this->store_id ,'is_delete' =>0]);
+        //直播间
+        $goods->room_id=0;
+        $room_info='';
+        if($goods->room_id){
+            $room_info =  Room::findOne(['room_id' => $goods->room_id, 'store_id' => $this->store_id ,'is_delete' =>0]);
 
-        if($room_info){
-            $room_info= $room_info->toArray();
+            if($room_info){
+                $room_info= $room_info->toArray();
+            }
         }
+
+
+        //文章
+        $goods->article_id=6;
+        $article_info='';
+        if($goods->article_id){
+            $article_form = new TopicForm();
+            $article_form->store_id = $this->store_id;
+            $article_form->id = $goods->article_id;
+            $article_form->user_id = \Yii::$app->user->id;
+            $article_info=$article_form->search();
+            if($article_info['data']){
+                $article_info=$article_info['data'];
+            }
+        }
+
+
+
 
 
         return [
@@ -105,6 +128,7 @@ class BusinessForm extends Model
                 'room_info' => $room_info,
                 'article_id' => $goods->article_id,
                 'good_id' => $goods->good_id,
+                'article_info' => $article_info,
             ],
         ];
     }

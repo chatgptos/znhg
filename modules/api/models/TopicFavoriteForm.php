@@ -8,6 +8,7 @@
 namespace app\modules\api\models;
 
 
+use app\models\Topic;
 use app\models\TopicFavorite;
 
 class TopicFavoriteForm extends Model
