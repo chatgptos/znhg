@@ -3,6 +3,7 @@
 namespace app\modules\mch\controllers\crontab;
 
 use app\extensions\PinterOrder;
+use app\models\Business;
 use app\models\Goods;
 use app\models\IntegralLog;
 use app\models\Level;
@@ -11,13 +12,16 @@ use app\models\Order;
 use app\models\OrderDetail;
 use app\models\OrderRefund;
 use app\models\PrinterSetting;
+use app\models\Room;
 use app\models\Setting;
 use app\models\Store;
 use app\models\StoreUser;
+use app\models\Topic;
 use app\models\User;
 use app\models\UserShareMoney;
 use app\models\UserShareMoneyDetail;
 use app\models\UserShareMoneyIntegral;
+use app\modules\api\models\BusinessCommentForm;
 use app\modules\mch\models\BusinessListForm;
 use app\modules\mch\models\crontab\DailyData;
 use app\modules\mch\models\crontab\Stock;
@@ -1171,6 +1175,89 @@ class CrontabController extends Controller
         $integralLog->store_id = $this->store->id;
         $integralLog->operator_id = 0;
         $integralLog->save();
+
+    }
+
+
+
+
+
+    /**
+     * 账户设置
+     * @return array|bool|string
+     * @throws \yii\base\Exception 积分商品
+     */
+    public function actionBusiness1()
+    {
+        //腾讯大大id
+        $this_user_id = 5241;
+        \Yii::warning('==>' .'begin-bussiness1-'.$this_user_id);
+        //查询优惠券是否有
+        $Business = new Business();
+        $count_business = $Business::find()->where([ 'user_id' => $this_user_id,'is_exchange' => 0, 'is_delete' => 0])
+            ->count();
+        if ($count_business>3) {
+            return;
+        }
+
+        $form = new BusinessCommentForm();
+        $form->store_id = $this->store->id;
+        $form->user_id = $this_user_id;
+        $form->num = 1;
+        $form->room_id = 0;//是货柜 货柜表象
+        $form->good_id = 0;//是货柜 货柜表象
+        $form->article_id = 0;//是货柜 货柜表象
+
+        //从数据库里取用
+        //取出来券池文章
+        //如果没有文章券
+        $exist_business = $Business::find()->where([ 'user_id' => $this_user_id,'is_exchange' => 0, 'is_delete' => 0])
+            ->andWhere(['>', 'article_id', 0])
+            ->exists();
+        if (!$exist_business) {
+            $topic_query = Topic::find()->where(['store_id' => $this->store->id, 'is_delete' => 0])->asArray()->all();
+            $topic_query_id = $topic_query[array_rand($topic_query)]['id'];
+            if($topic_query_id) {
+                //如果没有就创建新闻券
+                //创建券池 1个券
+                $form->article_id = $topic_query_id;//是货柜 货柜表象
+                $res=$form->add();
+                return;
+            }
+        }
+
+
+        $exist_business = $Business::find()->where([ 'user_id' => $this_user_id,'is_exchange' => 0, 'is_delete' => 0])
+            ->andWhere(['>', 'room_id', 0])
+            ->exists();
+        if (!$exist_business) {
+            $room_query = Room::find()->where(['store_id' => $this->store->id, 'is_delete' => 0])->asArray()->all();
+            $room_query_id = $room_query[array_rand($room_query)]['id'];
+            if($room_query_id) {
+                //如果没有就创建新闻券
+                //创建券池 1个券
+                $form->room_id = $room_query_id;//是货柜 货柜表象
+                $res=$form->add();
+                return;
+            }
+        }
+
+
+        $exist_business = $Business::find()->where([ 'user_id' => $this_user_id,'is_exchange' => 0, 'is_delete' => 0])
+            ->andWhere(['>', 'good_id', 0])
+            ->exists();
+        if (!$exist_business) {
+            $good_query = Goods::find()->where(['store_id' => $this->store->id, 'is_delete' => 0, 'status' => 1])->asArray()->all();
+            $good_query_id = $good_query[array_rand($good_query)]['id'];
+            if($good_query_id) {
+                //如果没有就创建新闻券
+                //创建券池 1个券
+                $form->good_id = $good_query_id;//是货柜 货柜表象
+                $res=$form->add();
+                return;
+            }
+        }
+        $res=$form->add();
 
     }
 }

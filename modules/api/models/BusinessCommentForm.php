@@ -66,6 +66,12 @@ class BusinessCommentForm extends Model
 
 
 
+    public $article_id=0;//文章 卖优惠券
+    public $room_id=0;//直播 卖优惠券
+    public $good_id=0;//产品 卖优惠券
+
+
+
 
 
     public function rules()
@@ -340,27 +346,26 @@ class BusinessCommentForm extends Model
         //广告券
 
         //直播券
-//        if($user->room_id){
-//                $Business->room_id = $user->room_id;
-//        }
-//
-//        //商品券
-//        if($user->good_id){
-//            $Business->good_id = $user->good_id;
-//        }
-//
-//        //文章券
-//        if($user->article_id){
-//            $Business->article_id = $user->article_id;
-//        }
+        if($this->room_id){
+                $Business->room_id = $this->room_id;
+        }
+
+        //商品券
+        if($this->good_id){
+            $Business->good_id = $this->good_id;
+        }
+
+        //文章券
+        if($this->article_id){
+            $Business->article_id = $this->article_id;
+        }
 
         //生成不同的券 根据线上推广情况
         //线上不存在
         $exist_business = $Business::find()->where([ 'is_exchange' => 0, 'is_delete' => 0])->andWhere(['>', 'room_id', 0])->exists();
         if (!$exist_business){
-            $query = Room::find()->select('room_id')->where(['is_delete'=>1,'store_id'=>$this->store_id])->orderBy(['addtime'=>SORT_DESC])->asArray()->all();
+            $query = Room::find()->select('room_id')->where(['is_delete'=>0,'store_id'=>$this->store_id])->orderBy(['addtime'=>SORT_DESC])->asArray()->all();
             $rand_room_id=$query[array_rand($query)]['room_id'];
-
             if($rand_room_id){
                 $Business->room_id = $rand_room_id;
                 //加装红包
@@ -401,13 +406,13 @@ class BusinessCommentForm extends Model
         //线上存在 个人保持在线 出现的概率
         $exist_business_user = $Business::find()->where(['user_id' => $this->user_id, 'is_exchange' => 0, 'is_delete' => 0])->andWhere(['>', 'room_id', 0])->exists();
         if (!$exist_business_user){
-            $zhibo=99;
+            $zhibo=90;
         }else{
             $zhibo=0;
         }
         $zhibo_gailv=rand($zhibo,100);
         if($zhibo_gailv>95){
-            $query = Room::find()->select('room_id')->where(['is_delete'=>1,'store_id'=>$this->store_id])->orderBy(['addtime'=>SORT_DESC])->asArray()->all();
+            $query = Room::find()->select('room_id')->where(['is_delete'=>0,'store_id'=>$this->store_id])->orderBy(['addtime'=>SORT_DESC])->asArray()->all();
             $rand_room_id=$query[array_rand($query)]['room_id'];
             if($rand_room_id){
                 $Business->room_id = $rand_room_id;

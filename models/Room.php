@@ -53,7 +53,6 @@ class Room extends \yii\db\ActiveRecord
             'pic_url' => '直播间图片',
             'content' => '直播间描述',
             'is_delete' => 'Is Delete',
-            'room_id' => 'room_id',
             'addtime' => 'Addtime',
             'live_status'=>'直播状态',
             'goods'=>'直播商品',
