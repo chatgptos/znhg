@@ -78,7 +78,7 @@ class BusinessForm extends Model
 
 
         //直播间
-        $goods->room_id=0;
+        $goods->room_id=1;
         $room_info='';
         if($goods->room_id){
             $room_info =  Room::findOne(['room_id' => $goods->room_id, 'store_id' => $this->store_id ,'is_delete' =>0]);

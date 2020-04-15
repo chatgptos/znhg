@@ -124,6 +124,7 @@ Page({
                 (function (j) {
                     wx.uploadFile({
                         url: api.default.upload_image,
+                        formData:{'store_id':1},
                         name: "image",
                         filePath: goods_list[i].pic_list[j],
                         complete: function (e) {
@@ -161,7 +162,7 @@ Page({
                             success: function (e) {
                                 if (e.confirm) {
                                     wx.redirectTo({
-                                        url: "/pages/order/order?status=3",
+                                        // url: "/pages/order/order?status=3",
                                     });
                                 }
                             }

@@ -31,8 +31,12 @@ class TopicForm extends Model
     {
         if (!$this->validate())
             return $this->getModelError();
-        $model = Topic::find()->where(['store_id' => $this->store_id, 'id' => $this->id, 'is_delete' => 0])
-            ->select('id,title,read_count,virtual_read_count,content,addtime')->asArray()->one();
+        $model = Topic::find()
+            ->alias('t')
+            ->where(['t.store_id' => $this->store_id, 't.id' => $this->id, 't.is_delete' => 0])
+            ->select('u.avatar_url,u.nickname,t.id,title,read_count,virtual_read_count,content,t.addtime,virtual_favorite_count')
+            ->innerJoin(['u' => User::tableName()], 'u.id=t.user_id')
+            ->asArray()->one();
 
         if (empty($model))
             return [
@@ -52,7 +56,7 @@ class TopicForm extends Model
 
         //查找出所有的该书籍用户
         $favorite_user_list = TopicFavorite::find()
-            ->select('u.avatar_url pic_url,u.nickname name')
+            ->select('u.avatar_url,u.nickname')
             ->alias('t')
             ->innerJoin(['u' => User::tableName()], 'u.id=t.user_id')
             ->where([
@@ -60,8 +64,18 @@ class TopicForm extends Model
             't.is_delete' => 0,
             't.store_id' => $this->store_id,
         ]);
-        $model['user_list']=$favorite_user_list->asArray()->all();
+        $model['user_list']=$favorite_user_list->limit(6)->orderBy('t.addtime DESC')->asArray()->all();
         $model['user_list_count']=$favorite_user_list->count();
+
+        //最后加一个
+        $model['user_list'][$model['user_list_count']]['avatar_url'] = 0;
+//            默认加上设定的个数
+//        for ($i = $begin_id; $i< $end_id; $i++){
+//            if (!isset($model['user_list'][$i])){
+//                $model['user_list'][$i]['avatar_url'] = 0;
+//            }
+//        }
+
 
 
         $model['read_count'] = intval($model['read_count']) + intval($model['virtual_read_count']);

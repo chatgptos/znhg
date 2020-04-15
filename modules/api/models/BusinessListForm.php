@@ -113,6 +113,21 @@ class BusinessListForm extends Model
                 }
 
 
+                if($list[$i]['article_id']){
+                    $article_form = new TopicForm();
+                    $article_form->store_id = $this->store_id;
+                    $article_form->id = $list[$i]['article_id'];
+                    $article_form->user_id = \Yii::$app->user->id;
+                    $article_info=$article_form->search();
+                    if($article_info['data']){
+                        $article_info=$article_info['data'];
+                        $list[$i]['article_info']=$article_info;
+                    }
+                }else{
+                    $list[$i]['article_id'] =  0;
+                }
+
+
             }
         }
 
