@@ -134,7 +134,7 @@ class OrderClerkForm extends Model
         //积分日志增加
         $Message = new Message();
         $Message->user_id = $user->id;
-        $Message->content = "奖励".$user->nickname."用户，智能鲜蜂系统奖励：" . $integral . " 积分（已到账）";
+        $Message->content = "奖励".$user->nickname."用户，购值爽系统奖励：" . $integral . " 积分（已到账）";
         $Message->integral = $integral;
         $Message->addtime = time();
         $Message->username = $user->nickname;

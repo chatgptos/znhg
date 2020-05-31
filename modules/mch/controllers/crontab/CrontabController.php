@@ -1119,7 +1119,7 @@ class CrontabController extends Controller
         //积分日志增加
         $Message = new Message();
         $Message->user_id = $user_1->id;
-        $Message->content = "推荐".$user->nickname."用户，智能鲜蜂系统奖励：" . $integral . " 积分（已到账）";
+        $Message->content = "推荐".$user->nickname."用户，购值爽系统奖励：" . $integral . " 积分（已到账）";
         $Message->integral = $integral;
         $Message->addtime = time();
         $Message->username = $user_1->nickname;
@@ -1132,7 +1132,7 @@ class CrontabController extends Controller
         //积分日志增加
         $integralLog = new IntegralLog();
         $integralLog->user_id = $user_1->id;
-        $integralLog->content = "推荐".$user->nickname."用户，智能鲜蜂系统奖励：" . $integral . " 积分（已到账）";
+        $integralLog->content = "推荐".$user->nickname."用户，购值爽系统奖励：" . $integral . " 积分（已到账）";
         $integralLog->integral = intval($integral);
         $integralLog->addtime = time();
         $integralLog->username = $user_1->nickname;
