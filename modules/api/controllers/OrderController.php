@@ -178,6 +178,29 @@ class OrderController extends Controller
         $this->renderJson($form->save());
     }
 
+
+
+    //评论预览页面
+    public function actionTopicCommentPreview()
+    {
+        $form = new OrderCommentPreview();
+        $form->attributes = \Yii::$app->request->get();
+        $form->store_id = $this->store->id;
+        $form->user_id = \Yii::$app->user->id;
+        $this->renderJson($form->search());
+    }
+
+    //评论提交
+    public function actionTopicComment()
+    {
+        $form = new OrderCommentForm();
+        $form->attributes = \Yii::$app->request->post();
+        $form->store_id = $this->store->id;
+        $form->user_id = \Yii::$app->user->id;
+        $this->renderJson($form->save());
+    }
+
+
     //订单物流信息
     public function actionExpressDetail()
     {
