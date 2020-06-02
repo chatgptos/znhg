@@ -126,7 +126,7 @@ class WxPayScoreOrder extends Controller
                     'appid' => $this->wechat->appId,
                     'service_id' =>  $this->service_id,
                     'service_introduction' => '智慧零售',
-//                    'service_introduction' => '智能鲜蜂券池独享柜'.$goods_name,
+//                    'service_introduction' => '购值爽券池独享柜'.$goods_name,
 //                    'post_payments' => [[
 //                        'name' => '券池独享福利:'.$goods_name,
 //                        'amount' =>intval( $pay_price*100),
@@ -134,8 +134,8 @@ class WxPayScoreOrder extends Controller
 //                        'count' => $num,
 //                    ]],
 //                    "location" => [
-//                        'start_location' => "智能鲜蜂券池独享柜，开门一切就是你的-AI BEE",
-//                        'end_location' => "智能鲜蜂券池,更多的券,更多福利,独享属于你的世界-INCHINA,有券还有现金抢哦",
+//                        'start_location' => "购值爽券池独享柜，开门一切就是你的-AI BEE",
+//                        'end_location' => "购值爽券池,更多的券,更多福利,独享属于你的世界-INCHINA,有券还有现金抢哦",
 //                    ],
                     "notify_url" => "https://app.aijiehun.com/paynotify/wechatscorepay",
                     'time_range' => [
@@ -150,7 +150,7 @@ class WxPayScoreOrder extends Controller
 //                        'description' => $goods_name,
                     ],
 //                    'post_discounts' => [[
-//                        'name' => "智能鲜蜂券池独享优惠",
+//                        'name' => "购值爽券池独享优惠",
 //                        'amount' => intval($total_price-$pay_price)*100,
 //                        'description' => "券池独享柜，您的独享，进入小程序券池子抢券得到更多",
 //                    ]],
@@ -205,7 +205,7 @@ class WxPayScoreOrder extends Controller
                         'description' => $goods_name,
                     ],
                     'post_discounts' => [[
-                        'name' => "智能鲜蜂券池独享优惠",
+                        'name' => "购值爽券池独享优惠",
                         'amount' => intval($total_price-$pay_price)*100,
                         'description' => "券池独享柜,进入小程序券池子抢券,得更多,有券还有现金",
                     ]],
@@ -214,8 +214,8 @@ class WxPayScoreOrder extends Controller
                         'start_location' => $address,
                     ],
 //                    "location" => [
-//                        'start_location' => "智能鲜蜂券池独享柜，开门一切就是你的-AI BEE",
-//                        'end_location' => "智能鲜蜂券池,更多的券,更多福利,独享属于你的世界-INCHINA,有券还有现金抢哦",
+//                        'start_location' => "购值爽券池独享柜，开门一切就是你的-AI BEE",
+//                        'end_location' => "购值爽券池,更多的券,更多福利,独享属于你的世界-INCHINA,有券还有现金抢哦",
 //                    ],
                     'profit_sharing'=>false,
                 ]),

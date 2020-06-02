@@ -335,7 +335,7 @@ class BusinessCommentForm extends Model
             , '7' => '欢乐豆出，暴击红包：我不藏起来了，我有智能机大哥我怕谁！！'
             , '7' => '欢乐豆出，暴击红包：智能机半夜也收钱，新人必爆！！'
             );
-            $adhb='暴击红包："有人在-智能鲜蜂智能机购买饮料，该券必爆，点我点我"';
+            $adhb='暴击红包："有人在-购值爽智能机购买饮料，该券必爆，点我点我"';
             //广告覆盖
             $Business->title = $num . '优惠券，' . $this->hldtoyhq * $num . $guanggao[array_rand($guanggao)];//卖的张数
 
