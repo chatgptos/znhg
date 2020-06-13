@@ -9,6 +9,7 @@ namespace app\modules\api\models\couponmall;
 
 
 use app\models\PtOrderDetail;
+use app\models\Room;
 use app\models\Shop;
 use app\models\User;
 use app\modules\api\models\Model;
@@ -49,6 +50,21 @@ class GoodsForm extends Model
             ->orderBy('sort ASC')
             ->asArray()
             ->all();
+
+        foreach ($list AS $k => $v){
+            $room_info='';
+            if($v['room_id']){
+                $room_info =  Room::findOne(['room_id' => $v['room_id'], 'store_id' => $this->store_id ,'is_delete' =>0]);
+                if($room_info){
+                    $room_info= $room_info->toArray();
+                }
+            }
+            $list[$k]['room_info']=$room_info;
+        }
+
+
+
+
 
         return [
             'row_count'     => intval($count),

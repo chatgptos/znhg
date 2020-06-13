@@ -109,6 +109,7 @@ class GoodsController extends Controller
     public function actionGoodsEdit($id = 0)
     {
         $goods = Goods::findOne(['id'=>$id,'is_delete'=>0,'store_id'=>$this->store->id]);
+
         $form_list = Form::find()->where(['store_id'=>$this->store->id,'goods_id'=>$id,'is_delete'=>0])->orderBy(['sort'=>SORT_ASC])->asArray()->all();
 
         if (!$goods){

@@ -288,7 +288,7 @@ class MchMenu
 
             [
 //                'id' => 'book',
-                'name' => '优惠券商场管理',
+                'name' => '直播广场管理',
                 'icon' => 'icon-service',
                 'route' => 'mch/couponmall/goods/index',
                 'list' => [

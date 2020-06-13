@@ -50,6 +50,10 @@ class GoodsForm extends Model
 
     public $buy_max_day;
 
+    public $room_id;
+
+
+
 
     /**
      * @inheritdoc
@@ -60,7 +64,7 @@ class GoodsForm extends Model
             [['name', 'price', 'original_price', 'detail', 'service', 'store_id'], 'required'],
             [['price', 'original_price','coupon','integral','stock','buy_max','buy_max_day'], 'number'],
             [['detail', 'cover_pic'], 'string'],
-            [['cat_id', 'sort', 'virtual_sales', 'store_id'], 'integer'],
+            [['room_id','cat_id', 'sort', 'virtual_sales', 'store_id'], 'integer'],
             [['name','shop_id'], 'string', 'max' => 255],
             [['service'], 'string', 'max' => 2000],
             [['goods_pic_list','form_list',], 'safe',],
@@ -96,6 +100,7 @@ class GoodsForm extends Model
             'stock' => '积分',
             'buy_max' => '积分',
             'buy_max_day' => '积分',
+            'room_id' => 'room_id',
         ];
     }
 
@@ -154,6 +159,7 @@ class GoodsForm extends Model
             $goods = $this->goods;
             $goods->integral = $this->integral;
             $goods->coupon = $this->coupon;
+            $goods->room_id = $this->room_id;
             $goods->stock = $this->stock;//减少库存
             $goods->buy_max = $this->buy_max;//减少库存
             $goods->buy_max_day = $this->buy_max_day;//减少库存

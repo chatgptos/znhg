@@ -27,6 +27,7 @@ use Yii;
  * @property string $integral
  * @property string $stock
  * @property string $buy_max
+ * @property string $room_id
  * @property string $buy_max_day
  *
  *
@@ -51,7 +52,7 @@ class Goods extends \yii\db\ActiveRecord
             [['name', 'price', 'original_price', 'detail', 'service', 'store_id'], 'required'],
             [['price', 'original_price','stock'], 'number'],
             [['detail', 'cover_pic'], 'string'],
-            [['cat_id', 'status', 'sort', 'virtual_sales', 'addtime', 'is_delete', 'sales', 'store_id'], 'integer'],
+            [['room_id','cat_id', 'status', 'sort', 'virtual_sales', 'addtime', 'is_delete', 'sales', 'store_id'], 'integer'],
             [['name','shop_id'], 'string', 'max' => 255],
             [['service'], 'string', 'max' => 2000],
         ];
@@ -84,6 +85,7 @@ class Goods extends \yii\db\ActiveRecord
             'integral' => 'Store ID',
             'buy_max' => '最多允许购买',
             'buy_max_day' => '每日最多购买',
+            'room_id' => 'room_id',
         ];
     }
 
