@@ -489,7 +489,7 @@ if (!$returnUrl)
                             <div class="col-9">
                                 <input class="form-control short-row" name="model[room_id]"
                                        value="<?= $goods['room_id'] ?>">
-                                <div class="fs-sm text-muted">请填写货柜id 多个请使用英文逗号<kbd>,</kbd>分隔，不使用货柜请填 -1</div>
+                                <div class="fs-sm text-muted">请填写直播间的id<kbd>,</kbd>注意腾讯的id</div>
                             </div>
                         </div>
                     </div>
