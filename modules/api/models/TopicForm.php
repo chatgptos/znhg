@@ -35,7 +35,7 @@ class TopicForm extends Model
             ->alias('t')
             ->where(['t.store_id' => $this->store_id, 't.id' => $this->id, 't.is_delete' => 0])
             ->select('u.avatar_url,u.nickname,t.id,title,read_count,virtual_read_count,content,t.addtime,virtual_favorite_count')
-            ->innerJoin(['u' => User::tableName()], 'u.id=t.user_id')
+            ->leftJoin(['u' => User::tableName()], 'u.id=t.user_id')
             ->asArray()->one();
 
         if (empty($model))
