@@ -236,7 +236,7 @@
                     },
                     {
                         name: "直播房间",
-                        link: "plugin-private://wx2b03c6e691cd7370/pages/live-player-plugin?room_id=",
+                        link: "plugin-private://wx2b03c6e691cd7370/pages/live-player-plugin",
                         open_type: "navigate",
                         params: [
                             {
