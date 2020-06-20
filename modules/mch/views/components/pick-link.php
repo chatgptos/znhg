@@ -235,6 +235,18 @@
                         ]
                     },
                     {
+                        name: "直播房间",
+                        link: "/plugin-private://wx2b03c6e691cd7370/pages/live-player-plugin",
+                        open_type: "navigate",
+                        params: [
+                            {
+                                key: "room_id",
+                                value: "",
+                                desc: "id请填写在房间列表列表中相关腾讯直播间的的ID"
+                            }
+                        ]
+                    },
+                    {
                         name: "领券中心",
                         link: "/pages/coupon-list/coupon-list",
                         open_type: "navigate",

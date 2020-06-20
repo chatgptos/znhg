@@ -388,6 +388,10 @@ $this->params['active_nav_group'] = 11;
                     url: '/pages/mall/mall',
                 },
                 {
+                    name: '直播广场',
+                    url: '/pages/cheapmarket/index/cheapmarket',
+                },
+                {
                     name: '暂时不显示',
                     url: '/pages/mall/deplopment',
                 },
