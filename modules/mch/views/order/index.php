@@ -452,7 +452,7 @@ isset($Gets['shop_id']) && $condition['shop_id'] = $Gets['shop_id'];
                                 <?php if ($order_item['is_offline'] == 0): ?>
                                     <span>地址：<?= $order_item['address'] ?></span>
                                 <?php endif; ?>
-                                <span>地址：<?= $order_item['room_id'] ?></span>
+                                <span>直播房间：<?= $order_item['room_id'] ?></span>
                             </div>
                             <?php if ($order_item['shop_id']): ?>
                                 <div>
