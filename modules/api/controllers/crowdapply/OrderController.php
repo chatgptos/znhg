@@ -283,63 +283,28 @@ class OrderController extends Controller
 
         $haibao = \Yii::$app->request->get('haibao');
 
-        if($haibao){
-
+        if(empty($haibao)){
             $this->renderJson([
                 'code' => 0,
                 'msg' => 'success',
                 'data' => [
-                    'url' => '1',
+                    'url' => 'http://airent-hospital.oss-cn-beijing.aliyuncs.com/uploads/image/2d/2de65aa459924541f436dfdf510b5b2f.png',
                 ],
             ]);
-
         }
-
-
-        $this->renderJson([
-            'code' => 0,
-            'msg' => 'success',
-            'data' => [
-                'url' => 'http://airent-hospital.oss-cn-beijing.aliyuncs.com/uploads/image/2d/2de65aa459924541f436dfdf510b5b2f.png',
-            ],
-        ]);
-
-
 
         $order_no = \Yii::$app->request->get('order_no');
         $order = Order::findOne(['order_no'=>$order_no,'store_id'=>$this->store->id]);
-//        if(!empty($order->offline_qrcode)){
-//            return json_encode([
-//                'code' => 0,
-//                'msg' => 'success',
-//                'data' => [
-//                    'url' => $order->offline_qrcode,
-//                ],
-//            ],JSON_UNESCAPED_UNICODE);
-//        }
-//        $url = \Yii::$app->cache->get('offline_qrcode'.$order_no);
-//        if($url){
-//            return json_encode([
-//                'code' => 0,
-//                'msg' => 'success',
-//                'data' => [
-//                    'url' => $url,
-//                ],
-//            ],JSON_UNESCAPED_UNICODE);
-//        }
 
         $form = new QrcodeForm();
         $form->data = [
             'scene'=>"{$order->id}",
-            'page'=>"pages/book/clerk/clerk",
+            'page'=>"pages/crowdapply/order/order",
             'width'=>100
         ];
         $form->store = $this->store;
         $res = $form->getQrcode();
-//        \Yii::$app->cache->set('offline_qrcode'.$order_no,$res['data']['url']);
-//        $order->offline_qrcode = $res['data']['url'];
 
-//        $order->save();
         return json_encode($res,JSON_UNESCAPED_UNICODE);
     }
 
