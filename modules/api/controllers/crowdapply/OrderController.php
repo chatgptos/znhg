@@ -149,8 +149,7 @@ class OrderController extends Controller
             ])
             ->andWhere([
                 'o.is_delete' => 0,
-                'o.store_id' => $this->store->id,
-                'o.user_id' => \Yii::$app->user->id,
+                'o.store_id' => 1,
                 'o.is_cancel' => 0,
                 'o.id' => $id,
             ])
