@@ -289,7 +289,7 @@ $condition = [
                             <?php if ($order_item['room_id'] != 0): ?>
                                 <div>
                                     直播间id：
-                                    <?= $order_item['$order_item'] ?>
+                                    <?= $order_item['room_id'] ?>
                                 </div>
                             <?php endif; ?>
                         </td>
