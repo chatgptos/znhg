@@ -8,6 +8,7 @@
 namespace app\modules\api\controllers\crowdapply;
 
 
+use app\models\Room;
 use app\modules\api\models\crowdapply\Goods;
 use app\modules\api\models\crowdapply\Order;
 use app\modules\api\models\crowdapply\OrderForm;
@@ -168,6 +169,17 @@ class OrderController extends Controller
             ->asArray()
             ->all();
         $order['orderForm'] = $orderForm;
+
+
+        $room_info='';
+        $room_info =  Room::findOne(['room_id' => $order['room_id'], 'store_id' => $this->store_id ,'is_delete' =>0]);
+        if($room_info){
+            $room_info= $room_info->toArray();
+        }
+        $order['room_info']=$room_info;
+
+
+
         $shopList = [];
         if (!empty($order['shop_id'])){
             $shopId = explode(',',trim($order['shop_id'],','));
