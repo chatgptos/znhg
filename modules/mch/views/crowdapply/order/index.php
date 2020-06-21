@@ -267,7 +267,7 @@ $condition = [
 
                             <?php if ($order_item['is_pay'] == 1): ?>
                                 <div>
-                                    发货状态：
+                                    使用状态：
                                     <?php if ($order_item['is_use'] == 1): ?>
                                         <span class="badge badge-success">已使用</span>
                                     <?php else: ?>
@@ -284,6 +284,12 @@ $condition = [
                                         <span class="badge badge-warning">申请退款中</span>
                                     <?php endif; ?>
 
+                                </div>
+                            <?php endif; ?>
+                            <?php if ($order_item['room_id'] != 0): ?>
+                                <div>
+                                    直播间id：
+                                    <?= $order_item['$order_item'] ?>
                                 </div>
                             <?php endif; ?>
                         </td>
