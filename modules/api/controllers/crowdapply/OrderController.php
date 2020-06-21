@@ -272,23 +272,27 @@ class OrderController extends Controller
         $haibao = \Yii::$app->request->get('haibao');
 
         if($haibao){
-            return [
+
+            $this->renderJson([
                 'code' => 0,
                 'msg' => 'success',
                 'data' => [
                     'url' => '1',
                 ],
-            ];
+            ]);
+
         }
 
 
-        return [
+        $this->renderJson([
             'code' => 0,
             'msg' => 'success',
             'data' => [
                 'url' => 'http://airent-hospital.oss-cn-beijing.aliyuncs.com/uploads/image/2d/2de65aa459924541f436dfdf510b5b2f.png',
             ],
-        ];
+        ]);
+
+
 
         $order_no = \Yii::$app->request->get('order_no');
         $order = Order::findOne(['order_no'=>$order_no,'store_id'=>$this->store->id]);
