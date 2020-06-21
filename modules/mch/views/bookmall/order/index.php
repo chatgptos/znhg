@@ -179,7 +179,7 @@ isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
                                 <span class="status-item mr-3">核销员：<?= $clerk->nickname ?>的订单</span>
                             <?php endif; ?>
                             <?php if ($shop): ?>
-                                <span class="status-item mr-3">货柜：<?= $shop->name ?>的订单</span>
+                                <span class="status-item mr-3">购值爽服务点：<?= $shop->name ?>的订单</span>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -457,8 +457,8 @@ isset($Gets['shop_id']) && $condition['user_id'] = $Gets['shop_id'];
                             </div>
                             <?php if ($order_item['shop_id']): ?>
                                 <div>
-                                    <span class="mr-3">货柜名称：<?= $order_item['shop']['name'] ?></span>
-                                    <span class="mr-3">货柜地址：<?= $order_item['shop']['address'] ?></span>
+                                    <span class="mr-3">购值爽服务点名称：<?= $order_item['shop']['name'] ?></span>
+                                    <span class="mr-3">购值爽服务点地址：<?= $order_item['shop']['address'] ?></span>
                                     <span class="mr-3">电话：<?= $order_item['shop']['mobile'] ?></span>
                                 </div>
                             <?php endif; ?>

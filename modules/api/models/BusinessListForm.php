@@ -92,7 +92,7 @@ class BusinessListForm extends Model
                 }
 
 
-                //如果是货柜来的券必须显示出来
+                //如果是购值爽服务点来的券必须显示出来
                 if($list[$i]['is_hg']){
                     $list[$i]['avatar_url_hongbao'] = '/images/red_envelope3.png';
                     $list[$i]['is_hongbao']=1;

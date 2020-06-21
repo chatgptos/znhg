@@ -473,12 +473,12 @@ if (!$returnUrl)
                         </div>
                         <div class="form-group row">
                             <div class="col-3 text-right">
-                                <label class=" col-form-label">支持货柜</label>
+                                <label class=" col-form-label">支持购值爽服务点</label>
                             </div>
                             <div class="col-9">
                                 <input class="form-control short-row" name="model[shop_id]"
                                        value="<?= $goods['shop_id'] ?>">
-                                <div class="fs-sm text-muted">请填写货柜id 多个请使用英文逗号<kbd>,</kbd>分隔，不使用货柜请填 -1</div>
+                                <div class="fs-sm text-muted">请填写购值爽服务点id 多个请使用英文逗号<kbd>,</kbd>分隔，不使用购值爽服务点请填 -1</div>
                             </div>
                         </div>
                     </div>

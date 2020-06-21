@@ -21,13 +21,13 @@ class HuoGui
 
 
 //        $url="https://api.voidiot.com/open-api/syncUserInfo";//同步用户数据可以开门
-//        $url="https://api.voidiot.com/open-api/getDeviceList";//获取货柜列表
-//        $url="https://api.voidiot.com/open-api/getDeviceById";//获取货柜详情
+//        $url="https://api.voidiot.com/open-api/getDeviceList";//获取购值爽服务点列表
+//        $url="https://api.voidiot.com/open-api/getDeviceById";//获取购值爽服务点详情
 //        $url="https://api.voidiot.com/open-api/completeOrder";//完结订单传入开门id记录
 //        $url="https://api.voidiot.com/open-api/openDoor";//取货开门
 //        $url="https://api.voidiot.com/open-api/getSelectGoods";//实时购买商品数据 判断门是否关闭
-//        $url="https://api.voidiot.com/open-api/getOrdersByOpenDoorId";//获取货柜商品详情
-//        $url="https://api.voidiot.com/open-api/getDeviceGoods";//获取货柜商品详情
+//        $url="https://api.voidiot.com/open-api/getOrdersByOpenDoorId";//获取购值爽服务点商品详情
+//        $url="https://api.voidiot.com/open-api/getDeviceGoods";//获取购值爽服务点商品详情
 //        $url="https://api.voidiot.com/open-api/replenish";//补货开门
 //        $url="https://api.voidiot.com/open-api/getDeviceRealTimeGoods";//获取补货实时货品
 
@@ -46,13 +46,13 @@ class HuoGui
         );
         $pay_data['sign'] = $this->makeSignHG($pay_data['biz_content']);
 //        $url="https://api.voidiot.com/open-api/syncUserInfo";//同步用户数据可以开门
-        $url="https://api.voidiot.com/open-api/getDeviceList";//获取货柜列表
-//        $url="https://api.voidiot.com/open-api/getDeviceById";//获取货柜详情
+        $url="https://api.voidiot.com/open-api/getDeviceList";//获取购值爽服务点列表
+//        $url="https://api.voidiot.com/open-api/getDeviceById";//获取购值爽服务点详情
 //        $url="https://api.voidiot.com/open-api/completeOrder";//完结订单传入开门id记录
 //        $url="https://api.voidiot.com/open-api/openDoor";//取货开门
 //        $url="https://api.voidiot.com/open-api/getSelectGoods";//实时购买商品数据 判断门是否关闭
-//        $url="https://api.voidiot.com/open-api/getOrdersByOpenDoorId";//获取货柜商品详情
-//        $url="https://api.voidiot.com/open-api/getDeviceGoods";//获取货柜商品详情
+//        $url="https://api.voidiot.com/open-api/getOrdersByOpenDoorId";//获取购值爽服务点商品详情
+//        $url="https://api.voidiot.com/open-api/getDeviceGoods";//获取购值爽服务点商品详情
 //        $url="https://api.voidiot.com/open-api/replenish";//补货开门
 //        $url="https://api.voidiot.com/open-api/getDeviceRealTimeGoods";//获取补货实时货品
 

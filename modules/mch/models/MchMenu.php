@@ -942,14 +942,14 @@ class MchMenu
                         ],
                     ],
                     [
-                        'name' => '货柜',
+                        'name' => '购值爽服务点',
                         'route' => 'mch/store/shop',
                         'sub' => [
                             'mch/store/shop-edit',
                         ],
                     ],
                     [
-                        'name' => '货柜设备',
+                        'name' => '购值爽服务点设备',
                         'route' => 'mch/store/huogui',
                         'sub' => [
                             'mch/store/huogui-edit',

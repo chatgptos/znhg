@@ -138,7 +138,7 @@ class FairController extends Controller
     /**
      * @param null $id
      * @param int $status //0--解除核销员  1--设置核销员
-     * @param int $edit //0--设置/取消核销员 1--变更货柜
+     * @param int $edit //0--设置/取消核销员 1--变更购值爽服务点
      * @return null
      * 交易市场交易列表
      */
@@ -167,7 +167,7 @@ class FairController extends Controller
     /**
      * @param null $id
      * @param int $status //0--解除核销员  1--设置核销员
-     * @param int $edit //0--设置/取消核销员 1--变更货柜
+     * @param int $edit //0--设置/取消核销员 1--变更购值爽服务点
      * @return null
      * 设置/取消核销员
      */

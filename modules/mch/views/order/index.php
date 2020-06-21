@@ -173,13 +173,13 @@ isset($Gets['shop_id']) && $condition['shop_id'] = $Gets['shop_id'];
                                 <span class="status-item mr-3">核销员：<?= $clerk->nickname ?>的订单</span>
                             <?php endif; ?>
                             <?php if ($shop): ?>
-                                <span class="status-item mr-3">货柜：<?= $shop->name ?>的订单</span>
+                                <span class="status-item mr-3">购值爽服务点：<?= $shop->name ?>的订单</span>
                             <?php endif; ?>
                         </div>
                         <div class="col-3">
                             <div class="input-group short-row">
                                 <select class="form-control parent" name="shop_id">
-                                    <option value="">请选择货柜</option>
+                                    <option value="">请选择购值爽服务点</option>
                                     <?php  foreach ($shoplist as $value): ?>
                                         <option value="<?= $value['id'] ?>" <?= $value['id'] == $Gets['shop_id'] ? 'selected' : '' ?>><?= $value['name'] ?></option>
                                     <?php endforeach; ?>
@@ -456,8 +456,8 @@ isset($Gets['shop_id']) && $condition['shop_id'] = $Gets['shop_id'];
                             </div>
                             <?php if ($order_item['shop_id']): ?>
                                 <div>
-                                    <span class="mr-3">货柜名称：<?= $order_item['shop']['name'] ?></span>
-                                    <span class="mr-3">货柜地址：<?= $order_item['shop']['address'] ?></span>
+                                    <span class="mr-3">购值爽服务点名称：<?= $order_item['shop']['name'] ?></span>
+                                    <span class="mr-3">购值爽服务点地址：<?= $order_item['shop']['address'] ?></span>
                                     <span class="mr-3">电话：<?= $order_item['shop']['mobile'] ?></span>
                                 </div>
                             <?php endif; ?>

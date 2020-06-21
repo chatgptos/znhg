@@ -79,7 +79,7 @@
 
 
 
-    <view class='block_3 flex-y-center'>货柜介绍</view>
+    <view class='block_3 flex-y-center'>购值爽服务点介绍</view>
         <view class='detail'>
             <import src="../../wxParse/wxParse.wxml" />
             <template is="wxParse" data="{{wxParseData:detail.nodes}}" />

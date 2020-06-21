@@ -74,7 +74,7 @@ if ($status === '' || $status === null || $status == -1)
                     <span class="status-item mr-3">核销员：<?= $clerk->nickname ?>核销的卡券</span>
                 <?php endif; ?>
                 <?php if ($shop): ?>
-                    <span class="status-item mr-3">货柜：<?= $shop->name ?>核销的卡券</span>
+                    <span class="status-item mr-3">购值爽服务点：<?= $shop->name ?>核销的卡券</span>
                 <?php endif; ?>
             <?php else: ?>
                 <ul class="nav nav-tabs status">

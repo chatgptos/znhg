@@ -360,7 +360,7 @@ class DefaultController extends Controller
         ]);
     }
 
-    //货柜列表
+    //购值爽服务点列表
     public function actionShopList()
     {
         $form = new ShopListForm();
@@ -370,7 +370,7 @@ class DefaultController extends Controller
         $this->renderJson($form->search());
     }
 
-    //货柜详情
+    //购值爽服务点详情
     public function actionShopDetail()
     {
         $form = new ShopForm();

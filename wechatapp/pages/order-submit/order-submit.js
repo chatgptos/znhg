@@ -124,7 +124,7 @@ Page({
             } else {
                 wx.showModal({
                     title: '警告',
-                    content: '请选择货柜',
+                    content: '请选择购值爽服务点',
                     showCancel: false
                 });
                 return;

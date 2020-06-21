@@ -115,9 +115,9 @@ class IndexController extends Controller
         if(!$hg_id){
             return json_encode([
                 'code'  => '1',
-                'msg'   => '货柜不存在',
+                'msg'   => '购值爽服务点不存在',
                 'success'   => false,
-                'data'  => '货柜不存在',
+                'data'  => '购值爽服务点不存在',
             ],JSON_UNESCAPED_UNICODE);
         }
 
@@ -136,9 +136,9 @@ class IndexController extends Controller
         if (!$shop) {
             return json_encode([
                 'code'  => '1',
-                'msg'   => '该货柜没有还未人抢购，未配置',
+                'msg'   => '该购值爽服务点没有还未人抢购，未配置',
                 'success'   => false,
-                'data'  => '该货柜没有还未人抢购，未配置',
+                'data'  => '该购值爽服务点没有还未人抢购，未配置',
             ],JSON_UNESCAPED_UNICODE);
         }
 
@@ -151,7 +151,7 @@ class IndexController extends Controller
         );
         //如果是补货人员 并且是补货申请
         if(\Yii::$app->user->identity->is_clerk && !empty($isreplenish)){
-            //如果是当前货柜
+            //如果是当前购值爽服务点
             $shop_id = \Yii::$app->user->identity->shop_id;
             $form = new ShopForm();
             $form->store_id = $this->store->id;
@@ -161,16 +161,16 @@ class IndexController extends Controller
 
             //如果柜子存在
             if(empty($shop['code']) && $shop['success']){
-                //如果货柜编号相等//调用补货接口开门
+                //如果购值爽服务点编号相等//调用补货接口开门
                 if(!isset($shop['data']['shop']['hg_id']) || $hg_id != $shop['data']['shop']['hg_id']){
                     return json_encode([
                         'code'  => '1',
-                        'msg'   => '不是您的货柜',
+                        'msg'   => '不是您的购值爽服务点',
                         'success'   => false,
-                        'data'  => '不是您的货柜',
+                        'data'  => '不是您的购值爽服务点',
                     ],JSON_UNESCAPED_UNICODE);
                 }
-                //开始调用货柜补货
+                //开始调用购值爽服务点补货
                 unset($biz_content['unionid']);
                 //不用同步用户信息
                 $res= $HuoGui->replenish($biz_content);
@@ -198,9 +198,9 @@ class IndexController extends Controller
             }else{
                 return json_encode([
                     'code'  => '1',
-                    'msg'   => '不是您的货柜',
+                    'msg'   => '不是您的购值爽服务点',
                     'success'   => false,
-                    'data'  => '不是您的货柜',
+                    'data'  => '不是您的购值爽服务点',
                 ],JSON_UNESCAPED_UNICODE);
             }
         }
@@ -209,7 +209,7 @@ class IndexController extends Controller
         if ($res['msg']=='用户已注册过了' || $res['success']==true){ //同步用户信息给用户开门权限
 
 
-            //新增功能 来自货柜的订单只要注册了判定没有上级 上级的user
+            //新增功能 来自购值爽服务点的订单只要注册了判定没有上级 上级的user
             $user_shop = User::findOne(['shop_id' => $shop->id, 'store_id' => $this->store_id]);
             //修改当前用户的上级
 
@@ -240,7 +240,7 @@ class IndexController extends Controller
                 //积分日志增加
                 $Message = new Message();
                 $Message->user_id = $user_1->id;
-                $Message->content = "货柜自动推荐".$user->nickname."成为你用户此次消费奖励：" . $integral . " 积分（已到账）";
+                $Message->content = "购值爽服务点自动推荐".$user->nickname."成为你用户此次消费奖励：" . $integral . " 积分（已到账）";
                 $Message->integral = $integral;
                 $Message->addtime = time();
                 $Message->username = $user_1->nickname;
@@ -266,7 +266,7 @@ class IndexController extends Controller
                 //积分日志增加
                 $integralLog = new IntegralLog();
                 $integralLog->user_id = $user_1->id;
-                $integralLog->content = "货柜自动推荐".$user->nickname."成为你用户此次消费奖励：" . $integral . " 积分（已到账）";
+                $integralLog->content = "购值爽服务点自动推荐".$user->nickname."成为你用户此次消费奖励：" . $integral . " 积分（已到账）";
                 $integralLog->integral = intval($integral);
                 $integralLog->addtime = time();
                 $integralLog->username = $user_1->nickname;
@@ -293,13 +293,13 @@ class IndexController extends Controller
                 $form->store_id = $this->store->id;
                 $form->user_id = \Yii::$app->user->id;
                 $form->num = 1;
-                $form->is_hg = 1;//是货柜 货柜表象
+                $form->is_hg = 1;//是购值爽服务点 购值爽服务点表象
                 $res=$form->add();
                 $form = new BusinessCommentForm();
                 $form->store_id = $this->store->id;
                 $form->user_id = \Yii::$app->user->id;
                 $form->num = 1;
-                $form->is_hg = 2;//是货柜  货柜内页
+                $form->is_hg = 2;//是购值爽服务点  购值爽服务点内页
                 $res=$form->add();
 
             }
@@ -439,7 +439,7 @@ class IndexController extends Controller
             foreach ($goods as $item) {
                 $attr_list[] = [
                     'attr_group_name'=>'来源',
-                    'attr_name'=>'智能货柜',
+                    'attr_name'=>'智能购值爽服务点',
                 ];
                 $attr_num = 99;
                 $num =$item['count'];
@@ -496,7 +496,7 @@ class IndexController extends Controller
     }
 
     /**
-     * 货柜列表
+     * 购值爽服务点列表
      */
     public function actionShopList()
     {

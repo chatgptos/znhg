@@ -95,7 +95,7 @@ class CartListForm extends Model
 
     public function searchHg()
     {
-        //查询实时货柜信息
+        //查询实时购值爽服务点信息
         $hg_id = \Yii::$app->request->post('hg_id');
         //创建订单
         $opendoorRecordId = \Yii::$app->request->post('opendoorRecordId');
@@ -113,9 +113,9 @@ class CartListForm extends Model
         if (!$shop) {
             return json_encode([
                 'code'  => '1',
-                'msg'   => '该货柜没有还未人抢购，未配置',
+                'msg'   => '该购值爽服务点没有还未人抢购，未配置',
                 'success'   => false,
-                'data'  => '该货柜没有还未人抢购，未配置',
+                'data'  => '该购值爽服务点没有还未人抢购，未配置',
             ],JSON_UNESCAPED_UNICODE);
         }
 
@@ -139,7 +139,7 @@ class CartListForm extends Model
             if($num>0){
                 $attr_list[] = [
                     'attr_group_name'=>'来源',
-                    'attr_name'=>'智能货柜',
+                    'attr_name'=>'智能购值爽服务点',
                     '单价'=>$item['price'],
                 ];
                 $attr_list[] = [
@@ -207,10 +207,10 @@ class CartListForm extends Model
                 //如果是用户继续往下走
                 //如果关门 订单显示
                 //支付订单
-                //查询订单 查询货柜生成的订单---生成的订单支付
+                //查询订单 查询购值爽服务点生成的订单---生成的订单支付
                 $form = new \app\modules\api\models\couponmall\OrderListForm();
                 $res = $form->actionOrderDetailshg($opendoorRecordId,true,$shop,$out_order_no);
-                //如果成功生成货柜订单+微信订单
+                //如果成功生成购值爽服务点订单+微信订单
                 if($res['success']){
                     $pay_data=[];
                     if ($shop->hg_yx){
@@ -237,7 +237,7 @@ class CartListForm extends Model
                         ],
                     ];
                 }else{
-                    //没有生成订单 0元结束单子 跳转出来 到首页 isreplenish  控制跳到货柜 首页去
+                    //没有生成订单 0元结束单子 跳转出来 到首页 isreplenish  控制跳到购值爽服务点 首页去
                     //取消订单
                     return [
                         'code' => 0,

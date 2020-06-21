@@ -1211,9 +1211,9 @@ class CrontabController extends Controller
         $form->user_id = $this_user_id;
         $form->store_id = 1;
         $form->num = 1;
-        $form->room_id = 0;//是货柜 货柜表象
-        $form->good_id = 0;//是货柜 货柜表象
-        $form->article_id = 0;//是货柜 货柜表象
+        $form->room_id = 0;//是购值爽服务点 购值爽服务点表象
+        $form->good_id = 0;//是购值爽服务点 购值爽服务点表象
+        $form->article_id = 0;//是购值爽服务点 购值爽服务点表象
         \Yii::warning('==>' .'begin-bussiness1-'.$this_user_id);
         //从数据库里取用
         //取出来券池文章
@@ -1227,7 +1227,7 @@ class CrontabController extends Controller
             if($topic_query_id) {
                 //如果没有就创建新闻券
                 //创建券池 1个券
-                $form->article_id = $topic_query_id;//是货柜 货柜表象
+                $form->article_id = $topic_query_id;//是购值爽服务点 购值爽服务点表象
                 $res=$form->add();
                 \Yii::warning('==>' .'article_id-'.$topic_query_id);
                 return;
@@ -1244,7 +1244,7 @@ class CrontabController extends Controller
             if($room_query_id) {
                 //如果没有就创建新闻券
                 //创建券池 1个券
-                $form->room_id = $room_query_id;//是货柜 货柜表象
+                $form->room_id = $room_query_id;//是购值爽服务点 购值爽服务点表象
                 $res=$form->add();
                 \Yii::warning('==>' .'room_id-'.$room_query_id);
                 return;
@@ -1261,7 +1261,7 @@ class CrontabController extends Controller
             if($good_query_id) {
                 //如果没有就创建新闻券
                 //创建券池 1个券
-                $form->good_id = $good_query_id;//是货柜 货柜表象
+                $form->good_id = $good_query_id;//是购值爽服务点 购值爽服务点表象
                 $res=$form->add();
                 \Yii::warning('==>' .'good_id-'.$good_query_id);
                 return;

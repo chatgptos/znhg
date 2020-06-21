@@ -288,7 +288,7 @@
                         ],
                     },
                     {
-                        name: "货柜列表",
+                        name: "购值爽服务点列表",
                         link: "/pages/shop/shop",
                         open_type: "navigate",
                         params: []

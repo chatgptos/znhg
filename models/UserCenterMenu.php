@@ -138,7 +138,7 @@ class UserCenterMenu extends Model
             ],
             [
                 'is_show' => 1,
-                'name' => '报名',
+                'name' => '我的直播',
                 'icon' => '/images/icon-about-us.png',
                 'open_type' => 'navigator',
                 'url' => '/pages/crowdapply/order/order',
