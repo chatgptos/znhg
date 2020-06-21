@@ -28,11 +28,11 @@ class OrderController extends Controller
 {
     public function behaviors()
     {
-        return array_merge(parent::behaviors(), [
-            'login' => [
-                'class' => LoginBehavior::className(),
-            ],
-        ]);
+//        return array_merge(parent::behaviors(), [
+//            'login' => [
+//                'class' => LoginBehavior::className(),
+//            ],
+//        ]);
     }
 
     /**
@@ -215,6 +215,91 @@ class OrderController extends Controller
      * 核销订单详情
      */
     public function actionClerkOrderDetails($id = 0)
+    {
+
+        $order = Order::find()
+            ->alias('o')
+            ->select([
+                'o.*',
+                'g.name','g.original_price','g.shop_id','g.cover_pic','g.id AS g_id'
+            ])
+            ->andWhere([
+                'o.is_delete' => 0,
+                'o.store_id' => $this->store->id,
+                'o.is_cancel' => 0,
+                'o.id' => $id,
+            ])
+            ->leftJoin(['g'=>Goods::tableName()],'g.id=o.goods_id')
+            ->asArray()->one();
+        $this->renderJson([
+            'code'   => 0,
+            'msg'    => 'success',
+            'data'   => $order
+        ]);
+
+        $order = Order::find()
+            ->alias('o')
+            ->select([
+                'o.*',
+                'g.name','g.original_price','g.shop_id','g.cover_pic','g.id AS g_id'
+            ])
+            ->andWhere([
+                'o.is_delete' => 0,
+                'o.store_id' => $this->store->id,
+                'o.is_cancel' => 0,
+                'o.id' => $id,
+            ])
+            ->leftJoin(['g'=>Goods::tableName()],'g.id=o.goods_id')
+            ->asArray()->one();
+        if (!$order){
+            $this->renderJson([
+                'code'  => 1,
+                'msg'   => '订单不存在，或已取消'
+            ]);
+        }
+
+        $orderForm = OrderForm::find()
+            ->andWhere(['store_id'=>$this->store->id,'order_id'=>$order['id']])
+            ->select('key,value')
+            ->asArray()
+            ->all();
+        $order['orderForm'] = $orderForm;
+        $shopList = [];
+        if (!empty($order['shop_id'])){
+            $shopId = explode(',',trim($order['shop_id'],','));
+            $shopList = Shop::find()
+                ->andWhere(['id'=>$shopId[0]])
+                ->andWhere(['store_id'=>$this->store_id])
+                ->asArray()
+                ->all();
+            $order['shopListNum'] = count($shopId);
+        }else{
+            $shopList = Shop::find()
+                ->andWhere(['store_id'=>$this->store_id])
+                ->asArray()
+                ->limit(1)
+                ->all();
+            $shopListNum = Shop::find()
+                ->andWhere(['store_id'=>$this->store_id])
+                ->count();
+            $order['shopListNum'] = $shopListNum;
+        }
+
+        $order['shopList'] = $shopList;
+        $order['addtime'] = date('Y-m-d H:i:s',$order['addtime']);
+        $this->renderJson([
+            'code'   => 0,
+            'msg'    => 'success',
+            'data'   => $order
+        ]);
+    }
+
+
+    /**
+     * @param int $id
+     * 核销订单详情
+     */
+    public function actionClerkOrderDetails1($id = 0)
     {
         $order = Order::find()
             ->alias('o')

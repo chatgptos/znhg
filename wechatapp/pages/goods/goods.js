@@ -325,7 +325,7 @@ Page({
             console.log(user_info)
             console.log(user_info.id)
             if(user_info && user_info.id!= "undefined"&& user_info.id!= 0&& user_info.id!= undefined){
-                wx.redirectTo({
+                wx.navigateTo({
                     url: "/pages/order-submit/order-submit?room_id="+page.data.options.room_id+"&goods_info=" + JSON.stringify({
                         goods_id: page.data.id,
                         attr: checked_attr_list,
