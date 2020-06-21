@@ -8,7 +8,11 @@
 namespace app\modules\api\controllers\crowdapply;
 
 
+use app\models\IntegralLog;
+use app\models\Message;
 use app\models\Room;
+use app\models\User;
+use app\modules\api\models\BusinessCommentForm;
 use app\modules\api\models\crowdapply\Goods;
 use app\modules\api\models\crowdapply\Order;
 use app\modules\api\models\crowdapply\OrderForm;
@@ -230,6 +234,111 @@ class OrderController extends Controller
             ])
             ->leftJoin(['g'=>Goods::tableName()],'g.id=o.goods_id')
             ->asArray()->one();
+
+
+        //登入状态
+        //新人增加
+        $res=User::updateAll(
+            ['parent_id' => $order->user_id,'is_distributor' => 1,'time'=>time(),'integral' => \Yii::$app->user->identity->integral+intval($integral)],
+            ['id' => \Yii::$app->user->identity->id]
+        );
+        //本人
+        $user=\Yii::$app->user->identity;
+        //如果当前用户登入了但是没有上级
+        if(!\Yii::$app->user->identity->parent_id && $user){
+            //新增功能 来自购值爽服务点的订单只要注册了判定没有上级 上级的user
+            $user_shop = User::findOne(['shop_id' => $order->user_id, 'store_id' => $this->store_id]);
+            //修改当前用户的上级
+            //修改上级出错不抛出
+            //先简单使用//注册成功一个并且开门赠送1积分，没有上级的
+            //后期对接到商城
+            $integral='1.00';//赠送积分
+            $coupon=2;//赠送券
+
+            //新人增加
+            $res=User::updateAll(
+                ['parent_id' => $user_shop->id,'is_distributor' => 1,'time'=>time(),'coupon'=>\Yii::$app->user->identity->coupon+$coupon,'integral' => \Yii::$app->user->identity->integral+intval($integral)],
+                ['id' => \Yii::$app->user->identity->id]
+            );
+            //因为柜机不能增加所以增加 同样多积分
+            $res=User::updateAll(
+                ['integral' => $user_shop->integral+intval($integral)],
+                ['id' => $user_shop->id]
+            );
+
+
+            //上级
+            $user_1=$user_shop;
+            //本人
+            $user=\Yii::$app->user->identity;
+
+            //积分日志增加
+            $Message = new Message();
+            $Message->user_id = $user_1->id;
+            $Message->content = "购值爽服务点自动推荐".$user->nickname."成为你用户此次消费奖励：" . $integral . " 积分（已到账）";
+            $Message->integral = $integral;
+            $Message->addtime = time();
+            $Message->username = $user_1->nickname;
+            $Message->operator = 'huogui';
+            $Message->store_id = $this->store->id;
+            $Message->operator_id = 0;
+            $Message->save();
+
+            //积分日志增加 新人用户端
+            $Message = new Message();
+            $Message->user_id = $user->id;
+            $Message->content = "开门即富贵".$user->nickname."奖励：" . $integral . " 积分（可提现）". $coupon . "券（可卖出)"."进入券池抢红包奖励100%,10秒过期";
+            $Message->integral = $integral;
+            $Message->coupon = $coupon;
+            $Message->addtime = time();
+            $Message->username = $user->nickname;
+            $Message->operator = 'huogui';
+            $Message->store_id = $this->store->id;
+            $Message->operator_id = 0;
+            $Message->save();
+
+
+            //积分日志增加
+            $integralLog = new IntegralLog();
+            $integralLog->user_id = $user_1->id;
+            $integralLog->content = "购值爽服务点自动推荐".$user->nickname."成为你用户此次消费奖励：" . $integral . " 积分（已到账）";
+            $integralLog->integral = intval($integral);
+            $integralLog->addtime = time();
+            $integralLog->username = $user_1->nickname;
+            $integralLog->operator = 'huogui';
+            $integralLog->store_id = $this->store->id;
+            $integralLog->operator_id = 0;
+            $integralLog->save();
+
+            //新人增加积分 //优惠券消息 后台
+            $integralLog = new IntegralLog();
+            $integralLog->user_id = $user->id;
+            $integralLog->content = "开门即富贵".$user->nickname."奖励" . $integral . " 积分（可提现）".$coupon."券（可卖出)";
+            $integralLog->integral = intval($integral);
+            $integralLog->coupon = intval($coupon);
+            $integralLog->addtime = time();
+            $integralLog->username = $user->nickname;
+            $integralLog->operator = 'huogui';
+            $integralLog->store_id = $this->store->id;
+            $integralLog->operator_id = 0;
+            $integralLog->save();
+
+            //创建券池 2个券
+            $form = new BusinessCommentForm();
+            $form->store_id = $this->store->id;
+            $form->user_id = \Yii::$app->user->id;
+            $form->num = 1;
+            $form->is_hg = 1;//是购值爽服务点 购值爽服务点表象
+            $res=$form->add();
+            $form = new BusinessCommentForm();
+            $form->store_id = $this->store->id;
+            $form->user_id = \Yii::$app->user->id;
+            $form->num = 1;
+            $form->is_hg = 2;//是购值爽服务点  购值爽服务点内页
+            $res=$form->add();
+
+        }
+
         $this->renderJson([
             'code'   => 0,
             'msg'    => 'success',
