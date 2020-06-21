@@ -55,6 +55,9 @@ use Codeception\PHPUnit\ResultPrinter\HTML;
  * @property integer $is_sale
  * @property string $words
  * @property string $version
+ * @property string $room_id
+ *
+ *
  */
 class Order extends \yii\db\ActiveRecord
 {
@@ -73,7 +76,7 @@ class Order extends \yii\db\ActiveRecord
     {
         return [
             [['store_id', 'user_id', 'order_no', 'first_price', 'second_price', 'third_price'], 'required'],
-            [['store_id', 'user_id', 'is_pay', 'pay_type', 'pay_time', 'is_send', 'send_time', 'is_confirm', 'confirm_time', 'is_comment', 'apply_delete', 'addtime', 'is_delete', 'is_price', 'parent_id', 'is_offline', 'clerk_id', 'is_cancel', 'shop_id', 'user_coupon_id', 'give_integral', 'parent_id_1', 'parent_id_2', 'is_sale'], 'integer'],
+            [['room_id','store_id', 'user_id', 'is_pay', 'pay_type', 'pay_time', 'is_send', 'send_time', 'is_confirm', 'confirm_time', 'is_comment', 'apply_delete', 'addtime', 'is_delete', 'is_price', 'parent_id', 'is_offline', 'clerk_id', 'is_cancel', 'shop_id', 'user_coupon_id', 'give_integral', 'parent_id_1', 'parent_id_2', 'is_sale'], 'integer'],
             [['total_price', 'pay_price', 'express_price', 'first_price', 'second_price', 'third_price', 'coupon_sub_price', 'before_update_price', 'discount'], 'number'],
             [['address_data', 'content', 'offline_qrcode', 'integral', 'words'], 'string'],
             [['order_no', 'name', 'mobile', 'express', 'express_no', 'version'], 'string', 'max' => 255],
@@ -134,6 +137,7 @@ class Order extends \yii\db\ActiveRecord
             'is_sale' => '是否超过售后时间',
             'words' => '商家留言',
             'version' => '版本',
+            'room_id'=>'主播'
         ];
     }
     public function getOrderDetail()

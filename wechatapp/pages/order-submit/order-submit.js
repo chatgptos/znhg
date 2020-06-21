@@ -21,7 +21,8 @@ Page({
         mobile: "",
         integral_radio: 1,
         new_total_price: 0,
-        show_card: false
+        show_card: false,
+        options:{},
     },
 
     /**
@@ -209,6 +210,9 @@ Page({
         if (page.data.content) {
             data.content = page.data.content
         }
+        if (page.data.options.room_id) {
+            data.room_id = page.data.options.room_id
+        }
         wx.showLoading({
             title: "正在提交",
             mask: true,
@@ -351,6 +355,7 @@ Page({
             app.request({
                 url: api.order.submit_preview,
                 data: {
+                    room_id: options.room_id,
                     cart_id_list: options.cart_id_list,
                     address_id: address_id,
                     longitude: longitude,
@@ -412,9 +417,13 @@ Page({
                 title: "正在加载",
                 mask: true,
             });
+            console.log(1111111111);
+            console.log(options);
+            console.log(options.goods_info);
             app.request({
                 url: api.order.submit_preview,
                 data: {
+                    room_id: options.room_id,
                     goods_info: options.goods_info,
                     address_id: address_id,
                     longitude: longitude,

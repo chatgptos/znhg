@@ -197,6 +197,13 @@
         </view>
     </view>
 
+    <view class="flex-row" style="background: #fff;padding: 32rpx 24rpx;margin-bottom:20rpx;" wx:if='{{goods_info.room_id}}'>
+        <view class="flex-grow-1">来源</view>
+        <view class="flex-grow-0">
+            <view style="color:#ff4544">主播房间：{{goods_info.room_id}}</view>
+        </view>
+    </view>
+
     <view class="flex-row" style="background: #fff;padding: 32rpx 24rpx;margin-bottom:20rpx;" wx:if='{{level}}'>
         <view class="flex-grow-1">会员折扣</view>
         <view class="flex-grow-0">

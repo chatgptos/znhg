@@ -49,6 +49,10 @@ class OrderSubmitForm extends Model
     public $use_integral;
 
     public $form;//自定义表单信息
+    public $room_id;//自定义表单信息
+
+
+
 
     public function rules()
     {
@@ -56,7 +60,7 @@ class OrderSubmitForm extends Model
             [['cart_id_list', 'goods_info', 'content', 'address_name', 'address_mobile'], 'string'],
             [['address_id',], 'required', 'on' => "EXPRESS"],
             [['address_name', 'address_mobile'], 'required', 'on' => "OFFLINE"],
-            [['user_coupon_id', 'offline', 'shop_id', 'use_integral'], 'integer'],
+            [['room_id','user_coupon_id', 'offline', 'shop_id', 'use_integral'], 'integer'],
             [['offline'], 'default', 'value' => 0],
             [['form'], 'safe']
         ];
@@ -367,6 +371,7 @@ class OrderSubmitForm extends Model
 //        $total_price_3 = $total_price_2 - $resIntegral['forehead'];
 
         $order = new Order();
+        $order->room_id = $this->room_id;
         $order->store_id = $this->store_id;
         $order->user_id = $this->user_id;
         $order->order_no = $this->getOrderNo();

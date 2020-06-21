@@ -40,6 +40,7 @@ Page({
             m: "--",
             s: "--",
         },
+        options:{},
     },
 
     /**
@@ -79,11 +80,14 @@ Page({
             parent_id:parent_id,
             id: options.id,
         });
-        page.getGoods();
+        page.getGoods(options);
         page.getCommentList();
     },
-    getGoods: function () {
+    getGoods: function (options) {
         var page = this;
+        page.setData({
+            options: options,
+        });
         app.request({
             url: api.default.goods,
             data: {
@@ -226,6 +230,15 @@ Page({
 
     submit: function (type) {
         var page = this;
+        if(page.data.options){
+            console.log(111111111111)
+            console.log(page.data.options.room_id)
+            var room_id=page.data.options.room_id;
+        }else {
+            var room_id=0;
+        }
+
+
         if (!page.data.show_attr_picker) {
             page.setData({
                 show_attr_picker: true,
@@ -313,10 +326,11 @@ Page({
             console.log(user_info.id)
             if(user_info && user_info.id!= "undefined"&& user_info.id!= 0&& user_info.id!= undefined){
                 wx.redirectTo({
-                    url: "/pages/order-submit/order-submit?goods_info=" + JSON.stringify({
+                    url: "/pages/order-submit/order-submit?room_id="+page.data.options.room_id+"&goods_info=" + JSON.stringify({
                         goods_id: page.data.id,
                         attr: checked_attr_list,
                         num: page.data.form.number,
+                        room_id:room_id,
                     }),
                 });
             }else {
@@ -494,7 +508,7 @@ Page({
     /**
      * 生命周期函数--监听页面显示
      */
-    onShow: function () {
+    onShow: function (options) {
 
     },
 
