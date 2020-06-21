@@ -299,7 +299,7 @@ class OrderController extends Controller
         $form = new QrcodeForm();
         $form->data = [
             'scene'=>"{$order->id}",
-            'page'=>"pages/crowdapply/order/order",
+            'page'=>"pages/crowdapply/order/details",
             'width'=>100
         ];
         $form->store = $this->store;
