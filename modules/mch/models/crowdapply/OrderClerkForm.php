@@ -22,6 +22,9 @@ class OrderClerkForm extends Model
     public $store_id;
     public $user_id;
     public $price;
+    public $type;
+
+
 
     /**
      * @return array
@@ -52,8 +55,14 @@ class OrderClerkForm extends Model
         }
         $order->clerk_id = 9999;//后台核销
         $order->shop_id = 9999;//后台核销
-        $order->is_use = 1;
         $order->room_id = $this->price;
+        if($this->type==2){
+            $order->is_use = 1;
+        }else{
+            $order->is_use = 0;
+        }
+
+        
         $order->use_time = time();
 
         if($order->save()){

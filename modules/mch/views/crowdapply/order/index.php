@@ -402,8 +402,8 @@ $condition = [
                 <div class="text-danger form-error mb-3" style="display: none">错误信息</div>
             </div>
             <div class="modal-footer">
-                <a href="javascript:" class="btn btn-primary add-price" data-type="1">确认</a>
-<!--                <a href="javascript:" class="btn btn-primary add-price" data-type="2">优惠</a>-->
+                <a href="javascript:" class="btn btn-primary add-price" data-type="1">确定直播间号</a>
+                <a href="javascript:" class="btn btn-primary add-price" data-type="2">核销（用户海报关闭）</a>
             </div>
         </div>
     </div>
