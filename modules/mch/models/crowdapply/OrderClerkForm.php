@@ -21,6 +21,7 @@ class OrderClerkForm extends Model
     public $order_id;
     public $store_id;
     public $user_id;
+    public $price;
 
     /**
      * @return array
@@ -37,12 +38,12 @@ class OrderClerkForm extends Model
             ];
         }
         $user = User::findOne(['id'=>$this->user_id]);
-//        if($user->is_clerk == 0){
-//            return [
-//                'code'=>1,
-//                'msg'=>'不是核销员'
-//            ];
-//        }
+        if( $this->price == 0){
+            return [
+                'code'=>1,
+                'msg'=>'请输入直播间id'
+            ];
+        }
         if($order->is_use == 1){
             return [
                 'code'=>1,
@@ -52,6 +53,7 @@ class OrderClerkForm extends Model
         $order->clerk_id = 9999;//后台核销
         $order->shop_id = 9999;//后台核销
         $order->is_use = 1;
+        $order->room_id = $this->price;
         $order->use_time = time();
 
         if($order->save()){

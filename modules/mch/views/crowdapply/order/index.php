@@ -392,7 +392,7 @@ $condition = [
             </div>
             <div class="modal-body">
                 <input class="order-id" type="hidden">
-<!--                <input class=" form-control money" type="number" placeholder="请填写增加或减少的价格">-->
+                <input class=" form-control money" type="number" placeholder="请填写直播间id腾讯id">
                 <div class="text-danger form-error mb-3" style="display: none">错误信息</div>
             </div>
             <div class="modal-footer">

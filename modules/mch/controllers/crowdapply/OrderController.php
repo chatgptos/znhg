@@ -134,6 +134,7 @@ class OrderController extends Controller
     {
         $form = new OrderClerkForm();
         $form->order_id = \Yii::$app->request->get('order_id');
+        $form->price = \Yii::$app->request->get('price');
         $form->store_id = $this->store->id;
         $this->renderJson($form->save());
     }
