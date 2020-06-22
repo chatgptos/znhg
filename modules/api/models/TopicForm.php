@@ -34,10 +34,9 @@ class TopicForm extends Model
         $model = Topic::find()
             ->alias('t')
             ->where(['t.store_id' => $this->store_id, 't.id' => $this->id, 't.is_delete' => 0])
-            ->select('u.avatar_url,u.nickname,t.id,title,read_count,virtual_read_count,content,t.addtime,virtual_favorite_count')
+            ->select('u.avatar_url,u.nickname,t.id,title,cover_pic,sub_title,read_count,virtual_read_count,content,t.addtime,virtual_favorite_count')
             ->leftJoin(['u' => User::tableName()], 'u.id=t.user_id')
             ->asArray()->one();
-
         if (empty($model))
             return [
                 'code' => 1,
