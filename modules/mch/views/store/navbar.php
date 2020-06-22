@@ -392,6 +392,10 @@ $this->params['active_nav_group'] = 11;
                     url: '/pages/cheapmarket/index/cheapmarket',
                 },
                 {
+                    name: '发现',
+                    url: '/pages/find/index',
+                },
+                {
                     name: '暂时不显示',
                     url: '/pages/mall/deplopment',
                 },
