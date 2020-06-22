@@ -1,7 +1,9 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/find/index","pages/topic-comment/topic-comment",
+    "pages/find/index",
+    "pages/find-detail/index",
+    "pages/topic-comment/topic-comment",
     "pages/huogui-order/details",
     "pages/huogui-detail/huogui-detail",
     "pages/huogui-cart/cart",
