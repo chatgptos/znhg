@@ -54,6 +54,7 @@ class BusinessListForm extends Model
             'g.is_exchange' => 0,
             'g.is_delete' => 0,
         ])->innerJoin(['u' => User::tableName()], 'u.id=g.user_id')
+            ->groupBy('g.user_id')
             ->orderBy('g.addtime DESC');
         if ($this->store_id)
             $query->andWhere(['g.store_id' => $this->store_id]);
