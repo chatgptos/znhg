@@ -58,7 +58,7 @@ class OrderTopicCommentForm extends Model
                 $order_comment->layout = 0;
                 $order_comment->sort = 0;
                 $order_comment->id = $goods->order_detail_id;
-                $order_comment->title = substr_replace(Html::encode($goods->content),'...',10);
+                $order_comment->title = mb_substr(Html::encode($goods->content),0,10);
                 $order_comment->content = Html::encode($goods->content);
                 //$order_comment->content = mb_convert_encoding($order_comment->content, 'UTF-8');
                 $order_comment->content = preg_replace('/[\xf0-\xf7].{3}/', '', $order_comment->content);
@@ -81,8 +81,6 @@ class OrderTopicCommentForm extends Model
                         'msg' => '直播日记需要你填写',
                     ];
                 }
-
-
                 $coupon=1;//赠送券
                 //新人增加
                  User::updateAll(
@@ -100,7 +98,11 @@ class OrderTopicCommentForm extends Model
                 $form->room_id = 0;//是购值爽服务点 购值爽服务点表象
                 $form->good_id = 0;//是购值爽服务点 购值爽服务点表象
                 $form->article_id = $order_comment->id;//是购值爽服务点 购值爽服务点表象
+
+
                 $res1 = $form->add();
+
+
 
                 if (!$res || !$res1) {
                     $t->rollBack();
