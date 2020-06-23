@@ -68,6 +68,14 @@ class OrderTopicCommentPreview extends Model
             'pic_list'=>[],
         ]);
 
+        $goods_list=[
+            'order_detail_id'=>0,
+            'goods_id'=>0,
+            'goods_pic'=>0,
+            'content'=>'',
+            'pic_list'=>[],
+        ];
+
         return [
             'code' => 0,
             'msg' => 'success',
