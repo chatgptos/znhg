@@ -70,7 +70,7 @@ class OrderTopicCommentForm extends Model
                 if($goods->uploaded_pic_list){
                     $order_comment->cover_pic = $goods->uploaded_pic_list[0];
                 }else{
-                    $order_comment->cover_pic = 'http://test.aijiehun.com/uploads/image/77/773717c17a32c513f2732a54be676a2b.png';
+                    $order_comment->cover_pic = 'http://airent-hospital.oss-cn-beijing.aliyuncs.com/uploads/image/77/773717c17a32c513f2732a54be676a2b.png';
                 }
                 $pic_list = json_encode($pic_list, JSON_UNESCAPED_UNICODE);
                 $order_comment->pic_list = $pic_list;
