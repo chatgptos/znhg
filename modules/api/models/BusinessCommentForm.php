@@ -69,6 +69,7 @@ class BusinessCommentForm extends Model
     public $article_id=0;//文章 卖优惠券
     public $room_id=0;//直播 卖优惠券
     public $good_id=0;//产品 卖优惠券
+    public $title='';//产品 卖优惠券
 
 
 
@@ -348,6 +349,10 @@ class BusinessCommentForm extends Model
         //直播券
         if($this->room_id){
                 $Business->room_id = $this->room_id;
+        }
+
+        if($this->title){
+            $Business->title = $this->title;
         }
 
         //商品券

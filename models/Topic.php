@@ -22,6 +22,10 @@ use Yii;
  * @property integer $virtual_favorite_count
  * @property integer $addtime
  * @property integer $is_delete
+ * @property integer $pic_list
+ * @property integer $user_id
+ *
+ *
  */
 class Topic extends \yii\db\ActiveRecord
 {
@@ -41,7 +45,7 @@ class Topic extends \yii\db\ActiveRecord
         return [
             [['store_id'], 'required'],
             [['store_id', 'read_count', 'virtual_read_count', 'layout', 'sort', 'agree_count', 'virtual_agree_count', 'virtual_favorite_count', 'addtime', 'is_delete'], 'integer'],
-            [['cover_pic', 'content'], 'string'],
+            [['pic_list','cover_pic', 'content'], 'string'],
             [['title', 'sub_title'], 'string', 'max' => 255],
         ];
     }
@@ -67,6 +71,8 @@ class Topic extends \yii\db\ActiveRecord
             'virtual_favorite_count' => '虚拟收藏量',
             'addtime' => 'Addtime',
             'is_delete' => 'Is Delete',
+            'pic_list' => 'Is pic_list',
+            'user_id' => 'Is pic_list',
         ];
     }
 }

@@ -25,6 +25,8 @@ use app\modules\api\models\OrderRefundPreviewForm;
 use app\modules\api\models\OrderRevokeForm;
 use app\modules\api\models\OrderSubmitForm;
 use app\modules\api\models\OrderSubmitPreviewForm;
+use app\modules\api\models\OrderTopicCommentForm;
+use app\modules\api\models\OrderTopicCommentPreview;
 use app\modules\api\models\QrcodeForm;
 use yii\helpers\VarDumper;
 
@@ -183,7 +185,7 @@ class OrderController extends Controller
     //评论预览页面
     public function actionTopicCommentPreview()
     {
-        $form = new OrderCommentPreview();
+        $form = new OrderTopicCommentPreview();
         $form->attributes = \Yii::$app->request->get();
         $form->store_id = $this->store->id;
         $form->user_id = \Yii::$app->user->id;
@@ -193,7 +195,7 @@ class OrderController extends Controller
     //评论提交
     public function actionTopicComment()
     {
-        $form = new OrderCommentForm();
+        $form = new OrderTopicCommentForm();
         $form->attributes = \Yii::$app->request->post();
         $form->store_id = $this->store->id;
         $form->user_id = \Yii::$app->user->id;

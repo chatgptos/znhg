@@ -54,8 +54,8 @@ class BusinessListForm extends Model
             'g.is_exchange' => 0,
             'g.is_delete' => 0,
         ])->innerJoin(['u' => User::tableName()], 'u.id=g.user_id')
-            ->groupBy('g.user_id')
-            ->orderBy('g.addtime DESC');
+            ->orderBy('g.addtime desc');
+//            ->groupBy('g.user_id');
         if ($this->store_id)
             $query->andWhere(['g.store_id' => $this->store_id]);
         if ($this->keyword)
@@ -122,6 +122,7 @@ class BusinessListForm extends Model
                     $article_info=$article_form->search();
                     if($article_info['data']){
                         $article_info=$article_info['data'];
+                        $list[$i]['article_info']=$article_info;
                         $list[$i]['article_info']=$article_info;
                     }
                 }else{
