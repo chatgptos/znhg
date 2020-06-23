@@ -396,6 +396,10 @@ $this->params['active_nav_group'] = 11;
                     url: '/pages/find/index',
                 },
                 {
+                    name: '笔记',
+                    url: '/pages/topic-comment/topic-comment',
+                },
+                {
                     name: '暂时不显示',
                     url: '/pages/mall/deplopment',
                 },
