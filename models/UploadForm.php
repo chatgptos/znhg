@@ -8,6 +8,7 @@
 namespace app\models;
 
 
+use Curl\Curl;
 use Grafika\Grafika;
 use Grafika\ImageInterface;
 use OSS\OssClient;
@@ -30,6 +31,8 @@ class UploadForm extends Model
     public $image;
     public $file;
     public $video;
+    public $access_token;
+    public $user;
 
     public static function getMaxUploadSize()
     {
@@ -106,6 +109,103 @@ class UploadForm extends Model
         }
         $this->saveData($res);
         return $res;
+    }
+
+
+    public function saveImageMediaid($name = null)
+    {
+        if (!$name) {
+            foreach ($_FILES as $_name => $file)
+                $name = $_name;
+        }
+        if (!$name)
+            $name = 'image';
+        $this->image = UploadedFile::getInstanceByName($name);
+        if (!$this->validate())
+            return $this->errors;
+
+        $allow_type = ['jpg', 'jpeg', 'gif', 'png', 'bmp', 'webp',];
+        if (!in_array($this->image->extension, $allow_type)) {
+            return [
+                'code' => 1,
+                'msg' => '上传文件格式不正确，请上传' . implode('/', $allow_type) . '格式的图片',
+            ];
+        }
+
+        $fileMd5 = md5_file($this->image->tempName);
+        $saveName = $fileMd5 . '.' . $this->image->extension;
+        $saveDir = 'uploads/image/' . substr($saveName, 0, 2) . '/';
+        $res = $this->saveFileMediaid($this->image->tempName, $saveDir, $saveName);
+        if ($res['code'] == 0) {
+            $res['data']['extension'] = $this->image->extension;
+            $res['data']['type'] = $this->getFileType($this->image->extension);
+            $res['data']['size'] = $this->image->size;
+        }
+        $this->saveData($res);
+        return $res;
+    }
+    /**
+     * @param string $file //文件路径
+     */
+    private function saveFileMediaid($file_path, $saveDir, $saveName, $type = 0)
+    {
+        return $this->saveToLocalMediaid($file_path, $saveDir, $saveName, $type);
+    }
+    /**
+     * @param string $file_path //文件路径
+     */
+    private function saveToLocalMediaid($file_path, $saveDir, $saveName, $type = 0)
+    {
+        //储存文件
+        $webRoot = \Yii::$app->request->hostInfo . \Yii::$app->request->baseUrl . '/';
+        $saveRoot = str_replace('\\', '/', \Yii::$app->basePath) . '/web/';
+        if (!is_dir($saveRoot . $saveDir))
+            $this->mkdir($saveRoot . $saveDir);
+        if (file_exists($saveRoot . $saveDir . $saveName)) {
+            $url=$_SERVER['DOCUMENT_ROOT'].'/'.$saveDir.$saveName;
+        }else{
+//        $file->saveAs($saveRoot . $saveDir . $saveName);
+            if ($type == 0) {
+                move_uploaded_file($file_path, $saveRoot . $saveDir . $saveName);
+                try {
+                    $this->compressImage($saveRoot . $saveDir . $saveName);
+                } catch (\Exception $e) {
+                    var_dump($e);
+                }
+            } else {
+                try {
+                    move_uploaded_file($file_path, $saveRoot . $saveDir . $saveName);
+                } catch (\Exception $e) {
+                    var_dump($e);
+                }
+            }
+            $url=$_SERVER['DOCUMENT_ROOT'].'/'.$saveDir.$saveName;
+        }
+
+        $api = "https://api.weixin.qq.com/cgi-bin/media/upload?access_token={$this->access_token}&type=image";;
+        $curl = new Curl();
+        $curl->setOpt(CURLOPT_SSL_VERIFYPEER, false);
+        $curl->setOpt ( CURLOPT_SAFE_UPLOAD, false);
+
+        $data = ['media' => new \CURLFile($url) ];
+
+        $ch  = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $api);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER , true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER , false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST , false);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        $res  = curl_exec($ch);
+        $data = json_decode($res);
+        return [
+            'code' => 0,
+            'msg' => 'success',
+            'data' => [
+                'url' => $webRoot . $saveDir . $saveName,
+                'data' => $data,
+            ],
+        ];
     }
 
     /**

@@ -7,6 +7,7 @@
 
 namespace app\modules\mch\models;
 use app\models\Room;
+use app\modules\api\models\crowdapply\Order;
 use Curl\Curl;
 
 /**
@@ -23,6 +24,15 @@ class RoomForm extends Model
     public $room_id;
     public $live_status;
     public $goods;
+    public $anchorName;
+    public $anchorWechat;
+    public $coverImg;
+    public $shareImg;
+    public $coverImgurl;
+    public $shareImgurl;
+    public $apply_form_id;
+
+
 
 
 
@@ -30,7 +40,7 @@ class RoomForm extends Model
     public function rules()
     {
         return [
-            [['name','pic_url','content','room_id','live_status'],'trim'],
+            [['apply_form_id','name','pic_url','content','room_id','live_status'],'trim'],
             [['name','pic_url','content','goods'],'string'],
             [['name','pic_url','content'],'required'],
         ];
@@ -45,6 +55,7 @@ class RoomForm extends Model
             'room_id'=>'room_id',
             'live_status'=>'直播状态',
             'goods'=>'直播商品',
+            'apply_form_id'=>'预约单据id',
         ];
     }
 
@@ -128,6 +139,101 @@ class RoomForm extends Model
             }else{
                 $this->save();
             }
+        }
+
+    }
+
+
+
+
+    public function addRoom()
+    {
+        $wechat = $this->getWechat();
+        $access_token = $wechat->getAccessToken();
+        if (!$access_token) {
+            return [
+                'code' => 1,
+                'msg' => $wechat->errMsg,
+            ];
+        }
+        if(!$this->coverImg){
+            //储存文件
+            $url=$_SERVER['DOCUMENT_ROOT'].'/uploads/image/0a/'.'0aef19c6dbff3333f657bf1c3b1f4708.jpg';
+            $api = "https://api.weixin.qq.com/cgi-bin/media/upload?access_token={$access_token}&type=image";;
+            $curl = new Curl();
+            $curl->setOpt(CURLOPT_SSL_VERIFYPEER, false);
+            $curl->setOpt ( CURLOPT_SAFE_UPLOAD, false);
+
+            $data = ['media' => new \CURLFile($url) ];
+
+            $ch  = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $api);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER , true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER , false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST , false);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+            $res  = curl_exec($ch);
+            $data = json_decode($res,true);
+            $this->coverImg =$data['media_id'];
+            $this->shareImg =$data['media_id'];
+            $this->coverImgurl ='https://xcx.aijiehun.com/uploads/image/0a/0aef19c6dbff3333f657bf1c3b1f4708.jpg';
+            $this->shareImgurl ='https://xcx.aijiehun.com/uploads/image/0a/0aef19c6dbff3333f657bf1c3b1f4708.jpg';
+        }
+
+        $api = "https://api.weixin.qq.com/wxaapi/broadcast/room/create?access_token={$access_token}";
+        $curl = new Curl();
+        $curl->setOpt(CURLOPT_SSL_VERIFYPEER, false);
+        $curl->setHeader('Content-Type', 'application/json');
+        $data = json_encode([
+            'name' => $this->anchorName.'的直播间',// 房间名字
+            'startTime' =>  time()+3600,// 开始时间
+            'endTime' =>   time()+3600*12,// 开始时间
+            'anchorName' => $this->anchorName,// 主播昵称
+//            'anchorWechat' => $this->anchorWechat,// 主播微信号
+            'anchorWechat' => $this->anchorWechat,// 主播微信号  Lvcj1997 xiaochijiekafei
+            'coverImg' => $this->coverImg,// 通过 uploadfile 上传，填写 mediaID
+            'shareImg' => $this->shareImg, //通过 uploadfile 上传，填写 mediaID
+            'type' => '0', // 直播类型，1 推流 0 手机直播
+            'screenType' => '0', // 1：横屏 0：竖屏
+            'closeLike' => '0',// 是否 关闭点赞 1 关闭
+            'closeGoods' => '0',// 是否 关闭商品货架，1：关闭
+            'closeComment' => '0',// 是否开启评论，1：关闭
+        ]);
+        $curl->post($api, $data);
+        $res = json_decode($curl->response, true);
+        if($res['errcode'] ==0){
+            $is_room = Room::findOne(['room_id'=>$res['roomId'],'is_delete'=>0]);
+            if($is_room){
+                $this->Room->isNewRecord=false;//更新
+                Room::updateAll([
+                    'name'=>$this->anchorName.'的直播间',
+                    'pic_url'=>$this->coverImg,'content'=>$this->anchorName.'的直播间',
+                    'room_id'=>$res['roomId']]);
+            }else{
+                $Room = new Room();
+                $Room->name = $this->anchorName.'的直播间';
+                $Room->room_id = $res['roomId'];
+                $Room->store_id = 1;
+                $Room->is_delete = 0;
+                $Room->addtime = time();
+                $Room->goods = [];
+                $Room->pic_url =$this->coverImgurl;
+                $Room->content = $this->anchorName.'的直播间';
+                $Room->save();
+            }
+            $resorder=Order::findOne([ 'id'=>$this->apply_form_id]);
+            if($resorder){
+                Order::updateAll(['room_id' => $res['roomId']], ['id' => $this->apply_form_id]);
+            }
+
+            return [
+                'code'=>0,
+                'data'=>$res,
+                'msg'=>'成功'
+            ];
+        } else{
+            return $res;
         }
 
     }

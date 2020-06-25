@@ -213,6 +213,14 @@ class DefaultController extends Controller
         $this->renderJson($form->saveImage('image'));
     }
 
+
+    public function actionUploadImageGetMediaid()
+    {
+        $form = new UploadForm();
+        $form->access_token = $this->wechat->getAccessToken();
+        $this->renderJson($form->saveImageMediaid('image'));
+    }
+
     //商品评价列表
     public function actionCommentList()
     {

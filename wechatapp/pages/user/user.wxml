@@ -191,7 +191,7 @@
             <view class="flex-row">
 
                 <view class="flex-grow-1">
-                    <navigator class="nav-item" url="/pages/order/order?status=0">
+                    <navigator class="nav-item" url="/pages/kaibo/index">
                         <view>
                             <image src="http://airent-hospital.oss-cn-beijing.aliyuncs.com/uploads/image/d6/d656cabadc8bb4fa97fbb55220a37ab4.png"/>
                         </view>
@@ -240,11 +240,11 @@
                     <!--</navigator>-->
                 <!--</view>-->
                 <view class="flex-grow-1">
-                    <navigator class="nav-item" url="/pages/order/order?status=4">
+                    <navigator class="nav-item" url="/pages/crowdapply/order/order?status=-1">
                         <view>
                             <image src="http://airent-hospital.oss-cn-beijing.aliyuncs.com/uploads/image/e5/e5a54258b5cde58696ee777bb57533f6.png"/>
                         </view>
-                        <view>直播预告</view>
+                        <view>直播记录</view>
                     </navigator>
                 </view>
             </view>

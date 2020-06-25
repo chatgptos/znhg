@@ -104,6 +104,7 @@ class OrderTopicCommentPreview extends Model
             'goods_pic'=>$user->avatar_url,
             'content'=>'',
             'pic_list'=>[],
+            'media_id'=>[],
         ]);
 
 //        $goods_list=[

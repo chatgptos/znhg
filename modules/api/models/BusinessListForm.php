@@ -109,6 +109,7 @@ class BusinessListForm extends Model
                     if($room_info){
                         $room_info= $room_info->toArray();
                     }
+
                     $list[$i]['room_info']=$room_info;
                 }else{
                     $list[$i]['room_id'] =  0;

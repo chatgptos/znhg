@@ -31,6 +31,9 @@ use Yii;
  * @property string $form_id
  * @property string $coupon
  * @property string $integral
+ * @property string $room_id
+ *
+ *
  */
 class Order extends \yii\db\ActiveRecord
 {
@@ -49,7 +52,7 @@ class Order extends \yii\db\ActiveRecord
     {
         return [
             [['goods_id', 'user_id', 'order_no', 'store_id', 'form_id'], 'required'],
-            [['goods_id', 'user_id', 'is_pay', 'pay_type', 'pay_time', 'is_use', 'is_comment', 'apply_delete', 'addtime', 'is_delete', 'is_cancel', 'store_id', 'use_time', 'clerk_id', 'shop_id', 'is_refund'], 'integer'],
+            [['room_id','goods_id', 'user_id', 'is_pay', 'pay_type', 'pay_time', 'is_use', 'is_comment', 'apply_delete', 'addtime', 'is_delete', 'is_cancel', 'store_id', 'use_time', 'clerk_id', 'shop_id', 'is_refund'], 'integer'],
             [['total_price', 'pay_price'], 'number'],
             [['offline_qrcode'], 'string'],
             [['order_no', 'form_id'], 'string', 'max' => 255],
@@ -86,6 +89,7 @@ class Order extends \yii\db\ActiveRecord
             'form_id' => '表单ID',
             'coupon' => '欢乐豆',
             'integral' => '积分',
+            'room_id' => '积分',
 //            'express_price' => '运费',
 //            'name' => '收货人姓名',
 //            'mobile' => '收货人手机',

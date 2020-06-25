@@ -221,7 +221,8 @@ class OrderController extends Controller
         $form->attributes = \Yii::$app->request->post();
         $form->store_id = $this->store->id;
         $form->user_id = \Yii::$app->user->id;
-        $this->renderJson($form->save());
+        $form->user = \Yii::$app->user->identity;
+        $this->renderJson($form->kaibosave());
     }
 
 

@@ -27,6 +27,9 @@ class OrderPreviewFrom extends Model
     private $wechat;
     private $order;
     private $user;
+    private $room_id;
+
+
 
     public function search()
     {
@@ -86,7 +89,7 @@ class OrderPreviewFrom extends Model
 
         //当天限制一人
         //会卡死了
-        //查询当前用户订单
+        //查询当前用户预约
 
         $query = Order::find()
             ->alias('o')
@@ -120,7 +123,7 @@ class OrderPreviewFrom extends Model
             ])
             ->leftJoin(['g'=>Goods::tableName()],'o.goods_id=g.id');
         $query_num_buy_order_day = $query_day->count();
-        //查找是否订单数量
+        //查找是否预约数量
         if($query_num_buy_order_day > $goods->buy_max_day ){
             return [
                 'code' => 1,
@@ -146,6 +149,7 @@ class OrderPreviewFrom extends Model
         $order->addtime = time();
         $order->is_delete = 0;
         $order->form_id = $this->form_id;
+        $order->room_id = $this->room_id;
         if ($order->save()) {
             $goods->sales ++;
             $goods->stock --;
@@ -191,15 +195,15 @@ class OrderPreviewFrom extends Model
                 $formList->is_delete= 0;
                 $formList->addtime  = time();
 
-                if (!$formList->save()){
+                $res_yy=$formList->save();
+                if (!$res_yy){
                     $p->rollBack();
                     return [
                         'code'  => 1,
-                        'msg'   => '订单提交失败，请稍后重试',
+                        'msg'   => '预约提交失败，请稍后重试',
                     ];
                 }
             }
-
             if ($order->pay_price <= 0){
                 //暂时不做退款支付的操作 所有 商品只有付钱和积分两种分开
                 //扣除积分
@@ -217,7 +221,7 @@ class OrderPreviewFrom extends Model
                 }else{
                     return [
                         'code'  => 2,
-                        'msg'   => '积分/优惠券不足，请充值',
+                        'msg'   => '积分/优惠券不足请充值',
                     ];
                 }
 
@@ -258,14 +262,15 @@ class OrderPreviewFrom extends Model
                     $p->commit();
                     return [
                         'code'  => 0,
-                        'msg'   => '订单提交成功',
+                        'msg'   => '预约提交成功',
+                        'dataid'   => $order->attributes['id'],
                         'type'  => 1,
                     ];
                 }else{
                     $p->rollBack();
                     return [
                         'code'  => 1,
-                        'msg'   => '订单提交失败，请稍后重试',
+                        'msg'   => '预约提交失败，请稍后重试',
                     ];
                 }
             }
@@ -297,7 +302,7 @@ class OrderPreviewFrom extends Model
             $p->commit();
             return [
                 'code' => 0,
-                'msg' => '订单提交成功',
+                'msg' => '预约提交成功',
                 'data' => (object)$pay_data,
                 'res' => $res,
                 'body' => $goods_names,
@@ -312,7 +317,7 @@ class OrderPreviewFrom extends Model
 
     /**
      * @return null|string
-     * 生成订单号
+     * 生成预约号
      */
     public function getOrderNo()
     {
@@ -355,7 +360,7 @@ class OrderPreviewFrom extends Model
             ];
         }
         if ($res['result_code'] != 'SUCCESS') {
-            if ($res['err_code'] == 'INVALID_REQUEST') {//商户订单号重复
+            if ($res['err_code'] == 'INVALID_REQUEST') {//商户预约号重复
                 $this->order->order_no = $this->getOrderNo();
                 $this->order->save();
                 return $this->unifiedOrder($goods_names);
@@ -387,7 +392,7 @@ class OrderPreviewFrom extends Model
         if (!$order){
             return [
                 'code'  => 1,
-                'msg'   => '订单不存在，或已支付',
+                'msg'   => '预约不存在，或已支付',
             ];
         }
 
@@ -399,7 +404,7 @@ class OrderPreviewFrom extends Model
 //        if (!$goods){
 //            return [
 //                'code'  => 1,
-//                'msg'   => '订单不存在，或已支付',
+//                'msg'   => '预约不存在，或已支付',
 //            ];
 //        }
 
