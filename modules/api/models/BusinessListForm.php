@@ -103,6 +103,7 @@ class BusinessListForm extends Model
                     $list[$i]['is_ad'] =  rand(0,1);
                 }
 
+                //有房间就没有文章
                 if($list[$i]['room_id']){
                     $room_info =  Room::findOne(['room_id' => $list[$i]['room_id'], 'store_id' => $this->store_id ,'is_delete' =>0]);
                     if($room_info){
@@ -111,23 +112,24 @@ class BusinessListForm extends Model
                     $list[$i]['room_info']=$room_info;
                 }else{
                     $list[$i]['room_id'] =  0;
-                }
 
-
-                if($list[$i]['article_id']){
-                    $article_form = new TopicForm();
-                    $article_form->store_id = $this->store_id;
-                    $article_form->id = $list[$i]['article_id'];
-                    $article_form->user_id = \Yii::$app->user->id;
-                    $article_info=$article_form->search();
-                    if($article_info['data']){
-                        $article_info=$article_info['data'];
-                        $list[$i]['article_info']=$article_info;
-                        $list[$i]['article_info']=$article_info;
+                    if($list[$i]['article_id']){
+                        $article_form = new TopicForm();
+                        $article_form->store_id = $this->store_id;
+                        $article_form->id = $list[$i]['article_id'];
+                        $article_form->user_id = \Yii::$app->user->id;
+                        $article_info=$article_form->search();
+                        if($article_info['data']){
+                            $article_info=$article_info['data'];
+                            $list[$i]['article_info']=$article_info;
+                            $list[$i]['article_info']=$article_info;
+                        }
+                    }else{
+                        $list[$i]['article_id'] =  0;
                     }
-                }else{
-                    $list[$i]['article_id'] =  0;
                 }
+
+
 
 
             }

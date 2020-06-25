@@ -203,6 +203,28 @@ class OrderController extends Controller
     }
 
 
+
+    //主播预览
+    public function actionKaiboCommentPreview()
+    {
+        $form = new OrderTopicCommentPreview();
+        $form->attributes = \Yii::$app->request->get();
+        $form->store_id = $this->store->id;
+        $form->user_id = \Yii::$app->user->id;
+        $this->renderJson($form->kaibosearch());
+    }
+
+    //主播
+    public function actionKaiboComment()
+    {
+        $form = new OrderTopicCommentForm();
+        $form->attributes = \Yii::$app->request->post();
+        $form->store_id = $this->store->id;
+        $form->user_id = \Yii::$app->user->id;
+        $this->renderJson($form->save());
+    }
+
+
     //订单物流信息
     public function actionExpressDetail()
     {

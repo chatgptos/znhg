@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/kaibo/index",
     "pages/find/index",
     "pages/find-detail/index",
     "pages/topic-comment/topic-comment",

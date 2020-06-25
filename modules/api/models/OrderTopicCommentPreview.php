@@ -86,4 +86,42 @@ class OrderTopicCommentPreview extends Model
         ];
     }
 
+
+
+
+    public function kaibosearch()
+    {
+        if (!$this->validate())
+            return $this->getModelError();
+
+        $user = User::find()->where(['store_id' => $this->store_id,'id'=>$this->user_id])->one();
+
+        $goods_list=[];
+
+        array_unshift($goods_list, [
+            'order_detail_id'=>0,
+            'goods_id'=>0,
+            'goods_pic'=>$user->avatar_url,
+            'content'=>'',
+            'pic_list'=>[],
+        ]);
+
+//        $goods_list=[
+//            'order_detail_id'=>0,
+//            'goods_id'=>0,
+//            'goods_pic'=>0,
+//            'content'=>'',
+//            'pic_list'=>[],
+//        ];
+
+        return [
+            'code' => 0,
+            'msg' => 'success',
+            'data' => [
+                'order_id' => 0,
+                'goods_list' => $goods_list,
+            ],
+        ];
+    }
+
 }

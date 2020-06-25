@@ -111,7 +111,7 @@
 <view class='container'>
     <view class='my'>
         <view class='noWarp-space-between order'>
-            <text class='title1'>我的订单</text>
+            <text class='title'>我的订单</text>
             <view class='noWarp'>
                 <navigator class="my-order" url="/pages/order/order?status=-1">查看全部订单</navigator>
                 <image class="rigth" src="../../Img/right.png" mode="cover"></image>
@@ -169,6 +169,82 @@
                             <image src="../../Img/shouhou.png"/>
                         </view>
                         <view>售后</view>
+                    </navigator>
+                </view>
+            </view>
+        </view>
+    </view>
+
+
+
+<!--我的主播-->
+
+    <view class='my'>
+        <view class='noWarp-space-between order' style="border-bottom: none;background:none">
+            <text class='title' style="background:none">我的直播</text>
+            <view class='noWarp'>
+            </view>
+        </view>
+
+
+        <view class="order-block">
+            <view class="flex-row">
+
+                <view class="flex-grow-1">
+                    <navigator class="nav-item" url="/pages/order/order?status=0">
+                        <view>
+                            <image src="http://airent-hospital.oss-cn-beijing.aliyuncs.com/uploads/image/d6/d656cabadc8bb4fa97fbb55220a37ab4.png"/>
+                        </view>
+                        <view>开始直播</view>
+                        <view class="num-icon" wx:if="{{order_count.status_0 && order_count.status_0 > 0}}">
+                            {{order_count.status_0}}
+                        </view>
+                    </navigator>
+                </view>
+                <view class="flex-grow-1">
+                    <navigator class="nav-item" url="/pages/order/order?status=1">
+                        <view>
+                            <image src="http://airent-hospital.oss-cn-beijing.aliyuncs.com/uploads/image/8b/8bc22d4fbdb225505deac9abbc19c763.png"/>
+                        </view>
+                        <view>直播商品</view>
+                        <view class="num-icon" wx:if="{{order_count.status_1 && order_count.status_1 > 0}}">
+                            {{order_count.status_1}}
+                        </view>
+                    </navigator>
+                </view>
+                <view class="flex-grow-1">
+                    <navigator class="nav-item" url="/pages/order/order?status=2">
+                        <view>
+                            <image src="http://airent-hospital.oss-cn-beijing.aliyuncs.com/uploads/image/af/af5bd3f618cefa04c90d23772ddbdc5d.png"/>
+                        </view>
+                        <view>邀请主播</view>
+                        <view class="num-icon" wx:if="{{order_count.status_2 && order_count.status_2 > 0}}">
+                            {{order_count.status_2}}
+                        </view>
+                    </navigator>
+                </view>
+                <view class="flex-grow-1">
+                    <navigator class="nav-item" url="/pages/order/order?status=3">
+                        <view>
+                            <image src="http://airent-hospital.oss-cn-beijing.aliyuncs.com/uploads/image/54/54cbbe55d277985a944e8b4e3557b2f0.png"/>
+                        </view>
+                        <view>主播权益</view>
+                    </navigator>
+                </view>
+                <!--<view class="flex-grow-1">-->
+                    <!--<navigator class="nav-item" url="/pages/order/order?status=4">-->
+                        <!--<view>-->
+                            <!--<image src="http://airent-hospital.oss-cn-beijing.aliyuncs.com/uploads/image/ca/ca801b3c68caf4c94d3740d3c7d7f817.png"/>-->
+                        <!--</view>-->
+                        <!--<view>主播套餐</view>-->
+                    <!--</navigator>-->
+                <!--</view>-->
+                <view class="flex-grow-1">
+                    <navigator class="nav-item" url="/pages/order/order?status=4">
+                        <view>
+                            <image src="http://airent-hospital.oss-cn-beijing.aliyuncs.com/uploads/image/e5/e5a54258b5cde58696ee777bb57533f6.png"/>
+                        </view>
+                        <view>直播预告</view>
                     </navigator>
                 </view>
             </view>
