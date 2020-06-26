@@ -226,6 +226,22 @@ class OrderController extends Controller
     }
 
 
+
+
+    //主播
+    public function actionKaiboAddgoods()
+    {
+        $form = new OrderTopicCommentForm();
+        $form->attributes = \Yii::$app->request->post();
+        $form->store_id = $this->store->id;
+        $form->user_id = \Yii::$app->user->id;
+        $form->user = \Yii::$app->user->identity;
+        $form->goods_list = $form->cart_id_list;
+        $form->order_id = 1;
+        $this->renderJson($form->addgoods());
+    }
+
+
     //订单物流信息
     public function actionExpressDetail()
     {

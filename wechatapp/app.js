@@ -14,13 +14,11 @@ App({
         this.getCatList();
 
         mta.App.init({
-            "appID":"500706424",
-            "eventID":"500706426",
-            "appID":"500706424",
+            "appID":"500722725",
+            "eventID":"500722987",
             "autoReport": true,
             "statParam": true,
             // 高级功能-自定义事件统计 ID，配置开通后在初始化处填写
-            "eventID": "500706426",
             //渠道分析,需在 onLaunch 方法传入 options,如
             "lauchOpts": options,
             // 使用分析-下拉刷新次数/人数，必须先开通自定义事件，并配置了合法的eventID
@@ -36,7 +34,6 @@ App({
             //statParam 为 true 时，如果不想上报的参数可配置忽略
             "ignoreParams": [],
         });
-        mta.Data.userInfo = {'open_id':'ogZOL5XwAe-PVnKuJnAAiSXP5fA0', 'phone':13236390680}
     },
     globalData:{
       parent_id:0,

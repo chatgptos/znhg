@@ -82,6 +82,7 @@ Page({
         });
         page.getGoods(options);
         page.getCommentList();
+        mta.Event.stat("goods",{})
     },
     getGoods: function (options) {
         var page = this;
@@ -225,7 +226,6 @@ Page({
 
     buyNow: function () {
         this.submit('BUY_NOW');
-        mta.Event.stat("myprice",{})
     },
 
     submit: function (type) {
@@ -234,6 +234,7 @@ Page({
             console.log(111111111111)
             console.log(page.data.options.room_id)
             var room_id=page.data.options.room_id;
+            mta.Event.stat('zhibodaihuoloud',{'room':'true'})
         }else {
             var room_id=0;
         }
@@ -315,7 +316,7 @@ Page({
             });
         }
         if (type == 'BUY_NOW') {//立即购买
-
+            mta.Event.stat("buynow",{})
             page.setData({
                 show_attr_picker: false,
             });
@@ -427,8 +428,8 @@ Page({
                 }
             }
         });
-        mta.Event.stat("myprice",{})
 
+        mta.Event.stat("attrclick",{})
     },
 
 

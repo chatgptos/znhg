@@ -24,11 +24,13 @@ class OrderTopicCommentForm extends Model
     public $order_id;
     public $goods_list;
     public $user;
+    public $cart_id_list;
 
     public function rules()
     {
         return [
             [['goods_list', 'order_id'], 'required'],
+            [['cart_id_list'], 'string'],
         ];
     }
 
@@ -157,6 +159,7 @@ class OrderTopicCommentForm extends Model
                 $form = new RoomForm();
                 $form->store_id = $this->store_id;
                 $form->anchorName =$this->user->nickname;
+                $form->user_id =$this->user->id;
                 if($goods->content){
                     $form->anchorWechat =$goods->content;
                 }else{
@@ -169,8 +172,6 @@ class OrderTopicCommentForm extends Model
                 $form->shareImg =$goods->media_id[0];
 
                 $form->coverImgurl =$goods->uploaded_pic_list[0];
-
-
 
                 if($goods->media_id[1]){
                     $form->shareImg=$goods->media_id[1];
@@ -266,5 +267,20 @@ class OrderTopicCommentForm extends Model
         }
 
 
+    }
+
+
+
+    public function addgoods()
+    {
+        if (!$this->validate())
+            return $this->getModelError();
+        $this->cart_id_list ='['.$this->cart_id_list.']';
+        $form = new RoomForm();
+        $form->store_id = $this->store_id;
+        $form->ids =json_decode($this->cart_id_list);
+        $form->user_id = $this->user_id;
+        $res=$form->addgoods();
+        return $res; 
     }
 }

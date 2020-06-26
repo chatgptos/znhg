@@ -16,6 +16,7 @@ use app\models\Cart;
 use app\models\Goods;
 use app\models\SeckillGoods;
 use app\models\Shop;
+use app\modules\mch\models\RoomForm;
 use yii\data\Pagination;
 
 class CartListForm extends Model
@@ -74,6 +75,77 @@ class CartListForm extends Model
             $seckill_data = $this->getSeckillData($goods, json_decode($item->attr, true));
             if ($seckill_data) {
                 $temp_price = $this->getSeckillPrice($seckill_data, $goods, json_decode($item->attr, true), $item->num);
+                if ($temp_price !== false)
+                    $new_item->price = $temp_price;
+            }
+
+            $new_list[] = $new_item;
+        }
+        return [
+            'code' => 0,
+            'msg' => 'success',
+            'data' => [
+                'row_count' => $count,
+                'page_count' => $pagination->pageCount,
+                'list' => $new_list,
+            ],
+        ];
+    }
+
+
+
+
+    public function searchKaiboAddgoods()
+    {
+
+
+        $form = new RoomForm();
+        $form->store_id = $this->store_id;
+        $res=$form->getgoods(0,10);
+
+        $count=$res['data']['total'];
+        $pagination = new Pagination(['totalCount' => $count, 'page' => $this->page - 1]);
+        /* @var Cart[] $list */
+//        $query = Cart::find()->where(['store_id' => $this->store_id, 'user_id' => $this->user_id, 'is_delete' => 0]);
+//        $list = $query->orderBy('goods_id DESC')->limit($pagination->limit)->offset($pagination->offset)->all();
+//        $count = $query->count();
+        $list=$form->getgoods($pagination->offset,$pagination->limit)['data']['goods'];
+        $new_list = [];
+        foreach ($list as $item) {
+            $goods = Goods::findOne([
+                'id' => $item['id'],
+                'is_delete' => 0,
+                'status' => 1,
+            ]);
+            if (!$goods)
+                continue;
+            $attr_list = Attr::find()->alias('a')
+                ->select('ag.attr_group_name,a.attr_name,')
+                ->leftJoin(['ag' => AttrGroup::tableName()], 'a.attr_group_id=ag.id')
+                ->where(['a.id' => json_decode($goods->attr, true)])
+                ->asArray()->all();
+
+            $goods_attr_info = $goods->getAttrInfo(json_decode($goods->attr, true));
+            $attr_num = intval(empty($goods_attr_info['num']) ? 0 : $goods_attr_info['num']);
+            $goods_pic = isset($goods_attr_info['pic'])?$goods_attr_info['pic']?:$goods->getGoodsPic(0)->pic_url:$goods->getGoodsPic(0)->pic_url;
+            $new_item = (object)[
+                'checked' => true,
+                'cart_id' => $item['goodsId'],
+                'goods_id' => $goods->id,
+                'goods_name' => $goods->name,
+                'goods_pic' => $goods_pic,
+                'num' => $goods->num,
+                'attr_list' => $attr_list,
+                'price' => doubleval(empty($goods_attr_info['price']) ? $goods->price : $goods_attr_info['price']) * 1,
+                'yongjin' => doubleval(empty($goods_attr_info['price']) ? $goods->price : $goods_attr_info['price']) * 1*0.2,
+                'max_num' => $attr_num,
+                'disabled' => ($goods->num < 1) ? true : false,
+            ];
+
+            //秒杀价计算
+            $seckill_data = $this->getSeckillData($goods, json_decode($goods->attr, true));
+            if ($seckill_data) {
+                $temp_price = $this->getSeckillPrice($seckill_data, $goods, json_decode($goods->attr, true), $goods->num);
                 if ($temp_price !== false)
                     $new_item->price = $temp_price;
             }

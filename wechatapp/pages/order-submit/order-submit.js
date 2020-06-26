@@ -37,6 +37,8 @@ Page({
             store: wx.getStorageSync("store"),
             time: time
         });
+        mta.Event.stat("sumit",{})
+        mta.Event.stat('zhibodaihuoloud',{'order':'true'})
     },
     bindkeyinput: function (e) {
         this.setData({
@@ -103,7 +105,7 @@ Page({
     },
 
     orderSubmit: function () {
-        mta.Event.stat("buy",{})
+        mta.Event.stat("sumit",{})
         var page = this;
         var offline = page.data.offline;
         var data = {};
@@ -218,7 +220,7 @@ Page({
             mask: true,
         });
         page.data.integral_radio == 1 ? data.use_integral = 1 : data.use_integral = 2;
-
+        mta.Event.stat("pay",{})
         //提交订单
         app.request({
             url: api.order.submit,
@@ -260,6 +262,8 @@ Page({
                                     fail: function (e) {
                                     },
                                     complete: function (e) {
+                                        mta.Event.stat("paycomplete",{})
+                                        mta.Event.stat('zhibodaihuoloud',{'pay':'true'})
                                         if (e.errMsg == "requestPayment:fail" || e.errMsg == "requestPayment:fail cancel") {//支付失败转到待支付订单列表
                                             wx.showModal({
                                                 title: "提示",

@@ -350,3 +350,32 @@ button.option-item {
   min-width: 40rpx;
   font-size: 7pt;
 }
+
+
+
+
+
+
+
+.seckill-time-item {
+  position: relative;
+}
+
+.seckill-time-item image {
+  display: inline-block;
+}
+
+.seckill-time-item > view {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  font-size: 7pt;
+  color: #fff;
+  line-height: 0.95;
+}
+
+.seckill-time-split {
+  display: inline-block;
+}

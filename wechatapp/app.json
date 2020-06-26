@@ -2,6 +2,7 @@
   "pages": [
     "pages/index/index",
     "pages/kaibo/index",
+    "pages/kaibo-cart/cart",
     "pages/find/index",
     "pages/find-detail/index",
     "pages/topic-comment/topic-comment",

@@ -31,6 +31,12 @@ class RoomForm extends Model
     public $coverImgurl;
     public $shareImgurl;
     public $apply_form_id;
+    public $ids;
+    public $user_id;
+
+
+
+
 
 
 
@@ -40,7 +46,7 @@ class RoomForm extends Model
     public function rules()
     {
         return [
-            [['apply_form_id','name','pic_url','content','room_id','live_status'],'trim'],
+            [['user_id','apply_form_id','name','pic_url','content','room_id','live_status'],'trim'],
             [['name','pic_url','content','goods'],'string'],
             [['name','pic_url','content'],'required'],
         ];
@@ -56,6 +62,7 @@ class RoomForm extends Model
             'live_status'=>'直播状态',
             'goods'=>'直播商品',
             'apply_form_id'=>'预约单据id',
+            'user_id'=>'user_id',
         ];
     }
 
@@ -208,8 +215,8 @@ class RoomForm extends Model
                 $this->Room->isNewRecord=false;//更新
                 Room::updateAll([
                     'name'=>$this->anchorName.'的直播间',
-                    'pic_url'=>$this->coverImg,'content'=>$this->anchorName.'的直播间',
-                    'room_id'=>$res['roomId']]);
+                    'pic_url'=>$this->coverImg,'content'=>$this->anchorName.'的直播间'],
+                    ['room_id'=>$res['roomId']]);
             }else{
                 $Room = new Room();
                 $Room->name = $this->anchorName.'的直播间';
@@ -220,6 +227,7 @@ class RoomForm extends Model
                 $Room->goods = [];
                 $Room->pic_url =$this->coverImgurl;
                 $Room->content = $this->anchorName.'的直播间';
+                $Room->user_id = $this->user_id;
                 $Room->save();
             }
             $resorder=Order::findOne([ 'id'=>$this->apply_form_id]);
@@ -236,5 +244,89 @@ class RoomForm extends Model
             return $res;
         }
 
+    }
+
+
+
+
+    public function addgoods()
+    {
+        $wechat = $this->getWechat();
+        $access_token = $wechat->getAccessToken();
+        if (!$access_token) {
+            return [
+                'code' => 1,
+                'msg' => $wechat->errMsg,
+            ];
+        }
+
+        $is_room = Room::find()->select('*')->where(['is_delete'=>0,'user_id'=>$this->user_id])->orderBy('id DESC')->limit(1)->one();
+        if($is_room){
+            $api = "https://api.weixin.qq.com/wxaapi/broadcast/room/addgoods?access_token={$access_token}";
+            $curl = new Curl();
+            $curl->setOpt(CURLOPT_SSL_VERIFYPEER, false);
+            $curl->setHeader('Content-Type', 'application/json');
+            $data = json_encode([
+                'ids' => $this->ids,// 房间名字
+                'roomId' => $is_room['room_id'],// 房间名字
+            ]);
+            $curl->post($api, $data);
+            $res = json_decode($curl->response, true);
+            if($res['errcode'] ==0){
+                $res1=Room::updateAll(['goods' => json_encode($this->ids)],
+                    ['room_id' => $is_room['room_id']]);
+                return [
+                    'code'=>0,
+                    'data'=>$res,
+                    'msg'=>'成功'
+                ];
+            } else{
+                return $res;
+            }
+        }else{
+            return [
+                'code'=>2,
+                'msg'=>'还没有直播间请开播'
+            ];
+        }
+    }
+
+
+
+    public function getgoods($offset=0,$limit=100,$status=2)
+    {
+        $wechat = $this->getWechat();
+        $access_token = $wechat->getAccessToken();
+        if (!$access_token) {
+            return [
+                'code' => 1,
+                'msg' => $wechat->errMsg,
+            ];
+        }
+        $api = "https://api.weixin.qq.com/wxaapi/broadcast/goods/getapproved?access_token={$access_token}&status={$status}&offset={$offset}&limit={$limit}";
+
+
+        $ch  = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $api);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER , true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER , false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST , false);
+        $res  = curl_exec($ch);
+        $data = json_decode($res,true);
+        if($data['goods']){
+            foreach ($data['goods']  as $key => $item) {
+                $id=$this->getQuerystr($item['url'],'id');
+                $data['goods'][$key]['id']=$id;
+            }
+        }
+        if($res['errcode'] ==0){
+            return [
+                'code'=>0,
+                'data'=>$data,
+                'msg'=>'成功'
+            ];
+        } else{
+            return $res;
+        }
     }
 }

@@ -17,6 +17,9 @@ use Yii;
  * @property integer $addtime
  * @property integer $live_status
  * @property integer $goods
+ * @property integer $user_id
+ *
+ *
  */
 class Room extends \yii\db\ActiveRecord
 {
@@ -34,7 +37,7 @@ class Room extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['store_id', 'is_delete', 'addtime','room_id','live_status'], 'integer'],
+            [['user_id','store_id', 'is_delete', 'addtime','room_id','live_status'], 'integer'],
             [['pic_url', 'content','goods'], 'string'],
             [['name'], 'string', 'max' => 255],
         ];
@@ -56,6 +59,7 @@ class Room extends \yii\db\ActiveRecord
             'addtime' => 'Addtime',
             'live_status'=>'直播状态',
             'goods'=>'直播商品',
+            'user_id'=>'user_id',
         ];
     }
     public function beforeSave($insert)

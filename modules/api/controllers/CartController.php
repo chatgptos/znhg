@@ -35,6 +35,16 @@ class CartController extends Controller
     }
 
 
+    public function actionKaiboGoodslist()
+    {
+        $form = new CartListForm();
+        $form->attributes = \Yii::$app->request->get();
+        $form->store_id = $this->store->id;
+        $form->user_id = \Yii::$app->user->id;
+        $this->renderJson($form->searchKaiboAddgoods());
+    }
+
+
 
     public function actionListhg()
     {
