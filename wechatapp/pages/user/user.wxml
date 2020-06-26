@@ -269,16 +269,33 @@
                         <view>
                             <image src="http://airent-hospital.oss-cn-beijing.aliyuncs.com/uploads/image/af/af5bd3f618cefa04c90d23772ddbdc5d.png"/>
                         </view>
-                        <view>邀请主播</view>
+                        <view>邀请</view>
+                    </navigator>
+                </view>
+                <!--<view class="flex-grow-1">-->
+                    <!--<navigator class="nav-item" url="/pages/topic/topic?id=40">-->
+                        <!--<view>-->
+                            <!--<image src="http://airent-hospital.oss-cn-beijing.aliyuncs.com/uploads/image/54/54cbbe55d277985a944e8b4e3557b2f0.png"/>-->
+                        <!--</view>-->
+                        <!--<view>权益</view>-->
+                    <!--</navigator>-->
+                <!--</view>-->
+
+                <view class="flex-grow-1">
+                    <navigator class="nav-item" url="/pages/crowdapply/order/order?status=-1">
+                        <view>
+                            <image src="http://airent-hospital.oss-cn-beijing.aliyuncs.com/uploads/image/e5/e5a54258b5cde58696ee777bb57533f6.png"/>
+                        </view>
+                        <view>记录</view>
                     </navigator>
                 </view>
                 <view class="flex-grow-1">
-                    <navigator class="nav-item" url="/pages/topic/topic?id=40">
+                    <view class="nav-item"  bindtap="navigatorClick">
                         <view>
                             <image src="http://airent-hospital.oss-cn-beijing.aliyuncs.com/uploads/image/54/54cbbe55d277985a944e8b4e3557b2f0.png"/>
                         </view>
-                        <view>主播权益</view>
-                    </navigator>
+                        <view>播主端</view>
+                    </view>
                 </view>
                 <!--<view class="flex-grow-1">-->
                     <!--<navigator class="nav-item" url="/pages/order/order?status=4">-->
@@ -288,14 +305,6 @@
                         <!--<view>主播套餐</view>-->
                     <!--</navigator>-->
                 <!--</view>-->
-                <view class="flex-grow-1">
-                    <navigator class="nav-item" url="/pages/crowdapply/order/order?status=-1">
-                        <view>
-                            <image src="http://airent-hospital.oss-cn-beijing.aliyuncs.com/uploads/image/e5/e5a54258b5cde58696ee777bb57533f6.png"/>
-                        </view>
-                        <view>直播记录</view>
-                    </navigator>
-                </view>
             </view>
         </view>
     </view>
