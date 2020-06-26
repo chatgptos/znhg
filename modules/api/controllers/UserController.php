@@ -85,6 +85,22 @@ class UserController extends Controller
         }
         if (!$user_center_bg)
             $user_center_bg = '/images/img-user-bg.png';
+
+        //显示主播插件
+        $end_time=strtotime('2020-06-28 22:10');
+        if($end_time>time()){
+            $seckill_show=true;
+        }else{
+            $seckill_show=false;
+        }
+
+        $seckill=array(
+                'seckill'=>array(
+                    'name'=>"(达标主播奖".date('d',$end_time-time())."天)",
+                    "rest_time"=> $end_time-time(),
+                    ),
+                'seckill_show'=>$seckill_show,
+            ) ;
         return $this->renderJson([
             'code' => 0,
             'msg' => 'success',
@@ -97,6 +113,7 @@ class UserController extends Controller
                 'next_level' => $next_level,
                 'menu_list' => $user_center_menu->getMenuList(),
                 'user_center_bg' => $user_center_bg,
+                'seckill' => $seckill,
             ],
         ]);
     }

@@ -191,21 +191,13 @@
                         <view style="margin-right: 24rpx">{{seckill.name}}</view>
                         <view class="flex-y-center seckill-time-item" style="width: 32rpx;height: 34rpx">
                             <image src="/images/icon-time-bg.png" style="width: 100%;height: 100%"></image>
-                            <view class="flex-y-center flex-x-center">{{seckill.times.d?seckill.times.d:'--'}}</view>
+                            <view class="flex-y-center flex-x-center">{{seckill.times.d?seckill.times.d:'天'}}</view>
                         </view>
                         <image src="/images/icon-time-split.png" class="seckill-item-split"
                                style="width: 20rpx;height: 34rpx"></image>
                         <view class="flex-y-center seckill-time-item" style="width: 32rpx;height: 34rpx">
                             <image src="/images/icon-time-bg.png" style="width: 100%;height: 100%"></image>
-                            <view class="flex-y-center flex-x-center">{{seckill.times.h?seckill.times.h:'--'}}</view>
-                        </view>
-
-                        <image src="/images/icon-time-split.png" class="seckill-item-split"
-                               style="width: 20rpx;height: 34rpx"></image>
-
-                        <view class="flex-y-center seckill-time-item" style="width: 32rpx;height: 34rpx">
-                            <image src="/images/icon-time-bg.png" style="width: 100%;height: 100%"></image>
-                            <view class="flex-y-center flex-x-center">{{seckill.times.m?seckill.times.m:'--'}}</view>
+                            <view class="flex-y-center flex-x-center">{{seckill.times.h?seckill.times.h:'时'}}</view>
                         </view>
 
                         <image src="/images/icon-time-split.png" class="seckill-item-split"
@@ -213,7 +205,15 @@
 
                         <view class="flex-y-center seckill-time-item" style="width: 32rpx;height: 34rpx">
                             <image src="/images/icon-time-bg.png" style="width: 100%;height: 100%"></image>
-                            <view class="flex-y-center flex-x-center">{{seckill.times.s?seckill.times.s:'--'}}</view>
+                            <view class="flex-y-center flex-x-center">{{seckill.times.m?seckill.times.m:'分'}}</view>
+                        </view>
+
+                        <image src="/images/icon-time-split.png" class="seckill-item-split"
+                               style="width: 20rpx;height: 34rpx"></image>
+
+                        <view class="flex-y-center seckill-time-item" style="width: 32rpx;height: 34rpx">
+                            <image src="/images/icon-time-bg.png" style="width: 100%;height: 100%"></image>
+                            <view class="flex-y-center flex-x-center">{{seckill.times.s?seckill.times.s:'秒'}}</view>
                         </view>
 
                     </view>

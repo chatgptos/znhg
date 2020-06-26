@@ -168,9 +168,10 @@ Page({
                             user_info: res.data.user_info,
                         });
                         console.log(page.data.seckill)
-                        if(page.data.seckill.rest_time>0){
+                        if(page.data.seckill.seckill.rest_time>0){
                             page.setData({
-                                seckill_show: true,
+                                seckill:page.data.seckill.seckill,
+                                seckill_show: page.data.seckill.seckill_show,
                             });
                             page.seckillTimer();
                         }
