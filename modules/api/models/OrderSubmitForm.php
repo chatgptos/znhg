@@ -60,7 +60,7 @@ class OrderSubmitForm extends Model
             [['cart_id_list', 'goods_info', 'content', 'address_name', 'address_mobile'], 'string'],
             [['address_id',], 'required', 'on' => "EXPRESS"],
             [['address_name', 'address_mobile'], 'required', 'on' => "OFFLINE"],
-            [['room_id','user_coupon_id', 'offline', 'shop_id', 'use_integral'], 'integer'],
+            [['user_coupon_id', 'offline', 'shop_id', 'use_integral'], 'integer'],
             [['offline'], 'default', 'value' => 0],
             [['form'], 'safe']
         ];

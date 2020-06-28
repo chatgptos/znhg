@@ -11,6 +11,7 @@ use app\extensions\getInfo;
 use app\models\Favorite;
 use app\models\Goods;
 use app\models\GoodsPic;
+use app\models\Room;
 use app\models\SeckillGoods;
 
 class GoodsForm extends Model
@@ -18,6 +19,7 @@ class GoodsForm extends Model
     public $id;
     public $user_id;
     public $store_id;
+    public $room_id;
 
     public function rules()
     {
@@ -40,6 +42,15 @@ class GoodsForm extends Model
             'status' => 1,
             'store_id' => $this->store_id,
         ]);
+
+        if($this->room_id){
+            $Room = Room::findOne(['id'=>$this->room_id,'store_id'=>$this->store_id,'user_id'=>$this->user_id]);
+            if($Room){
+               //绑定用户关系
+                 
+            }
+        }
+
         if (!$goods)
             return [
                 'code' => 1,

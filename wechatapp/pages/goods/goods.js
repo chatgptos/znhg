@@ -89,10 +89,19 @@ Page({
         page.setData({
             options: options,
         });
+        if(page.data.options){
+            console.log(111111111111)
+            console.log(page.data.options.room_id)
+            var room_id=page.data.options.room_id;
+            mta.Event.stat('zhibodaihuoloud',{'room':'true'})
+        }else {
+            var room_id=0;
+        }
         app.request({
             url: api.default.goods,
             data: {
-                id: page.data.id
+                id: page.data.id,
+                room_id: page.data.room_id
             },
             success: function (res) {
                 if (res.code == 0) {
