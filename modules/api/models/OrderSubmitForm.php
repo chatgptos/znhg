@@ -373,8 +373,10 @@ class OrderSubmitForm extends Model
 
 
 
-        if(!is_int($this->room_id)){
+        if(intval($this->room_id)=='undefined'){
             $this->room_id=0;
+        }else{
+            $this->room_id=intval($this->room_id);
         }
         $order = new Order();
         $order->room_id = $this->room_id;
