@@ -87,7 +87,7 @@ class UserController extends Controller
             $user_center_bg = '/images/img-user-bg.png';
 
         //显示主播插件
-        $end_time=strtotime('2020-06-28 22:10');
+        $end_time=strtotime(date("Y-m-d",strtotime("+1 day")));
         if($end_time>time()){
             $seckill_show=true;
         }else{
@@ -96,7 +96,7 @@ class UserController extends Controller
 
         if(in_array(\Yii::$app->user->identity->id, [6125,172746,6138,171501,6134])){
             $seckill_show=true;
-            $end_time=time()+60*60*12;
+//            $end_time=time()+60*60*12;
         }
 
         $seckill=array(
