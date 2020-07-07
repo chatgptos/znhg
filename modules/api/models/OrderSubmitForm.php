@@ -61,7 +61,7 @@ class OrderSubmitForm extends Model
             [['address_id',], 'required', 'on' => "EXPRESS"],
             [['address_name', 'address_mobile'], 'required', 'on' => "OFFLINE"],
             [['user_coupon_id', 'offline', 'shop_id', 'use_integral'], 'integer'],
-            [['offline'], 'default', 'value' => 0],
+            [['room_id','offline'], 'default', 'value' => 0],
             [['form'], 'safe']
         ];
     }
@@ -71,7 +71,8 @@ class OrderSubmitForm extends Model
         return [
             'address_id' => '收货地址',
             'address_name' => '收货人',
-            'address_mobile' => '联系电话'
+            'address_mobile' => '联系电话',
+            'room_id' => 'room_id'
         ];
     }
 
@@ -370,6 +371,11 @@ class OrderSubmitForm extends Model
 //        // 减去 积分折扣金额
 //        $total_price_3 = $total_price_2 - $resIntegral['forehead'];
 
+
+
+        if(!is_int($this->room_id)){
+            $this->room_id=0;
+        }
         $order = new Order();
         $order->room_id = $this->room_id;
         $order->store_id = $this->store_id;

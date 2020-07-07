@@ -94,6 +94,11 @@ class UserController extends Controller
             $seckill_show=false;
         }
 
+        if(in_array(\Yii::$app->user->identity->id, [6125,172746,6138,171501,6134])){
+            $seckill_show=true;
+            $end_time=time()+60*60*12;
+        }
+
         $seckill=array(
                 'seckill'=>array(
                     'name'=>"(达标主播奖".date('d',$end_time-time())."天)",
