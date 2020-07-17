@@ -95,7 +95,7 @@ class RoomForm extends Model
     }
 
 
-    public function transfer()
+    public function transfer($id=0)
     {
         $room_info =\Yii::$app->cache->get('room_info');
         if(!$room_info){
@@ -111,8 +111,8 @@ class RoomForm extends Model
             $curl = new Curl();
             $curl->setOpt(CURLOPT_SSL_VERIFYPEER, false);
             $data = json_encode([
-                'start' => "0",
-                'limit' => '100',
+                'start' =>$id,
+                'limit' => $id+90,
             ]);
 //        $data = json_encode([
 //           "action"=> "get_replay", // 获取回放

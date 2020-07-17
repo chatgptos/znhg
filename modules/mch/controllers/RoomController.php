@@ -89,7 +89,7 @@ class RoomController extends Controller
     {
         $form = new RoomForm();
         $form->store_id = $this->store->id;
-        $this->renderJson($form->transfer());
+        $this->renderJson($form->transfer($id));
         $this->renderJson([
             'code'=>0,
             'msg'=>'删除成功'
