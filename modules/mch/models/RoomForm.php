@@ -112,7 +112,7 @@ class RoomForm extends Model
             $curl->setOpt(CURLOPT_SSL_VERIFYPEER, false);
             $data = json_encode([
                 'start' =>$id,
-                'limit' => $id+90,
+                'limit' => 100,
             ]);
 //        $data = json_encode([
 //           "action"=> "get_replay", // 获取回放
