@@ -107,7 +107,7 @@ class RoomForm extends Model
                     'msg' => $wechat->errMsg,
                 ];
             }
-            $api = "http://api.weixin.qq.com/wxa/business/getliveinfo?access_token={$access_token}";
+            $api = "https://api.weixin.qq.com/wxa/business/getliveinfo?access_token={$access_token}";
             $curl = new Curl();
             $curl->setOpt(CURLOPT_SSL_VERIFYPEER, false);
             $data = json_encode([
