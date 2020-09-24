@@ -97,8 +97,6 @@ class CartListForm extends Model
 
     public function searchKaiboAddgoods()
     {
-
-
         $form = new RoomForm();
         $form->store_id = $this->store_id;
         $res=$form->getgoods(0,10);

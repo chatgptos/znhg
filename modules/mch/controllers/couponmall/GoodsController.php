@@ -130,10 +130,13 @@ class GoodsController extends Controller
             ->asArray()
             ->orderBy('sort ASC')
             ->all();
+        $cat_list = Cat::find()->select('id,name')->andWhere(['store_id'=>$this->store->id,'is_delete'=>0])->orderBy('sort ASC')->all();
+
         return $this->render('goods-edit',[
             'goods'  => $goods,
             'cat'   => $ptCat,
             'form_list' => json_encode($form_list,JSON_UNESCAPED_UNICODE),
+            'cat_list'  => $cat_list,
         ]);
     }
 

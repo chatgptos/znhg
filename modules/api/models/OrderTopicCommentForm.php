@@ -168,6 +168,8 @@ class OrderTopicCommentForm extends Model
                         'msg' => '请输入微信号，不是微信昵称，主播需要实名',
                     ];
                 }
+
+                var_dump($goods->media_id);die;
                 $form->coverImg =$goods->media_id[0];
                 $form->shareImg =$goods->media_id[0];
 
@@ -201,7 +203,7 @@ class OrderTopicCommentForm extends Model
                 $order_form = new OrderPreviewFrom();
                 $order_form->store_id = $this->store_id;
                 $order_form->user_id = \Yii::$app->user->id;
-                $order_form->goods_id = 16;
+                $order_form->goods_id = 15;//传入的是单据的id活动
                 $order_form->form_list = $data;
                 $order_form->form_id = 'this is a form';
                 $res3=$order_form->save();

@@ -107,7 +107,7 @@ $this->params['active_nav_group'] = 12;
 
             <nav aria-label="Page navigation example">
                 <?php echo LinkPager::widget([
-                    'pagination' => $pagination,
+                    'pagination' => $pagintion,
                     'prevPageLabel' => '上一页',
                     'nextPageLabel' => '下一页',
                     'firstPageLabel' => '首页',

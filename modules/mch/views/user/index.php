@@ -13,7 +13,7 @@ $this->params['active_nav_group'] = 4;
 
 
 <div class="alert alert-info rounded-0">
-    <?php if ($_GET['fuliquan'] == 1): ?>
+    <?php if (isset($_GET['fuliquan']) && $_GET['fuliquan'] == 1): ?>
         <div>福利池名称： <?php echo  $awardFuli->name ?>份</div>
         <div>所有福利券已经销售数量： <?php echo  $all_fuliquan ?>份</div>
         <div>所有福利池总奖励（前端不显示）： <?php echo  $awardFuli->all_money ?>积分</div>

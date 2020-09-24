@@ -74,7 +74,7 @@ $this->params['is_book'] = 1;
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <?php $cat_name = null;
                         foreach ($cat_list as $index => $value) {
-                            if ($value['id'] == $_GET['cat']) {
+                            if (isset( $_GET['cat'])  &&  $value['id'] == $_GET['cat']) {
                                 $cat_name = $value['name'];
                             }
                         } ?>

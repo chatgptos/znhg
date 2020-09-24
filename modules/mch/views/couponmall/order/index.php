@@ -451,28 +451,28 @@ $condition = [
                     <div class="is-true-express">
                         <input class="form-control" type="hidden" autocomplete="off" name="order_id">
                         <label>快递公司</label>
-                        <div class="input-group mb-3">
-                            <input class="form-control" placeholder="请输入快递公司" type="text" autocomplete="off"
-                                   name="express">
-                            <div class="input-group-btn">
-                                <button type="button" class="btn btn-secondary dropdown-toggle"
-                                        data-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false">
-                                </button>
-                                <div class="dropdown-menu dropdown-menu-right"
-                                     style="max-height: 250px;overflow: auto">
-                                    <?php if (count($express_list['private'])): ?>
-                                        <?php foreach ($express_list['private'] as $item): ?>
-                                            <a class="dropdown-item" href="javascript:"><?= $item ?></a>
-                                        <?php endforeach; ?>
-                                        <div class="dropdown-divider"></div>
-                                    <?php endif; ?>
-                                    <?php foreach ($express_list['public'] as $item): ?>
-                                        <a class="dropdown-item" href="javascript:"><?= $item ?></a>
-                                    <?php endforeach; ?>
-                                </div>
-                            </div>
-                        </div>
+<!--                        <div class="input-group mb-3">-->
+<!--                            <input class="form-control" placeholder="请输入快递公司" type="text" autocomplete="off"-->
+<!--                                   name="express">-->
+<!--                            <div class="input-group-btn">-->
+<!--                                <button type="button" class="btn btn-secondary dropdown-toggle"-->
+<!--                                        data-toggle="dropdown"-->
+<!--                                        aria-haspopup="true" aria-expanded="false">-->
+<!--                                </button>-->
+<!--                                <div class="dropdown-menu dropdown-menu-right"-->
+<!--                                     style="max-height: 250px;overflow: auto">-->
+<!--                                    --><?php //if (count($express_list['private'])): ?>
+<!--                                        --><?php //foreach ($express_list['private'] as $item): ?>
+<!--                                            <a class="dropdown-item" href="javascript:">--><?//= $item ?><!--</a>-->
+<!--                                        --><?php //endforeach; ?>
+<!--                                        <div class="dropdown-divider"></div>-->
+<!--                                    --><?php //endif; ?>
+<!--                                    --><?php //foreach ($express_list['public'] as $item): ?>
+<!--                                        <a class="dropdown-item" href="javascript:">--><?//= $item ?><!--</a>-->
+<!--                                    --><?php //endforeach; ?>
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
                         <label>收件人邮编</label>
                         <input class="form-control" placeholder="请输入收件人邮编" type="text" autocomplete="off"
                                name="post_code">

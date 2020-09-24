@@ -96,7 +96,11 @@ class ShareListForm extends Model
                 $list[$index]['son'] = $son;
 
                 //获取层级和人数
-                $levelMax=$this->searchmax($allson,'parent_level');
+                if($allson){
+                    $levelMax=$this->searchmax($allson,'parent_level');
+                }else{
+                    $levelMax=0;
+                }
                 $list[$index]['levelMax']=$levelMax;
                 //归并
                 $list[$index]['level_s_children']=array_count_values(array_column($allson,'parent_level'));

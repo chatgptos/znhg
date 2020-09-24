@@ -455,18 +455,18 @@ $condition = [
                                         data-toggle="dropdown"
                                         aria-haspopup="true" aria-expanded="false">
                                 </button>
-                                <div class="dropdown-menu dropdown-menu-right"
-                                     style="max-height: 250px;overflow: auto">
-                                    <?php if (count($express_list['private'])): ?>
-                                        <?php foreach ($express_list['private'] as $item): ?>
-                                            <a class="dropdown-item" href="javascript:"><?= $item ?></a>
-                                        <?php endforeach; ?>
-                                        <div class="dropdown-divider"></div>
-                                    <?php endif; ?>
-                                    <?php foreach ($express_list['public'] as $item): ?>
-                                        <a class="dropdown-item" href="javascript:"><?= $item ?></a>
-                                    <?php endforeach; ?>
-                                </div>
+<!--                                <div class="dropdown-menu dropdown-menu-right"-->
+<!--                                     style="max-height: 250px;overflow: auto">-->
+<!--                                    --><?php //if (count($express_list['private'])): ?>
+<!--                                        --><?php //foreach ($express_list['private'] as $item): ?>
+<!--                                            <a class="dropdown-item" href="javascript:">--><?//= $item ?><!--</a>-->
+<!--                                        --><?php //endforeach; ?>
+<!--                                        <div class="dropdown-divider"></div>-->
+<!--                                    --><?php //endif; ?>
+<!--                                    --><?php //foreach ($express_list['public'] as $item): ?>
+<!--                                        <a class="dropdown-item" href="javascript:">--><?//= $item ?><!--</a>-->
+<!--                                    --><?php //endforeach; ?>
+<!--                                </div>-->
                             </div>
                         </div>
                         <label>收件人邮编</label>

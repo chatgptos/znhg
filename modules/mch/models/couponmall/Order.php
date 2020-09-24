@@ -95,7 +95,7 @@ class Order extends \yii\db\ActiveRecord
 //            'send_time' => '发货时间',
 //            'express' => '物流公司',
 //            'express_no' => 'Express No',
-//            'is_confirm' => '确认收货状态：0=未确认，1=已确认收货',
+            'is_confirm' => '确认收货状态：0=未确认，1=已确认收货',
 //            'confirm_time' => '确认收货时间',
 //            'is_price' => '是否发放佣金',
 //            'parent_id' => '用户上级ID',

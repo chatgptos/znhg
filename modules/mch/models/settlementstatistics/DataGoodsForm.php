@@ -161,6 +161,25 @@ class DataGoodsForm extends Model
             $son = $this->getSons($list_user, $value['id']);
             $allson_num = count($allson);
             $son_num = count($son);
+            if(empty($allson_num)){
+                $levelMax = 0;
+                $list[$key]['allson_num'] = 0;
+                $list[$key]['son_num'] = 0;
+                //获取层级和人数
+                $list[$key]['levelMax'] = 0;
+                $list[$key]['level_s_children'] =0;
+                $allson_haslevel = 0;
+                $son_haslevel = 0;
+                $allson_num_haslevel =  0;
+                $son_num_haslevel = 0;
+                $levelMax_haslevel = 0;
+                $list[$key]['allson_num_haslevel'] = 0;
+                $list[$key]['son_num_haslevel'] = 0;
+                //获取层级和人数
+                $list[$key]['levelMax_haslevel'] = 0;
+                $list[$key]['level_s_children_haslevel'] =  0;
+
+            }else{
             $levelMax = $this->searchmax($allson, 'level');
             $list[$key]['allson_num'] = $allson_num;
             $list[$key]['son_num'] = $son_num;
@@ -178,9 +197,8 @@ class DataGoodsForm extends Model
             //获取层级和人数
             $list[$key]['levelMax_haslevel'] = $levelMax_haslevel;
             $list[$key]['level_s_children_haslevel'] = array_count_values(array_column($allson_haslevel, 'level'));
-
+         }
         }
-
         if ($this->status == 1) {
             array_multisort(array_column($list, 'sales_price'), SORT_DESC, $list);
         } else if ($this->status == 2) {
@@ -192,8 +210,6 @@ class DataGoodsForm extends Model
         } else {
             array_multisort(array_column($list, 'integral'), SORT_DESC, $list);
         }
-
-
 //
 //        var_dump($this->flag);
 //        die;
@@ -257,41 +273,62 @@ class DataGoodsForm extends Model
             $son = $this->getSons($list_user, $value['id']);
             $allson_num = count($allson);
             $son_num = count($son);
-            $levelMax = $this->searchmax($allson, 'level');
-            $list[$key]['allson_num'] = $allson_num;
-            $list[$key]['son_num'] = $son_num;
-            //获取层级和人数
-            $list[$key]['levelMax'] = $levelMax;
-            $list[$key]['level_s_children'] = array_count_values(array_column($allson, 'level'));
-            $allson_haslevel = $this->getSubs($list_user_haslevel, $value['id']);
-            $son_haslevel = $this->getSons($list_user_haslevel, $value['id']);
-            $allson_num_haslevel = count($allson_haslevel);
-            $son_num_haslevel = count($son_haslevel);
-            $levelMax_haslevel = $this->searchmax($allson_haslevel, 'level');
-            $list[$key]['allson_num_haslevel'] = $allson_num_haslevel;
-            $list[$key]['son_num_haslevel'] = $son_num_haslevel;
-            //获取层级和人数
-            $list[$key]['levelMax_haslevel'] = $levelMax_haslevel;
-            $list[$key]['level_s_children_haslevel'] = array_count_values(array_column($allson_haslevel, 'level'));
-            $all_son_sum_price = 0;
-            $all_son_sum_price_level = 0;
-            if ($list[$key]['level_s_children']) {//包括所有用户
-                foreach ($allson as $key_son => $value_son) {
-                    $sum_price = Order::find()->where([
-                        'is_delete' => 0,
-                        'is_cancel' => 0,
-                        'user_id' => $value_son['id']
-                    ])->sum('pay_price');
-                    $all_son_sum_price += intval($sum_price);
+            if(empty($allson_num)){
+                $levelMax = 0;
+                $list[$key]['allson_num'] = 0;
+                $list[$key]['son_num'] = 0;
+                //获取层级和人数
+                $list[$key]['levelMax'] = 0;
+                $list[$key]['level_s_children'] =0;
+                $allson_haslevel = 0;
+                $son_haslevel = 0;
+                $allson_num_haslevel =  0;
+                $son_num_haslevel = 0;
+                $levelMax_haslevel = 0;
+                $list[$key]['allson_num_haslevel'] = 0;
+                $list[$key]['son_num_haslevel'] = 0;
+                //获取层级和人数
+                $list[$key]['levelMax_haslevel'] = 0;
+                $list[$key]['level_s_children_haslevel'] =  0;
 
-                    //一个用户到价格
-                    $one_son_price = $this->actionGetLevelpriceByUser($value_son['id'], $value_son['level']);
-                    $all_son_sum_price_level += $one_son_price;
+            }else{
+                $levelMax = $this->searchmax($allson, 'level');
+                $list[$key]['allson_num'] = $allson_num;
+                $list[$key]['son_num'] = $son_num;
+                //获取层级和人数
+                $list[$key]['levelMax'] = $levelMax;
+                $list[$key]['level_s_children'] = array_count_values(array_column($allson, 'level'));
+                $allson_haslevel = $this->getSubs($list_user_haslevel, $value['id']);
+                $son_haslevel = $this->getSons($list_user_haslevel, $value['id']);
+                $allson_num_haslevel = count($allson_haslevel);
+                $son_num_haslevel = count($son_haslevel);
+                $levelMax_haslevel = $this->searchmax($allson_haslevel, 'level');
+                $list[$key]['allson_num_haslevel'] = $allson_num_haslevel;
+                $list[$key]['son_num_haslevel'] = $son_num_haslevel;
+                //获取层级和人数
+                $list[$key]['levelMax_haslevel'] = $levelMax_haslevel;
+                $list[$key]['level_s_children_haslevel'] = array_count_values(array_column($allson_haslevel, 'level'));
+                $all_son_sum_price = 0;
+                $all_son_sum_price_level = 0;
+                if ($list[$key]['level_s_children']) {//包括所有用户
+                    foreach ($allson as $key_son => $value_son) {
+                        $sum_price = Order::find()->where([
+                            'is_delete' => 0,
+                            'is_cancel' => 0,
+                            'user_id' => $value_son['id']
+                        ])->sum('pay_price');
+                        $all_son_sum_price += intval($sum_price);
+
+                        //一个用户到价格
+                        $one_son_price = $this->actionGetLevelpriceByUser($value_son['id'], $value_son['level']);
+                        $all_son_sum_price_level += $one_son_price;
+                    }
                 }
+
+                $list[$key]['all_son_sum_price'] = $all_son_sum_price; //所有到消费金额
+                $list[$key]['all_son_sum_price_level'] = $all_son_sum_price_level; //所有到奖励金额
             }
 
-            $list[$key]['all_son_sum_price'] = $all_son_sum_price; //所有到消费金额
-            $list[$key]['all_son_sum_price_level'] = $all_son_sum_price_level; //所有到奖励金额
         }
 
         if ($this->status == 1) {
@@ -374,60 +411,84 @@ class DataGoodsForm extends Model
             $son = $this->getSons($list_user, $value['id']);
             $allson_num = count($allson);
             $son_num = count($son);
-            $levelMax = $this->searchmax($allson, 'level');
-            $list[$key]['allson_num'] = $allson_num;
-            $list[$key]['son_num'] = $son_num;
-            //获取层级和人数
-            $list[$key]['levelMax'] = $levelMax;
-            $list[$key]['level_s_children'] = array_count_values(array_column($allson, 'level'));
-            $allson_haslevel = $this->getSubs($list_user_haslevel, $value['id']);
-            $son_haslevel = $this->getSons($list_user_haslevel, $value['id']);
-            $allson_num_haslevel = count($allson_haslevel);
-            $son_num_haslevel = count($son_haslevel);
-            $levelMax_haslevel = $this->searchmax($allson_haslevel, 'level');
-            $list[$key]['allson_num_haslevel'] = $allson_num_haslevel;
-            $list[$key]['son_num_haslevel'] = $son_num_haslevel;
-            //获取层级和人数
-            $list[$key]['levelMax_haslevel'] = $levelMax_haslevel;
-            $list[$key]['level_s_children_haslevel'] = array_count_values(array_column($allson_haslevel, 'level'));
-            $all_son_sum_price = 0;
-            $all_son_sum_price_level = 0;
-            $all_son_sum_price_bookmall = 0;
-            $all_son_sum_price_level_bookmall = 0;
-            $all_son_sum_price_crowdc = 0;
-            $all_son_sum_price_level_crowdc = 0;
-            if ($list[$key]['level_s_children']) {//包括所有用户
-                foreach ($allson as $key_son => $value_son) {
-                    //用户总价格
-                    //用户返点 一个用户到价格
-                    $one_son_price = $this->actionGetLevelpriceByUser($value_son['id'], $value_son['level']);
-                    $all_son_sum_price_level += $one_son_price[0];
-                    $all_son_sum_price += $one_son_price[1];
+
+            if(empty($allson_num)){
+                $levelMax = 0;
+                $list[$key]['allson_num'] = 0;
+                $list[$key]['son_num'] = 0;
+                //获取层级和人数
+                $list[$key]['levelMax'] = 0;
+                $list[$key]['level_s_children'] =0;
+                $allson_haslevel = 0;
+                $son_haslevel = 0;
+                $allson_num_haslevel =  0;
+                $son_num_haslevel = 0;
+                $levelMax_haslevel = 0;
+                $list[$key]['allson_num_haslevel'] = 0;
+                $list[$key]['son_num_haslevel'] = 0;
+                //获取层级和人数
+                $list[$key]['levelMax_haslevel'] = 0;
+                $list[$key]['level_s_children_haslevel'] =  0;
+
+            }else{
+                $levelMax = $this->searchmax($allson, 'level');
+                $list[$key]['allson_num'] = $allson_num;
+                $list[$key]['son_num'] = $son_num;
+                //获取层级和人数
+                $list[$key]['levelMax'] = $levelMax;
+                $list[$key]['level_s_children'] = array_count_values(array_column($allson, 'level'));
+                $allson_haslevel = $this->getSubs($list_user_haslevel, $value['id']);
+                $son_haslevel = $this->getSons($list_user_haslevel, $value['id']);
+                $allson_num_haslevel = count($allson_haslevel);
+                $son_num_haslevel = count($son_haslevel);
+                $levelMax_haslevel = $this->searchmax($allson_haslevel, 'level');
+                $list[$key]['allson_num_haslevel'] = $allson_num_haslevel;
+                $list[$key]['son_num_haslevel'] = $son_num_haslevel;
+                //获取层级和人数
+                $list[$key]['levelMax_haslevel'] = $levelMax_haslevel;
+                $list[$key]['level_s_children_haslevel'] = array_count_values(array_column($allson_haslevel, 'level'));
+                $all_son_sum_price = 0;
+                $all_son_sum_price_level = 0;
+                $all_son_sum_price_bookmall = 0;
+                $all_son_sum_price_level_bookmall = 0;
+                $all_son_sum_price_crowdc = 0;
+                $all_son_sum_price_level_crowdc = 0;
+                if ($list[$key]['level_s_children']) {//包括所有用户
+                    foreach ($allson as $key_son => $value_son) {
+                        //用户总价格
+                        //用户返点 一个用户到价格
+                        $one_son_price = $this->actionGetLevelpriceByUser($value_son['id'], $value_son['level']);
+                        $all_son_sum_price_level += $one_son_price[0];
+                        $all_son_sum_price += $one_son_price[1];
 
 
-                    //bookmall
-                    //用户返点 一个用户到价格
-                    $one_son_price_bookmall = $this->actionGetLevelpriceByUserbookmall($value_son['id'], $value_son['level']);
-                    $all_son_sum_price_level_bookmall += $one_son_price_bookmall[0];
-                    $all_son_sum_price_bookmall += $one_son_price_bookmall[1];
+                        //bookmall
+                        //用户返点 一个用户到价格
+                        $one_son_price_bookmall = $this->actionGetLevelpriceByUserbookmall($value_son['id'], $value_son['level']);
+                        $all_son_sum_price_level_bookmall += $one_son_price_bookmall[0];
+                        $all_son_sum_price_bookmall += $one_son_price_bookmall[1];
 
-                    //crowdc
-                    //用户返点 一个用户到价格
-                    $one_son_price_crowdc = $this->actionGetLevelpriceByUsercrowdc($value_son['id'], $value_son['level']);
-                    $all_son_sum_price_level_crowdc += $one_son_price_crowdc[0];
-                    $all_son_sum_price_crowdc += $one_son_price_crowdc[1];
+                        //crowdc
+                        //用户返点 一个用户到价格
+                        $one_son_price_crowdc = $this->actionGetLevelpriceByUsercrowdc($value_son['id'], $value_son['level']);
+                        $all_son_sum_price_level_crowdc += $one_son_price_crowdc[0];
+                        $all_son_sum_price_crowdc += $one_son_price_crowdc[1];
 
+                    }
                 }
+
+                $list[$key]['all_son_sum_price'] = $all_son_sum_price; //所有到消费金额
+                $list[$key]['all_son_sum_price_level'] = $all_son_sum_price_level; //所有到奖励金额
+
+                $list[$key]['all_son_sum_price_bookmall'] = $all_son_sum_price_bookmall; //所有到奖励金额
+                $list[$key]['all_son_sum_price_level_bookmall'] = $all_son_sum_price_level_bookmall; //所有到奖励金额
+
+                $list[$key]['all_son_sum_price_crowdc'] = $all_son_sum_price_crowdc; //所有到奖励金额
+                $list[$key]['all_son_sum_price_level_crowdc'] = $all_son_sum_price_level_crowdc; //所有到奖励金额
+
+
             }
 
-            $list[$key]['all_son_sum_price'] = $all_son_sum_price; //所有到消费金额
-            $list[$key]['all_son_sum_price_level'] = $all_son_sum_price_level; //所有到奖励金额
-
-            $list[$key]['all_son_sum_price_bookmall'] = $all_son_sum_price_bookmall; //所有到奖励金额
-            $list[$key]['all_son_sum_price_level_bookmall'] = $all_son_sum_price_level_bookmall; //所有到奖励金额
-
-            $list[$key]['all_son_sum_price_crowdc'] = $all_son_sum_price_crowdc; //所有到奖励金额
-            $list[$key]['all_son_sum_price_level_crowdc'] = $all_son_sum_price_level_crowdc; //所有到奖励金额
 
 
         }

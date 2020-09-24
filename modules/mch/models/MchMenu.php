@@ -1006,9 +1006,9 @@ class MchMenu
                             ],
                             [
                                 'name' => '直播间申请',
-                                'route' => 'mch/room/send',
+                                'route' => '/mch/crowdapply/order/index',
                                 'sub' => [
-                                    'mch/room/edit'
+                                    '/mch/crowdapply/order/index'
                                 ]
                             ]
                         ]

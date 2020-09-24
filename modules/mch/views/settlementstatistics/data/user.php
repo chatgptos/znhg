@@ -173,7 +173,6 @@ $this->params['page_navs'] = [
             <col style="width: 10%;">
             <tbody>
 
-
             <?php foreach ($list as $index => $value): ?>
                 <tr>
                     <td class="data <?= ($index + 1 + ($pagination->page * $pagination->limit)) <= 3 ? 'active' : '' ?>"><?= $index + 1 + ($pagination->page * $pagination->limit) ?></td>
