@@ -246,7 +246,7 @@ class OrderController extends Controller
         $user=\Yii::$app->user->identity;
         //如果当前用户登入了但是没有上级
         if(!\Yii::$app->user->identity->parent_id && $user){
-            //新增功能 来自购值爽服务点的订单只要注册了判定没有上级 上级的user
+            //新增功能 来自智能鲜蜂服务点的订单只要注册了判定没有上级 上级的user
             $user_shop = User::findOne(['shop_id' => $order->user_id, 'store_id' => $this->store_id]);
             //修改当前用户的上级
             //修改上级出错不抛出
@@ -275,7 +275,7 @@ class OrderController extends Controller
             //积分日志增加
             $Message = new Message();
             $Message->user_id = $user_1->id;
-            $Message->content = "购值爽服务点自动推荐".$user->nickname."成为你用户此次消费奖励：" . $integral . " 积分（已到账）";
+            $Message->content = "智能鲜蜂服务点自动推荐".$user->nickname."成为你用户此次消费奖励：" . $integral . " 积分（已到账）";
             $Message->integral = $integral;
             $Message->addtime = time();
             $Message->username = $user_1->nickname;
@@ -301,7 +301,7 @@ class OrderController extends Controller
             //积分日志增加
             $integralLog = new IntegralLog();
             $integralLog->user_id = $user_1->id;
-            $integralLog->content = "购值爽服务点自动推荐".$user->nickname."成为你用户此次消费奖励：" . $integral . " 积分（已到账）";
+            $integralLog->content = "智能鲜蜂服务点自动推荐".$user->nickname."成为你用户此次消费奖励：" . $integral . " 积分（已到账）";
             $integralLog->integral = intval($integral);
             $integralLog->addtime = time();
             $integralLog->username = $user_1->nickname;
@@ -328,13 +328,13 @@ class OrderController extends Controller
             $form->store_id = $this->store->id;
             $form->user_id = \Yii::$app->user->id;
             $form->num = 1;
-            $form->is_hg = 1;//是购值爽服务点 购值爽服务点表象
+            $form->is_hg = 1;//是智能鲜蜂服务点 智能鲜蜂服务点表象
             $res=$form->add();
             $form = new BusinessCommentForm();
             $form->store_id = $this->store->id;
             $form->user_id = \Yii::$app->user->id;
             $form->num = 1;
-            $form->is_hg = 2;//是购值爽服务点  购值爽服务点内页
+            $form->is_hg = 2;//是智能鲜蜂服务点  智能鲜蜂服务点内页
             $res=$form->add();
 
         }

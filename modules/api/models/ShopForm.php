@@ -37,7 +37,7 @@ class ShopForm extends Model
         if (!$shop) {
             return [
                 'code' => 1,
-                'msg' => '购值爽服务点不存在'
+                'msg' => '智能鲜蜂服务点不存在'
             ];
         }
         $shop_pic = ShopPic::find()->select(['pic_url'])->where(['store_id' => $this->store_id, 'shop_id' => $shop['id'], 'is_delete' => 0])->column();

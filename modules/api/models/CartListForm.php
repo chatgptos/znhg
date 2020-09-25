@@ -123,7 +123,7 @@ class CartListForm extends Model
                 ->where(['a.id' => json_decode($goods->attr, true)])
                 ->asArray()->all();
 
-            $goods_attr_info = $goods->getAttrInfo(json_decode($goods->attr, true));
+            $goods_attr_info = $goods->getAttrInfo(json_decode($item->attr, true));
             $attr_num = intval(empty($goods_attr_info['num']) ? 0 : $goods_attr_info['num']);
             $goods_pic = isset($goods_attr_info['pic'])?$goods_attr_info['pic']?:$goods->getGoodsPic(0)->pic_url:$goods->getGoodsPic(0)->pic_url;
             $new_item = (object)[
@@ -132,12 +132,12 @@ class CartListForm extends Model
                 'goods_id' => $goods->id,
                 'goods_name' => $goods->name,
                 'goods_pic' => $goods_pic,
-                'num' => $goods->num,
+                'num' => $attr_num,
                 'attr_list' => $attr_list,
                 'price' => doubleval(empty($goods_attr_info['price']) ? $goods->price : $goods_attr_info['price']) * 1,
                 'yongjin' => doubleval(empty($goods_attr_info['price']) ? $goods->price : $goods_attr_info['price']) * 1*0.2,
                 'max_num' => $attr_num,
-                'disabled' => ($goods->num < 1) ? true : false,
+                'disabled' => ($item->num < 1) ? true : false,
             ];
 
             //秒杀价计算
@@ -165,7 +165,7 @@ class CartListForm extends Model
 
     public function searchHg()
     {
-        //查询实时购值爽服务点信息
+        //查询实时智能鲜蜂服务点信息
         $hg_id = \Yii::$app->request->post('hg_id');
         //创建订单
         $opendoorRecordId = \Yii::$app->request->post('opendoorRecordId');
@@ -183,9 +183,9 @@ class CartListForm extends Model
         if (!$shop) {
             return json_encode([
                 'code'  => '1',
-                'msg'   => '该购值爽服务点没有还未人抢购，未配置',
+                'msg'   => '该智能鲜蜂服务点没有还未人抢购，未配置',
                 'success'   => false,
-                'data'  => '该购值爽服务点没有还未人抢购，未配置',
+                'data'  => '该智能鲜蜂服务点没有还未人抢购，未配置',
             ],JSON_UNESCAPED_UNICODE);
         }
 
@@ -209,7 +209,7 @@ class CartListForm extends Model
             if($num>0){
                 $attr_list[] = [
                     'attr_group_name'=>'来源',
-                    'attr_name'=>'智能购值爽服务点',
+                    'attr_name'=>'智能智能鲜蜂服务点',
                     '单价'=>$item['price'],
                 ];
                 $attr_list[] = [
@@ -277,10 +277,10 @@ class CartListForm extends Model
                 //如果是用户继续往下走
                 //如果关门 订单显示
                 //支付订单
-                //查询订单 查询购值爽服务点生成的订单---生成的订单支付
+                //查询订单 查询智能鲜蜂服务点生成的订单---生成的订单支付
                 $form = new \app\modules\api\models\couponmall\OrderListForm();
                 $res = $form->actionOrderDetailshg($opendoorRecordId,true,$shop,$out_order_no);
-                //如果成功生成购值爽服务点订单+微信订单
+                //如果成功生成智能鲜蜂服务点订单+微信订单
                 if($res['success']){
                     $pay_data=[];
                     if ($shop->hg_yx){
@@ -307,7 +307,7 @@ class CartListForm extends Model
                         ],
                     ];
                 }else{
-                    //没有生成订单 0元结束单子 跳转出来 到首页 isreplenish  控制跳到购值爽服务点 首页去
+                    //没有生成订单 0元结束单子 跳转出来 到首页 isreplenish  控制跳到智能鲜蜂服务点 首页去
                     //取消订单
                     return [
                         'code' => 0,

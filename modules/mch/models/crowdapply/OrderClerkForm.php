@@ -81,9 +81,9 @@ class OrderClerkForm extends Model
         $form->store_id = 1;
         $form->num = 1;
         $form->title = $room_info->name;
-        $form->room_id = $room_info->room_id;//是购值爽服务点 购值爽服务点表象
-        $form->good_id = 0;//是购值爽服务点 购值爽服务点表象
-        $form->article_id = 0;//是购值爽服务点 购值爽服务点表象
+        $form->room_id = $room_info->room_id;//是智能鲜蜂服务点 智能鲜蜂服务点表象
+        $form->good_id = 0;//是智能鲜蜂服务点 智能鲜蜂服务点表象
+        $form->article_id = 0;//是智能鲜蜂服务点 智能鲜蜂服务点表象
         $res1 = $form->add();
 
         if(!$res1){

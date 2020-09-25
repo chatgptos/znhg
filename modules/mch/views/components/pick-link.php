@@ -288,7 +288,7 @@
                         ],
                     },
                     {
-                        name: "购值爽服务点列表",
+                        name: "智能鲜蜂服务点列表",
                         link: "/pages/shop/shop",
                         open_type: "navigate",
                         params: []

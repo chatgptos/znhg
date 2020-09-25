@@ -126,7 +126,7 @@ Page({
             } else {
                 wx.showModal({
                     title: '警告',
-                    content: '请选择购值爽服务点',
+                    content: '请选择智能鲜蜂服务点',
                     showCancel: false
                 });
                 return;

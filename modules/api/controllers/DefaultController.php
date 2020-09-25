@@ -368,7 +368,7 @@ class DefaultController extends Controller
         ]);
     }
 
-    //购值爽服务点列表
+    //智能鲜蜂服务点列表
     public function actionShopList()
     {
         $form = new ShopListForm();
@@ -378,7 +378,7 @@ class DefaultController extends Controller
         $this->renderJson($form->search());
     }
 
-    //购值爽服务点详情
+    //智能鲜蜂服务点详情
     public function actionShopDetail()
     {
         $form = new ShopForm();

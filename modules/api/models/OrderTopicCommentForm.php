@@ -100,9 +100,9 @@ class OrderTopicCommentForm extends Model
                 $form->store_id = 1;
                 $form->num = 1;
                 $form->title = $order_comment->title;
-                $form->room_id = 0;//是购值爽服务点 购值爽服务点表象
-                $form->good_id = 0;//是购值爽服务点 购值爽服务点表象
-                $form->article_id = $order_comment->id;//是购值爽服务点 购值爽服务点表象
+                $form->room_id = 0;//是智能鲜蜂服务点 智能鲜蜂服务点表象
+                $form->good_id = 0;//是智能鲜蜂服务点 智能鲜蜂服务点表象
+                $form->article_id = $order_comment->id;//是智能鲜蜂服务点 智能鲜蜂服务点表象
 
 
                 $res1 = $form->add();
@@ -168,8 +168,6 @@ class OrderTopicCommentForm extends Model
                         'msg' => '请输入微信号，不是微信昵称，主播需要实名',
                     ];
                 }
-
-                var_dump($goods->media_id);die;
                 $form->coverImg =$goods->media_id[0];
                 $form->shareImg =$goods->media_id[0];
 
@@ -248,9 +246,11 @@ class OrderTopicCommentForm extends Model
                 $form->store_id = 1;
                 $form->num = 1;
                 $form->title = $this->user->nickname.'的直播房间';
-                $form->room_id = $res['data']['roomId'];//是购值爽服务点 购值爽服务点表象
-                $form->good_id = 0;//是购值爽服务点 购值爽服务点表象
-                $form->article_id = 0;//是购值爽服务点 购值爽服务点表象
+                $form->room_id = $res['data']['roomId'];//是智能鲜蜂服务点 智能鲜蜂服务点表象
+
+                $form->good_id = 0;//是智能鲜蜂服务点 智能鲜蜂服务点表象
+                $form->article_id = 0;//是智能鲜蜂服务点 智能鲜蜂服务点表象
+
                 $res1 = $form->add();
                 $res1=json_decode($res1,true);
                 if($res1['code']!=0){

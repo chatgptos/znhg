@@ -164,6 +164,7 @@ class RoomForm extends Model
             ];
         }
         if(!$this->coverImg){
+
             //储存文件
             $url=$_SERVER['DOCUMENT_ROOT'].'/uploads/image/0a/'.'0aef19c6dbff3333f657bf1c3b1f4708.jpg';
             $api = "https://api.weixin.qq.com/cgi-bin/media/upload?access_token={$access_token}&type=image";;

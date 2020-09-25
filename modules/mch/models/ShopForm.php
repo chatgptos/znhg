@@ -52,15 +52,15 @@ class ShopForm extends Model
     public function attributeLabels()
     {
         return [
-            'name'=>'购值爽服务点名称',
+            'name'=>'智能鲜蜂服务点名称',
             'mobile'=>'联系方式',
-            'address'=>'购值爽服务点地址',
+            'address'=>'智能鲜蜂服务点地址',
             'latitude'=>'经纬度',
             'longitude'=>'经纬度',
             'score'=>'评分',
             'hg_id'=>'hg',
             'hg_yx'=>'hgyx',
-            'cover_url'=>'购值爽服务点大图',
+            'cover_url'=>'智能鲜蜂服务点大图',
             'pic_url'=>'门店小图',
             'content'=>'门店介绍',
             'shop_time'=>'营业时间',

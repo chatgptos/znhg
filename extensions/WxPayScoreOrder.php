@@ -255,7 +255,7 @@ class WxPayScoreOrder extends Controller
                 'body' => json_encode((array)[
                     'appid' => $this->wechat->appId,
                     'service_id' =>  $this->service_id,
-                    'service_introduction' => '购值爽服务点可乐',
+                    'service_introduction' => '智能鲜蜂服务点可乐',
                     "notify_url" => "https://app.aijiehun.com/paynotify/wechatscorepay",
                     'time_range' => [
                         'start_time' => "20200305123510",
@@ -278,8 +278,8 @@ class WxPayScoreOrder extends Controller
                         'description' => "不与其他优惠叠加",
                     ]],
                     "location" => [
-                        'start_location' => "深圳购值爽服务点",
-                        'end_location' => "深圳购值爽服务点",
+                        'start_location' => "深圳智能鲜蜂服务点",
+                        'end_location' => "深圳智能鲜蜂服务点",
                     ],
                     'openid' => \Yii::$app->user->identity->wechat_open_id,
                     'need_user_confirm' => false,//提示服务无权限 是因为这个参数

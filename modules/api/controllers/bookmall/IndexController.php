@@ -90,7 +90,7 @@ class IndexController extends Controller
     }
 
     /**
-     * 购值爽服务点列表
+     * 智能鲜蜂服务点列表
      */
     public function actionShopList()
     {

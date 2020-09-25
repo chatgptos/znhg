@@ -66,7 +66,7 @@ class UserController extends Controller
             if (!$shop_exit) {
                 return $this->renderJson([
                     'code' => 1,
-                    'msg' => '购值爽服务点不存在'
+                    'msg' => '智能鲜蜂服务点不存在'
                 ]);
             }
             $user->shop_id = $shop_id;

@@ -14,7 +14,7 @@
 
 
     <view class="app">
-        <view class="title_scan">附近购值爽服务点</view>
+        <view class="title_scan">附近智能鲜蜂服务点</view>
         <view class="ditu">
             <image src="/Img/znhgdt.jepg"></image>
         </view>

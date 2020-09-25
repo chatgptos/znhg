@@ -5,7 +5,7 @@
  * Time: 16:41
  */
 $urlManager = Yii::$app->urlManager;
-$this->title = '购值爽服务点设置';
+$this->title = '智能鲜蜂服务点设置';
 $this->params['active_nav_group'] = 1;
 ?>
 <script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
@@ -13,15 +13,15 @@ $this->params['active_nav_group'] = 1;
     <div class="panel-header"><?= $this->title ?></div>
     <div class="panel-body">
         <div class="float-left pt-2 mb-4">
-            <a class="btn btn-primary edit-modal" href="<?= $urlManager->createUrl(['mch/crowdc/store/shop-edit']) ?>">添加购值爽服务点</a>
+            <a class="btn btn-primary edit-modal" href="<?= $urlManager->createUrl(['mch/crowdc/store/shop-edit']) ?>">添加智能鲜蜂服务点</a>
         </div>
         <table class="table table-bordered bg-white">
             <thead>
             <tr>
                 <th>ID</th>
-                <th>购值爽服务点名称</th>
+                <th>智能鲜蜂服务点名称</th>
                 <th>联系方式</th>
-                <th>购值爽服务点地址</th>
+                <th>智能鲜蜂服务点地址</th>
                 <th>经纬度</th>
                 <th>核销订单</th>
                 <th>核销卡券</th>

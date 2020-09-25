@@ -137,7 +137,7 @@ class OrderListForm extends Model
             foreach ($goodsList as $item) {
                 $attr_list[] = [
                     'attr_group_name'=>'来源',
-                    'attr_name'=>'智能购值爽服务点',
+                    'attr_name'=>'智能智能鲜蜂服务点',
                 ];
                 $attr_num = 99;
                 $num =$item['count'];
@@ -260,7 +260,7 @@ class OrderListForm extends Model
                         "unionid"=>\Yii::$app->user->identity->wechat_open_id,
                         "orderNo"=>$data['orderNo'],
                     );
-                    //完结购值爽服务点订单
+                    //完结智能鲜蜂服务点订单
                     $res= $HuoGui->completeOrder($biz_content);
 
                     //开始判断逻辑

@@ -5,7 +5,7 @@
  * Time: 9:09
  */
 $urlManager = Yii::$app->urlManager;
-$this->title = '编辑购值爽服务点';
+$this->title = '编辑智能鲜蜂服务点';
 $this->params['active_nav_group'] = 1;
 ?>
 
@@ -20,7 +20,7 @@ $this->params['active_nav_group'] = 1;
             <div class="form-body">
                 <div class="form-group row">
                     <div class="col-3 text-right">
-                        <label class=" col-form-label required">购值爽服务点名称：</label>
+                        <label class=" col-form-label required">智能鲜蜂服务点名称：</label>
                     </div>
                     <div class="col-9">
                         <input class="form-control" type="text" name="name" value="<?= $shop->name ?>">
@@ -44,25 +44,25 @@ $this->params['active_nav_group'] = 1;
                 </div>
                 <div class="form-group row">
                     <div class="col-3 text-right">
-                        <label class=" col-form-label required">购值爽服务点经度：</label>
+                        <label class=" col-form-label required">智能鲜蜂服务点经度：</label>
                     </div>
                     <div class="col-9">
                         <input class="form-control" type="text" name="longitude" value="<?= $shop->longitude ?>">
-                        <div class="fs-sm">购值爽服务点经纬度可以在地图上选择，也可以自己添加</div>
+                        <div class="fs-sm">智能鲜蜂服务点经纬度可以在地图上选择，也可以自己添加</div>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-3 text-right">
-                        <label class="col-form-label required">购值爽服务点纬度：</label>
+                        <label class="col-form-label required">智能鲜蜂服务点纬度：</label>
                     </div>
                     <div class="col-9">
                         <input class="form-control" type="text" name="latitude" value="<?= $shop->latitude ?>">
-                        <div class="fs-sm">购值爽服务点经纬度可以在地图上选择，也可以自己添加</div>
+                        <div class="fs-sm">智能鲜蜂服务点经纬度可以在地图上选择，也可以自己添加</div>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-3 text-right">
-                        <label class="col-form-label required">购值爽服务点大图：</label>
+                        <label class="col-form-label required">智能鲜蜂服务点大图：</label>
                     </div>
                     <div class="col-9">
                         <?php if ($shop->shopPic): ?>
@@ -115,7 +115,7 @@ $this->params['active_nav_group'] = 1;
                 </div>
                 <div class="form-group row">
                     <div class="col-3 text-right">
-                        <label class="col-form-label required">购值爽服务点小图：</label>
+                        <label class="col-form-label required">智能鲜蜂服务点小图：</label>
                     </div>
                     <div class="col-9">
 
@@ -151,7 +151,7 @@ $this->params['active_nav_group'] = 1;
                 </div>
                 <div class="form-group row">
                     <div class="col-3 text-right">
-                        <label class=" col-form-label">购值爽服务点评分：</label>
+                        <label class=" col-form-label">智能鲜蜂服务点评分：</label>
                     </div>
                     <div class="col-9">
                         <input class="form-control" type="number" name="score" min="1" max="5"
@@ -170,7 +170,7 @@ $this->params['active_nav_group'] = 1;
 
                 <div class="form-group row">
                     <div class="col-3 text-right">
-                        <label class=" col-form-label">购值爽服务点介绍：</label>
+                        <label class=" col-form-label">智能鲜蜂服务点介绍：</label>
                     </div>
                     <div class="col-9">
                             <textarea class="short-row" id="editor"

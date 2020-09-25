@@ -328,7 +328,7 @@ $this->params['active_nav_group'] = 1;
                         <span class="label-icon"></span>
                         <span class="label-text">仅自提</span>
                     </label>
-                    <div class="text-muted fs-sm">自提需要设置购值爽服务点，如果您还未设置购值爽服务点请保存本页后设置购值爽服务点，<a target="_blank"
+                    <div class="text-muted fs-sm">自提需要设置智能鲜蜂服务点，如果您还未设置智能鲜蜂服务点请保存本页后设置智能鲜蜂服务点，<a target="_blank"
                                                                                   href="<?= $urlManager->createUrl(['mch/crowdc/store/shop']) ?>">点击前往设置</a>
                     </div>
                 </div>

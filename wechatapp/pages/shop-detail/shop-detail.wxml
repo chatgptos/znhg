@@ -11,7 +11,7 @@
     </view>
 
 
-    <view class='block_3 flex-y-center'>购值爽柜商品</view>
+    <view class='block_3 flex-y-center'>智能鲜蜂柜商品</view>
     <view class='block'>
         <view class='wrap'>
             <navigator style="display: inline-table" wx:for="{{goods}}" url='/pages/cheapmarket/details/details?id={{item.id}}'>
@@ -79,7 +79,7 @@
 
 
 
-    <view class='block_3 flex-y-center'>购值爽服务点介绍</view>
+    <view class='block_3 flex-y-center'>智能鲜蜂服务点介绍</view>
         <view class='detail'>
             <import src="../../wxParse/wxParse.wxml" />
             <template is="wxParse" data="{{wxParseData:detail.nodes}}" />

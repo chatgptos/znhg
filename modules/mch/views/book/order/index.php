@@ -175,7 +175,7 @@ $condition = [
                                 <span class="status-item mr-3">核销员：<?= $clerk->nickname ?>的订单</span>
                             <?php endif; ?>
                             <?php if (isset($shop)): ?>
-                                <span class="status-item mr-3">购值爽服务点：<?= $shop->name ?>的订单</span>
+                                <span class="status-item mr-3">智能鲜蜂服务点：<?= $shop->name ?>的订单</span>
                             <?php endif; ?>
                         </div>
                     </div>

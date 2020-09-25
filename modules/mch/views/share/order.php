@@ -266,8 +266,8 @@ if ($status === '' || $status === null || $status == -1)
                             </div>
                             <?php if ($order_item['shop_id']): ?>
                                 <div>
-                                    <span class="mr-3">购值爽服务点名称：<?= $order_item['shop']['name'] ?></span>
-                                    <span class="mr-3">购值爽服务点地址：<?= $order_item['shop']['address'] ?></span>
+                                    <span class="mr-3">智能鲜蜂服务点名称：<?= $order_item['shop']['name'] ?></span>
+                                    <span class="mr-3">智能鲜蜂服务点地址：<?= $order_item['shop']['address'] ?></span>
                                     <span class="mr-3">电话：<?= $order_item['shop']['mobile'] ?></span>
                                 </div>
                             <?php endif; ?>

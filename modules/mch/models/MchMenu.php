@@ -942,14 +942,14 @@ class MchMenu
                         ],
                     ],
                     [
-                        'name' => '购值爽服务点',
+                        'name' => '智能鲜蜂服务点',
                         'route' => 'mch/store/shop',
                         'sub' => [
                             'mch/store/shop-edit',
                         ],
                     ],
                     [
-                        'name' => '购值爽服务点设备',
+                        'name' => '智能鲜蜂服务点设备',
                         'route' => 'mch/store/huogui',
                         'sub' => [
                             'mch/store/huogui-edit',

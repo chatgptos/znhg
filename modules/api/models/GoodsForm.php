@@ -62,7 +62,7 @@ class GoodsForm extends Model
 ////                $user=\Yii::$app->user->identity;
 ////                //如果当前用户登入了但是没有上级
 ////                if(!\Yii::$app->user->identity->parent_id && $user) {
-////                    //新增功能 来自购值爽服务点的订单只要注册了判定没有上级 上级的user
+////                    //新增功能 来自智能鲜蜂服务点的订单只要注册了判定没有上级 上级的user
 ////                    $user_shop = User::findOne(['shop_id' => $order->user_id, 'store_id' => $this->store_id]);
 ////                    //修改当前用户的上级
 ////                    //修改上级出错不抛出

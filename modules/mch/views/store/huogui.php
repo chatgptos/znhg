@@ -5,7 +5,7 @@
  * Time: 16:41
  */
 $urlManager = Yii::$app->urlManager;
-$this->title = '购值爽服务点设备设置';
+$this->title = '智能鲜蜂服务点设备设置';
 $this->params['active_nav_group'] = 1;
 ?>
 <script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
@@ -16,13 +16,13 @@ $this->params['active_nav_group'] = 1;
             <thead>
             <tr>
                 <th>ID</th>
-                <th>购值爽服务点名称</th>
+                <th>智能鲜蜂服务点名称</th>
 <!--                <th>deviceNo</th>-->
-                <th>购值爽服务点地址</th>
-                <th>购值爽服务点图片</th>
-                <th>购值爽服务点运营状态</th>
-                <th>购值爽服务点小程序入口</th>
-                <th>购值爽服务点商品信息</th>
+                <th>智能鲜蜂服务点地址</th>
+                <th>智能鲜蜂服务点图片</th>
+                <th>智能鲜蜂服务点运营状态</th>
+                <th>智能鲜蜂服务点小程序入口</th>
+                <th>智能鲜蜂服务点商品信息</th>
             </tr>
             </thead>
             <?php foreach ($list as $item): ?>
