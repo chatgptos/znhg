@@ -190,7 +190,7 @@ class OrderTopicCommentForm extends Model
                     }
 
                     if($value['name']=='直播开始时间'){
-                        $data[$key]['default']= date("H:i",time()+3600) ;// 开始时间
+                        $data[$key]['default']= date("H:i",time()+600) ;// 开始时间
 //                        var_dump($data[$key]['default']);die;
                     }
 
@@ -263,7 +263,10 @@ class OrderTopicCommentForm extends Model
                 $t->commit();
                 return [
                     'code' => 0,
-                    'msg' => '恭喜创建成功直播房间',
+                    'data' => array(
+                        'roomId'=>$res['data']['roomId'],
+                    ),
+                    'msg' => '十分钟后开播个人中心-主播端进入主播开播吧 ,点击确定添加直播间商品立刻赚钱',
                 ];
             }
         }
@@ -275,8 +278,8 @@ class OrderTopicCommentForm extends Model
 
     public function addgoods()
     {
-        if (!$this->validate())
-            return $this->getModelError();
+//        if (!$this->validate())
+//            return $this->getModelError();
         $this->cart_id_list ='['.$this->cart_id_list.']';
         $form = new RoomForm();
         $form->store_id = $this->store_id;

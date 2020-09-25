@@ -195,8 +195,8 @@ class RoomForm extends Model
         $curl->setHeader('Content-Type', 'application/json');
         $data = json_encode([
             'name' => $this->anchorName.'的直播间',// 房间名字
-            'startTime' =>  time()+3600,// 开始时间
-            'endTime' =>   time()+3600*12,// 开始时间
+            'startTime' =>  time()+701,// 开始时间
+            'endTime' =>   time()+701*12,// 开始时间
             'anchorName' => $this->anchorName,// 主播昵称
 //            'anchorWechat' => $this->anchorWechat,// 主播微信号
             'anchorWechat' => $this->anchorWechat,// 主播微信号  Lvcj1997 xiaochijiekafei
@@ -260,7 +260,6 @@ class RoomForm extends Model
                 'msg' => $wechat->errMsg,
             ];
         }
-
         $is_room = Room::find()->select('*')->where(['is_delete'=>0,'user_id'=>$this->user_id])->orderBy('id DESC')->limit(1)->one();
         if($is_room){
             $api = "https://api.weixin.qq.com/wxaapi/broadcast/room/addgoods?access_token={$access_token}";
@@ -268,7 +267,7 @@ class RoomForm extends Model
             $curl->setOpt(CURLOPT_SSL_VERIFYPEER, false);
             $curl->setHeader('Content-Type', 'application/json');
             $data = json_encode([
-                'ids' => $this->ids,// 房间名字
+                'ids' => $this->ids[0],// 房间名字
                 'roomId' => $is_room['room_id'],// 房间名字
             ]);
             $curl->post($api, $data);
@@ -278,7 +277,10 @@ class RoomForm extends Model
                     ['room_id' => $is_room['room_id']]);
                 return [
                     'code'=>0,
-                    'data'=>$res,
+                    'data'=>array(
+                        'roomId'=>$is_room['room_id'],
+                        'res'=>$res,
+                    ),
                     'msg'=>'成功'
                 ];
             } else{
