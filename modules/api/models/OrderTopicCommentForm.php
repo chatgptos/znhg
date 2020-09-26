@@ -77,6 +77,8 @@ class OrderTopicCommentForm extends Model
                 }else{
                     $order_comment->cover_pic = 'http://airent-hospital.oss-cn-beijing.aliyuncs.com/uploads/image/77/773717c17a32c513f2732a54be676a2b.png';
                 }
+
+                $order_comment->content = $order_comment->content . "<img src='{$order_comment->cover_pic}'/>";
                 $pic_list = json_encode($pic_list, JSON_UNESCAPED_UNICODE);
                 $order_comment->pic_list = $pic_list;
                 $order_comment->addtime = time();
