@@ -232,11 +232,26 @@ class BusinessForm extends Model
         if(!$price){
             $price = 0.3;
         }
+
+        //券类型
+        $quantype='优惠券';
+        $Business = Business::findOne([
+            'id' => $this->id,
+        ]);
+        if($Business['room_id']){
+            $quantype='直播券';
+        }
+        if($Business['article_id']){
+            $quantype='书虫券';
+        }
+
+
+
         $data = [
             'partner_trade_no' => md5(uniqid()),
             'openid' => $user->wechat_open_id,
             'amount' =>$price * 100,
-            'desc' => '点到'.$this->r_mb_str($user_from->nickname,3).'优惠券红包'.$ad
+            'desc' => '点到'.$this->r_mb_str($user_from->nickname,3).$quantype.'红包'.$ad
         ];
 
         $res = $this->wechat->pay->transfers($data);
@@ -261,7 +276,7 @@ class BusinessForm extends Model
                 'partner_trade_no' => md5(uniqid()),
                 'openid' => $user_from->wechat_open_id,
                 'amount' =>$price * 100,
-                'desc' => '优惠券获被'.$this->r_mb_str($user->nickname,3).'点击奖红包'.$ad
+                'desc' => $quantype.'获被'.$this->r_mb_str($user->nickname,3).'点击奖红包'.$ad
             ];
 
             $res = $this->wechat->pay->transfers($data_from);
@@ -286,7 +301,7 @@ class BusinessForm extends Model
                 'partner_trade_no' => md5(uniqid()),
                 'openid' => $user_1->wechat_open_id,
                 'amount' =>$price * 100,
-                'desc' => '你推荐的'.$this->r_mb_str($user->nickname,3).'点到券池红包'.$ad
+                'desc' => '你推荐的'.$this->r_mb_str($user->nickname,3).'点到'.$quantype.'红包'.$ad
             ];
             $res = $this->wechat->pay->transfers($data_1);
             $notice =date('h:m',time()).$this->r_mb_str(Option::get('notice', $this->store_id, 'admin'),250);

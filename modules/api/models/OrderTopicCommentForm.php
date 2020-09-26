@@ -8,6 +8,7 @@
 namespace app\modules\api\models;
 
 
+use app\models\Business;
 use app\models\Order;
 use app\models\OrderComment;
 use app\models\OrderDetail;
@@ -230,28 +231,42 @@ class OrderTopicCommentForm extends Model
                     ];
                 }
 
-                $coupon=1;//赠送券
-                //新人增加
-                $res2=User::updateAll(
-                    ['coupon'=>\Yii::$app->user->identity->coupon+$coupon],
-                    ['id' => \Yii::$app->user->identity->id]
-                );
-                if(!$res2){
-                    $e=$t->rollBack();
-                    return [
-                        'code' => 1,
-                        'msg' => '申请失败',
-                    ];
+
+                //线上存在 个人保持在线 出现的概率
+                $exist_business_user = Business::find()->where(['user_id' => $this->user_id, 'is_exchange' => 0, 'is_delete' => 0])->andWhere(['>', 'room_id', 0])->exists();
+                if (!$exist_business_user){
+                    $coupon=1;//赠送券
+                    //新人增加
+                    $res2=User::updateAll(
+                        ['coupon'=>\Yii::$app->user->identity->coupon+$coupon],
+                        ['id' => \Yii::$app->user->identity->id]
+                    );
+                    if(!$res2){
+                        $e=$t->rollBack();
+                        return [
+                            'code' => 1,
+                            'msg' => '申请失败',
+                        ];
+                    }
                 }
+
+
                 $form = new BusinessCommentForm();
                 $form->user_id = $this->user_id;
                 $form->store_id = 1;
                 $form->num = 1;
-                $form->title = $this->user->nickname.'的直播房间';
                 $form->room_id = $res['data']['roomId'];//是智能鲜蜂服务点 智能鲜蜂服务点表象
 
                 $form->good_id = 0;//是智能鲜蜂服务点 智能鲜蜂服务点表象
                 $form->article_id = 0;//是智能鲜蜂服务点 智能鲜蜂服务点表象
+
+
+                if (!$exist_business_user){
+                    $form->is_zhibo = 1;//是智能鲜蜂服务点 智能鲜蜂服务点表象
+                }else{
+                    $form->title = $this->user->nickname.'的直播房间';
+                }
+
 
                 $res1 = $form->add();
                 $res1=json_decode($res1,true);
