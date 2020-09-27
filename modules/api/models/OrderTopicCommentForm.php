@@ -79,7 +79,7 @@ class OrderTopicCommentForm extends Model
                     $order_comment->cover_pic = 'http://airent-hospital.oss-cn-beijing.aliyuncs.com/uploads/image/77/773717c17a32c513f2732a54be676a2b.png';
                 }
 
-                $order_comment->content = $order_comment->content . "<img src='{$order_comment->cover_pic}'/>";
+                $order_comment->content = $order_comment->content . "<img style='width:100%;margin:0px auto; '  src='{$order_comment->cover_pic}'/>";
                 $pic_list = json_encode($pic_list, JSON_UNESCAPED_UNICODE);
                 $order_comment->pic_list = $pic_list;
                 $order_comment->addtime = time();
@@ -89,14 +89,31 @@ class OrderTopicCommentForm extends Model
                         'msg' => '直播日记需要你填写',
                     ];
                 }
-                $coupon=1;//赠送券
-                //新人增加
-                 User::updateAll(
-                    ['coupon'=>\Yii::$app->user->identity->coupon+$coupon],
-                    ['id' => \Yii::$app->user->identity->id]
-                );
-                //增加一张券
+
+                //线上存在 个人保持在线 出现的概率
+                $exist_business_user = Business::find()->where(['user_id' => $this->user_id, 'is_exchange' => 0, 'is_delete' => 0])->andWhere(['>', 'article_id', 0])->exists();
+                if (!$exist_business_user){
+                    $coupon=1;//赠送券
+                    //新人增加
+                    $res2=User::updateAll(
+                        ['coupon'=>\Yii::$app->user->identity->coupon+$coupon],
+                        ['id' => \Yii::$app->user->identity->id]
+                    );
+                    if(!$res2){
+                        $e=$t->rollBack();
+                        return [
+                            'code' => 1,
+                            'msg' => '申请失败',
+                        ];
+                    }
+                }
+
                 $res=$order_comment->save();
+
+                if (!$res) {
+                    $t->rollBack();
+                    return $this->getModelError($order_comment);
+                }
 
                 $form = new BusinessCommentForm();
                 $form->user_id = $this->user_id;
@@ -106,16 +123,23 @@ class OrderTopicCommentForm extends Model
                 $form->room_id = 0;//是智能鲜蜂服务点 智能鲜蜂服务点表象
                 $form->good_id = 0;//是智能鲜蜂服务点 智能鲜蜂服务点表象
                 $form->article_id = $order_comment->id;//是智能鲜蜂服务点 智能鲜蜂服务点表象
-
-
                 $res1 = $form->add();
-
-
-
-                if (!$res || !$res1) {
-                    $t->rollBack();
-                    return $this->getModelError($order_comment);
+                $res1=json_decode($res1,true);
+                if($res1['code']!=0){
+                    $e=$t->rollBack();
+                    return [
+                        'code' => 1,
+                        'msg' => $res1['msg'],
+                    ];
                 }
+                $t->commit();
+                return [
+                    'code' => 0,
+                    'data' => array(
+                        'article_id'=>$order_comment->id,
+                    ),
+                    'msg' => '发布成功，快去告诉给群里朋友吧',
+                ];
             }
         }
 
