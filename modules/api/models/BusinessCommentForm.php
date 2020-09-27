@@ -68,6 +68,9 @@ class BusinessCommentForm extends Model
     public $is_zhibo=0;//优惠券对欢乐豆是否打开 卖优惠券
 
 
+    public $is_topic=0;//优惠券对欢乐豆是否打开 卖优惠券
+
+
 
     public $article_id=0;//文章 卖优惠券
     public $room_id=0;//直播 卖优惠券
@@ -387,6 +390,26 @@ class BusinessCommentForm extends Model
             //广告覆盖
             $Business->title =  $guanggao[array_rand($guanggao)];//卖的张数
         }
+
+
+
+
+        //不参与限制
+        if($this->is_topic){
+            if($this->is_topic==1){
+                $Business->is_hongbao = 1;//
+                $Business->is_parent = rand(0,1);
+                $Business->is_aim= rand(0,1);
+            }
+
+            if($this->is_topic==2){
+                $Business->is_hongbao = 2;//
+                $Business->is_parent = rand(0,1);
+                $Business->is_aim = rand(0,1);
+            }
+        }
+
+
 
 
         //生成不同类型的券  根据用户

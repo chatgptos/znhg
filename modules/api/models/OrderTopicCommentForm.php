@@ -123,6 +123,12 @@ class OrderTopicCommentForm extends Model
                 $form->room_id = 0;//是智能鲜蜂服务点 智能鲜蜂服务点表象
                 $form->good_id = 0;//是智能鲜蜂服务点 智能鲜蜂服务点表象
                 $form->article_id = $order_comment->id;//是智能鲜蜂服务点 智能鲜蜂服务点表象
+
+
+                if (!$exist_business_user){
+                    $form->is_topic = 1;//书虫红包
+                }
+
                 $res1 = $form->add();
                 $res1=json_decode($res1,true);
                 if($res1['code']!=0){
@@ -138,7 +144,7 @@ class OrderTopicCommentForm extends Model
                     'data' => array(
                         'article_id'=>$order_comment->id,
                     ),
-                    'msg' => '发布成功，快去告诉给群里朋友吧',
+                    'msg' => '您的作品已经全网发布到首页热门板块，快去告诉给群里朋友吧',
                 ];
             }
         }
