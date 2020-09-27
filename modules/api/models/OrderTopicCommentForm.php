@@ -37,6 +37,7 @@ class OrderTopicCommentForm extends Model
 
     public function save()
     {
+
         if (!$this->validate())
             return $this->getModelError();
 //        $order = Order::findOne([
@@ -76,7 +77,7 @@ class OrderTopicCommentForm extends Model
                 if($goods->uploaded_pic_list){
                     $order_comment->cover_pic = $goods->uploaded_pic_list[0];
                 }else{
-                    $order_comment->cover_pic = 'http://airent-hospital.oss-cn-beijing.aliyuncs.com/uploads/image/77/773717c17a32c513f2732a54be676a2b.png';
+                    $order_comment->cover_pic = 'http://airent-hospital.oss-cn-beijing.aliyuncs.com/uploads/image/27/27e601b97099aebe888a303eebd826e6.png';
                 }
 
                 $order_comment->content = $order_comment->content . "<img style='width:100%;margin:0px auto; '  src='{$order_comment->cover_pic}'/>";
@@ -124,9 +125,26 @@ class OrderTopicCommentForm extends Model
                 $form->good_id = 0;//是智能鲜蜂服务点 智能鲜蜂服务点表象
                 $form->article_id = $order_comment->id;//是智能鲜蜂服务点 智能鲜蜂服务点表象
 
+                $this->user = User::findOne([
+                    'id' => $this->user_id,
+                    'store_id' => $this->store_id,
+                    'is_delete' => 0,
+                ]);
 
                 if (!$exist_business_user){
                     $form->is_topic = 1;//书虫红包
+                    $form->title = $form->title.'@新人-笔记-奖励红包';
+                    $order_comment->content='<p>
+                        我是@<span style="color: rgb(54, 54, 54); text-align: center; background-color: rgb(255, 255, 255);">'.$this->user->nickname.'惠协发&nbsp;</span>发布第一条笔记-奖励一个红包呢
+                    </p>
+                    <p>
+                        &nbsp;---感谢@<span style="color: rgb(54, 54, 54); text-align: center; background-color: rgb(255, 255, 255);">惠协发&nbsp;</span>参与新功能会员内测体验，我们将升级更好功能
+                    </p>
+                    <p>
+                        <img src="http://airent-hospital.oss-cn-beijing.aliyuncs.com/uploads/image/77/773717c17a32c513f2732a54be676a2b.png" width="155" height="141"/><img src="http://airent-hospital.oss-cn-beijing.aliyuncs.com/uploads/image/27/27e601b97099aebe888a303eebd826e6.png" title="" alt=""/>
+                    </p>';
+
+
                 }
 
                 $res1 = $form->add();

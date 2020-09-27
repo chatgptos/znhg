@@ -161,7 +161,6 @@ class BusinessListForm extends Model
 
     public  function getUserHuobao()
     {
-
         //判断逻辑 基本分数
         $score =0;
         $gailvarray=[75,95,99];//控制抽到奖品人抽奖
@@ -186,6 +185,13 @@ class BusinessListForm extends Model
             ])
             ->andWhere(['>', 'addtime', strtotime(date('Y-m-d'))])
             ->count();
+
+
+
+        //如果是新萌就看的到 并且没有抽到过
+        if($user->addtime>strtotime(date('Y-m')) && $user_id_hongbao_num_now == 0){
+            return 1;
+        }
 
         //没有抽到过今天  优化 数据  刷 保障最多刷3次   刷到一次基本上是 贡献流量100次
         $gailv=rand(1,100);
