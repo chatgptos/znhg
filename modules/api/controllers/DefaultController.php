@@ -108,6 +108,37 @@ class DefaultController extends Controller
     }
 
 
+
+    /**
+     * 交易列表
+     */
+    public function actionFindList()
+    {
+        // 获取导航分类
+        $cat = \app\modules\api\models\couponmall\Cat::find()
+            ->select('id,name')
+            ->andWhere(['is_delete'=>0,'store_id'=>$this->store_id])
+            ->orderBy('sort ASC')
+            ->asArray()
+            ->all();
+        $yyGoods = new \app\modules\api\models\couponmall\GoodsForm();
+        $yyGoods->store_id = $this->store_id;
+        $yyGoods->user_id = \Yii::$app->user->id;
+        $goods = $yyGoods->getFindList();
+        $catShow = \app\modules\api\models\couponmall\Setting::findOne(['store_id'=>$this->store_id]);
+        return json_encode([
+            'code'  => 0,
+            'msg'   => 'success',
+            'data'  => [
+                'cat'     => $cat,
+                'goods'   => $goods,
+                'cat_show'   => $catShow->cat,
+            ],
+        ],JSON_UNESCAPED_UNICODE);
+    }
+
+
+
     /**
      * 踩到红包
      */

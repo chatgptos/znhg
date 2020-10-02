@@ -11,9 +11,12 @@ namespace app\modules\api\models\couponmall;
 use app\models\PtOrderDetail;
 use app\models\Room;
 use app\models\Shop;
+use app\models\Topic;
 use app\models\User;
+use app\models\Video;
 use app\modules\api\models\Model;
 use yii\data\Pagination;
+use yii\db\Query;
 
 class GoodsForm extends Model
 {
@@ -34,10 +37,10 @@ class GoodsForm extends Model
     public function getList()
     {
         $page = \Yii::$app->request->get('page')?:1;
-        $limit = (int)\Yii::$app->request->get('limit')?:30;
+        $limit = (int)\Yii::$app->request->get('limit')?:9;
         $cid = \Yii::$app->request->get('cid');
         $query = Goods::find()
-              ->andWhere(['is_delete' => 0, 'store_id' => $this->store_id, 'status' => 1]);
+            ->andWhere(['is_delete' => 0, 'store_id' => $this->store_id, 'status' => 1]);
         if ((int)$cid){
             // 分类
             $query->andWhere(['cat_id'=>$cid]);
@@ -49,6 +52,105 @@ class GoodsForm extends Model
             ->limit($p->limit)
             ->orderBy('sort ASC')
             ->asArray()
+            ->all();
+
+        foreach ($list AS $k => $v){
+            $room_info='';
+            if($v['room_id']){
+                $room_info =  Room::findOne(['room_id' => $v['room_id'], 'store_id' => $this->store_id ,'is_delete' =>0]);
+                if($room_info){
+                    $room_info= $room_info->toArray();
+                }
+            }
+            $list[$k]['room_info']=$room_info;
+        }
+
+
+
+
+
+        return [
+            'row_count'     => intval($count),
+            'page_count'    => intval($p->pageCount),
+            'page'          => intval($page),
+            'list'          => $list,
+        ];
+    }
+
+
+
+    /**
+     * @return array
+     * 拼团商品列表
+     */
+    public function getFindList()
+    {
+        $page = \Yii::$app->request->get('page')?:1;
+        $limit = (int)\Yii::$app->request->get('limit')?:9;
+        $cid = \Yii::$app->request->get('cid');
+        $query = User::find() ->alias('u')
+            ->select('*,v.id video_id,c.id topic_id')
+            ->leftJoin(['c'=>Topic::tableName()],'u.id = c.user_id')
+            ->leftJoin(['v'=>Video::tableName()],'u.id = v.user_id')
+            ->andWhere(['>','u.id',0])
+            ->andWhere(['c.is_delete' => 0, 'c.store_id' => $this->store_id, 'c.status' => 1]);
+
+
+
+
+//        $query1 = Topic::find() ->alias('t')
+//            ->select('10 as v_id   ')
+//            ->innerJoin(['u'=>user::tableName()],'u.id = t.user_id')
+//            ->andWhere(['>','u.id',0])
+//            ->andWhere(['t.is_delete' => 0, 't.store_id' => $this->store_id, 't.status' => 1]);
+//
+//
+//        $query2 = Video::find() ->alias('v')
+//            ->select('0 t_id  ')
+//            ->innerJoin(['u'=>user::tableName()],'u.id = v.user_id')
+//            ->andWhere(['>','u.id',0])
+//            ->andWhere(['v.is_delete' => 0, 'v.store_id' => $this->store_id, 'v.status' => 1]);
+
+
+        $query1 = Topic::find() ->alias('t')
+            ->andWhere(['>','user_id',0])
+            ->andWhere(['t.is_delete' => 0, 't.store_id' => $this->store_id, 't.status' => 1]);
+
+
+        $query2 = Topic::find() ->alias('t')
+            ->innerJoin(['u'=>user::tableName()],'u.id = t.user_id')
+            ->andWhere(['>','user_id',0])
+            ->andWhere(['t.is_delete' => 0, 't.store_id' => $this->store_id, 't.status' => 1]);
+
+
+        if ((int)$cid){
+            // 分类
+            $query1->andWhere(['t.cat_id'=>$cid]);
+            $query2->andWhere(['t.cat_id'=>$cid]);
+        }
+
+
+
+        $queryAll = $query1->union($query2, true);
+
+
+        $query = (new Query())->from(['c' => $queryAll])->select('c.*,avatar_url,nickname name')
+            ->leftJoin(['v'=>Video::tableName()],'c.id = v.user_id')
+            ->innerJoin(['u'=>user::tableName()],'u.id = c.user_id')
+        ->distinct(true)->orderBy(['c.addtime'=>SORT_DESC]);
+
+        if ((int)$cid){
+            // 分类
+            $query->andWhere(['c.cat_id'=>$cid]);
+        }
+
+
+        $count = $query->count();
+        $p = new Pagination(['totalCount' => $count, 'pageSize' => $limit, 'page' => $page - 1]);
+        $list = $query
+            ->offset($p->offset)
+            ->limit($p->limit)
+            ->orderBy('c.sort ASC')
             ->all();
 
         foreach ($list AS $k => $v){
