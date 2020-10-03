@@ -73,6 +73,7 @@ class Topic extends \yii\db\ActiveRecord
             'is_delete' => 'Is Delete',
             'pic_list' => 'Is pic_list',
             'user_id' => 'Is pic_list',
+            'is_video' => '1视频 2 直播 0图文',
         ];
     }
 }

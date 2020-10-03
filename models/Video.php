@@ -57,6 +57,7 @@ class Video extends \yii\db\ActiveRecord
             'pic_url' => 'Pic Url',
             'content' => '详情介绍',
             'type' => '视频来源 0--源地址 1--腾讯视频',
+            'is_video' => '1视频 2 直播 0图文',
         ];
     }
     public function beforeSave($insert)

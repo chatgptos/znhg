@@ -88,56 +88,41 @@ class GoodsForm extends Model
         $page = \Yii::$app->request->get('page')?:1;
         $limit = (int)\Yii::$app->request->get('limit')?:9;
         $cid = \Yii::$app->request->get('cid');
-        $query = User::find() ->alias('u')
-            ->select('*,v.id video_id,c.id topic_id')
-            ->leftJoin(['c'=>Topic::tableName()],'u.id = c.user_id')
-            ->leftJoin(['v'=>Video::tableName()],'u.id = v.user_id')
-            ->andWhere(['>','u.id',0])
-            ->andWhere(['c.is_delete' => 0, 'c.store_id' => $this->store_id, 'c.status' => 1]);
-
-
-
-
-//        $query1 = Topic::find() ->alias('t')
-//            ->select('10 as v_id   ')
-//            ->innerJoin(['u'=>user::tableName()],'u.id = t.user_id')
-//            ->andWhere(['>','u.id',0])
-//            ->andWhere(['t.is_delete' => 0, 't.store_id' => $this->store_id, 't.status' => 1]);
-//
-//
-//        $query2 = Video::find() ->alias('v')
-//            ->select('0 t_id  ')
-//            ->innerJoin(['u'=>user::tableName()],'u.id = v.user_id')
-//            ->andWhere(['>','u.id',0])
-//            ->andWhere(['v.is_delete' => 0, 'v.store_id' => $this->store_id, 'v.status' => 1]);
-
-
-        $query1 = Topic::find() ->alias('t')
-            ->andWhere(['>','user_id',0])
-            ->andWhere(['t.is_delete' => 0, 't.store_id' => $this->store_id, 't.status' => 1]);
 
 
         $query2 = Topic::find() ->alias('t')
-            ->innerJoin(['u'=>user::tableName()],'u.id = t.user_id')
+            ->select('cat_id,user_id,title,addtime,cover_pic,id topic_id,is_video video_id,is_video,sort')
             ->andWhere(['>','user_id',0])
             ->andWhere(['t.is_delete' => 0, 't.store_id' => $this->store_id, 't.status' => 1]);
+
+
+
+        $query1 = Video::find() ->alias('v')
+            ->select('cat_id,user_id,title,addtime,pic_url cover_pic ,is_video topic_id,id video_id,is_video,sort ')
+            ->andWhere(['>','user_id',0])
+            ->andWhere(['v.is_delete' => 0, 'v.store_id' => $this->store_id, 'v.status' => 1]);
+
+
+        $query3 = Room::find() ->alias('r')
+            ->select('cat_id,user_id,name title,addtime,pic_url cover_pic ,is_video topic_id,id video_id,is_video,sort ')
+            ->andWhere(['>','user_id',0])
+            ->andWhere(['r.is_delete' => 0, 'r.store_id' => $this->store_id, 'r.status' => 1]);
 
 
         if ((int)$cid){
             // 分类
-            $query1->andWhere(['t.cat_id'=>$cid]);
-            $query2->andWhere(['t.cat_id'=>$cid]);
+            $query1->andWhere(['cat_id'=>$cid]);
+            $query2->andWhere(['cat_id'=>$cid]);
+            $query3->andWhere(['cat_id'=>$cid]);
         }
 
+        $queryAll = $query1->union($query2, true)->union($query3, true);
 
 
-        $queryAll = $query1->union($query2, true);
-
-
-        $query = (new Query())->from(['c' => $queryAll])->select('c.*,avatar_url,nickname name')
-            ->leftJoin(['v'=>Video::tableName()],'c.id = v.user_id')
+        $query = (new Query())->from(['c' => $queryAll])
+            ->select('u.avatar_url,u.nickname name,user_id,cat_id,title,cover_pic,topic_id,video_id,is_video,sort')
             ->innerJoin(['u'=>user::tableName()],'u.id = c.user_id')
-        ->distinct(true)->orderBy(['c.addtime'=>SORT_DESC]);
+            ->orderBy(['c.addtime'=>SORT_DESC]);
 
         if ((int)$cid){
             // 分类
